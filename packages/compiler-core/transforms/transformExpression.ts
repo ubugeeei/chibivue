@@ -1,9 +1,16 @@
 import { parse } from "@babel/parser";
 import { Identifier, Node } from "@babel/types";
 
-import { isSimpleIdentifier } from "../utils";
+import { advancePositionWithClone, isSimpleIdentifier } from "../utils";
 import { walkIdentifiers } from "../babelUtils";
-import { ExpressionNode, NodeTypes, SimpleExpressionNode } from "../ast";
+import {
+  CompoundExpressionNode,
+  ExpressionNode,
+  NodeTypes,
+  SimpleExpressionNode,
+  createCompoundExpression,
+  createSimpleExpression,
+} from "../ast";
 import { NodeTransform, TransformContext } from "../transform";
 
 export const transformExpression: NodeTransform = (node, context) => {
@@ -60,20 +67,56 @@ export function processExpression(
   }
 
   // find ids
-  const ast = parse(rawExp).program;
+  const ast = parse(`(${rawExp})`).program;
   type QualifiedId = Identifier & PrefixMeta;
   const ids: QualifiedId[] = [];
   const parentStack: Node[] = [];
   const knownIds: Record<string, number> = Object.create(context.identifiers);
+
   walkIdentifiers(
     ast,
     (node, _, __, isReferenced, isLocal) => {
-      if (isReferenced && !isLocal) node.name = rewriteIdentifier(node.name);
+      if (isReferenced && !isLocal) {
+        node.name = rewriteIdentifier(node.name);
+      }
       ids.push(node as QualifiedId);
     },
     parentStack,
     knownIds
   );
 
-  return node;
+  const children: CompoundExpressionNode["children"] = [];
+  ids.sort((a, b) => a.start - b.start);
+  ids.forEach((id, i) => {
+    // range is offset by -1 due to the wrapping parens when parsed
+    const start = id.start - 1;
+    const end = id.end - 1;
+    const last = ids[i - 1];
+    const leadingText = rawExp.slice(last ? last.end - 1 : 0, start);
+    if (leadingText.length) {
+      children.push(leadingText);
+    }
+
+    const source = rawExp.slice(start, end);
+    children.push(
+      createSimpleExpression(id.name, false, {
+        source,
+        start: advancePositionWithClone(node.loc.start, source, start),
+        end: advancePositionWithClone(node.loc.start, source, end),
+      })
+    );
+    if (i === ids.length - 1 && end < rawExp.length) {
+      children.push(rawExp.slice(end));
+    }
+  });
+
+  let ret;
+  if (children.length) {
+    ret = createCompoundExpression(children, node.loc);
+  } else {
+    ret = node;
+  }
+  ret.identifiers = Object.keys(knownIds);
+
+  return ret;
 }
