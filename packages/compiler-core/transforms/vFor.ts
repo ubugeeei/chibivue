@@ -18,14 +18,13 @@ import {
 } from "../ast";
 import { FRAGMENT, RENDER_LIST } from "../runtimeHelpers";
 import {
-  NodeTransform,
   TransformContext,
   createStructuralDirectiveTransform,
 } from "../transform";
 import { getInnerRange } from "../utils";
 import { processExpression } from "./transformExpression";
 
-export const transformFor: NodeTransform = createStructuralDirectiveTransform(
+export const transformFor = createStructuralDirectiveTransform(
   "for",
   (node, dir, context) => {
     return processFor(node, dir, context, (forNode) => {
