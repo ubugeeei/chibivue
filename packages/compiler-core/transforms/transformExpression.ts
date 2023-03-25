@@ -27,7 +27,11 @@ export const transformExpression: NodeTransform = (node, context) => {
           const exp = dir.exp;
           const arg = dir.arg;
 
-          if (exp && exp.type === NodeTypes.SIMPLE_EXPRESSION) {
+          if (
+            exp &&
+            exp.type === NodeTypes.SIMPLE_EXPRESSION &&
+            !(dir.name === "on" && arg)
+          ) {
             dir.exp = processExpression(exp, context);
           }
 

@@ -40,6 +40,7 @@ export const transformFor = createStructuralDirectiveTransform(
       ) as ForCodegenNode;
 
       return () => {
+        // finish the codegen now that all children have been traversed
         const { children } = forNode;
         const childBlock = (children[0] as PlainElementNode)
           .codegenNode as VNodeCall;
