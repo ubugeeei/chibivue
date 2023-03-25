@@ -42,10 +42,5 @@ export function baseCompile(
   // codegen
   const code = generate(ast, { __BROWSER__ });
 
-  // FIXME: remove this
-  import("fs").then((fs) => {
-    fs.writeFileSync("./out.json", JSON.stringify(ast, null, 2));
-  });
-
   return code;
 }

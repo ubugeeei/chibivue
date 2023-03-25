@@ -34,12 +34,7 @@ export async function transformMain(
     output.push(`export default _sfc_main`);
   }
 
-  let resolvedCode = output.join("\n");
-
-  // FIXME: remove this
-  import("fs").then((fs) => {
-    fs.writeFileSync("./resolved.js", resolvedCode);
-  });
+  const resolvedCode = output.join("\n");
 
   return { code: resolvedCode };
 }
