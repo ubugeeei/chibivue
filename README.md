@@ -30,7 +30,7 @@ Currently, I am still in the process of implementation, but after implementation
   - ✅ lifecycle hooks
     - ✅ mounted
   - props / emit
-  - provide / inject
+  - ✅ provide / inject
   - ✅ use plugin
 - Template Compiler
   - ✅ directives
