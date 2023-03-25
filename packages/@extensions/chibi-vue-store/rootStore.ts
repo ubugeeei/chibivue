@@ -1,4 +1,4 @@
-import { InjectionKey, Ref } from "~/packages";
+import { InjectionKey } from "chibi-vue";
 import { App } from "~/packages/runtime-core/apiCreateApp";
 
 export let activeStore: Store | undefined;
@@ -9,11 +9,7 @@ export type StateTree = Record<string | number | symbol, any>;
 
 export interface Store {
   install: (app: App) => void;
-
-  /**
-   * root state
-   */
-  state: Ref<Record<string, StateTree>>;
+  _s: Map<string, StateTree>;
 }
 
 export const storeSymbol: InjectionKey<Store> = Symbol();
