@@ -2,6 +2,7 @@ import { proxyRefs } from "../reactivity";
 import { ReactiveEffect } from "../reactivity/effect";
 import { EffectScope } from "../reactivity/effectScope";
 import { isFunction, isObject } from "../shared";
+import { AppContext, createAppContext } from "./apiCreateApp";
 import { ComponentOptions, applyOptions } from "./componentOptions";
 import {
   ComponentPublicInstance,
@@ -19,6 +20,7 @@ type LifecycleHook<TFn = Function> = TFn[] | null;
 
 export interface ComponentInternalInstance {
   type: ConcreteComponent;
+  appContext: AppContext;
 
   /**
    * Vnode representing this component in its parent's vdom tree
@@ -40,6 +42,12 @@ export interface ComponentInternalInstance {
 
   render: InternalRenderFunction | null;
   update: () => void;
+
+  /**
+   * Object containing values this component provides for its descendents
+   * @internal
+   */
+  provides: Data;
 
   /**
    * This is the target for the public instance proxy. It also holds properties
@@ -84,14 +92,20 @@ export type InternalRenderFunction = {
 };
 
 export function createComponentInstance(
-  vnode: VNode
+  vnode: VNode,
+  parent: ComponentInternalInstance | null
 ): ComponentInternalInstance {
   const type = vnode.type as ConcreteComponent;
+  const appContext =
+    (parent ? parent.appContext : vnode.appContext) || createAppContext();
+
   const instance: ComponentInternalInstance = {
     type,
     vnode,
+    appContext,
     next: null,
     proxy: null,
+    provides: parent ? parent.provides : Object.create(appContext.provides),
     effect: null!,
     scope: new EffectScope(),
     subTree: null!,

@@ -96,7 +96,8 @@ type MoveFn = (
 type MountComponentFn = (
   initialVNode: VNode,
   container: RendererElement,
-  anchor: RendererNode | null
+  anchor: RendererNode | null,
+  parentComponent: ComponentInternalInstance | null
 ) => void;
 
 type NextFn = (vnode: VNode) => RendererNode | null;
@@ -206,10 +207,11 @@ export function createRenderer(options: RendererOptions) {
     n1: VNode | null,
     n2: VNode,
     container: RendererElement,
-    anchor: RendererNode | null
+    anchor: RendererNode | null,
+    parentComponent: ComponentInternalInstance | null = null
   ) => {
     if (n1 == null) {
-      mountComponent(n2, container, anchor);
+      mountComponent(n2, container, anchor, parentComponent);
     } else {
       updateComponent(n1, n2);
     }
@@ -265,10 +267,11 @@ export function createRenderer(options: RendererOptions) {
   const mountComponent: MountComponentFn = (
     initialVNode,
     container,
-    anchor
+    anchor,
+    parentComponent
   ) => {
     // prettier-ignore
-    const instance: ComponentInternalInstance = (initialVNode.component = createComponentInstance(initialVNode));
+    const instance: ComponentInternalInstance = (initialVNode.component = createComponentInstance(initialVNode, parentComponent));
     setupComponent(instance);
     setupRenderEffect(instance, initialVNode, container, anchor);
   };
