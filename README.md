@@ -31,6 +31,7 @@ Currently, I am still in the process of implementation, but after implementation
     - ✅ mounted
   - props / emit
   - provide / inject
+  - ✅ use plugin
 - Template Compiler
   - ✅ directives
     - ✅ v-on
