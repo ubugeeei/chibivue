@@ -12,7 +12,10 @@
       ],
       "chibi-vue": [
         "./packages"
-      ]
+      ],
+      "chibi-vue-store": [
+        "./packages/@extensions/chibi-vue-store"
+      ],
     },
     "types": [
       "vitest/importMeta",
