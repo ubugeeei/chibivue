@@ -30,16 +30,20 @@ Currently, I am still in the process of implementation, but after implementation
   - ✅ lifecycle hooks
     - ✅ mounted
   - props / emit
+  - provide / inject
 - Template Compiler
   - ✅ directives
     - ✅ v-on
-    - v-if
     - ✅ v-for
+    - v-if
+    - v-model
   - ✅ mustache
 - Extensions
   - sfc compiler (vite plugin)
     - ✅ basic
     - script setup
+      - basic
+      - defineProps / defineEmits
     - style block
   - store
   - router
