@@ -124,6 +124,8 @@ export function createComponentInstance(
 }
 
 export let currentInstance: ComponentInternalInstance | null = null;
+export const getCurrentInstance: () => ComponentInternalInstance | null = () =>
+  currentInstance;
 
 export const setCurrentInstance = (instance: ComponentInternalInstance) => {
   currentInstance = instance;

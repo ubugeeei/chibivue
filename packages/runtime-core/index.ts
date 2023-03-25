@@ -39,6 +39,7 @@ export { type CreateAppFunction } from "./apiCreateApp";
 export {
   type ComponentInternalInstance,
   registerRuntimeCompiler,
+  getCurrentInstance,
 } from "./component";
 export { type ComponentOptions, type RenderFunction } from "./componentOptions";
 export { type ComponentPublicInstance } from "./componentPublicInstance";
