@@ -46,5 +46,5 @@ Currently, I am still in the process of implementation, but after implementation
       - basic
       - defineProps / defineEmits
     - style block
-  - store
-  - ✅ router
+  - ✅ store
+  -  router
