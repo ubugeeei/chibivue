@@ -3,6 +3,7 @@ import { isArray, isObject, isString } from "../shared";
 import { currentRenderingInstance } from "./componentRenderContext";
 import { type ComponentInternalInstance } from "./component";
 import { type ComponentPublicInstance } from "./componentPublicInstance";
+import { AppContext } from "./apiCreateApp";
 
 export type VNodeTypes =
   | string // html element name
@@ -33,6 +34,9 @@ export interface VNode<HostNode = any> {
   component: ComponentInternalInstance | null;
   ctx: ComponentPublicInstance | null;
   shapeFlag: number;
+
+  // application root node only
+  appContext: AppContext | null;
 }
 
 export interface VNodeProps {
@@ -89,6 +93,7 @@ function createBaseVNode(
     ctx: currentRenderingInstance,
     shapeFlag,
     component: null,
+    appContext: null,
   } as VNode;
 
   normalizeChildren(vnode, children);
@@ -152,6 +157,7 @@ export function cloneVNode<T>(vnode: VNode<T>): VNode<T> {
     el: vnode.el,
     anchor: vnode.anchor,
     ctx: vnode.ctx,
+    appContext: vnode.appContext,
   };
   return cloned;
 }
@@ -235,6 +241,7 @@ if (import.meta.vitest) {
         component: null,
         ctx: null,
         shapeFlag: ShapeFlags.ELEMENT | ShapeFlags.TEXT_CHILDREN,
+        appContext: null,
       } as VNode;
       normalizeChildren(vnode, "bar");
       expect(vnode.children).toStrictEqual([
@@ -262,6 +269,7 @@ if (import.meta.vitest) {
         component: null,
         ctx: null,
         shapeFlag: ShapeFlags.ELEMENT | ShapeFlags.TEXT_CHILDREN,
+        appContext: null,
       } as VNode;
       normalizeChildren(vnode, "bar");
       expect(vnode.children).toStrictEqual([
