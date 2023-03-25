@@ -34,7 +34,7 @@ Currently, I am still in the process of implementation, but after implementation
   - ✅ directives
     - ✅ v-on
     - v-if
-    - v-for
+    - ✅ v-for
   - ✅ mustache
 - Extensions
   - sfc compiler (vite plugin)
