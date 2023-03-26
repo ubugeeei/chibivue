@@ -14,10 +14,6 @@ export default {
     const newTodo = ref("");
     const todos = ref(JSON.parse(localStorage.getItem("todos") ?? []));
 
-    const handleInput = (event) => {
-      newTodo.value = event.target.value;
-    };
-
     const addTodo = () => {
       if (newTodo.value.trim()) {
         todos.value = [
@@ -51,7 +47,6 @@ export default {
     return {
       newTodo,
       todos,
-      handleInput,
       addTodo,
       toggleTodoCompletion,
       removeTodo,
@@ -64,12 +59,7 @@ export default {
   <div>
     <h1>Todo App</h1>
     <div>
-      <input
-        type="text"
-        placeholder="Enter a new todo"
-        :value="newTodo"
-        @input="handleInput"
-      />
+      <input v-model="newTodo" type="text" placeholder="Enter a new todo" />
       <button @click="addTodo">Add Todo</button>
     </div>
     <ul>

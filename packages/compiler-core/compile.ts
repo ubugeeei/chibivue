@@ -5,10 +5,13 @@ import { baseParse } from "./parse";
 import { DirectiveTransform, NodeTransform, transform } from "./transform";
 
 import { transformElement } from "./transforms/transformElement";
-import { transformOn } from "./transforms/vOn";
 import { transformExpression } from "./transforms/transformExpression";
-import { transformBind } from "./transforms/vBind";
 import { transformFor } from "./transforms/vFor";
+
+import { transformBind } from "./transforms/vBind";
+import { transformOn } from "./transforms/vOn";
+import { transformModel } from "./transforms/vModel";
+import { CompilerOptions } from "./options";
 
 export type TransformPreset = [
   NodeTransform[],
@@ -21,13 +24,14 @@ export function getBaseTransformPreset(): TransformPreset {
     {
       on: transformOn,
       bind: transformBind,
+      model: transformModel,
     },
   ];
 }
 
 export function baseCompile(
   template: string | RootNode,
-  { __BROWSER__ }: { __BROWSER__: boolean }
+  options: CompilerOptions
 ) {
   // parse
   const ast = isString(template) ? baseParse(template) : template;
@@ -35,12 +39,15 @@ export function baseCompile(
   // transform
   const [nodeTransforms, directiveTransforms] = getBaseTransformPreset();
   transform(ast, {
-    nodeTransforms: [...nodeTransforms],
-    directiveTransforms: { ...directiveTransforms },
+    nodeTransforms: [...nodeTransforms, ...(options.nodeTransforms || [])],
+    directiveTransforms: {
+      ...directiveTransforms,
+      ...(options.directiveTransforms || {}),
+    },
   });
 
   // codegen
-  const code = generate(ast, { __BROWSER__ });
+  const code = generate(ast, options);
 
   return code;
 }

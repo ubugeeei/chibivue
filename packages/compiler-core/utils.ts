@@ -1,4 +1,4 @@
-import { Position, SourceLocation } from "./ast";
+import { ElementNode, NodeTypes, Position, SourceLocation } from "./ast";
 import { CREATE_ELEMENT_VNODE, CREATE_VNODE } from "./runtimeHelpers";
 
 const nonIdentifierRE = /^\d|[^\$\w]/;
@@ -141,4 +141,23 @@ export function advancePositionWithClone(
 
 export function getVNodeHelper(isComponent: boolean) {
   return isComponent ? CREATE_VNODE : CREATE_ELEMENT_VNODE;
+}
+
+export function findProp(
+  node: ElementNode,
+  name: string,
+  dynamicOnly: boolean = false,
+  allowEmpty: boolean = false
+): ElementNode["props"][0] | undefined {
+  for (let i = 0; i < node.props.length; i++) {
+    const p = node.props[i];
+    if (p.type === NodeTypes.ATTRIBUTE) {
+      if (dynamicOnly) continue;
+      if (p.name === name && (p.value || allowEmpty)) {
+        return p;
+      }
+    } else if (p.name === "bind" && (p.exp || allowEmpty)) {
+      return p;
+    }
+  }
 }

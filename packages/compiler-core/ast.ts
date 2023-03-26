@@ -72,6 +72,7 @@ export interface VNodeCall extends Node {
     | TemplateTextChildNode
     | SimpleExpressionNode // hoisted
     | undefined;
+  directives: DirectiveArguments | undefined;
   isComponent: boolean;
 }
 
@@ -142,7 +143,7 @@ export interface BaseElementNode extends Node {
   tagType: ElementTypes;
   props: Array<AttributeNode | DirectiveNode>;
   children: TemplateChildNode[];
-  isSelfClosing: boolean
+  isSelfClosing: boolean;
 }
 
 export interface PlainElementNode extends BaseElementNode {
@@ -175,7 +176,7 @@ export interface SimpleExpressionNode extends Node {
   type: NodeTypes.SIMPLE_EXPRESSION;
   content: string;
   isStatic: boolean;
-  identifiers?: string[]
+  identifiers?: string[];
 }
 
 export interface CompoundExpressionNode extends Node {
@@ -278,6 +279,7 @@ export function createVNodeCall(
   tag: VNodeCall["tag"],
   props?: VNodeCall["props"],
   children?: VNodeCall["children"],
+  directives?: VNodeCall["directives"],
   isComponent: VNodeCall["isComponent"] = false,
   loc: SourceLocation = locStub
 ): VNodeCall {
@@ -290,6 +292,7 @@ export function createVNodeCall(
     tag,
     props,
     children,
+    directives,
     isComponent,
     loc,
   };
@@ -324,7 +327,7 @@ export function createObjectProperty(
 ): Property {
   return {
     type: NodeTypes.JS_PROPERTY,
-    key: isString(key) ? createSimpleExpression(key) : key,
+    key: isString(key) ? createSimpleExpression(key, true) : key,
     value,
     loc,
   };

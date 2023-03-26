@@ -30,6 +30,8 @@ function normalizeContainer(container: Element | string): Element | null {
   }
 }
 
+export { vModelText, vModelDynamic } from "./directives/vModel";
+
 // re-export everything from core
 // h, Component, reactivity API, nextTick, flags & types
 export * from "../runtime-core";

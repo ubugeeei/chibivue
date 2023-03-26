@@ -8,6 +8,7 @@ import {
   Data,
 } from "./component";
 import { renderComponentRoot } from "./componentRenderUtils";
+import { invokeDirectiveHook } from "./directives";
 import {
   Text,
   normalizeVNode,
@@ -175,7 +176,7 @@ export function createRenderer(options: RendererOptions) {
     anchor: RendererNode | null
   ) => {
     let el: RendererElement;
-    const { type, props, shapeFlag } = vnode;
+    const { type, props, shapeFlag, dirs } = vnode;
 
     el = vnode.el = hostCreateElement(type as string);
 
@@ -185,22 +186,30 @@ export function createRenderer(options: RendererOptions) {
       mountChildren(vnode.children as VNodeArrayChildren, el, null);
     }
 
+    dirs && invokeDirectiveHook(vnode, null, "created");
+
     if (props) {
       for (const key in props) {
         hostPatchProp(el, key, null, props[key]);
       }
     }
 
+    dirs && invokeDirectiveHook(vnode, null, "beforeMount");
     hostInsert(el, container, anchor!);
+    dirs && invokeDirectiveHook(vnode, null, "mounted");
   };
 
   const patchElement = (n1: VNode, n2: VNode) => {
     const el = (n2.el = n1.el!);
+    const { dirs } = n2;
 
     const oldProps = n1.props ?? {};
     const newProps = n2.props ?? {};
+
+    dirs && invokeDirectiveHook(n2, n1, "beforeUpdate");
     patchChildren(n1, n2, el, null);
     patchProps(el, oldProps, newProps);
+    dirs && invokeDirectiveHook(n2, n1, "updated");
   };
 
   const processComponent = (

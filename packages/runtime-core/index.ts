@@ -33,6 +33,13 @@ export {
 } from "./vnode";
 
 export { type RendererOptions, createRenderer } from "./renderer";
+export type {
+  DirectiveBinding,
+  DirectiveHook,
+  ObjectDirective,
+} from "./directives";
+
+export { withDirectives } from "./directives";
 
 export { type CreateAppFunction } from "./apiCreateApp";
 

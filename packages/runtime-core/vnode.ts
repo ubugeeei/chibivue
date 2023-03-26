@@ -4,6 +4,7 @@ import { currentRenderingInstance } from "./componentRenderContext";
 import { type ComponentInternalInstance } from "./component";
 import { type ComponentPublicInstance } from "./componentPublicInstance";
 import { AppContext } from "./apiCreateApp";
+import { DirectiveBinding } from "./directives";
 
 export type VNodeTypes =
   | string // html element name
@@ -32,6 +33,7 @@ export interface VNode<HostNode = any> {
 
   children: VNodeNormalizedChildren;
   component: ComponentInternalInstance | null;
+  dirs: DirectiveBinding[] | null;
   ctx: ComponentPublicInstance | null;
   shapeFlag: number;
 
@@ -93,6 +95,7 @@ function createBaseVNode(
     ctx: currentRenderingInstance,
     shapeFlag,
     component: null,
+    dirs: null,
     appContext: null,
   } as VNode;
 
@@ -153,6 +156,7 @@ export function cloneVNode<T>(vnode: VNode<T>): VNode<T> {
       ? (children as VNode[]).map(cloneVNode)
       : children,
     component: vnode.component,
+    dirs: vnode.dirs,
     shapeFlag: vnode.shapeFlag,
     el: vnode.el,
     anchor: vnode.anchor,
@@ -238,6 +242,7 @@ if (import.meta.vitest) {
         el: null,
         anchor: null,
         children: "bar",
+        dirs: null,
         component: null,
         ctx: null,
         shapeFlag: ShapeFlags.ELEMENT | ShapeFlags.TEXT_CHILDREN,
@@ -267,6 +272,7 @@ if (import.meta.vitest) {
         anchor: null,
         children: ["bar"],
         component: null,
+        dirs: null,
         ctx: null,
         shapeFlag: ShapeFlags.ELEMENT | ShapeFlags.TEXT_CHILDREN,
         appContext: null,

@@ -42,3 +42,6 @@ export const enum BindingTypes {
   SETUP_MAYBE_REF = "setup-maybe-ref",
   OPTIONS = "options",
 }
+
+export type CompilerOptions = ParserOptions &
+  TransformOptions & { __BROWSER__: boolean };
