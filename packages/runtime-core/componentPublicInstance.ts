@@ -34,8 +34,11 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
     key: string,
     value: any
   ): boolean {
-    const { ctx, data } = instance;
-    if (hasOwn(data, key)) {
+    const { ctx, data, setupState } = instance;
+    if (hasSetupBinding(setupState, key)) {
+      setupState[key] = value;
+      return true;
+    } else if (hasOwn(data, key)) {
       data[key] = value;
     } else if (hasOwn(ctx, key)) {
       ctx[key] = value;
