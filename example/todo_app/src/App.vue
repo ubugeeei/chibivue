@@ -47,7 +47,6 @@ export default {
     return {
       newTodo,
       todos,
-      handleInput,
       addTodo,
       toggleTodoCompletion,
       removeTodo,

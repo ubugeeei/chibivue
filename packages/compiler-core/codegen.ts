@@ -124,9 +124,9 @@ function genFunctionPreamble(ast: RootNode, context: CodegenContext) {
     context;
 
   if (__BROWSER__) {
-    push(`const _Vue = ${runtimeGlobalName}\n`);
+    push(`const _ChibiVue = ${runtimeGlobalName}\n`);
   } else {
-    push(`import * as _Vue from '${runtimeModuleName}'\n`);
+    push(`import * as _ChibiVue from '${runtimeModuleName}'\n`);
   }
 
   const staticHelpers = [
@@ -139,7 +139,7 @@ function genFunctionPreamble(ast: RootNode, context: CodegenContext) {
   ]
     .map(aliasHelper)
     .join(", ");
-  push(`const { ${staticHelpers} } = _Vue\n`);
+  push(`const { ${staticHelpers} } = _ChibiVue\n`);
   newline();
   if (__BROWSER__) push(`return `);
 }
