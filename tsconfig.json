@@ -7,9 +7,6 @@
     ],
     "strict": true,
     "paths": {
-      "~/*": [
-        "./*"
-      ],
       "chibi-vue": [
         "./packages"
       ],
