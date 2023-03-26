@@ -1,4 +1,5 @@
 import { isFunction } from "../shared";
+import { ComponentInternalInstance } from "./component";
 import { ComponentPublicInstance } from "./componentPublicInstance";
 import { currentRenderingInstance } from "./componentRenderContext";
 import { VNode } from "./vnode";
@@ -64,4 +65,24 @@ export function withDirectives<T extends VNode>(
     }
   }
   return vnode;
+}
+
+export function invokeDirectiveHook(
+  vnode: VNode,
+  prevVNode: VNode | null,
+  name: keyof ObjectDirective
+) {
+  const bindings = vnode.dirs!;
+  const oldBindings = prevVNode && prevVNode.dirs!;
+  for (let i = 0; i < bindings.length; i++) {
+    const binding = bindings[i];
+    if (oldBindings) {
+      binding.oldValue = oldBindings[i].value;
+    }
+
+    const hook = binding.dir[name] as DirectiveHook | undefined;
+    if (hook) {
+      hook(vnode.el, binding, vnode, prevVNode);
+    }
+  }
 }
