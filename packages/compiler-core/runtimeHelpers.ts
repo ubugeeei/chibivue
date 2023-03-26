@@ -13,3 +13,9 @@ export const helperNameMap: Record<symbol, string> = {
   [TO_HANDLER_KEY]: `toHandlerKey`,
   [RENDER_LIST]: `renderList`,
 };
+
+export function registerRuntimeHelpers(helpers: Record<symbol, string>) {
+  Object.getOwnPropertySymbols(helpers).forEach((s) => {
+    helperNameMap[s] = helpers[s];
+  });
+}
