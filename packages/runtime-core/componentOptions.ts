@@ -8,6 +8,7 @@ import { VNodeChild, type VNode } from "./vnode";
 export type RenderFunction = () => VNodeChild;
 
 export type ComponentOptions = {
+  name?: string;
   data?: () => Record<string, unknown>;
   methods?: { [key: string]: Function };
   computed?: { [key: string]: Function };

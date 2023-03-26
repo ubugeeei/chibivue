@@ -1,8 +1,13 @@
 import { App, reactive, ref } from "chibi-vue";
-import { routeLocationKey, routerKey } from "./injectionSymbols";
+import {
+  routeLocationKey,
+  routerKey,
+  routerViewLocationKey,
+} from "./injectionSymbols";
 import { RouterHistory } from "./history";
 import { RouteLocationNormalizedLoaded } from "./types";
 import { computed } from "../../reactivity";
+import { RouterViewImpl } from "./RouterView";
 
 export interface RouteRecord {
   path: string;
@@ -25,7 +30,10 @@ export interface Router {
 }
 
 export function createRouter(options: RouterOptions): Router {
-  const currentRoute = ref<RouteLocationNormalizedLoaded>({ fullPath: "/" });
+  const currentRoute = ref<RouteLocationNormalizedLoaded>({
+    fullPath: "/",
+    component: null,
+  });
   const routerHistory = options.history;
 
   function push(to: string) {
@@ -46,9 +54,12 @@ export function createRouter(options: RouterOptions): Router {
     forward: () => go(1),
     install(app: App) {
       const router = this;
+      app.component("RouterView", RouterViewImpl);
+
       const reactiveRoute = computed(() => currentRoute.value);
       app.provide(routerKey, router);
       app.provide(routeLocationKey, reactive(reactiveRoute));
+      app.provide(routerViewLocationKey, currentRoute);
     },
   };
 
