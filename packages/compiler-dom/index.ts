@@ -1,11 +1,13 @@
 import {
   CompilerOptions,
   DirectiveTransform,
+  ParserOptions,
   RootNode,
   baseCompile,
 } from "../compiler-core";
 import { baseParse } from "../compiler-core/parse";
 import { CodegenResult } from "./codegen";
+import { parserOptions } from "./parserOptions";
 import { transformModel } from "./transforms/vModel";
 
 export const DOMDirectiveTransforms: Record<string, DirectiveTransform> = {
@@ -18,6 +20,7 @@ export function compile(
 ): CodegenResult {
   return baseCompile(template, {
     ...options,
+    ...parserOptions,
     directiveTransforms: {
       ...options.directiveTransforms,
       ...DOMDirectiveTransforms,
@@ -25,6 +28,6 @@ export function compile(
   }) as any;
 }
 
-export function parse(template: string): RootNode {
-  return baseParse(template);
+export function parse(template: string, options: ParserOptions = {}): RootNode {
+  return baseParse(template, { ...options, ...parserOptions });
 }
