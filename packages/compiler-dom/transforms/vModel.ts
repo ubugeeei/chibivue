@@ -27,9 +27,6 @@ export const transformModel: DirectiveTransform = (dir, node, context) => {
         }
       }
     }
-
-    // inject runtime directive
-    baseResult.needRuntime = context.helper(directiveToUse);
   }
 
   // native v-model doesn't need the `modelValue` props since they are also
