@@ -1,3 +1,4 @@
+import { V_MODEL_TEXT } from "../compiler-dom/runtimeHelpers";
 import { isArray, isString, isSymbol } from "../shared";
 import {
   ArrayExpression,
@@ -22,6 +23,7 @@ import {
   RENDER_LIST,
   TO_DISPLAY_STRING,
   TO_HANDLER_KEY,
+  WITH_DIRECTIVES,
   helperNameMap,
 } from "./runtimeHelpers";
 
@@ -135,6 +137,8 @@ function genFunctionPreamble(ast: RootNode, context: CodegenContext) {
     TO_HANDLER_KEY,
     TO_DISPLAY_STRING,
     FRAGMENT,
+    V_MODEL_TEXT,
+    WITH_DIRECTIVES,
     RENDER_LIST,
   ]
     .map(aliasHelper)
@@ -244,11 +248,18 @@ function genExpressionAsPropertyKey(
 
 function genVNodeCall(node: VNodeCall, context: CodegenContext) {
   const { push, helper } = context;
-  const { tag, props, children } = node;
-
+  const { tag, props, children, directives } = node;
+  if (directives) {
+    push(helper(WITH_DIRECTIVES) + `(`);
+  }
   push(helper(CREATE_ELEMENT_VNODE) + `(`, node);
   genNodeList(genNullableArgs([tag, props, children]), context);
   push(`)`);
+  if (directives) {
+    push(`, `);
+    genNode(directives, context);
+    push(`)`);
+  }
 }
 
 function genNullableArgs(args: any[]): CallExpression["arguments"] {

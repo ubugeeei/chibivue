@@ -39,6 +39,8 @@ export type {
   ObjectDirective,
 } from "./directives";
 
+export { withDirectives } from "./directives";
+
 export { type CreateAppFunction } from "./apiCreateApp";
 
 export {
