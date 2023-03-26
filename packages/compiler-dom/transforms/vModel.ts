@@ -3,9 +3,9 @@ import {
   NodeTypes,
   transformModel as baseTransform,
   findProp,
-} from "~/packages/compiler-core";
+} from "../../compiler-core";
 
-import { DirectiveTransform } from "~/packages/compiler-core";
+import { DirectiveTransform } from "../../compiler-core";
 import { V_MODEL_DYNAMIC, V_MODEL_TEXT } from "../runtimeHelpers";
 
 export const transformModel: DirectiveTransform = (dir, node, context) => {
