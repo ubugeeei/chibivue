@@ -5,10 +5,12 @@ import { baseParse } from "./parse";
 import { DirectiveTransform, NodeTransform, transform } from "./transform";
 
 import { transformElement } from "./transforms/transformElement";
-import { transformOn } from "./transforms/vOn";
 import { transformExpression } from "./transforms/transformExpression";
-import { transformBind } from "./transforms/vBind";
 import { transformFor } from "./transforms/vFor";
+
+import { transformBind } from "./transforms/vBind";
+import { transformOn } from "./transforms/vOn";
+import { transformModel } from "./transforms/vModel";
 
 export type TransformPreset = [
   NodeTransform[],
@@ -21,6 +23,7 @@ export function getBaseTransformPreset(): TransformPreset {
     {
       on: transformOn,
       bind: transformBind,
+      model: transformModel,
     },
   ];
 }
