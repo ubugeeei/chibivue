@@ -41,7 +41,7 @@ export type {
 
 export { withDirectives } from "./directives";
 
-export { type CreateAppFunction } from "./apiCreateApp";
+export { type CreateAppFunction, App } from "./apiCreateApp";
 
 export {
   type ComponentInternalInstance,
