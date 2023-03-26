@@ -1,4 +1,7 @@
+import { isSymbol } from "../../shared";
 import {
+  ArrayExpression,
+  DirectiveArguments,
   DirectiveNode,
   ElementNode,
   ElementTypes,
@@ -6,12 +9,15 @@ import {
   ObjectExpression,
   TemplateTextChildNode,
   VNodeCall,
+  createArrayExpression,
   createObjectExpression,
   createObjectProperty,
   createSimpleExpression,
   createVNodeCall,
 } from "../ast";
 import { NodeTransform, TransformContext } from "../transform";
+
+const directiveImportMap = new WeakMap<DirectiveNode, symbol>();
 
 export type PropsExpression = ObjectExpression;
 
@@ -34,12 +40,20 @@ export const transformElement: NodeTransform = (node, context) => {
 
     let vnodeTag = `"${tag}"`;
     let vnodeProps: VNodeCall["props"];
+    let vnodeDirectives: VNodeCall["directives"];
     let vnodeChildren: VNodeCall["children"];
 
     // props
     if (props.length > 0) {
       const propsBuildResult = buildProps(node, context);
       vnodeProps = propsBuildResult.props;
+
+      const directives = propsBuildResult.directives;
+      vnodeDirectives = directives.length
+        ? (createArrayExpression(
+            directives.map((dir) => buildDirectiveArgs(dir, context))
+          ) as DirectiveArguments)
+        : undefined;
     }
 
     // children
@@ -67,6 +81,7 @@ export const transformElement: NodeTransform = (node, context) => {
       vnodeTag,
       vnodeProps,
       vnodeChildren,
+      vnodeDirectives,
       isComponent
     );
   };
@@ -97,8 +112,14 @@ export function buildProps(
       const directiveTransform = context.directiveTransforms[name];
       if (directiveTransform) {
         // has built-in directive transform.
-        const { props } = directiveTransform(prop, node, context);
+        const { props, needRuntime } = directiveTransform(prop, node, context);
         properties.push(...props);
+        if (needRuntime) {
+          runtimeDirectives.push(prop);
+          if (isSymbol(needRuntime)) {
+            directiveImportMap.set(prop, needRuntime);
+          }
+        }
       }
     }
   }
@@ -112,4 +133,23 @@ export function buildProps(
     props: propsExpression,
     directives: runtimeDirectives,
   };
+}
+
+export function buildDirectiveArgs(
+  dir: DirectiveNode,
+  context: TransformContext
+): ArrayExpression {
+  const dirArgs: ArrayExpression["elements"] = [];
+  const runtime = directiveImportMap.get(dir);
+  if (runtime) {
+    dirArgs.push(context.helperString(runtime));
+  }
+  if (dir.exp) dirArgs.push(dir.exp);
+  if (dir.arg) {
+    if (!dir.exp) {
+      dirArgs.push(`void 0`);
+    }
+    dirArgs.push(dir.arg);
+  }
+  return createArrayExpression(dirArgs, dir.loc);
 }

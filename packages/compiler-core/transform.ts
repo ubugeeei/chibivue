@@ -26,6 +26,7 @@ export type DirectiveTransform = (
 
 export interface DirectiveTransformResult {
   props: Property[];
+  needRuntime?: boolean | symbol
 }
 
 export type StructuralDirectiveTransform = (

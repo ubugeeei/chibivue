@@ -72,6 +72,7 @@ export interface VNodeCall extends Node {
     | TemplateTextChildNode
     | SimpleExpressionNode // hoisted
     | undefined;
+  directives: DirectiveArguments | undefined;
   isComponent: boolean;
 }
 
@@ -278,6 +279,7 @@ export function createVNodeCall(
   tag: VNodeCall["tag"],
   props?: VNodeCall["props"],
   children?: VNodeCall["children"],
+  directives?: VNodeCall["directives"],
   isComponent: VNodeCall["isComponent"] = false,
   loc: SourceLocation = locStub
 ): VNodeCall {
@@ -290,6 +292,7 @@ export function createVNodeCall(
     tag,
     props,
     children,
+    directives,
     isComponent,
     loc,
   };
