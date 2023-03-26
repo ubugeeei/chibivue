@@ -142,7 +142,7 @@ export interface BaseElementNode extends Node {
   tagType: ElementTypes;
   props: Array<AttributeNode | DirectiveNode>;
   children: TemplateChildNode[];
-  isSelfClosing: boolean
+  isSelfClosing: boolean;
 }
 
 export interface PlainElementNode extends BaseElementNode {
@@ -175,7 +175,7 @@ export interface SimpleExpressionNode extends Node {
   type: NodeTypes.SIMPLE_EXPRESSION;
   content: string;
   isStatic: boolean;
-  identifiers?: string[]
+  identifiers?: string[];
 }
 
 export interface CompoundExpressionNode extends Node {
@@ -324,7 +324,7 @@ export function createObjectProperty(
 ): Property {
   return {
     type: NodeTypes.JS_PROPERTY,
-    key: isString(key) ? createSimpleExpression(key) : key,
+    key: isString(key) ? createSimpleExpression(key, true) : key,
     value,
     loc,
   };
