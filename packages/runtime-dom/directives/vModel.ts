@@ -25,6 +25,13 @@ export const vModelText: ModelDirective<
   mounted(el, { value }) {
     el.value = value == null ? "" : value;
   },
+  beforeUpdate(el, { value }, vnode) {
+    el._assign = getModelAssigner(vnode);
+    const newValue = value == null ? "" : value;
+    if (el.value !== newValue) {
+      el.value = newValue;
+    }
+  },
 };
 
 export const vModelDynamic: ObjectDirective<
