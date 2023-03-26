@@ -4,9 +4,14 @@ import * as runtimeDom from "./runtime-dom";
 
 import { compile } from "./compiler-dom";
 import { RenderFunction, registerRuntimeCompiler } from "./runtime-core";
+import { CompilerOptions } from "./compiler-core";
 
-function compileToFunction(template: string): RenderFunction {
-  const { code } = compile(template);
+function compileToFunction(
+  template: string,
+  options?: CompilerOptions
+): RenderFunction {
+  const opts = { ...options } as CompilerOptions;
+  const { code } = compile(template, opts);
   return new Function("ChibiVue", code)(runtimeDom);
 }
 
