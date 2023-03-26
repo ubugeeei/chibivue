@@ -75,13 +75,13 @@ function createParserContext(
   rawOptions: ParserOptions
 ): ParserContext {
   const options = { ...defaultParserOptions };
-  let key: keyof ParserOptions
+  let key: keyof ParserOptions;
   for (key in rawOptions) {
     // @ts-ignore
     options[key] =
       rawOptions[key] === undefined
         ? defaultParserOptions[key]
-        : rawOptions[key]
+        : rawOptions[key];
   }
 
   return {
@@ -257,6 +257,8 @@ function parseTag(context: ParserContext, type: TagType): ElementNode {
 
   if (tag === "template") {
     tagType = ElementTypes.TEMPLATE;
+  } else if (isComponent(tag, props, context)) {
+    tagType = ElementTypes.COMPONENT;
   }
 
   return {
