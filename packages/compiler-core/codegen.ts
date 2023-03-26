@@ -21,6 +21,7 @@ import {
   CREATE_VNODE,
   FRAGMENT,
   RENDER_LIST,
+  RESOLVE_COMPONENT,
   TO_DISPLAY_STRING,
   TO_HANDLER_KEY,
   WITH_DIRECTIVES,
@@ -131,9 +132,10 @@ function genFunctionPreamble(ast: RootNode, context: CodegenContext) {
     push(`import * as _ChibiVue from '${runtimeModuleName}'\n`);
   }
 
-  const staticHelpers = [
+  const helpers = [
     CREATE_VNODE,
     CREATE_ELEMENT_VNODE,
+    RESOLVE_COMPONENT,
     TO_HANDLER_KEY,
     TO_DISPLAY_STRING,
     FRAGMENT,
@@ -143,7 +145,7 @@ function genFunctionPreamble(ast: RootNode, context: CodegenContext) {
   ]
     .map(aliasHelper)
     .join(", ");
-  push(`const { ${staticHelpers} } = _ChibiVue\n`);
+  push(`const { ${helpers} } = _ChibiVue\n`);
   newline();
   if (__BROWSER__) push(`return `);
 }
