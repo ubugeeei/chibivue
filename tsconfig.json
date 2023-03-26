@@ -13,6 +13,9 @@
       "chibi-vue-store": [
         "./packages/@extensions/chibi-vue-store"
       ],
+      "chibi-vue-router": [
+        "./packages/@extensions/chibi-vue-router"
+      ],
     },
     "types": [
       "vitest/importMeta",

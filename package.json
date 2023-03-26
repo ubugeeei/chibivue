@@ -5,6 +5,7 @@
     "dev": "cd example/playground && pnpm i && pnpm run dev",
     "dev:template": "cd example/template && pnpm i && pnpm run dev",
     "dev:render": "cd example/render && pnpm i && pnpm run dev",
+    "dev:router": "cd example/router && pnpm i && pnpm run dev",
     "dev:setup": "cd example/render_setup && pnpm i && pnpm run dev",
     "dev:store": "cd example/store && pnpm i && pnpm run dev",
     "dev:sfc": "cd example/sfc && pnpm i && pnpm run dev",
