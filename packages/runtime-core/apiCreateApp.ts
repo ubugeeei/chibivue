@@ -6,6 +6,7 @@ import { InjectionKey } from "./apiInject";
 
 export interface App<HostElement = any> {
   use(plugin: Plugin, ...options: any[]): App;
+  component(name: string, component: Component): this;
   mount(rootContainer: HostElement | string): void;
   provide<T>(key: InjectionKey<T> | string, value: T): this;
 }
@@ -17,6 +18,7 @@ export type CreateAppFunction<HostElement> = (
 export interface AppContext {
   app: App; // for devtools
   provides: Record<string | symbol, any>;
+  components: Record<string, Component>;
 }
 
 export type Plugin = {
@@ -27,6 +29,7 @@ export function createAppContext(): AppContext {
   return {
     app: null as any,
     provides: Object.create(null),
+    components: Object.create(null),
   };
 }
 
@@ -44,6 +47,11 @@ export function createAppAPI<HostElement>(
 
         installedPlugins.add(plugin);
         plugin.install(app, ...options);
+        return app;
+      },
+
+      component(name: string, component: Component) {
+        context.components[name] = component;
         return app;
       },
 
