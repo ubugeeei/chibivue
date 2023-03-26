@@ -1,4 +1,6 @@
+import { isFunction } from "../shared";
 import { ComponentPublicInstance } from "./componentPublicInstance";
+import { currentRenderingInstance } from "./componentRenderContext";
 import { VNode } from "./vnode";
 
 export interface DirectiveBinding<V = any> {
@@ -25,4 +27,41 @@ export interface ObjectDirective<T = any> {
   beforeUnmount?: DirectiveHook<T>;
   unmounted?: DirectiveHook<T>;
   deep?: boolean;
+}
+
+export type DirectiveArguments = Array<
+  | [ObjectDirective | undefined]
+  | [ObjectDirective | undefined, any]
+  | [ObjectDirective | undefined, any, string]
+>;
+
+export function withDirectives<T extends VNode>(
+  vnode: T,
+  directives: DirectiveArguments
+): T {
+  const internalInstance = currentRenderingInstance;
+  if (internalInstance === null) return vnode;
+
+  const instance = internalInstance.proxy;
+
+  const bindings: DirectiveBinding[] = vnode.dirs || (vnode.dirs = []);
+  for (let i = 0; i < directives.length; i++) {
+    let [dir, value, arg] = directives[i];
+    if (dir) {
+      if (isFunction(dir)) {
+        dir = {
+          mounted: dir,
+          updated: dir,
+        } as ObjectDirective;
+      }
+      bindings.push({
+        dir,
+        instance,
+        value,
+        oldValue: void 0,
+        arg,
+      });
+    }
+  }
+  return vnode;
 }
