@@ -11,6 +11,7 @@ import { transformFor } from "./transforms/vFor";
 import { transformBind } from "./transforms/vBind";
 import { transformOn } from "./transforms/vOn";
 import { transformModel } from "./transforms/vModel";
+import { CompilerOptions } from "./options";
 
 export type TransformPreset = [
   NodeTransform[],
@@ -30,6 +31,7 @@ export function getBaseTransformPreset(): TransformPreset {
 
 export function baseCompile(
   template: string | RootNode,
+  options: CompilerOptions = {},
   { __BROWSER__ }: { __BROWSER__: boolean }
 ) {
   // parse
@@ -38,8 +40,11 @@ export function baseCompile(
   // transform
   const [nodeTransforms, directiveTransforms] = getBaseTransformPreset();
   transform(ast, {
-    nodeTransforms: [...nodeTransforms],
-    directiveTransforms: { ...directiveTransforms },
+    nodeTransforms: [...nodeTransforms, ...(options.nodeTransforms || [])],
+    directiveTransforms: {
+      ...directiveTransforms,
+      ...(options.directiveTransforms || {}),
+    },
   });
 
   // codegen
