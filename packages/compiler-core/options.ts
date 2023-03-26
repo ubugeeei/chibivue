@@ -43,4 +43,5 @@ export const enum BindingTypes {
   OPTIONS = "options",
 }
 
-export type CompilerOptions = ParserOptions & TransformOptions;
+export type CompilerOptions = ParserOptions &
+  TransformOptions & { __BROWSER__: boolean };

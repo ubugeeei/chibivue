@@ -14,20 +14,15 @@ export const DOMDirectiveTransforms: Record<string, DirectiveTransform> = {
 
 export function compile(
   template: string,
-  options: CompilerOptions = {},
-  { __BROWSER__ } = { __BROWSER__: true }
+  options: CompilerOptions
 ): CodegenResult {
-  return baseCompile(
-    template,
-    {
-      ...options,
-      directiveTransforms: {
-        ...options.directiveTransforms,
-        ...DOMDirectiveTransforms,
-      },
+  return baseCompile(template, {
+    ...options,
+    directiveTransforms: {
+      ...options.directiveTransforms,
+      ...DOMDirectiveTransforms,
     },
-    { __BROWSER__ }
-  ) as any;
+  }) as any;
 }
 
 export function parse(template: string): RootNode {

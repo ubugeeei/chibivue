@@ -31,8 +31,7 @@ export function getBaseTransformPreset(): TransformPreset {
 
 export function baseCompile(
   template: string | RootNode,
-  options: CompilerOptions = {},
-  { __BROWSER__ }: { __BROWSER__: boolean }
+  options: CompilerOptions
 ) {
   // parse
   const ast = isString(template) ? baseParse(template) : template;
@@ -48,7 +47,7 @@ export function baseCompile(
   });
 
   // codegen
-  const code = generate(ast, { __BROWSER__ });
+  const code = generate(ast, options);
 
   return code;
 }
