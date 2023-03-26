@@ -1,5 +1,5 @@
 import { ResolvedOptions } from ".";
-import { SFCTemplateCompileResults } from "~/packages/compiler-sfc/compileTemplate";
+import { SFCTemplateCompileResults } from "../../compiler-sfc/compileTemplate";
 
 export function transformTemplateInMain(
   code: string,

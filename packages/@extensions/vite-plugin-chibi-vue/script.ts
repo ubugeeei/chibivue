@@ -1,4 +1,4 @@
-import { SFCDescriptor, SFCScriptBlock } from "~/packages/compiler-sfc";
+import { SFCDescriptor, SFCScriptBlock } from "../../compiler-sfc";
 import { ResolvedOptions } from ".";
 
 export function resolveScript(

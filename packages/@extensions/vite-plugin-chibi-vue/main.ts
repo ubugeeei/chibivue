@@ -1,7 +1,7 @@
 import { ResolvedOptions } from ".";
 import { createDescriptor } from "./createDescriptor";
 import { resolveScript } from "./script";
-import { SFCDescriptor } from "~/packages/compiler-sfc";
+import { SFCDescriptor } from "../../compiler-sfc";
 import { transformTemplateInMain } from "./template";
 
 export async function transformMain(
