@@ -34,7 +34,7 @@ export function baseCompile(
   options: CompilerOptions
 ) {
   // parse
-  const ast = isString(template) ? baseParse(template) : template;
+  const ast = isString(template) ? baseParse(template, options) : template;
 
   // transform
   const [nodeTransforms, directiveTransforms] = getBaseTransformPreset();

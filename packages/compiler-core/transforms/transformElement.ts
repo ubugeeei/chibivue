@@ -1,6 +1,7 @@
 import { isSymbol } from "../../shared";
 import {
   ArrayExpression,
+  ComponentNode,
   DirectiveArguments,
   DirectiveNode,
   ElementNode,
@@ -38,7 +39,9 @@ export const transformElement: NodeTransform = (node, context) => {
     const { tag, props } = node;
     const isComponent = node.tagType === ElementTypes.COMPONENT;
 
-    let vnodeTag = `"${tag}"`;
+    const vnodeTag = isComponent
+      ? resolveComponentType(node as ComponentNode, context)
+      : `"${tag}"`;
     let vnodeProps: VNodeCall["props"];
     let vnodeDirectives: VNodeCall["directives"];
     let vnodeChildren: VNodeCall["children"];
@@ -152,4 +155,34 @@ export function buildDirectiveArgs(
     dirArgs.push(dir.arg);
   }
   return createArrayExpression(dirArgs, dir.loc);
+}
+
+export function resolveComponentType(
+  node: ComponentNode,
+  context: TransformContext
+) {
+  let { tag } = node;
+
+  // TODO: 1. dynamic component
+
+  // TODO: 1.5 v-is (TODO: Deprecate)
+
+  // TODO: 2. built-in components (Teleport, Transition, KeepAlive, Suspense...)
+
+  // TODO: 3. user component (from setup bindings)
+
+  // TODO: 4. Self referencing component (inferred from filename)
+
+  // 5. user component (resolve)
+  context.components.add(tag);
+  return toValidAssetId(tag, `component`);
+}
+
+export function toValidAssetId(
+  name: string,
+  type: "component" | "directive" | "filter"
+): string {
+  return `_${type}_${name.replace(/[^\w]/g, (searchValue, replaceValue) => {
+    return searchValue === "-" ? "_" : name.charCodeAt(replaceValue).toString();
+  })}`;
 }

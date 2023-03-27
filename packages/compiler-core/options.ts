@@ -4,6 +4,11 @@ import { DirectiveTransform, NodeTransform } from "./transform";
 
 export interface ParserOptions {
   /**
+   * e.g. platform native elements, e.g. `<div>` for browsers
+   */
+  isNativeTag?: (tag: string) => boolean;
+
+  /**
    * @default ['{{', '}}']
    */
   delimiters?: [string, string];

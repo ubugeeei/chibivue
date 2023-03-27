@@ -2,6 +2,7 @@ import { computed, reactive } from "../reactivity";
 import {
   InternalRenderFunction,
   type ComponentInternalInstance,
+  ConcreteComponent,
 } from "./component";
 import { VNodeChild, type VNode } from "./vnode";
 
@@ -15,6 +16,7 @@ export type ComponentOptions = {
   setup?: () => Record<string, unknown> | (() => VNode);
   render?: Function;
   template?: string;
+  components?: Record<string, ConcreteComponent>;
 };
 
 export function applyOptions(instance: ComponentInternalInstance) {

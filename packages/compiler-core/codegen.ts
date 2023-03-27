@@ -21,11 +21,13 @@ import {
   CREATE_VNODE,
   FRAGMENT,
   RENDER_LIST,
+  RESOLVE_COMPONENT,
   TO_DISPLAY_STRING,
   TO_HANDLER_KEY,
   WITH_DIRECTIVES,
   helperNameMap,
 } from "./runtimeHelpers";
+import { toValidAssetId } from "./transforms/transformElement";
 
 const aliasHelper = (s: symbol) => `${helperNameMap[s]}: _${helperNameMap[s]}`;
 
@@ -103,6 +105,13 @@ export function generate(
 
   genFunctionPreamble(ast, context);
 
+  // generate asset resolution statements
+  if (ast.components.length) {
+    genAssets(ast.components, context);
+    context.newline();
+    context.newline();
+  }
+
   const args = ["_ctx"];
   const signature = args.join(", ");
 
@@ -131,9 +140,10 @@ function genFunctionPreamble(ast: RootNode, context: CodegenContext) {
     push(`import * as _ChibiVue from '${runtimeModuleName}'\n`);
   }
 
-  const staticHelpers = [
+  const helpers = [
     CREATE_VNODE,
     CREATE_ELEMENT_VNODE,
+    RESOLVE_COMPONENT,
     TO_HANDLER_KEY,
     TO_DISPLAY_STRING,
     FRAGMENT,
@@ -143,7 +153,7 @@ function genFunctionPreamble(ast: RootNode, context: CodegenContext) {
   ]
     .map(aliasHelper)
     .join(", ");
-  push(`const { ${staticHelpers} } = _ChibiVue\n`);
+  push(`const { ${helpers} } = _ChibiVue\n`);
   newline();
   if (__BROWSER__) push(`return `);
 }
@@ -369,6 +379,28 @@ function genNodeList(
 
     if (i < nodes.length - 1) {
       comma && push(", ");
+    }
+  }
+}
+
+function genAssets(
+  assets: string[],
+  { helper, push, newline }: CodegenContext
+) {
+  const resolver = helper(RESOLVE_COMPONENT);
+  for (let i = 0; i < assets.length; i++) {
+    let id = assets[i];
+    const maybeSelfReference = id.endsWith("__self");
+    if (maybeSelfReference) {
+      id = id.slice(0, -6);
+    }
+    push(
+      `const ${toValidAssetId(id, "component")} = ${resolver}(${JSON.stringify(
+        id
+      )}${maybeSelfReference ? `, true` : ``})`
+    );
+    if (i < assets.length - 1) {
+      newline();
     }
   }
 }

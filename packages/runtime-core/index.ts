@@ -21,6 +21,7 @@ export { provide, inject, type InjectionKey } from "./apiInject";
 
 export { h } from "./h";
 
+export { resolveComponent } from "./helpers/resolveAssets";
 export { renderList } from "./helpers/renderList";
 
 export {

@@ -37,6 +37,7 @@ const decodeMap: Record<string, string> = {
 };
 
 export const defaultParserOptions: Required<ParserOptions> = {
+  isNativeTag: (tag) => true,
   delimiters: [`{{`, `}}`],
   decodeEntities: (rawText: string): string =>
     rawText.replace(decodeRE, (_, p1) => decodeMap[p1]),
@@ -61,13 +62,27 @@ export interface ParserContext {
   column: number;
 }
 
-export function baseParse(content: string): RootNode {
-  const context = createParserContext(content);
+export function baseParse(
+  content: string,
+  rawOptions: ParserOptions
+): RootNode {
+  const context = createParserContext(content, rawOptions);
   return createRoot(parseChildren(context, TextModes.DATA, []));
 }
 
-function createParserContext(content: string): ParserContext {
+function createParserContext(
+  content: string,
+  rawOptions: ParserOptions
+): ParserContext {
   const options = { ...defaultParserOptions };
+  let key: keyof ParserOptions;
+  for (key in rawOptions) {
+    // @ts-ignore
+    options[key] =
+      rawOptions[key] === undefined
+        ? defaultParserOptions[key]
+        : rawOptions[key];
+  }
 
   return {
     options,
@@ -242,6 +257,8 @@ function parseTag(context: ParserContext, type: TagType): ElementNode {
 
   if (tag === "template") {
     tagType = ElementTypes.TEMPLATE;
+  } else if (isComponent(tag, props, context)) {
+    tagType = ElementTypes.COMPONENT;
   }
 
   return {
@@ -254,6 +271,15 @@ function parseTag(context: ParserContext, type: TagType): ElementNode {
     codegenNode: undefined, // to be created during transform phase
     loc: getSelection(context, start),
   };
+}
+
+function isComponent(
+  tag: string,
+  props: (AttributeNode | DirectiveNode)[],
+  context: ParserContext
+) {
+  const options = context.options;
+  return options.isNativeTag && !options.isNativeTag(tag);
 }
 
 function parseAttributes(

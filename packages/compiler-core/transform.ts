@@ -26,7 +26,7 @@ export type DirectiveTransform = (
 
 export interface DirectiveTransformResult {
   props: Property[];
-  needRuntime?: boolean | symbol
+  needRuntime?: boolean | symbol;
 }
 
 export type StructuralDirectiveTransform = (
@@ -37,6 +37,7 @@ export type StructuralDirectiveTransform = (
 
 export interface TransformContext extends Required<TransformOptions> {
   helpers: Map<symbol, number>;
+  components: Set<string>;
   currentNode: RootNode | TemplateChildNode | null;
   identifiers: { [name: string]: number | undefined };
   scopes: {
@@ -59,6 +60,7 @@ export function createTransformContext(
     nodeTransforms,
     directiveTransforms,
     helpers: new Map(),
+    components: new Set(),
     currentNode: root,
     identifiers: Object.create(null),
     scopes: {
@@ -115,6 +117,7 @@ export function createTransformContext(
 export function transform(root: RootNode, options: TransformOptions) {
   const context = createTransformContext(root, options);
   traverseNode(root, context);
+  root.components = [...context.components];
 }
 
 export function traverseNode(

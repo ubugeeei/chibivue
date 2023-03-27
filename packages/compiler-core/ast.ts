@@ -133,6 +133,7 @@ export interface RootNode extends Node {
   children: TemplateChildNode[];
   codegenNode: (TemplateChildNode | VNodeCall)[] | undefined;
   helpers: Set<symbol>;
+  components: string[];
 }
 
 export type ElementNode = PlainElementNode | ComponentNode | TemplateNode;
@@ -268,6 +269,7 @@ export function createRoot(
   return {
     type: NodeTypes.ROOT,
     children,
+    components: [],
     helpers: new Set(),
     codegenNode: undefined,
     loc,
