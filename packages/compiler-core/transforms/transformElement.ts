@@ -39,7 +39,7 @@ export const transformElement: NodeTransform = (node, context) => {
     const { tag, props } = node;
     const isComponent = node.tagType === ElementTypes.COMPONENT;
 
-    let vnodeTag = isComponent
+    const vnodeTag = isComponent
       ? resolveComponentType(node as ComponentNode, context)
       : `"${tag}"`;
     let vnodeProps: VNodeCall["props"];
@@ -159,8 +159,7 @@ export function buildDirectiveArgs(
 
 export function resolveComponentType(
   node: ComponentNode,
-  context: TransformContext,
-  ssr = false
+  context: TransformContext
 ) {
   let { tag } = node;
 
@@ -175,6 +174,7 @@ export function resolveComponentType(
   // TODO: 4. Self referencing component (inferred from filename)
 
   // 5. user component (resolve)
+  context.components.add(tag);
   return toValidAssetId(tag, `component`);
 }
 

@@ -33,6 +33,12 @@ export interface ComponentInternalInstance {
   scope: EffectScope;
 
   /**
+   * Resolved component registry, only for components with mixins or extends
+   * @internal
+   */
+  components: Record<string, ConcreteComponent> | null;
+
+  /**
    * Root vnode of this component's own vdom tree
    */
   subTree: VNode;
@@ -108,6 +114,7 @@ export function createComponentInstance(
     provides: parent ? parent.provides : Object.create(appContext.provides),
     effect: null!,
     scope: new EffectScope(),
+    components: null,
     subTree: null!,
     update: null!,
     render: null!,

@@ -27,6 +27,7 @@ import {
   WITH_DIRECTIVES,
   helperNameMap,
 } from "./runtimeHelpers";
+import { toValidAssetId } from "./transforms/transformElement";
 
 const aliasHelper = (s: symbol) => `${helperNameMap[s]}: _${helperNameMap[s]}`;
 
@@ -103,6 +104,13 @@ export function generate(
   const { push } = context;
 
   genFunctionPreamble(ast, context);
+
+  // generate asset resolution statements
+  if (ast.components.length) {
+    genAssets(ast.components, context);
+    context.newline();
+    context.newline();
+  }
 
   const args = ["_ctx"];
   const signature = args.join(", ");
@@ -371,6 +379,28 @@ function genNodeList(
 
     if (i < nodes.length - 1) {
       comma && push(", ");
+    }
+  }
+}
+
+function genAssets(
+  assets: string[],
+  { helper, push, newline }: CodegenContext
+) {
+  const resolver = helper(RESOLVE_COMPONENT);
+  for (let i = 0; i < assets.length; i++) {
+    let id = assets[i];
+    const maybeSelfReference = id.endsWith("__self");
+    if (maybeSelfReference) {
+      id = id.slice(0, -6);
+    }
+    push(
+      `const ${toValidAssetId(id, "component")} = ${resolver}(${JSON.stringify(
+        id
+      )}${maybeSelfReference ? `, true` : ``})`
+    );
+    if (i < assets.length - 1) {
+      newline();
     }
   }
 }
