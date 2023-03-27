@@ -110,7 +110,7 @@ function createBaseVNode(
   return vnode;
 }
 
-export { createBaseVNode as createElementVNode };
+export { createVNode as createElementVNode };
 
 export function normalizeChildren(vnode: VNode, children: unknown) {
   let type = 0;
