@@ -105,23 +105,25 @@ export function generate(
 
   genFunctionPreamble(ast, context);
 
-  // generate asset resolution statements
-  if (ast.components.length) {
-    genAssets(ast.components, context);
-    context.newline();
-    context.newline();
-  }
-
   const args = ["_ctx"];
   const signature = args.join(", ");
 
   push(`function render(${signature}) { `);
+  context.indent();
+
+  // generate asset resolution statements
+  if (ast.components.length) {
+    genAssets(ast.components, context);
+    context.newline();
+  }
+
   push(`return `);
   if (ast.children) {
     ast.children.forEach((codegenNode) => {
       genNode(codegenNode, context);
     });
   }
+  context.deindent();
   push(` }`);
 
   return {

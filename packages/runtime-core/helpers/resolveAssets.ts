@@ -1,5 +1,5 @@
 import { camelize, capitalize } from "../../shared";
-import { ConcreteComponent } from "../component";
+import { ConcreteComponent, currentInstance } from "../component";
 import { ComponentOptions } from "../componentOptions";
 import { currentRenderingInstance } from "../componentRenderContext";
 
@@ -12,7 +12,8 @@ export function resolveComponent(name: string): ConcreteComponent | string {
 }
 
 function resolveAsset(type: AssetTypes, name: string) {
-  const instance = currentRenderingInstance;
+  const instance = currentRenderingInstance || currentInstance;
+
   if (instance) {
     const Component = instance.type;
     const res =
