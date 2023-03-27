@@ -13,7 +13,7 @@ export function provide<T>(key: InjectionKey<T> | string | number, value: T) {
 export function inject<T>(key: InjectionKey<T> | string): T | undefined {
   const instance = currentInstance;
   if (instance) {
-    const provides = instance.vnode.appContext?.provides;
+    const provides = instance.appContext?.provides;
     if (provides && (key as string | symbol) in provides) {
       return provides[key as string];
     }

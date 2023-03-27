@@ -65,7 +65,8 @@ type PatchFn = (
   n1: VNode | null, // null means this is a mount
   n2: VNode,
   container: RendererElement,
-  anchor: RendererNode | null
+  anchor: RendererNode | null,
+  parentComponent?: ComponentInternalInstance | null
 ) => void;
 
 type ProcessTextOrCommentFn = (
@@ -78,14 +79,16 @@ type ProcessTextOrCommentFn = (
 type MountChildrenFn = (
   children: VNodeArrayChildren,
   container: RendererElement,
-  anchor: RendererNode | null
+  anchor: RendererNode | null,
+  parentComponent: ComponentInternalInstance | null
 ) => void;
 
 type PatchChildrenFn = (
   n1: VNode | null,
   n2: VNode,
   container: RendererElement,
-  anchor: RendererNode | null
+  anchor: RendererNode | null,
+  parentComponent: ComponentInternalInstance | null
 ) => void;
 
 type MoveFn = (
@@ -129,16 +132,22 @@ export function createRenderer(options: RendererOptions) {
     nextSibling: hostNextSibling,
   } = options;
 
-  const patch: PatchFn = (n1, n2, container, anchor) => {
+  const patch: PatchFn = (
+    n1,
+    n2,
+    container,
+    anchor,
+    parentComponent = null
+  ) => {
     const { type, shapeFlag } = n2;
     if (type === Text) {
       processText(n1, n2, container, anchor);
     } else if (type === Fragment) {
-      processFragment(n1, n2, container, anchor);
+      processFragment(n1, n2, container, anchor, parentComponent);
     } else if (shapeFlag & ShapeFlags.ELEMENT) {
-      processElement(n1, n2, container, anchor);
+      processElement(n1, n2, container, anchor, parentComponent);
     } else if (shapeFlag & ShapeFlags.COMPONENT) {
-      processComponent(n1, n2, container, anchor);
+      processComponent(n1, n2, container, anchor, parentComponent);
     }
   };
 
@@ -161,19 +170,21 @@ export function createRenderer(options: RendererOptions) {
     n1: VNode | null,
     n2: VNode,
     container: RendererElement,
-    anchor: RendererNode | null
+    anchor: RendererNode | null,
+    parentComponent: ComponentInternalInstance | null
   ) => {
     if (n1 == null) {
-      mountElement(n2, container, anchor);
+      mountElement(n2, container, anchor, parentComponent);
     } else {
-      patchElement(n1, n2);
+      patchElement(n1, n2, parentComponent);
     }
   };
 
   const mountElement = (
     vnode: VNode,
     container: RendererElement,
-    anchor: RendererNode | null
+    anchor: RendererNode | null,
+    parentComponent: ComponentInternalInstance | null
   ) => {
     let el: RendererElement;
     const { type, props, shapeFlag, dirs } = vnode;
@@ -183,7 +194,12 @@ export function createRenderer(options: RendererOptions) {
     if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
       hostSetElementText(el, vnode.children as string);
     } else if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
-      mountChildren(vnode.children as VNodeArrayChildren, el, null);
+      mountChildren(
+        vnode.children as VNodeArrayChildren,
+        el,
+        null,
+        parentComponent
+      );
     }
 
     dirs && invokeDirectiveHook(vnode, null, "created");
@@ -199,7 +215,11 @@ export function createRenderer(options: RendererOptions) {
     dirs && invokeDirectiveHook(vnode, null, "mounted");
   };
 
-  const patchElement = (n1: VNode, n2: VNode) => {
+  const patchElement = (
+    n1: VNode,
+    n2: VNode,
+    parentComponent: ComponentInternalInstance | null
+  ) => {
     const el = (n2.el = n1.el!);
     const { dirs } = n2;
 
@@ -207,7 +227,7 @@ export function createRenderer(options: RendererOptions) {
     const newProps = n2.props ?? {};
 
     dirs && invokeDirectiveHook(n2, n1, "beforeUpdate");
-    patchChildren(n1, n2, el, null);
+    patchChildren(n1, n2, el, null, parentComponent);
     patchProps(el, oldProps, newProps);
     dirs && invokeDirectiveHook(n2, n1, "updated");
   };
@@ -246,7 +266,8 @@ export function createRenderer(options: RendererOptions) {
     n1: VNode | null,
     n2: VNode,
     container: RendererElement,
-    anchor: RendererNode | null
+    anchor: RendererNode | null,
+    parentComponent: ComponentInternalInstance | null
   ) => {
     const fragmentStartAnchor = (n2.el = n1 ? n1.el : hostCreateText(""))!;
     const fragmentEndAnchor = (n2.anchor = n1
@@ -259,17 +280,23 @@ export function createRenderer(options: RendererOptions) {
       mountChildren(
         n2.children as VNodeArrayChildren,
         container,
-        fragmentEndAnchor
+        fragmentEndAnchor,
+        parentComponent
       );
     } else {
-      patchChildren(n1, n2, container, fragmentEndAnchor);
+      patchChildren(n1, n2, container, fragmentEndAnchor, parentComponent);
     }
   };
 
-  const mountChildren: MountChildrenFn = (children, container, anchor) => {
+  const mountChildren: MountChildrenFn = (
+    children,
+    container,
+    anchor,
+    parentComponent
+  ) => {
     for (let i = 0; i < children.length; i++) {
       const child = (children[i] = normalizeVNode(children[i]));
-      patch(null, child, container, anchor);
+      patch(null, child, container, anchor, parentComponent);
     }
   };
 
@@ -301,7 +328,7 @@ export function createRenderer(options: RendererOptions) {
       if (!instance.isMounted) {
         const { m } = instance;
         const subTree = (instance.subTree = renderComponentRoot(instance));
-        patch(null, subTree, container, anchor);
+        patch(null, subTree, container, anchor, instance);
         initialVNode.el = subTree.el;
 
         // mounted hook
@@ -327,7 +354,8 @@ export function createRenderer(options: RendererOptions) {
           prevTree,
           nextTree,
           hostParentNode(prevTree.el!)!,
-          getNextHostNode(prevTree)
+          getNextHostNode(prevTree),
+          instance
         );
         next.el = nextTree.el;
       }
@@ -349,7 +377,13 @@ export function createRenderer(options: RendererOptions) {
     instance.next = null;
   };
 
-  const patchChildren: PatchChildrenFn = (n1, n2, container, anchor) => {
+  const patchChildren: PatchChildrenFn = (
+    n1,
+    n2,
+    container,
+    anchor,
+    parentComponent
+  ) => {
     const c1 = n1 && n1.children;
     const prevShapeFlag = n1 ? n1.shapeFlag : 0;
     const c2 = n2.children;
@@ -365,7 +399,13 @@ export function createRenderer(options: RendererOptions) {
     } else {
       if (prevShapeFlag & ShapeFlags.ARRAY_CHILDREN) {
         if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
-          patchKeyedChildren(c1 as VNode[], c2 as VNode[], container, anchor);
+          patchKeyedChildren(
+            c1 as VNode[],
+            c2 as VNode[],
+            container,
+            anchor,
+            parentComponent
+          );
         } else {
           // no new children, just unmount old
           unmountChildren(c1 as VNode[]);
@@ -378,7 +418,12 @@ export function createRenderer(options: RendererOptions) {
         }
         // mount new if array
         if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
-          mountChildren(c2 as VNodeArrayChildren, container, anchor);
+          mountChildren(
+            c2 as VNodeArrayChildren,
+            container,
+            anchor,
+            parentComponent
+          );
         }
       }
     }
@@ -389,7 +434,8 @@ export function createRenderer(options: RendererOptions) {
     c1: VNode[],
     c2: VNode[],
     container: RendererElement,
-    parentAnchor: RendererNode | null
+    parentAnchor: RendererNode | null,
+    parentComponent: ComponentInternalInstance | null
   ) => {
     let i = 0;
     const l2 = c2.length;
@@ -403,7 +449,7 @@ export function createRenderer(options: RendererOptions) {
       const n1 = c1[i];
       const n2 = (c2[i] = normalizeVNode(c2[i]));
       if (isSameVNodeType(n1, n2)) {
-        patch(n1, n2, container, null);
+        patch(n1, n2, container, null, parentComponent);
       } else {
         break;
       }
@@ -417,7 +463,7 @@ export function createRenderer(options: RendererOptions) {
       const n1 = c1[e1];
       const n2 = (c2[i] = normalizeVNode(c2[i]));
       if (isSameVNodeType(n1, n2)) {
-        patch(n1, n2, container, null);
+        patch(n1, n2, container, null, parentComponent);
       } else {
         break;
       }
@@ -437,7 +483,13 @@ export function createRenderer(options: RendererOptions) {
         const nextPos = e2 + 1;
         const anchor = nextPos < l2 ? (c2[nextPos] as VNode).el : parentAnchor;
         while (i <= e2) {
-          patch(null, (c2[i] = normalizeVNode(c2[i])), container, anchor);
+          patch(
+            null,
+            (c2[i] = normalizeVNode(c2[i])),
+            container,
+            anchor,
+            parentComponent
+          );
           i++;
         }
       }
@@ -521,7 +573,13 @@ export function createRenderer(options: RendererOptions) {
           } else {
             moved = true;
           }
-          patch(prevChild, c2[newIndex] as VNode, container, null);
+          patch(
+            prevChild,
+            c2[newIndex] as VNode,
+            container,
+            null,
+            parentComponent
+          );
           patched++;
         }
       }
@@ -540,7 +598,7 @@ export function createRenderer(options: RendererOptions) {
           nextIndex + 1 < l2 ? (c2[nextIndex + 1] as VNode).el : parentAnchor;
         if (newIndexToOldIndexMap[i] === 0) {
           // mount new
-          patch(null, nextChild, container, anchor);
+          patch(null, nextChild, container, anchor, parentComponent);
         } else if (moved) {
           // move if:
           // There is no stable subsequence (e.g. a reverse)
@@ -603,7 +661,7 @@ export function createRenderer(options: RendererOptions) {
         unmount(container._vnode);
       }
     } else {
-      patch((container as any)._vnode || null, vnode, container, null);
+      patch((container as any)._vnode || null, vnode, container, null, null);
     }
     (container as any)._vnode = vnode;
   };
