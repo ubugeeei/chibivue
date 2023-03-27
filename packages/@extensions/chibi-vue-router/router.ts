@@ -24,34 +24,36 @@ export interface Router {
 
   push(to: string): void;
   replace(to: string): void;
-  go(delta: number): void;
-  back(): ReturnType<Router["go"]>;
-  forward(): ReturnType<Router["go"]>;
 }
 
 export function createRouter(options: RouterOptions): Router {
+  const routerHistory = options.history;
+  const resolve = (to: string) => {
+    const route = options.routes.find((route) => route.path === to);
+    return {
+      fullPath: to,
+      component: route?.component ?? null,
+    };
+  };
+
   const currentRoute = ref<RouteLocationNormalizedLoaded>({
     fullPath: "/",
-    component: null,
+    component: resolve("/").component,
   });
-  const routerHistory = options.history;
 
   function push(to: string) {
     routerHistory.push(to);
+    currentRoute.value = resolve(to);
   }
 
   function replace(to: string) {
     routerHistory.replace(to);
+    currentRoute.value = resolve(to);
   }
-
-  const go = (delta: number) => routerHistory.go(delta);
 
   const router: Router = {
     push,
     replace,
-    go,
-    back: () => go(-1),
-    forward: () => go(1),
     install(app: App) {
       const router = this;
       app.component("RouterView", RouterViewImpl);

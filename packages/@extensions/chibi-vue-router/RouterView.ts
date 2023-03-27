@@ -1,17 +1,19 @@
-import { inject, computed, h } from "chibi-vue";
-import { ComponentOptions } from "../../runtime-core";
+import { inject, h, ComponentOptions, Fragment } from "chibi-vue";
 import { routerViewLocationKey } from "./injectionSymbols";
-import { RouteLocationNormalizedLoaded } from "./types";
 
 export const RouterViewImpl: ComponentOptions = {
   name: "RouterView",
   setup() {
     const injectedRoute = inject(routerViewLocationKey)!;
-    const routeToDisplay = computed<RouteLocationNormalizedLoaded>(
-      () => injectedRoute.value
-    );
+
     return () => {
-      return h(routeToDisplay.value.component);
+      const ViewComponent = injectedRoute.value.component;
+
+      // NOTE: wrap in Fragment to render by patch children:
+      // prettier-ignore
+      const component = h(Fragment, [h(ViewComponent, { key: injectedRoute.value.fullPath }),]);
+
+      return component;
     };
   },
 };

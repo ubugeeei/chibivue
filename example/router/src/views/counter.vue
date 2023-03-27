@@ -1,4 +1,5 @@
 <script>
+import { ref } from "chibi-vue";
 export default {
   setup() {
     const count = ref(0);
