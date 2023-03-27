@@ -1,5 +1,5 @@
 export interface RouterHistory {
-  location: string;
+  location: Location;
   push(to: string): void;
   replace(to: string): void;
   go(delta: number, triggerListeners?: boolean): void;
@@ -7,7 +7,7 @@ export interface RouterHistory {
 
 export const createWebHistory = (): RouterHistory => {
   return {
-    location: window.location.pathname,
+    location: window.location,
     push(to: string) {
       window.history.pushState({}, "", to);
     },

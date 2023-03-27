@@ -37,8 +37,8 @@ export function createRouter(options: RouterOptions): Router {
   };
 
   const currentRoute = ref<RouteLocationNormalizedLoaded>({
-    fullPath: "/",
-    component: resolve("/").component,
+    fullPath: routerHistory.location.pathname,
+    component: resolve(routerHistory.location.pathname).component,
   });
 
   function push(to: string) {
