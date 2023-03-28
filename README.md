@@ -48,4 +48,4 @@ Currently, I am still in the process of implementation, but after implementation
       - defineProps / defineEmits
     - style block
   - ✅ store
-  - ⚠️ router
+  - ✅ router
