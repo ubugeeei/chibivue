@@ -13,18 +13,19 @@ export interface SFCParseOptions {
 export interface SFCBlock {
   type: string;
   content: string;
+  attrs: Record<string, string | true>;
 }
 
 export interface SFCTemplateBlock extends SFCBlock {
   type: "template";
-  // TODO: use ElementNode AST
-  // ast: ElementNode;
 }
 
 export interface SFCScriptBlock extends SFCBlock {
   type: "script";
+  setup?: string | boolean;
   bindings?: BindingMetadata;
   scriptAst?: import("@babel/types").Statement[];
+  scriptSetupAst?: import("@babel/types").Statement[];
 }
 
 export interface SFCDescriptor {
@@ -32,8 +33,7 @@ export interface SFCDescriptor {
   source: string;
   template: SFCTemplateBlock | null;
   script: SFCScriptBlock | null;
-  // TODO: script setup
-  // scriptSetup: SFCScriptBlock | null;
+  scriptSetup: SFCScriptBlock | null;
 }
 
 export interface SFCParseResult {
@@ -49,6 +49,7 @@ export function parse(
     source,
     template: null,
     script: null,
+    scriptSetup: null,
   };
 
   const ast = compiler.parse(source, {});
@@ -61,7 +62,14 @@ export function parse(
         break;
       }
       case "script": {
-        descriptor.script = createBlock(node, source) as SFCScriptBlock;
+        const scriptBlock = createBlock(node, source) as SFCScriptBlock;
+        const isSetup = !!scriptBlock.attrs.setup;
+        if (isSetup && !descriptor.scriptSetup) {
+          descriptor.scriptSetup = scriptBlock;
+        }
+        if (!isSetup && !descriptor.script) {
+          descriptor.script = scriptBlock;
+        }
         break;
       }
       default: {
@@ -75,9 +83,32 @@ export function parse(
 
 function createBlock(node: ElementNode, source: string): SFCBlock {
   const type = node.tag;
+
   let { start, end } = node.loc;
   start = node.children[0].loc.start;
   end = node.children[node.children.length - 1].loc.end;
   const content = source.slice(start.offset, end.offset);
-  return { type, content };
+
+  const attrs: Record<string, string | true> = {};
+
+  const block: SFCBlock = {
+    type,
+    content,
+    attrs,
+  };
+
+  node.props.forEach((p) => {
+    if (p.type === NodeTypes.ATTRIBUTE) {
+      attrs[p.name] = p.value ? p.value.content || true : true;
+      if (p.name === "lang") {
+        // TODO: parse lang
+      } else if (type === "style") {
+        // TODO: parse style block
+      } else if (type === "script" && p.name === "setup") {
+        (block as SFCScriptBlock).setup = attrs.setup;
+      }
+    }
+  });
+
+  return block;
 }
