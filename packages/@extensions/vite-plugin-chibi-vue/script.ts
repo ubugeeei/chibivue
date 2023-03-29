@@ -5,7 +5,7 @@ export function resolveScript(
   descriptor: SFCDescriptor,
   options: ResolvedOptions
 ): SFCScriptBlock | null {
-  if (!descriptor.script) return null;
+  if (!descriptor.script && !descriptor.scriptSetup) return null;
   let resolved: SFCScriptBlock | null = null;
   resolved = options.compiler.compileScript(descriptor);
   return resolved;

@@ -5,26 +5,69 @@ import { SFCDescriptor, SFCScriptBlock } from "./parse";
 import { BindingMetadata, BindingTypes } from "../compiler-core";
 
 export function compileScript(sfc: SFCDescriptor): SFCScriptBlock {
-  let { script } = sfc;
-  if (!script) {
-    throw new Error(`[compiler-sfc] SFC contains no <script> tags.`);
-  }
+  let { script, scriptSetup } = sfc;
 
-  try {
+  const scriptAst = _parse(script?.content ?? "", {
+    sourceType: "module",
+  }).program;
+  const scriptSetupAst = _parse(scriptSetup?.content ?? "", {}).program;
+
+  if (!scriptSetup) {
+    if (!script) {
+      throw new Error(`[@vue/compiler-sfc] SFC contains no <script> tags.`);
+    }
+
     let content = script.content;
-    const scriptAst = _parse(content, {
-      sourceType: "module",
-    }).program;
     const bindings = analyzeScriptBindings(scriptAst.body);
     return {
       ...script,
       content,
       bindings,
       scriptAst: scriptAst.body,
+      scriptSetupAst: scriptSetupAst.body,
     };
-  } catch (e) {
-    return script;
   }
+
+  // 1.1 walk import declaration of <script>
+  for (const node of scriptAst.body) {
+    if (node.type === "ImportDeclaration") {
+      // TODO:
+    }
+  }
+
+  // 1.2 walk import declarations of <script setup>
+  for (const node of scriptSetupAst.body) {
+    if (node.type === "ImportDeclaration") {
+      // TODO:
+    }
+  }
+
+  // 2.1 process normal <script> body
+  if (script && scriptAst) {
+    for (const node of scriptAst.body) {
+      // TODO:
+    }
+  }
+
+  // 2.2 process <script setup> body
+  for (const node of scriptSetupAst.body) {
+    // TODO:
+  }
+
+  // 10. generate return statement
+  let returned;
+  // TODO:
+
+  // 11. finalize default export
+  // TODO:
+
+  return {
+    // ...script,
+    // content,
+    // bindings,
+    // scriptAst: scriptAst.body,
+    // scriptSetupAst: scriptSetupAst.body,
+  };
 }
 
 function analyzeScriptBindings(ast: Statement[]): BindingMetadata {
