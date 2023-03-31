@@ -59,7 +59,7 @@ export function processExpression(
 ): ExpressionNode {
   const rawExp = node.content;
   const rewriteIdentifier = (raw: string) => {
-    const { inline } = context;
+    const { inline, bindingMetadata } = context;
     if (inline) {
       // TODO:
       return `${raw}.value`;

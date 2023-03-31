@@ -274,9 +274,7 @@ export function compileScript(sfc: SFCDescriptor): SFCScriptBlock {
   if (sfc.template) {
     const { code, preamble } = compileTemplate({
       source: sfc.template.content.trim(),
-      compilerOptions: {
-        inline: true,
-      },
+      compilerOptions: { inline: true, bindingMetadata },
     });
     if (preamble) {
       s.prepend(preamble);

@@ -59,6 +59,7 @@ export function createTransformContext(
     nodeTransforms = [],
     directiveTransforms = {},
     inline = false,
+    bindingMetadata = Object.create(null),
   }: TransformOptions
 ): TransformContext {
   const context: TransformContext = {
@@ -73,6 +74,7 @@ export function createTransformContext(
     },
     parent: null,
     childIndex: 0,
+    bindingMetadata,
     inline,
     helper(name) {
       const count = context.helpers.get(name) || 0;

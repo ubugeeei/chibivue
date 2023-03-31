@@ -25,16 +25,10 @@ export interface ParserOptions {
 }
 
 export interface TransformOptions {
-  /**
-   * An array of node transforms to be applied to every AST node.
-   */
   nodeTransforms?: NodeTransform[];
-  /**
-   * An object of { name: transform } to be applied to every directive attribute
-   * node found on element nodes.
-   */
   directiveTransforms?: Record<string, DirectiveTransform | undefined>;
   inline?: boolean;
+  bindingMetadata?: BindingMetadata;
 }
 
 export type BindingMetadata = {
