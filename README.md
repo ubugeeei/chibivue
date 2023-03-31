@@ -44,7 +44,7 @@ Currently, I am still in the process of implementation, but after implementation
   - sfc compiler (vite plugin)
     - ✅ basic
     - script setup
-      - basic
+      - ✅ basic
       - defineProps / defineEmits
     - style block
   - ✅ store
