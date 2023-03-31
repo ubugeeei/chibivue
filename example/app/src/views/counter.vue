@@ -1,12 +1,6 @@
-<script>
+<script setup>
 import { useCounterStore } from "../store/count.store";
-
-export default {
-  setup() {
-    const { count: todoMaxLength, increment, reset } = useCounterStore();
-    return { todoMaxLength, increment, reset };
-  },
-};
+const { count: todoMaxLength, increment, reset } = useCounterStore();
 </script>
 
 <template>

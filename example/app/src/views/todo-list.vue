@@ -1,7 +1,6 @@
 <script>
 import { ref } from "chibi-vue";
 import { useCounterStore } from "../store/count.store";
-
 const uuid = () => {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
     const r = (Math.random() * 16) | 0;
@@ -9,56 +8,45 @@ const uuid = () => {
     return v.toString(16);
   });
 };
+</script>
 
-export default {
-  setup() {
-    const newTodo = ref("");
-    const todos = ref(JSON.parse(localStorage.getItem("todos") ?? []));
-    const { count: todoMaxLength } = useCounterStore();
+<script setup>
+const newTodo = ref("");
+const todos = ref(JSON.parse(localStorage.getItem("todos") ?? []));
+const { count: todoMaxLength } = useCounterStore();
 
-    const addTodo = () => {
-      if (todos.value.length >= todoMaxLength.value) {
-        alert("Todo list is full");
-        return;
-      }
-      if (newTodo.value.trim()) {
-        todos.value = [
-          ...todos.value,
-          {
-            id: uuid(),
-            text: newTodo.value,
-            completed: false,
-          },
-        ];
-        localStorage.setItem("todos", JSON.stringify(todos.value));
-        newTodo.value = "";
-      } else {
-        alert("Please enter a todo");
-      }
-    };
+const addTodo = () => {
+  if (todos.value.length >= todoMaxLength.value) {
+    alert("Todo list is full");
+    return;
+  }
+  if (newTodo.value.trim()) {
+    todos.value = [
+      ...todos.value,
+      {
+        id: uuid(),
+        text: newTodo.value,
+        completed: false,
+      },
+    ];
+    localStorage.setItem("todos", JSON.stringify(todos.value));
+    newTodo.value = "";
+  } else {
+    alert("Please enter a todo");
+  }
+};
 
-    const toggleTodoCompletion = (id) => {
-      const todo = todos.value.find((t) => t.id === id);
-      if (todo) {
-        todo.completed = !todo.completed;
-        localStorage.setItem("todos", JSON.stringify(todos.value));
-      }
-    };
+const toggleTodoCompletion = (id) => {
+  const todo = todos.value.find((t) => t.id === id);
+  if (todo) {
+    todo.completed = !todo.completed;
+    localStorage.setItem("todos", JSON.stringify(todos.value));
+  }
+};
 
-    const removeTodo = (id) => {
-      todos.value = todos.value.filter((t) => t.id !== id);
-      localStorage.setItem("todos", JSON.stringify(todos.value));
-    };
-
-    return {
-      todoMaxLength,
-      newTodo,
-      todos,
-      addTodo,
-      toggleTodoCompletion,
-      removeTodo,
-    };
-  },
+const removeTodo = (id) => {
+  todos.value = todos.value.filter((t) => t.id !== id);
+  localStorage.setItem("todos", JSON.stringify(todos.value));
 };
 </script>
 
