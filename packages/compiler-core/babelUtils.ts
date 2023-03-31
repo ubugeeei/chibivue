@@ -1,4 +1,10 @@
-import { Identifier, Node } from "@babel/types";
+import {
+  Identifier,
+  ImportDefaultSpecifier,
+  ImportNamespaceSpecifier,
+  ImportSpecifier,
+  Node,
+} from "@babel/types";
 import { walk } from "estree-walker";
 
 export function walkIdentifiers(
@@ -44,6 +50,17 @@ export function walkIdentifiers(
       }
     },
   });
+}
+
+export function getImportedName(
+  specifier: ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier
+) {
+  if (specifier.type === "ImportSpecifier")
+    return specifier.imported.type === "Identifier"
+      ? specifier.imported.name
+      : specifier.imported.value;
+  else if (specifier.type === "ImportNamespaceSpecifier") return "*";
+  return "default";
 }
 
 export function isReferencedIdentifier(id: Identifier, parent: Node | null) {
