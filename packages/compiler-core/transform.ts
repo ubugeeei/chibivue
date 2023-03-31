@@ -45,6 +45,7 @@ export interface TransformContext extends Required<TransformOptions> {
   };
   parent: ParentNode | null;
   childIndex: number;
+  inline: boolean;
   helper<T extends symbol>(name: T): T;
   helperString(name: symbol): string;
   replaceNode(node: TemplateChildNode): void;
@@ -54,7 +55,11 @@ export interface TransformContext extends Required<TransformOptions> {
 
 export function createTransformContext(
   root: RootNode,
-  { nodeTransforms = [], directiveTransforms = {} }: TransformOptions
+  {
+    nodeTransforms = [],
+    directiveTransforms = {},
+    inline = false,
+  }: TransformOptions
 ): TransformContext {
   const context: TransformContext = {
     nodeTransforms,
@@ -68,6 +73,7 @@ export function createTransformContext(
     },
     parent: null,
     childIndex: 0,
+    inline,
     helper(name) {
       const count = context.helpers.get(name) || 0;
       context.helpers.set(name, count + 1);

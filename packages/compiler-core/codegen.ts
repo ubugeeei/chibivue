@@ -49,6 +49,7 @@ export interface CodegenContext {
   indentLevel: number;
   runtimeGlobalName: string;
   runtimeModuleName: string;
+  inline?: boolean;
   helper(key: symbol): string;
   push(code: string, node?: CodegenNode): void;
   indent(): void;
@@ -57,12 +58,12 @@ export interface CodegenContext {
   __BROWSER__: boolean;
 }
 
-function createCodegenContext({
-  __BROWSER__,
-}: {
-  __BROWSER__: boolean;
-}): CodegenContext {
+function createCodegenContext(
+  ast: RootNode,
+  { __BROWSER__ = false }: CodegenOptions
+): CodegenContext {
   const context: CodegenContext = {
+    source: ast.loc.source,
     code: ``,
     column: 1,
     line: 1,
