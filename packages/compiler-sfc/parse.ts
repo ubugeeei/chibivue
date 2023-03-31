@@ -1,5 +1,11 @@
-import { BindingMetadata, ElementNode, NodeTypes } from "../compiler-core";
+import {
+  BindingMetadata,
+  ElementNode,
+  NodeTypes,
+  SourceLocation,
+} from "../compiler-core";
 import * as CompilerDOM from "../compiler-dom";
+import { ImportBinding } from "./compileScript";
 import { TemplateCompiler } from "./compileTemplate";
 
 export const DEFAULT_FILENAME = "anonymous.vue";
@@ -13,6 +19,7 @@ export interface SFCParseOptions {
 export interface SFCBlock {
   type: string;
   content: string;
+  loc: SourceLocation;
   attrs: Record<string, string | true>;
 }
 
@@ -24,6 +31,7 @@ export interface SFCScriptBlock extends SFCBlock {
   type: "script";
   setup?: string | boolean;
   bindings?: BindingMetadata;
+  imports?: Record<string, ImportBinding>;
   scriptAst?: import("@babel/types").Statement[];
   scriptSetupAst?: import("@babel/types").Statement[];
 }
@@ -91,10 +99,16 @@ function createBlock(node: ElementNode, source: string): SFCBlock {
 
   const attrs: Record<string, string | true> = {};
 
+  const loc = {
+    source: content,
+    start,
+    end,
+  };
   const block: SFCBlock = {
     type,
     content,
     attrs,
+    loc,
   };
 
   node.props.forEach((p) => {
