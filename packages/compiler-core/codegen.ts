@@ -16,6 +16,7 @@ import {
   TextNode,
   VNodeCall,
 } from "./ast";
+import { CodegenOptions } from "./options";
 import {
   CREATE_ELEMENT_VNODE,
   CREATE_VNODE,
@@ -33,12 +34,14 @@ const aliasHelper = (s: symbol) => `${helperNameMap[s]}: _${helperNameMap[s]}`;
 
 export interface CodegenResult {
   code: string;
+  preamble: string;
   ast: RootNode;
 }
 
 type CodegenNode = TemplateChildNode | JSChildNode;
 
 export interface CodegenContext {
+  source: string;
   code: string;
   line: number;
   column: number;
@@ -98,12 +101,19 @@ function createCodegenContext({
 
 export function generate(
   ast: RootNode,
-  { __BROWSER__ }: { __BROWSER__: boolean }
+  options: CodegenOptions
 ): CodegenResult {
-  const context = createCodegenContext({ __BROWSER__ });
+  const context = createCodegenContext(ast, {
+    __BROWSER__: options.__BROWSER__,
+  });
   const { push } = context;
+  const isSetupInlined = !options.__BROWSER__ && !!options.inline;
 
-  genFunctionPreamble(ast, context);
+  const preambleContext = isSetupInlined
+    ? createCodegenContext(ast, options)
+    : context;
+
+  genFunctionPreamble(ast, preambleContext);
 
   const args = ["_ctx"];
   const signature = args.join(", ");
@@ -128,6 +138,7 @@ export function generate(
 
   return {
     ast,
+    preamble: isSetupInlined ? preambleContext.code : ``,
     code: context.code,
   };
 }
