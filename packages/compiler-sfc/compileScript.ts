@@ -277,6 +277,7 @@ export function compileScript(sfc: SFCDescriptor): SFCScriptBlock {
       source: sfc.template.content.trim(),
       compilerOptions: { inline: true, bindingMetadata },
     });
+
     if (preamble) {
       s.prepend(preamble);
     }
@@ -303,8 +304,6 @@ export function compileScript(sfc: SFCDescriptor): SFCScriptBlock {
   }
 
   s.trim();
-
-  console.log(s.toString());
 
   return {
     ...scriptSetup,
