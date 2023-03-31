@@ -12,6 +12,9 @@ import {
   createSimpleExpression,
 } from "../ast";
 import { NodeTransform, TransformContext } from "../transform";
+import { hasOwn } from "../../shared";
+import { BindingTypes } from "../options";
+import { UNREF } from "../runtimeHelpers";
 
 export const transformExpression: NodeTransform = (node, context) => {
   if (node.type === NodeTypes.INTERPOLATION) {
@@ -55,15 +58,39 @@ interface PrefixMeta {
 
 export function processExpression(
   node: SimpleExpressionNode,
-  context: TransformContext
+  context: TransformContext,
+  localVars: Record<string, number> = Object.create(context.identifiers)
 ): ExpressionNode {
   const rawExp = node.content;
-  const rewriteIdentifier = (raw: string) => {
-    const { inline, bindingMetadata } = context;
+  const { inline, bindingMetadata } = context;
+
+  const rewriteIdentifier = (raw: string, parent?: Node, id?: Identifier) => {
+    const type = hasOwn(bindingMetadata, raw) && bindingMetadata[raw];
+    // x = y
+    const isAssignmentLVal =
+      parent && parent.type === "AssignmentExpression" && parent.left === id;
+    // x++
+    const isUpdateArg =
+      parent && parent.type === "UpdateExpression" && parent.argument === id;
+
     if (inline) {
-      // TODO:
-      return `${raw}.value`;
+      if (
+        isConst(type) ||
+        type === BindingTypes.SETUP_REACTIVE_CONST ||
+        localVars[raw]
+      ) {
+        return raw;
+      } else if (type === BindingTypes.SETUP_REF) {
+        return `${raw}.value`;
+      } else if (type === BindingTypes.SETUP_MAYBE_REF) {
+        return isAssignmentLVal || isUpdateArg
+          ? `${raw}.value`
+          : `${context.helperString(UNREF)}(${raw})`;
+      } else {
+        // TODO: props
+      }
     }
+
     return `_ctx.${raw}`;
   };
 
@@ -84,9 +111,9 @@ export function processExpression(
 
   walkIdentifiers(
     ast,
-    (node, _, __, isReferenced, isLocal) => {
+    (node, parent, __, isReferenced, isLocal) => {
       if (isReferenced && !isLocal) {
-        node.name = rewriteIdentifier(node.name);
+        node.name = rewriteIdentifier(node.name, parent, node);
       }
       ids.push(node as QualifiedId);
     },
@@ -128,4 +155,10 @@ export function processExpression(
   ret.identifiers = Object.keys(knownIds);
 
   return ret;
+}
+
+function isConst(type: unknown) {
+  return (
+    type === BindingTypes.SETUP_CONST || type === BindingTypes.LITERAL_CONST
+  );
 }

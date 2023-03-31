@@ -25,6 +25,7 @@ import {
   RESOLVE_COMPONENT,
   TO_DISPLAY_STRING,
   TO_HANDLER_KEY,
+  UNREF,
   WITH_DIRECTIVES,
   helperNameMap,
 } from "./runtimeHelpers";
@@ -164,6 +165,7 @@ function genFunctionPreamble(ast: RootNode, context: CodegenContext) {
     V_MODEL_TEXT,
     WITH_DIRECTIVES,
     RENDER_LIST,
+    UNREF,
   ]
     .map(aliasHelper)
     .join(", ");
