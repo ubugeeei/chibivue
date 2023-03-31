@@ -39,6 +39,7 @@ export function baseCompile(
   // transform
   const [nodeTransforms, directiveTransforms] = getBaseTransformPreset();
   transform(ast, {
+    ...options,
     nodeTransforms: [...nodeTransforms, ...(options.nodeTransforms || [])],
     directiveTransforms: {
       ...directiveTransforms,

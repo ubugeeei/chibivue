@@ -1,12 +1,6 @@
-<script>
+<script setup>
 import { useRouter } from "chibi-vue-router";
-
-export default {
-  setup() {
-    const router = useRouter();
-    return { router };
-  },
-};
+const router = useRouter();
 </script>
 
 <template>

@@ -15,6 +15,7 @@ export interface SFCTemplateCompileResults {
   code: string;
   source: string;
   ast?: RootNode;
+  preamble?: string;
 }
 
 export interface SFCTemplateCompileOptions {
@@ -28,9 +29,9 @@ export function compileTemplate({
   compiler = CompilerDOM,
   compilerOptions,
 }: SFCTemplateCompileOptions): SFCTemplateCompileResults {
-  let { code, ast } = compiler.compile(source, {
+  let { code, ast, preamble } = compiler.compile(source, {
     ...compilerOptions,
     __BROWSER__: false,
   });
-  return { code: code, ast, source };
+  return { code: code, ast, source, preamble };
 }

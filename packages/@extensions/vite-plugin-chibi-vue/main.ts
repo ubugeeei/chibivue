@@ -1,6 +1,6 @@
 import { ResolvedOptions } from ".";
 import { createDescriptor } from "./createDescriptor";
-import { resolveScript } from "./script";
+import { isUseInlineTemplate, resolveScript } from "./script";
 import { SFCDescriptor } from "../../compiler-sfc";
 import { transformTemplateInMain } from "./template";
 
@@ -13,8 +13,17 @@ export async function transformMain(
 
   // script
   const { code: scriptCode } = genScriptCode(descriptor, options);
+
   // template
-  const { code: templateCode } = genTemplateCode(descriptor, options);
+  const hasTemplateImport =
+    descriptor.template && !isUseInlineTemplate(descriptor);
+
+  let templateCode = "";
+
+  if (hasTemplateImport) {
+    const { code } = genTemplateCode(descriptor, options);
+    templateCode = code;
+  }
 
   const attachedProps: [string, string][] = [];
   if (templateCode) {

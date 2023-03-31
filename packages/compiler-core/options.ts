@@ -25,15 +25,10 @@ export interface ParserOptions {
 }
 
 export interface TransformOptions {
-  /**
-   * An array of node transforms to be applied to every AST node.
-   */
   nodeTransforms?: NodeTransform[];
-  /**
-   * An object of { name: transform } to be applied to every directive attribute
-   * node found on element nodes.
-   */
   directiveTransforms?: Record<string, DirectiveTransform | undefined>;
+  inline?: boolean;
+  bindingMetadata?: BindingMetadata;
 }
 
 export type BindingMetadata = {
@@ -44,9 +39,18 @@ export type BindingMetadata = {
 
 export const enum BindingTypes {
   DATA = "data",
+  SETUP_CONST = "setup-const",
   SETUP_MAYBE_REF = "setup-maybe-ref",
+  SETUP_REF = "setup-ref",
+  SETUP_REACTIVE_CONST = "setup-reactive-const",
+  SETUP_LET = "setup-let",
+  LITERAL_CONST = "literal-const",
   OPTIONS = "options",
 }
 
-export type CompilerOptions = ParserOptions &
-  TransformOptions & { __BROWSER__: boolean };
+export interface CodegenOptions {
+  inline?: boolean;
+  __BROWSER__?: boolean;
+}
+
+export type CompilerOptions = ParserOptions & TransformOptions & CodegenOptions;

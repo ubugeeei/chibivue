@@ -16,6 +16,7 @@ import {
   TextNode,
   VNodeCall,
 } from "./ast";
+import { CodegenOptions } from "./options";
 import {
   CREATE_ELEMENT_VNODE,
   CREATE_VNODE,
@@ -24,6 +25,7 @@ import {
   RESOLVE_COMPONENT,
   TO_DISPLAY_STRING,
   TO_HANDLER_KEY,
+  UNREF,
   WITH_DIRECTIVES,
   helperNameMap,
 } from "./runtimeHelpers";
@@ -33,12 +35,14 @@ const aliasHelper = (s: symbol) => `${helperNameMap[s]}: _${helperNameMap[s]}`;
 
 export interface CodegenResult {
   code: string;
+  preamble: string;
   ast: RootNode;
 }
 
 type CodegenNode = TemplateChildNode | JSChildNode;
 
 export interface CodegenContext {
+  source: string;
   code: string;
   line: number;
   column: number;
@@ -46,6 +50,7 @@ export interface CodegenContext {
   indentLevel: number;
   runtimeGlobalName: string;
   runtimeModuleName: string;
+  inline?: boolean;
   helper(key: symbol): string;
   push(code: string, node?: CodegenNode): void;
   indent(): void;
@@ -54,12 +59,12 @@ export interface CodegenContext {
   __BROWSER__: boolean;
 }
 
-function createCodegenContext({
-  __BROWSER__,
-}: {
-  __BROWSER__: boolean;
-}): CodegenContext {
+function createCodegenContext(
+  ast: RootNode,
+  { __BROWSER__ = false }: CodegenOptions
+): CodegenContext {
   const context: CodegenContext = {
+    source: ast.loc.source,
     code: ``,
     column: 1,
     line: 1,
@@ -98,12 +103,19 @@ function createCodegenContext({
 
 export function generate(
   ast: RootNode,
-  { __BROWSER__ }: { __BROWSER__: boolean }
+  options: CodegenOptions
 ): CodegenResult {
-  const context = createCodegenContext({ __BROWSER__ });
+  const context = createCodegenContext(ast, {
+    __BROWSER__: options.__BROWSER__,
+  });
   const { push } = context;
+  const isSetupInlined = !options.__BROWSER__ && !!options.inline;
 
-  genFunctionPreamble(ast, context);
+  const preambleContext = isSetupInlined
+    ? createCodegenContext(ast, options)
+    : context;
+
+  genFunctionPreamble(ast, preambleContext);
 
   const args = ["_ctx"];
   const signature = args.join(", ");
@@ -128,6 +140,7 @@ export function generate(
 
   return {
     ast,
+    preamble: isSetupInlined ? preambleContext.code : ``,
     code: context.code,
   };
 }
@@ -152,6 +165,7 @@ function genFunctionPreamble(ast: RootNode, context: CodegenContext) {
     V_MODEL_TEXT,
     WITH_DIRECTIVES,
     RENDER_LIST,
+    UNREF,
   ]
     .map(aliasHelper)
     .join(", ");
