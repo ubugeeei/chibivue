@@ -4,6 +4,7 @@ import PagesTop from "./views/index.vue";
 import PagesState from "./views/state.vue";
 import PagesDirective from "./views/directive.vue";
 import PagesPropsEmits from "./views/props-emits.vue";
+import PagesCompilerMacro from "./views/compiler-macro.vue";
 import PagesOptionsApi from "./views/options-api.vue";
 import PagesInline from "./views/inline";
 
@@ -17,6 +18,7 @@ export const router = createRouter({
     { path: "/state", component: PagesState },
     { path: "/directive", component: PagesDirective },
     { path: "/props-emits", component: PagesPropsEmits },
+    { path: "/compiler-macro", component: PagesCompilerMacro },
     { path: "/options-api", component: PagesOptionsApi },
     { path: "/inline", component: PagesInline },
 
