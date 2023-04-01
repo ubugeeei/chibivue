@@ -7,10 +7,10 @@ export default defineComponent({
 
   setup() {
     const message = ref("hello world");
-    const changeMessage = () => {
-      message.value = "message changed";
+    const handleClick = (...args) => {
+      message.value = args.join(" ");
     };
-    return { message, changeMessage };
+    return { message, handleClick };
   },
 });
 </script>
@@ -18,7 +18,6 @@ export default defineComponent({
 <template>
   <div>
     <h1>compiler macro</h1>
-    <CompilerMacroDemo :message="message" />
-    <button @click="changeMessage">change message</button>
+    <CompilerMacroDemo :message="message" @click:compiler-macro="handleClick" />
   </div>
 </template>
