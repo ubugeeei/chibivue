@@ -20,11 +20,18 @@ const hasSetupBinding = (state: Data, key: string) => hasOwn(state, key);
 
 export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
   get({ _: instance }: ComponentRenderContext, key: string) {
-    const { ctx, setupState, data } = instance;
+    const { ctx, setupState, data, props } = instance;
+
+    let normalizedProps;
     if (hasSetupBinding(setupState, key)) {
       return setupState[key];
     } else if (hasOwn(data, key)) {
       return data[key];
+    } else if (
+      (normalizedProps = instance.propsOptions) &&
+      hasOwn(normalizedProps, key)
+    ) {
+      return props![key];
     } else if (hasOwn(ctx, key)) {
       return ctx[key];
     }
