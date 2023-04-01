@@ -43,9 +43,9 @@ Currently, I am still in the process of implementation, but after implementation
 - Extensions
   - sfc compiler (vite plugin)
     - ✅ basic
-    - script setup
+    - ✅ script setup
       - ✅ basic
-      - defineProps / defineEmits
+      - ✅ defineProps / defineEmits
     - style block
   - ✅ store
   - ✅ router
