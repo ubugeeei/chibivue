@@ -4,6 +4,7 @@ import {
   type ComponentInternalInstance,
   ConcreteComponent,
 } from "./component";
+import { ObjectEmitsOptions } from "./componentEmits";
 import { VNodeChild, type VNode } from "./vnode";
 
 export type RenderFunction = () => VNodeChild;
@@ -12,10 +13,12 @@ export type ComponentOptions = {
   name?: string;
   data?: () => Record<string, unknown>;
   props?: Record<string, any>;
+  emits?: ObjectEmitsOptions;
   methods?: { [key: string]: Function };
   computed?: { [key: string]: Function };
   setup?: (
-    props: Record<string, any>
+    props: Record<string, any>,
+    ctx: { emit: (event: string, ...args: any[]) => void }
   ) => Record<string, unknown> | (() => VNode);
   render?: Function;
   template?: string;
