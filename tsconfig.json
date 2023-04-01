@@ -25,7 +25,8 @@
   },
   "include": [
     "packages/**/*.ts",
-    "example/**/**.ts"
+    "example/**/**.ts",
+    "example/**/**.vue",
   ],
   "exclude": [
     "node_modules",

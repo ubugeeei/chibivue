@@ -14,7 +14,9 @@ export type ComponentOptions = {
   props?: Record<string, any>;
   methods?: { [key: string]: Function };
   computed?: { [key: string]: Function };
-  setup?: () => Record<string, unknown> | (() => VNode);
+  setup?: (
+    props: Record<string, any>
+  ) => Record<string, unknown> | (() => VNode);
   render?: Function;
   template?: string;
   components?: Record<string, ConcreteComponent>;

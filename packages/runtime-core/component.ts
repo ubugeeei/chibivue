@@ -128,7 +128,7 @@ export function createComponentInstance(
     ctx: {},
     data: {},
     props: {},
-    propsOptions: {},
+    propsOptions: type.props || {},
     setupState: {},
     isMounted: false,
     m: null,
@@ -165,7 +165,7 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
   const { setup } = Component;
   if (setup) {
     setCurrentInstance(instance);
-    const setupResult = setup();
+    const setupResult = setup(instance.props);
     if (isFunction(setupResult)) {
       instance.render = setupResult as InternalRenderFunction;
     } else if (isObject(setupResult)) {
