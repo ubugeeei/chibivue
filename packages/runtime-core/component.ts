@@ -3,6 +3,7 @@ import { ReactiveEffect } from "../reactivity/effect";
 import { EffectScope } from "../reactivity/effectScope";
 import { isFunction, isObject } from "../shared";
 import { AppContext, createAppContext } from "./apiCreateApp";
+import { EmitsOptions, ObjectEmitsOptions, emit } from "./componentEmits";
 import { ComponentOptions, applyOptions } from "./componentOptions";
 import { NormalizedProps, initProps } from "./componentProps";
 import {
@@ -44,6 +45,11 @@ export interface ComponentInternalInstance {
    * @internal
    */
   propsOptions: NormalizedProps;
+  /**
+   * resolved emits options
+   * @internal
+   */
+  emitsOptions: ObjectEmitsOptions | null;
 
   /**
    * Root vnode of this component's own vdom tree
@@ -73,23 +79,25 @@ export interface ComponentInternalInstance {
   // state
   data: Data;
   props: Data;
-  // TODO:
-  // emit: EmitFn
-  // attrs: Data
+  emit: EmitFn;
 
   /**
    * setup related
    * @internal
    */
   setupState: Data;
+  setupContext: SetupContext | null;
 
   // lifecycle
   isMounted: boolean;
-  /**
-   * @internal
-   */
   [LifecycleHooks.MOUNTED]: LifecycleHook;
 }
+
+// TODO: type as generic
+export type EmitFn = (event: string, ...args: any[]) => void;
+
+// TODO: type as generic
+export type SetupContext = { emit: EmitFn };
 
 export type InternalRenderFunction = {
   (
@@ -118,23 +126,30 @@ export function createComponentInstance(
     appContext,
     next: null,
     proxy: null,
-    provides: parent ? parent.provides : Object.create(appContext.provides),
     effect: null!,
     scope: new EffectScope(),
-    components: null,
     subTree: null!,
     update: null!,
     render: null!,
+
+    provides: parent ? parent.provides : Object.create(appContext.provides),
+    components: null,
+    propsOptions: type.props || {},
+    emitsOptions: type.emits || {},
+    emit: null!, // to be set immediately
+
     ctx: {},
     data: {},
     props: {},
-    propsOptions: type.props || {},
+
     setupState: {},
+    setupContext: null,
     isMounted: false,
     m: null,
   };
 
   instance.ctx = { _: instance };
+  instance.emit = emit.bind(null, instance);
 
   return instance;
 }
@@ -164,8 +179,9 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
   // Composition API
   const { setup } = Component;
   if (setup) {
+    const setupContext = (instance.setupContext = createSetupContext(instance));
     setCurrentInstance(instance);
-    const setupResult = setup(instance.props);
+    const setupResult = setup(instance.props, setupContext);
     if (isFunction(setupResult)) {
       instance.render = setupResult as InternalRenderFunction;
     } else if (isObject(setupResult)) {
@@ -196,4 +212,10 @@ let compile: CompileFunction | undefined;
  */
 export function registerRuntimeCompiler(_compile: any) {
   compile = _compile;
+}
+
+export function createSetupContext(
+  instance: ComponentInternalInstance
+): SetupContext {
+  return { emit: instance.emit };
 }
