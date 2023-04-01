@@ -1,9 +1,9 @@
 <script>
-import { reactive } from "chibi-vue";
+import { defineComponent, reactive } from "chibi-vue";
 import SimpleCard from "../components/SimpleCard.vue";
 import SimpleBtn from "../components/SimpleBtn.vue";
 
-export default {
+export default defineComponent({
   components: { SimpleCard, SimpleBtn },
   setup() {
     const card = reactive({
@@ -20,7 +20,7 @@ export default {
 
     return { card, changeTitle };
   },
-};
+});
 </script>
 
 <template>

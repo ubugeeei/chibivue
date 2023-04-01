@@ -1,5 +1,7 @@
 <script>
-export default {
+import { defineComponent } from "chibi-vue";
+
+export default defineComponent({
   data() {
     return {
       count: 0,
@@ -18,7 +20,7 @@ export default {
       return this.count * 2;
     },
   },
-};
+});
 </script>
 
 <template>
