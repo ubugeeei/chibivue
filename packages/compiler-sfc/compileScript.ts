@@ -19,6 +19,7 @@ import { getImportedName } from "../compiler-core/babelUtils";
 import { compileTemplate } from "./compileTemplate";
 
 const DEFINE_PROPS = "defineProps";
+const DEFINE_EMITS = "defineEmits";
 const DEFAULT_VAR = `__default__`;
 
 export interface ImportBinding {
@@ -61,6 +62,8 @@ export function compileScript(sfc: SFCDescriptor): SFCScriptBlock {
   let defaultExport: Node | undefined;
   let propsRuntimeDecl: Node | undefined;
   let propsIdentifier: string | undefined;
+  let emitsRuntimeDecl: Node | undefined;
+  let emitIdentifier: string | undefined;
 
   const scriptStartOffset = script && script.loc.start.offset;
   const scriptEndOffset = script && script.loc.end.offset;
@@ -87,10 +90,23 @@ export function compileScript(sfc: SFCDescriptor): SFCScriptBlock {
     if (!isCallOf(node, DEFINE_PROPS)) {
       return false;
     }
-
     propsRuntimeDecl = node.arguments[0];
     if (declId) {
       propsIdentifier = scriptSetup!.content.slice(declId.start!, declId.end!);
+    }
+    return true;
+  }
+
+  function processDefineEmits(node: Node, declId?: LVal): boolean {
+    if (!isCallOf(node, DEFINE_EMITS)) {
+      return false;
+    }
+    emitsRuntimeDecl = node.arguments[0];
+    if (declId) {
+      emitIdentifier =
+        declId.type === "Identifier"
+          ? declId.name
+          : scriptSetup!.content.slice(declId.start!, declId.end!);
     }
     return true;
   }
@@ -250,7 +266,7 @@ export function compileScript(sfc: SFCDescriptor): SFCScriptBlock {
 
     if (node.type === "ExpressionStatement") {
       const expr = node.expression;
-      if (processDefineProps(expr)) {
+      if (processDefineProps(expr) || processDefineEmits(expr)) {
         s.remove(node.start! + startOffset, node.end! + startOffset);
       }
     }
@@ -264,7 +280,8 @@ export function compileScript(sfc: SFCDescriptor): SFCScriptBlock {
         const init = decl.init;
         if (init) {
           const isDefineProps = processDefineProps(init, decl.id);
-          if (isDefineProps) {
+          const isDefineEmits = processDefineEmits(init, decl.id);
+          if (isDefineProps || isDefineEmits) {
             if (left === 1) {
               s.remove(node.start! + startOffset, node.end! + startOffset);
             } else {
@@ -336,6 +353,15 @@ export function compileScript(sfc: SFCDescriptor): SFCScriptBlock {
   if (propsIdentifier) {
     s.prependLeft(startOffset, `\nconst ${propsIdentifier} = __props;\n`);
   }
+  const destructureElements = [];
+  if (emitIdentifier) {
+    destructureElements.push(
+      emitIdentifier === `emit` ? `emit` : `emit: ${emitIdentifier}`
+    );
+  }
+  if (destructureElements.length) {
+    args += `, { ${destructureElements.join(", ")} }`;
+  }
 
   // 10. generate return statement
   let returned;
@@ -361,6 +387,11 @@ export function compileScript(sfc: SFCDescriptor): SFCScriptBlock {
       .slice(propsRuntimeDecl.start!, propsRuntimeDecl.end!)
       .trim();
     runtimeOptions += `\n  props: ${declCode},`;
+  }
+  if (emitsRuntimeDecl) {
+    runtimeOptions += `\n  emits: ${scriptSetup.content
+      .slice(emitsRuntimeDecl.start!, emitsRuntimeDecl.end!)
+      .trim()},`;
   }
 
   if (defaultExport) {
