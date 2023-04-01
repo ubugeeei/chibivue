@@ -5,9 +5,9 @@ import { type ComponentOptions } from "./componentOptions";
 export class ComponentPublicInstance {
   $!: ComponentInternalInstance;
   $data!: Record<string, unknown>;
+  $prop!: Data; // TODO: type as generic
   $options!: ComponentOptions;
   $el!: Element;
-
   $mount!: (el?: Element | string) => ComponentPublicInstance;
 }
 

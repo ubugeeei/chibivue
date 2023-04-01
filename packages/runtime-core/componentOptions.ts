@@ -11,6 +11,7 @@ export type RenderFunction = () => VNodeChild;
 export type ComponentOptions = {
   name?: string;
   data?: () => Record<string, unknown>;
+  props?: Record<string, any>;
   methods?: { [key: string]: Function };
   computed?: { [key: string]: Function };
   setup?: () => Record<string, unknown> | (() => VNode);
