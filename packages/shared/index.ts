@@ -55,6 +55,10 @@ export const isReservedProp = /*#__PURE__*/ makeMap(
     "onVnodeBeforeUnmount,onVnodeUnmounted"
 );
 
+export function genPropsAccessExp(name: string) {
+  return `__props.${name}`;
+}
+
 /**
  *
  * ----------- tests

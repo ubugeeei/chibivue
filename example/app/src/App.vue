@@ -14,6 +14,8 @@ const router = useRouter();
       <span>|</span>
       <a @click="router.push('/props-emits')">props/emit</a>
       <span>|</span>
+      <a @click="router.push('/compiler-macro')">compiler macro</a>
+      <span>|</span>
       <a @click="router.push('/options-api')">options api</a>
       <span>|</span>
       <a @click="router.push('/inline')">inline</a>
