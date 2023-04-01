@@ -30,7 +30,7 @@ Currently, I am still in the process of implementation, but after implementation
     - ✅ Composition API
   - ✅ lifecycle hooks
     - ✅ mounted
-  - props / emit
+  - ✅ props / emit
   - ✅ provide / inject
   - ✅ use plugin
 - Template Compiler
