@@ -1,13 +1,13 @@
 <script setup>
 const props = defineProps({
-  msg: { type: String, default: "Hello World" },
+  message: { type: String, default: "Hello World" },
 });
 
-console.log("props.msg: ", props);
+console.log("props.message: ", props);
 </script>
 
 <template>
   <div>
-    <p>{{ msg }} (children)</p>
+    <p>{{ message }} (children)</p>
   </div>
 </template>

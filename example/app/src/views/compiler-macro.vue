@@ -6,7 +6,7 @@ export default defineComponent({
   components: { CompilerMacroDemo },
 
   setup() {
-    const message = ref();
+    const message = ref("hello world");
     const changeMessage = () => {
       message.value = "message changed";
     };
@@ -18,7 +18,7 @@ export default defineComponent({
 <template>
   <div>
     <h1>compiler macro</h1>
-    <CompilerMacroDemo :msg="message" />
+    <CompilerMacroDemo :message="message" />
     <button @click="changeMessage">change message</button>
   </div>
 </template>

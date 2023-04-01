@@ -59,7 +59,6 @@ export function compileScript(sfc: SFCDescriptor): SFCScriptBlock {
   const setupBindings: Record<string, BindingTypes> = Object.create(null);
 
   let defaultExport: Node | undefined;
-  let hasDefinePropsCall = false;
   let propsRuntimeDecl: Node | undefined;
   let propsIdentifier: string | undefined;
 
@@ -89,7 +88,6 @@ export function compileScript(sfc: SFCDescriptor): SFCScriptBlock {
       return false;
     }
 
-    hasDefinePropsCall = true;
     propsRuntimeDecl = node.arguments[0];
     if (declId) {
       propsIdentifier = scriptSetup!.content.slice(declId.start!, declId.end!);
@@ -357,9 +355,15 @@ export function compileScript(sfc: SFCDescriptor): SFCScriptBlock {
   s.appendRight(endOffset, `\nreturn ${returned}\n`);
 
   // 11. finalize default export
+  let runtimeOptions = ``;
+  if (propsRuntimeDecl) {
+    let declCode = scriptSetup.content
+      .slice(propsRuntimeDecl.start!, propsRuntimeDecl.end!)
+      .trim();
+    runtimeOptions += `\n  props: ${declCode},`;
+  }
+
   if (defaultExport) {
-    // without TS, can't rely on rest spread, so we use Object.assign
-    // export default Object.assign(__default__, { ... })
     s.prependLeft(
       startOffset,
       `\nexport default /*#__PURE__*/Object.assign(${
@@ -368,7 +372,10 @@ export function compileScript(sfc: SFCDescriptor): SFCScriptBlock {
     );
     s.appendRight(endOffset, `})`);
   } else {
-    s.prependLeft(startOffset, `\nexport default { setup(${args}) {\n`);
+    s.prependLeft(
+      startOffset,
+      `\nexport default {\n${runtimeOptions}\nsetup(${args}) {\n`
+    );
     s.appendRight(endOffset, `}}`);
   }
 
