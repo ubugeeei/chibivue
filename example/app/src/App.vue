@@ -14,6 +14,8 @@ const router = useRouter();
       <span>|</span>
       <a @click="router.push('/props-emits')">props/emit</a>
       <span>|</span>
+      <a @click="router.push('/options-api')">options api</a>
+      <span>|</span>
       <a @click="router.push('/store-counter')">store</a>
       <span>|</span>
       <a @click="router.push('/todo-app')">todo app</a>
