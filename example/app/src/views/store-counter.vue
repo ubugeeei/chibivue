@@ -5,8 +5,8 @@ const { count: todoMaxLength, increment, reset } = useCounterStore();
 
 <template>
   <div>
-    <h1>Counter Page</h1>
-    <p>todo max length: {{ todoMaxLength }}</p>
+    <h1>store</h1>
+    <p>todo max length: {{ todoMaxLength }} (global counter)</p>
     <button @click="increment">increment</button>
     <button @click="reset">reset</button>
   </div>

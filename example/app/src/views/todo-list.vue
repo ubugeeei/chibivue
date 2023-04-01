@@ -52,9 +52,9 @@ const removeTodo = (id) => {
 
 <template>
   <div>
-    <h1>Todo App</h1>
+    <h1>todo app</h1>
     <div>
-      <p>todo max length: {{ todoMaxLength }}</p>
+      <p>todo max length: {{ todoMaxLength }} (global counter)</p>
       <input v-model="newTodo" type="text" placeholder="Enter a new todo" />
       <button @click="addTodo">Add Todo</button>
     </div>

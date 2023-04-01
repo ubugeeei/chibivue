@@ -1,11 +1,3 @@
-<script>
-export default {
-  setup() {
-    return {};
-  },
-};
-</script>
-
 <template>
   <div>
     <h1>Top Page</h1>
@@ -13,7 +5,7 @@ export default {
     <p>👋 Hello Chibi-vue!</p>
 
     <p>
-      chibi-vue is minimam Vue.js v3 core implementations (reaactivity, vnode,
+      chibi-vue is minimal Vue.js v3 core implementations (reactivity, vnode,
       component, compiler). "chibi" means "small" in Japanese.
     </p>
 

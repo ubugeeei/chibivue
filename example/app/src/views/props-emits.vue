@@ -1,10 +1,10 @@
 <script>
 import { reactive } from "chibi-vue";
 import SimpleCard from "../components/SimpleCard.vue";
+import SimpleBtn from "../components/SimpleBtn.vue";
 
 export default {
-  components: { SimpleCard },
-
+  components: { SimpleCard, SimpleBtn },
   setup() {
     const card = reactive({
       title: "Hello World",
@@ -12,7 +12,10 @@ export default {
     });
 
     const changeTitle = () => {
-      card.title = "Changed Title";
+      card.title =
+        card.title === "Hello World!!!!!!!!!!!"
+          ? "Hello World??????????"
+          : "Hello World!!!!!!!!!!!";
     };
 
     return { card, changeTitle };
@@ -22,8 +25,8 @@ export default {
 
 <template>
   <div>
-    <h1>Props Test</h1>
-    <button @click="changeTitle">Change Title</button>
+    <h1>props/emits</h1>
     <SimpleCard :card="card" />
+    <SimpleBtn text="Change Title" @click:simple-btn="changeTitle" />
   </div>
 </template>
