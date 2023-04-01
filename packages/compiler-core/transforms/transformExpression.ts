@@ -12,7 +12,7 @@ import {
   createSimpleExpression,
 } from "../ast";
 import { NodeTransform, TransformContext } from "../transform";
-import { hasOwn } from "../../shared";
+import { genPropsAccessExp, hasOwn } from "../../shared";
 import { BindingTypes } from "../options";
 import { UNREF } from "../runtimeHelpers";
 
@@ -86,8 +86,8 @@ export function processExpression(
         return isAssignmentLVal || isUpdateArg
           ? `${raw}.value`
           : `${context.helperString(UNREF)}(${raw})`;
-      } else {
-        // TODO: props
+      } else if (type === BindingTypes.PROPS) {
+        return genPropsAccessExp(raw);
       }
     }
 

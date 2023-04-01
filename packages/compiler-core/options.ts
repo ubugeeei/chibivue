@@ -39,6 +39,7 @@ export type BindingMetadata = {
 
 export const enum BindingTypes {
   DATA = "data",
+  PROPS = "props",
   SETUP_CONST = "setup-const",
   SETUP_MAYBE_REF = "setup-maybe-ref",
   SETUP_REF = "setup-ref",
