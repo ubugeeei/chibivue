@@ -4,6 +4,7 @@ import { EffectScope } from "../reactivity/effectScope";
 import { isFunction, isObject } from "../shared";
 import { AppContext, createAppContext } from "./apiCreateApp";
 import { ComponentOptions, applyOptions } from "./componentOptions";
+import { NormalizedProps, initProps } from "./componentProps";
 import {
   ComponentPublicInstance,
   PublicInstanceProxyHandlers,
@@ -39,6 +40,12 @@ export interface ComponentInternalInstance {
   components: Record<string, ConcreteComponent> | null;
 
   /**
+   * resolved props options
+   * @internal
+   */
+  propsOptions: NormalizedProps;
+
+  /**
    * Root vnode of this component's own vdom tree
    */
   subTree: VNode;
@@ -65,10 +72,10 @@ export interface ComponentInternalInstance {
 
   // state
   data: Data;
+  props: Data;
   // TODO:
-  // props: Data
-  // attrs: Data
   // emit: EmitFn
+  // attrs: Data
 
   /**
    * setup related
@@ -120,6 +127,8 @@ export function createComponentInstance(
     render: null!,
     ctx: {},
     data: {},
+    props: {},
+    propsOptions: type.props || {},
     setupState: {},
     isMounted: false,
     m: null,
@@ -145,6 +154,9 @@ export const unsetCurrentInstance = () => {
 };
 
 export const setupComponent = (instance: ComponentInternalInstance) => {
+  const { props } = instance.vnode;
+  initProps(instance, props);
+
   const Component = instance.type as ComponentOptions;
 
   instance.proxy = new Proxy(instance.ctx, PublicInstanceProxyHandlers);
@@ -153,7 +165,7 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
   const { setup } = Component;
   if (setup) {
     setCurrentInstance(instance);
-    const setupResult = setup();
+    const setupResult = setup(instance.props);
     if (isFunction(setupResult)) {
       instance.render = setupResult as InternalRenderFunction;
     } else if (isObject(setupResult)) {

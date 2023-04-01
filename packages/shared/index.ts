@@ -1,3 +1,5 @@
+import { makeMap } from "./makeMap";
+
 export * from "./toDisplayString";
 
 const onRE = /^on[^a-z]/;
@@ -44,6 +46,14 @@ export const capitalize = (str: string) =>
 
 export const toHandlerKey = (str: string) =>
   str ? `on${capitalize(str)}` : ``;
+
+export const isReservedProp = /*#__PURE__*/ makeMap(
+  // the leading comma is intentional so empty string "" is also included
+  ",key,ref,ref_for,ref_key," +
+    "onVnodeBeforeMount,onVnodeMounted," +
+    "onVnodeBeforeUpdate,onVnodeUpdated," +
+    "onVnodeBeforeUnmount,onVnodeUnmounted"
+);
 
 /**
  *
