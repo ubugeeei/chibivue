@@ -9,6 +9,7 @@ import {
   ObjectPattern,
   ArrayPattern,
   ExportSpecifier,
+  LVal,
 } from "@babel/types";
 import MagicString from "magic-string";
 
@@ -17,6 +18,7 @@ import { BindingMetadata, BindingTypes } from "../compiler-core";
 import { getImportedName } from "../compiler-core/babelUtils";
 import { compileTemplate } from "./compileTemplate";
 
+const DEFINE_PROPS = "defineProps";
 const DEFAULT_VAR = `__default__`;
 
 export interface ImportBinding {
@@ -55,7 +57,11 @@ export function compileScript(sfc: SFCDescriptor): SFCScriptBlock {
   const userImports: Record<string, ImportBinding> = Object.create(null);
   const scriptBindings: Record<string, BindingTypes> = Object.create(null);
   const setupBindings: Record<string, BindingTypes> = Object.create(null);
+
   let defaultExport: Node | undefined;
+  let hasDefinePropsCall = false;
+  let propsRuntimeDecl: Node | undefined;
+  let propsIdentifier: string | undefined;
 
   const scriptStartOffset = script && script.loc.start.offset;
   const scriptEndOffset = script && script.loc.end.offset;
@@ -76,6 +82,19 @@ export function compileScript(sfc: SFCDescriptor): SFCScriptBlock {
       source,
       isFromSetup,
     };
+  }
+
+  function processDefineProps(node: Node, declId?: LVal): boolean {
+    if (!isCallOf(node, DEFINE_PROPS)) {
+      return false;
+    }
+
+    hasDefinePropsCall = true;
+    propsRuntimeDecl = node.arguments[0];
+    if (declId) {
+      propsIdentifier = scriptSetup!.content.slice(declId.start!, declId.end!);
+    }
+    return true;
   }
 
   function hoistNode(node: Statement) {
@@ -230,6 +249,43 @@ export function compileScript(sfc: SFCDescriptor): SFCScriptBlock {
     ) {
       walkDeclaration(node, setupBindings, vueImportAliases);
     }
+
+    if (node.type === "ExpressionStatement") {
+      const expr = node.expression;
+      if (processDefineProps(expr)) {
+        s.remove(node.start! + startOffset, node.end! + startOffset);
+      }
+    }
+
+    if (node.type === "VariableDeclaration" && !node.declare) {
+      const total = node.declarations.length;
+      let left = total;
+      let lastNonRemoved: number | undefined;
+      for (let i = 0; i < total; i++) {
+        const decl = node.declarations[i];
+        const init = decl.init;
+        if (init) {
+          const isDefineProps = processDefineProps(init, decl.id);
+          if (isDefineProps) {
+            if (left === 1) {
+              s.remove(node.start! + startOffset, node.end! + startOffset);
+            } else {
+              let start = decl.start! + startOffset;
+              let end = decl.end! + startOffset;
+              if (i === total - 1) {
+                start = node.declarations[lastNonRemoved!].end! + startOffset;
+              } else {
+                end = node.declarations[i + 1].start! + startOffset;
+              }
+              s.remove(start, end);
+              left--;
+            }
+          } else {
+            lastNonRemoved = i;
+          }
+        }
+      }
+    }
   }
 
   // 6. remove non-script content
@@ -255,6 +311,13 @@ export function compileScript(sfc: SFCDescriptor): SFCScriptBlock {
   if (scriptAst) {
     Object.assign(bindingMetadata, analyzeScriptBindings(scriptAst.body));
   }
+  if (propsRuntimeDecl) {
+    for (const key of getObjectExpressionKeys(
+      propsRuntimeDecl as ObjectExpression
+    )) {
+      bindingMetadata[key] = BindingTypes.PROPS;
+    }
+  }
   for (const [key, { imported, source }] of Object.entries(userImports)) {
     bindingMetadata[key] =
       imported === "*" ||
@@ -268,6 +331,12 @@ export function compileScript(sfc: SFCDescriptor): SFCScriptBlock {
   }
   for (const key in setupBindings) {
     bindingMetadata[key] = setupBindings[key];
+  }
+
+  // 9. finalize setup() argument signature
+  let args = `__props`;
+  if (propsIdentifier) {
+    s.prependLeft(startOffset, `\nconst ${propsIdentifier} = __props;\n`);
   }
 
   // 10. generate return statement
@@ -295,15 +364,17 @@ export function compileScript(sfc: SFCDescriptor): SFCScriptBlock {
       startOffset,
       `\nexport default /*#__PURE__*/Object.assign(${
         defaultExport ? `${DEFAULT_VAR}, ` : ""
-      }{ setup() {\n`
+      }{ setup(${args}) {\n`
     );
     s.appendRight(endOffset, `})`);
   } else {
-    s.prependLeft(startOffset, `\nexport default { setup() {\n`);
+    s.prependLeft(startOffset, `\nexport default { setup(${args}) {\n`);
     s.appendRight(endOffset, `}}`);
   }
 
   s.trim();
+
+  console.log(s.toString());
 
   return {
     ...scriptSetup,
