@@ -9,7 +9,7 @@ export default {
     const handleClick = (...args) => {
       message.value = [...args].join(" ");
     };
-    return { handleClick };
+    return { message, handleClick };
   },
 };
 </script>
