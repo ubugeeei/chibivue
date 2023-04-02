@@ -1,7 +1,6 @@
 import { isOn } from "../shared";
 import { patchEvent } from "./modules/events";
 import { type RendererOptions } from "../runtime-core";
-import { patchDOMProp } from "./modules/props";
 import { patchAttr } from "./modules/attrs";
 import { patchStyle } from "./modules/style";
 
@@ -19,8 +18,6 @@ export const patchProp: DOMRendererOptions["patchProp"] = (
     patchStyle(el, prevValue, nextValue);
   } else if (isOn(key)) {
     patchEvent(el, key, nextValue);
-  } else if (!["type", "placeholder"].includes(key)) {
-    patchDOMProp(el, key, nextValue);
   } else {
     patchAttr(el, key, nextValue);
   }
