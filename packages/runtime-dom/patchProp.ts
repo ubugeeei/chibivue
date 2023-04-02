@@ -3,6 +3,7 @@ import { patchEvent } from "./modules/events";
 import { type RendererOptions } from "../runtime-core";
 import { patchDOMProp } from "./modules/props";
 import { patchAttr } from "./modules/attrs";
+import { patchStyle } from "./modules/style";
 
 type DOMRendererOptions = RendererOptions<Node, Element>;
 
@@ -15,7 +16,7 @@ export const patchProp: DOMRendererOptions["patchProp"] = (
   if (key === "class") {
     // TODO: patch class
   } else if (key === "style") {
-    // TODO: patch style
+    patchStyle(el, prevValue, nextValue);
   } else if (isOn(key)) {
     patchEvent(el, key, nextValue);
   } else if (!["type", "placeholder"].includes(key)) {
