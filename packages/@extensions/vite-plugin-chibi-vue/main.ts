@@ -1,5 +1,5 @@
 import { ResolvedOptions } from ".";
-import { createDescriptor } from "./createDescriptor";
+import { createDescriptor } from "./utils/descriptorCache";
 import { isUseInlineTemplate, resolveScript } from "./script";
 import { SFCDescriptor } from "../../compiler-sfc";
 import { transformTemplateInMain } from "./template";
@@ -30,7 +30,10 @@ export async function transformMain(
     attachedProps.push(["render", "_sfc_render"]);
   }
 
-  const output: string[] = [scriptCode, templateCode];
+  // styles
+  const stylesCode = await genStyleCode(descriptor);
+
+  const output: string[] = [scriptCode, templateCode, stylesCode];
   output.push("\n");
 
   if (attachedProps.length) {
@@ -61,6 +64,19 @@ function genScriptCode(
   }
 
   return { code: scriptCode };
+}
+
+async function genStyleCode(descriptor: SFCDescriptor): Promise<string> {
+  let stylesCode = ``;
+
+  for (let i = 0; i < descriptor.styles.length; i++) {
+    const src = descriptor.filename;
+    const query = `?chibiVue&type=style&index=${i}&lang.css`;
+    const styleRequest = src + query;
+    stylesCode += `\nimport ${JSON.stringify(styleRequest)}`;
+  }
+
+  return stylesCode;
 }
 
 function genTemplateCode(descriptor: SFCDescriptor, options: ResolvedOptions) {
