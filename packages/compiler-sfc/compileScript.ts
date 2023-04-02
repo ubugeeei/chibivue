@@ -412,8 +412,6 @@ export function compileScript(sfc: SFCDescriptor): SFCScriptBlock {
 
   s.trim();
 
-  console.log(s.toString());
-
   return {
     ...scriptSetup,
     content: s.toString(),
