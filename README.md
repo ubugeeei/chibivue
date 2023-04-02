@@ -24,7 +24,7 @@ Currently, I am still in the process of implementation, but after implementation
 - ✅ Virtual Dom & Renderer
   - ✅ h function
   - ✅ patch rendering
-- Component
+- ✅ Component
   - ✅ API
     - ✅ Options API
     - ✅ Composition API
@@ -40,12 +40,12 @@ Currently, I am still in the process of implementation, but after implementation
     - ✅ v-model
     - v-if
   - ✅ mustache
-- Extensions
-  - sfc compiler (vite plugin)
+- ✅ Extensions
+  - ✅ sfc compiler (vite plugin)
     - ✅ basic
     - ✅ script setup
       - ✅ basic
       - ✅ defineProps / defineEmits
-    - style block
+    - ✅ style block
   - ✅ store
   - ✅ router
