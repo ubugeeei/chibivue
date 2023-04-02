@@ -36,12 +36,18 @@ export interface SFCScriptBlock extends SFCBlock {
   scriptSetupAst?: import("@babel/types").Statement[];
 }
 
+export declare interface SFCStyleBlock extends SFCBlock {
+  type: "style";
+}
+
 export interface SFCDescriptor {
+  id: string;
   filename: string;
   source: string;
   template: SFCTemplateBlock | null;
   script: SFCScriptBlock | null;
   scriptSetup: SFCScriptBlock | null;
+  styles: SFCStyleBlock[];
 }
 
 export interface SFCParseResult {
@@ -53,11 +59,13 @@ export function parse(
   { filename = DEFAULT_FILENAME, compiler = CompilerDOM }: SFCParseOptions = {}
 ): SFCParseResult {
   const descriptor: SFCDescriptor = {
+    id: undefined!,
     filename,
     source,
     template: null,
     script: null,
     scriptSetup: null,
+    styles: [],
   };
 
   const ast = compiler.parse(source, {});
@@ -78,6 +86,10 @@ export function parse(
         if (!isSetup && !descriptor.script) {
           descriptor.script = scriptBlock;
         }
+        break;
+      }
+      case "style": {
+        descriptor.styles.push(createBlock(node, source) as SFCStyleBlock);
         break;
       }
       default: {
