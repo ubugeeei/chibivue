@@ -4,7 +4,7 @@ const router = useRouter();
 </script>
 
 <template>
-  <div>
+  <div id="pages-app">
     <nav>
       <a @click="router.push('/')">Top</a>
       <span>|</span>
@@ -27,3 +27,13 @@ const router = useRouter();
     <RouterView />
   </div>
 </template>
+
+<style>
+#pages-app {
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+</style>
