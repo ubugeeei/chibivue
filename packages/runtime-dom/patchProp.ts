@@ -12,9 +12,10 @@ export const patchProp: DOMRendererOptions["patchProp"] = (
   prevValue,
   nextValue
 ) => {
-  if (key === "class") {
-    // TODO: patch class
-  } else if (key === "style") {
+  // if (key === "class") {
+  //   // TODO: patch class
+  // }
+  if (key === "style") {
     patchStyle(el, prevValue, nextValue);
   } else if (isOn(key)) {
     patchEvent(el, key, nextValue);

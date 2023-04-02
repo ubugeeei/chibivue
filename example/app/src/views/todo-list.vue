@@ -51,23 +51,94 @@ const removeTodo = (id) => {
 </script>
 
 <template>
-  <div>
+  <div id="pages-todo">
     <h1>todo app</h1>
     <div>
       <p>todo max length: {{ todoMaxLength }} (global counter)</p>
-      <input v-model="newTodo" type="text" placeholder="Enter a new todo" />
-      <button @click="addTodo">Add Todo</button>
+      <input
+        v-model="newTodo"
+        type="text"
+        placeholder="Enter a new todo"
+        class="new-todo-input"
+      />
+      <button class="create-todo-btn" @click="addTodo">Add Todo</button>
     </div>
     <ul>
       <li v-for="(todo, index) in todos" :key="todo.id">
         <input
+          class="toggle-todo-completion"
           type="checkbox"
-          :checked="todo.completed"
+          :value="todo.completed"
           @change="toggleTodoCompletion(todo.id)"
         />
-        <span>{{ todo.text }}</span>
-        <button @click="removeTodo(todo.id)">Delete</button>
+
+        <span :class="todo.completed ? 'completed' : ''">{{ todo.text }}</span>
+        <button class="delete-todo-btn" @click="removeTodo(todo.id)">
+          Delete
+        </button>
       </li>
     </ul>
   </div>
 </template>
+
+<style>
+#pages-todo .new-todo-input {
+  font-family: "Hannotate SC";
+  border: none;
+  padding: 8px;
+  width: 240px;
+  font-weight: 900;
+  font-size: 1rem;
+  border-radius: 4px;
+}
+
+.delete-todo-btn {
+  font-family: "Hannotate SC";
+  border: none;
+  padding: 8px;
+  background-color: #ff6347;
+  color: #fff;
+  font-weight: 900;
+  font-size: 1rem;
+  border-radius: 4px;
+}
+
+.create-todo-btn {
+  font-family: "Hannotate SC";
+  border: none;
+  padding: 8px;
+  background-color: #1e90ff;
+  color: #fff;
+  font-weight: 900;
+  font-size: 1rem;
+  border-radius: 4px;
+}
+
+#pages-todo button:hover {
+  opacity: 0.8;
+}
+
+#pages-todo ul {
+  width: 240px;
+  margin: auto;
+  margin-top: 24px;
+  padding: 0;
+}
+
+#pages-todo li {
+  align-items: center;
+  background-color: #fff;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+  margin-bottom: 8px;
+  padding: 8px 16px;
+  width: 240px;
+}
+
+#pages-todo li .completed {
+  color: grey;
+  text-decoration: line-through;
+}
+</style>

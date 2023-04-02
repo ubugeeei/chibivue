@@ -9,7 +9,7 @@ const handleClick = () => {
 };
 
 // for v-bind
-const style = { color: "red", fontSize: "20px" };
+const style = { color: "#876432", fontSize: "30px", "font-weight": "bold" };
 
 // for v-for
 const list = [
@@ -23,7 +23,7 @@ const input = ref("");
 </script>
 
 <template>
-  <div>
+  <div id="pages-directives">
     <h1>directives</h1>
 
     <h3>v-on</h3>
@@ -44,6 +44,27 @@ const input = ref("");
 
     <h3>v-model</h3>
     <input v-model="input" />
-    <p>value: {{ input }}</p>
+    <p>value: "{{ input }}"</p>
   </div>
 </template>
+
+<style>
+#pages-directives button {
+  font-family: "Hannotate SC";
+  border: none;
+  padding: 8px;
+  width: 200px;
+  background: #92b5a9;
+  color: #fff;
+  font-weight: 900;
+  font-size: 1rem;
+  border-radius: 4px;
+}
+#pages-directives button:hover {
+  opacity: 0.8;
+}
+
+#pages-directives li {
+  list-style: none;
+}
+</style>
