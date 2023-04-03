@@ -353,7 +353,7 @@ export function compileScript(sfc: SFCDescriptor): SFCScriptBlock {
   if (propsIdentifier) {
     s.prependLeft(startOffset, `\nconst ${propsIdentifier} = __props;\n`);
   }
-  const destructureElements = [];
+  const destructureElements: string[] = [];
   if (emitIdentifier) {
     destructureElements.push(
       emitIdentifier === `emit` ? `emit` : `emit: ${emitIdentifier}`
@@ -573,6 +573,16 @@ function analyzeBindingsFromOptions(node: ObjectExpression): BindingMetadata {
       !property.computed &&
       property.key.type === "Identifier"
     ) {
+      // props
+      if (
+        property.value.type === "ObjectExpression" &&
+        property.key.name === "props"
+      ) {
+        for (const key of getObjectExpressionKeys(property.value)) {
+          bindings[key] = BindingTypes.PROPS;
+        }
+      }
+
       // computed & methods
       if (
         property.value.type === "ObjectExpression" &&
@@ -618,7 +628,7 @@ function analyzeBindingsFromOptions(node: ObjectExpression): BindingMetadata {
 }
 
 function getObjectExpressionKeys(node: ObjectExpression): string[] {
-  const keys = [];
+  const keys: string[] = [];
   for (const prop of node.properties) {
     if (prop.type === "SpreadElement") continue;
     const key = resolveObjectKey(prop.key, prop.computed);
