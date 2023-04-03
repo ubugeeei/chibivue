@@ -10,6 +10,12 @@ import {
 import { renderComponentRoot } from "./componentRenderUtils";
 import { invokeDirectiveHook } from "./directives";
 import {
+  SchedulerJob,
+  flushPostFlushCbs,
+  flushPreFlushCbs,
+  queueJob,
+} from "./scheduler";
+import {
   Text,
   normalizeVNode,
   type VNode,
@@ -362,9 +368,12 @@ export function createRenderer(options: RendererOptions) {
     };
     const effect = (instance.effect = new ReactiveEffect(
       componentUpdateFn,
+      () => queueJob(update),
       instance.scope
     ));
-    const update = (instance.update = () => effect.run());
+    const update: SchedulerJob = (instance.update = () => effect.run());
+    update.id = instance.uid;
+
     update();
   };
 
@@ -375,6 +384,7 @@ export function createRenderer(options: RendererOptions) {
     nextVNode.component = instance;
     instance.vnode = nextVNode;
     instance.next = null;
+    flushPreFlushCbs();
   };
 
   const patchChildren: PatchChildrenFn = (
@@ -663,6 +673,8 @@ export function createRenderer(options: RendererOptions) {
     } else {
       patch((container as any)._vnode || null, vnode, container, null, null);
     }
+    flushPreFlushCbs();
+    flushPostFlushCbs();
     (container as any)._vnode = vnode;
   };
 
