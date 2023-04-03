@@ -3,7 +3,7 @@ import { ReactiveEffect } from "../reactivity/effect";
 import { EffectScope } from "../reactivity/effectScope";
 import { isFunction, isObject } from "../shared";
 import { AppContext, createAppContext } from "./apiCreateApp";
-import { EmitsOptions, ObjectEmitsOptions, emit } from "./componentEmits";
+import { ObjectEmitsOptions, emit } from "./componentEmits";
 import { ComponentOptions, applyOptions } from "./componentOptions";
 import { NormalizedProps, initProps } from "./componentProps";
 import {
@@ -21,6 +21,7 @@ export type ConcreteComponent = ComponentOptions;
 type LifecycleHook<TFn = Function> = TFn[] | null;
 
 export interface ComponentInternalInstance {
+  uid: number;
   type: ConcreteComponent;
   appContext: AppContext;
 
@@ -112,6 +113,7 @@ export type InternalRenderFunction = {
   _compatWrapped?: boolean; // is wrapped for v2 compat
 };
 
+let uid = 0;
 export function createComponentInstance(
   vnode: VNode,
   parent: ComponentInternalInstance | null
@@ -121,6 +123,7 @@ export function createComponentInstance(
     (parent ? parent.appContext : vnode.appContext) || createAppContext();
 
   const instance: ComponentInternalInstance = {
+    uid: uid++,
     type,
     vnode,
     appContext,
