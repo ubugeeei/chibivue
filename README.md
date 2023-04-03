@@ -24,6 +24,7 @@ Currently, I am still in the process of implementation, but after implementation
 - ✅ Virtual Dom & Renderer
   - ✅ h function
   - ✅ patch rendering
+  - ✅ scheduler
 - ✅ Component
   - ✅ API
     - ✅ Options API
