@@ -1,6 +1,6 @@
 import { Dep } from "./dep";
 import { ReactiveEffect } from "./effect";
-import { Ref, trackRefValue } from "./ref";
+import { Ref, trackRefValue, triggerRefValue } from "./ref";
 
 export interface ComputedRef<T = any> extends WritableComputedRef<T> {
   readonly value: T;
@@ -19,7 +19,9 @@ export class ComputedRefImpl<T> {
   public readonly __v_isRef = true;
 
   constructor(getter: ComputedGetter<T>) {
-    this.effect = new ReactiveEffect(getter);
+    this.effect = new ReactiveEffect(getter, () => {
+      triggerRefValue(this);
+    });
     this.effect.computed = this;
   }
 
@@ -61,7 +63,7 @@ if (import.meta.vitest) {
 
     expect(countDouble.value).toBe(2); // call count 1
     expect(computedGetter).toHaveBeenCalledTimes(1);
-    
+
     count.value = 2; // call count 2
     expect(computedGetter).toHaveBeenCalledTimes(2);
     expect(countDouble.value).toBe(4); // call count 3
