@@ -7,6 +7,7 @@ import {
   setupComponent,
   Data,
 } from "./component";
+import { updateProps } from "./componentProps";
 import { renderComponentRoot } from "./componentRenderUtils";
 import { invokeDirectiveHook } from "./directives";
 import {
@@ -384,6 +385,7 @@ export function createRenderer(options: RendererOptions) {
     nextVNode.component = instance;
     instance.vnode = nextVNode;
     instance.next = null;
+    updateProps(instance, nextVNode.props);
     flushPreFlushCbs();
   };
 
