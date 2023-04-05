@@ -19,15 +19,15 @@ export default function chibiVuePlugin(): Plugin {
   };
 
   return {
-    name: "vite:chibi-vue",
+    name: "vite:chibivue",
 
     // virtual modules
     resolveId(id) {
-      if (parseChibiVueRequest(id).query.chibiVue) return id;
+      if (parseChibiVueRequest(id).query.chibivue) return id;
     },
     load(id) {
       const { filename, query } = parseChibiVueRequest(id);
-      if (query.chibiVue) {
+      if (query.chibivue) {
         const descriptor = getDescriptor(filename, options)!;
         if (query.type === "style")
           return { code: descriptor.styles[query.index!].content };

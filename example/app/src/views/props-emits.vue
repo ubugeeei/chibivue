@@ -1,5 +1,5 @@
 <script>
-import { defineComponent, reactive } from "chibi-vue";
+import { defineComponent, reactive } from "chibivue";
 import SimpleCard from "../components/SimpleCard.vue";
 import SimpleBtn from "../components/SimpleBtn.vue";
 

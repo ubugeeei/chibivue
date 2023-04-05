@@ -1,4 +1,4 @@
-import { EffectScope, getCurrentInstance, inject } from "chibi-vue";
+import { EffectScope, getCurrentInstance, inject } from "chibivue";
 import {
   StateTree,
   Store,

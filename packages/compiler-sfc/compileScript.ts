@@ -194,7 +194,7 @@ export function compileScript(sfc: SFCDescriptor): SFCScriptBlock {
   const vueImportAliases: Record<string, string> = {};
   for (const key in userImports) {
     const { source, imported, local } = userImports[key];
-    if (["chibi-vue", "chibi-vue-router", "chibi-vue-store"].includes(source))
+    if (["chibivue", "chibivue-router", "chibivue-store"].includes(source))
       vueImportAliases[imported] = local;
   }
 

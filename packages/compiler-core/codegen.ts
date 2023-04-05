@@ -71,7 +71,7 @@ function createCodegenContext(
     offset: 0,
     indentLevel: 0,
     runtimeGlobalName: `ChibiVue`,
-    runtimeModuleName: "chibi-vue",
+    runtimeModuleName: "chibivue",
     __BROWSER__,
     helper(key) {
       return `_${helperNameMap[key]}`;

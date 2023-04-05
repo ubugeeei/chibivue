@@ -1,5 +1,5 @@
 {
-  "name": "chibi-vue",
+  "name": "chibivue",
   "version": "1.0.0",
   "scripts": {
     "dev": "cd example/playground && pnpm i && pnpm run dev",

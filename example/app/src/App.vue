@@ -1,5 +1,5 @@
 <script setup>
-import { useRouter } from "chibi-vue-router";
+import { useRouter } from "chibivue-router";
 const router = useRouter();
 </script>
 

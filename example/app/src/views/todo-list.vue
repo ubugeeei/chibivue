@@ -1,5 +1,5 @@
 <script>
-import { ref } from "chibi-vue";
+import { ref } from "chibivue";
 import { useCounterStore } from "../store/count.store";
 const uuid = () => {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {

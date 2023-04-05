@@ -71,7 +71,7 @@ async function genStyleCode(descriptor: SFCDescriptor): Promise<string> {
 
   for (let i = 0; i < descriptor.styles.length; i++) {
     const src = descriptor.filename;
-    const query = `?chibiVue&type=style&index=${i}&lang.css`;
+    const query = `?chibivue&type=style&index=${i}&lang.css`;
     const styleRequest = src + query;
     stylesCode += `\nimport ${JSON.stringify(styleRequest)}`;
   }

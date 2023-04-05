@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { createRouter, createWebHistory } from "chibi-vue-router";
+import { createRouter, createWebHistory } from "chibivue-router";
 import PagesTop from "./views/index.vue";
 import PagesState from "./views/state.vue";
 import PagesDirective from "./views/directive.vue";

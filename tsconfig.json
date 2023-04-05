@@ -7,14 +7,14 @@
     ],
     "strict": true,
     "paths": {
-      "chibi-vue": [
+      "chibivue": [
         "./packages"
       ],
-      "chibi-vue-store": [
-        "./packages/@extensions/chibi-vue-store"
+      "chibivue-store": [
+        "./packages/@extensions/chibivue-store"
       ],
-      "chibi-vue-router": [
-        "./packages/@extensions/chibi-vue-router"
+      "chibivue-router": [
+        "./packages/@extensions/chibivue-router"
       ],
     },
     "types": [

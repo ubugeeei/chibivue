@@ -1,5 +1,5 @@
-import { ref } from "chibi-vue";
-import { defineStore } from "chibi-vue-store";
+import { ref } from "chibivue";
+import { defineStore } from "chibivue-store";
 
 export const useCounterStore = defineStore("counter", () => {
   const count = ref(0);

@@ -1,6 +1,6 @@
 // @ts-nocheck
-import { createApp } from "chibi-vue";
-import { createStore } from "chibi-vue-store";
+import { createApp } from "chibivue";
+import { createStore } from "chibivue-store";
 import App from "./App.vue";
 import { router } from "./router";
 

@@ -1,5 +1,5 @@
 <script>
-import { ref } from "chibi-vue";
+import { ref } from "chibivue";
 </script>
 
 <script setup>

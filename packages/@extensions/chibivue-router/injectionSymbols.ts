@@ -1,4 +1,4 @@
-import { InjectionKey, Ref } from "chibi-vue";
+import { InjectionKey, Ref } from "chibivue";
 import { Router } from "./router";
 import { RouteLocationNormalizedLoaded } from "./types";
 

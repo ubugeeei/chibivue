@@ -5,7 +5,7 @@
     <p>👋 Hello Chibi-vue!</p>
 
     <p>
-      chibi-vue is minimal Vue.js v3 core implementations (reactivity, vnode,
+      chibivue is minimal Vue.js v3 core implementations (reactivity, vnode,
       component, compiler). "chibi" means "small" in Japanese.
     </p>
 

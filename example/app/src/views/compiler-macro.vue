@@ -1,5 +1,5 @@
 <script>
-import { defineComponent, ref } from "chibi-vue";
+import { defineComponent, ref } from "chibivue";
 import CompilerMacroDemo from "../components/CompilerMacroDemo.vue";
 
 export default defineComponent({

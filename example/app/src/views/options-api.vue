@@ -1,5 +1,5 @@
 <script>
-import { defineComponent } from "chibi-vue";
+import { defineComponent } from "chibivue";
 
 export default defineComponent({
   data() {

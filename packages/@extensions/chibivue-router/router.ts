@@ -1,4 +1,4 @@
-import { App, reactive, ref } from "chibi-vue";
+import { App, reactive, ref } from "chibivue";
 import {
   routeLocationKey,
   routerKey,
