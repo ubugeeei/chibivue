@@ -1,6 +1,6 @@
-# chibi-vue
+# chibivue
 
-chibi-vue is minimal [Vue.js v3](https://github.com/vuejs/core) core implementations (reactivity, vnode, component, compiler).
+chibivue is minimal [Vue.js v3](https://github.com/vuejs/core) core implementations (reactivity, vnode, component, compiler).
 
 "chibi" means "small" in Japanese.
 
