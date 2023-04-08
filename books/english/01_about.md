@@ -1,4 +1,5 @@
-🎯 Purpose of This Book
+# 🎯 Purpose of This Book
+
 Thank you for picking up this book!  
 I'm delighted that you're even slightly interested in it.  
 First, let's summarize the purpose of this book.
@@ -45,7 +46,7 @@ Please point out any shortcomings on this front.
   Let's make it fun by creating a situation where it's always functioning, albeit imperfect.  
   The idea is to repeatedly experience "I did it! Now it works up to this point!"
 
-- Avoid discussing the merits of specific frameworks, libraries, languages, etc.
+- Avoid discussing the merits of specific frameworks, libraries, languages, etc.  
   While this book focuses on Vue.js, there are numerous other great frameworks, libraries, and languages available today.  
   In fact, I, the author, also have many favorite libraries besides Vue.js, and I'm often helped by services and insights created with them, even if I don't write them myself.  
   The ultimate purpose of this book is to "understand Vue.js," and other discussions are beyond its scope. It does not aim to rank the merits of each.
@@ -117,3 +118,5 @@ I want to spread easy-to-understand and accurate explanations to as many people 
 https://twitter.com/ubugeeei
 
 https://github.com/Ubugeeei/zenn
+
+prev | [next](https://github.com/Ubugeeei/chibivue/blob/main/books/english/02_what_is_vue.md)

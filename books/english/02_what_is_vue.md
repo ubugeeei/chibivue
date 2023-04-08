@@ -50,3 +50,5 @@ In the official documentation, the focus is on "how to use Vue.js" with an abund
 However, in this book, we'll change the focus to "how Vue.js is implemented" and actually write code while creating a small Vue.js instance.
 
 Also, this book is not an official one and may not be perfect. There might be some inaccuracies or mistakes, so please feel free to point them out as you come across them.
+
+[prev](https://github.com/Ubugeeei/chibivue/blob/main/books/english/01_about.md) | [next](https://github.com/Ubugeeei/chibivue/blob/main/books/english/03_vue_core_components.md)

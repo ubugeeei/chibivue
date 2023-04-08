@@ -62,3 +62,5 @@ As the name suggests, this is the compiler for the template part. Specifically, 
 As the name suggests, this is the compiler for Single File Components. It is a feature for writing component templates, scripts, and styles in a single file with a .vue extension. The defineComponent and defineProps functions used in script setup are also provided by this compiler (to be discussed later).
 
 This SFC compiler is actually
+
+[prev](https://github.com/Ubugeeei/chibivue/blob/main/books/english/02_what_is_vue.md) | next
