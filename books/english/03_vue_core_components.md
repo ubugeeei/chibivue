@@ -63,4 +63,4 @@ As the name suggests, this is the compiler for Single File Components. It is a f
 
 This SFC compiler is actually
 
-[prev](https://github.com/Ubugeeei/chibivue/blob/main/books/english/02_what_is_vue.md) | next
+[prev](https://github.com/Ubugeeei/chibivue/blob/main/books/english/02_what_is_vue.md) | [next](https://github.com/Ubugeeei/chibivue/blob/main/books/english/04_setup_project.md)

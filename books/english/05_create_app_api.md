@@ -377,3 +377,5 @@ Now that we've gotten closer to the official Vue.js source code, let's check the
 The source code so far:
 
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/02-2_create_app
+
+[prev](https://github.com/Ubugeeei/chibivue/blob/main/books/english/04_setup_project.md) | next
