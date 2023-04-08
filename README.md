@@ -13,7 +13,8 @@ Currently, I am still in the process of implementation, but after implementation
 [example](https://github.com/Ubugeeei/chibivue/tree/main/example/app)
 
 # Online Book
-## [Japanese](https://github.com/Ubugeeei/chibivue/tree/main/books/japanese) | English (coming soon)
+
+### [English](https://github.com/Ubugeeei/chibivue/tree/main/books/english) | [Japanese](https://github.com/Ubugeeei/chibivue/tree/main/books/japanese)
 
 <br/>
 <br/>
