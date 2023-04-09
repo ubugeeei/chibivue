@@ -1,4 +1,5 @@
 import { RendererOptions } from "../runtime-core";
+import { patchEvent } from "./modules/events";
 
 type DOMRendererOptions = RendererOptions<Node, Element>;
 
@@ -9,7 +10,7 @@ export const patchProp: DOMRendererOptions["patchProp"] = (el, key, value) => {
   if (key === "style") {
     // patchStyle(el, value); // これから実装します
   } else if (isOn(key)) {
-    // patchEvent(el, key, value); // これから実装します
+    patchEvent(el, key, value);
   } else {
     // patchAttr(el, key, value); // これから実装します
   }
