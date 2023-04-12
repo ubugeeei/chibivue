@@ -1,7 +1,9 @@
-import { VNode } from "./vnode";
+import { ReactiveEffect } from "../reactivity";
+import { Component } from "./component";
+import { VNode, VNodeProps } from "./vnode";
 
 export type RootRenderFunction<HostElement = RendererElement> = (
-  vnode: VNode,
+  vnode: Component,
   container: HostElement
 ) => void;
 
@@ -34,26 +36,102 @@ export function createRenderer(options: RendererOptions) {
     insert: hostInsert,
   } = options;
 
-  function renderVNode(vnode: VNode | string) {
-    if (typeof vnode === "string") return hostCreateText(vnode);
-    const el = hostCreateElement(vnode.type);
+  const patch = (
+    n1: VNode | string | null,
+    n2: VNode | string,
+    container: RendererElement
+  ) => {
+    if (typeof n2 === "object") {
+      // TODO:
+      processElement(n1, n2, container);
+    } else {
+      // TODO:
+      processText(n1, n2, container);
+    }
+  };
 
-    Object.entries(vnode.props).forEach(([key, value]) => {
-      hostPatchProp(el, key, value);
-    });
+  const processElement = (
+    n1: VNode | null,
+    n2: VNode,
+    container: RendererElement
+  ) => {
+    if (n1 === null) {
+      mountElement(n2, container);
+    } else {
+      patchElement(n1, n2);
+    }
+  };
 
-    for (let child of vnode.children) {
-      const childEl = renderVNode(child);
-      hostInsert(childEl, el);
+  const mountElement = (vnode: VNode, container: RendererElement) => {
+    let el: RendererElement;
+    const { type, props } = vnode;
+    el = vnode.el = hostCreateElement(type as string);
+
+    mountChildren(vnode.children, el); // TODO:
+
+    if (props) {
+      for (const key in props) {
+        hostPatchProp(el, key, props[key]);
+      }
     }
 
-    return el;
-  }
-
-  const render: RootRenderFunction = (vnode, container) => {
-    while (container.firstChild) container.removeChild(container.firstChild);
-    const el = renderVNode(vnode);
     hostInsert(el, container);
+  };
+
+  const mountChildren = (
+    children: (VNode | string)[],
+    container: RendererElement
+  ) => {
+    for (let i = 0; i < children.length; i++) {
+      patch(null, children[i], container);
+    }
+  };
+
+  const patchElement = (n1: VNode, n2: VNode) => {
+    const el = (n2.el = n1.el!);
+
+    const props = n2.props;
+
+    patchChildren(n1, n2, el);
+
+    for (const key in props) {
+      if (props[key] !== n1.props[key]) {
+        hostPatchProp(el, key, props[key]);
+      }
+    }
+  };
+
+  const patchChildren = (n1: VNode, n2: VNode, container: RendererElement) => {
+    const c1 = n1 && n1.children;
+    const c2 = n2.children;
+
+    for (let i = 0; i < c2.length; i++) {
+      patch(c1[i], c2[i], container);
+    }
+  };
+
+  const processText = (
+    n1: string | null,
+    n2: string,
+    container: RendererElement
+  ) => {
+    container.textContent = n2;
+  };
+
+  const render: RootRenderFunction = (rootComponent, container) => {
+    const componentRender = rootComponent.setup!();
+
+    let n1: VNode | null = null;
+    let n2: VNode = null!;
+
+    const updateComponent = () => {
+      const n2 = componentRender();
+      patch(n1, n2, container);
+      n1 = n2;
+    };
+
+    const effect = new ReactiveEffect(updateComponent);
+    effect.run();
   };
 
   return { render };
