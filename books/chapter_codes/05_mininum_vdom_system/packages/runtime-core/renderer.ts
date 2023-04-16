@@ -1,6 +1,6 @@
 import { ReactiveEffect } from "../reactivity";
 import { Component } from "./component";
-import { VNode, VNodeProps } from "./vnode";
+import { VNode, Text, normalizeVNode } from "./vnode";
 
 export type RootRenderFunction<HostElement = RendererElement> = (
   vnode: Component,
@@ -16,6 +16,8 @@ export interface RendererOptions<
   createElement(type: string): HostElement;
 
   createText(text: string): HostNode;
+
+  setText(node: HostNode, text: string): void;
 
   setElementText(node: HostNode, text: string): void;
 
@@ -33,20 +35,16 @@ export function createRenderer(options: RendererOptions) {
     patchProp: hostPatchProp,
     createElement: hostCreateElement,
     createText: hostCreateText,
+    setText: hostSetText,
     insert: hostInsert,
   } = options;
 
-  const patch = (
-    n1: VNode | string | null,
-    n2: VNode | string,
-    container: RendererElement
-  ) => {
-    if (typeof n2 === "object") {
-      // TODO:
-      processElement(n1, n2, container);
-    } else {
-      // TODO:
+  const patch = (n1: VNode | null, n2: VNode, container: RendererElement) => {
+    const { type } = n2;
+    if (type === Text) {
       processText(n1, n2, container);
+    } else {
+      processElement(n1, n2, container);
     }
   };
 
@@ -67,7 +65,7 @@ export function createRenderer(options: RendererOptions) {
     const { type, props } = vnode;
     el = vnode.el = hostCreateElement(type as string);
 
-    mountChildren(vnode.children, el); // TODO:
+    mountChildren(vnode.children as VNode[], el);
 
     if (props) {
       for (const key in props) {
@@ -78,12 +76,10 @@ export function createRenderer(options: RendererOptions) {
     hostInsert(el, container);
   };
 
-  const mountChildren = (
-    children: (VNode | string)[],
-    container: RendererElement
-  ) => {
+  const mountChildren = (children: VNode[], container: RendererElement) => {
     for (let i = 0; i < children.length; i++) {
-      patch(null, children[i], container);
+      const child = (children[i] = normalizeVNode(children[i]));
+      patch(null, child, container);
     }
   };
 
@@ -95,27 +91,35 @@ export function createRenderer(options: RendererOptions) {
     patchChildren(n1, n2, el);
 
     for (const key in props) {
-      if (props[key] !== n1.props[key]) {
+      if (props[key] !== n1.props?.[key] ?? {}) {
         hostPatchProp(el, key, props[key]);
       }
     }
   };
 
   const patchChildren = (n1: VNode, n2: VNode, container: RendererElement) => {
-    const c1 = n1 && n1.children;
-    const c2 = n2.children;
+    const c1 = n1.children as VNode[];
+    const c2 = n2.children as VNode[];
 
     for (let i = 0; i < c2.length; i++) {
-      patch(c1[i], c2[i], container);
+      const child = (c2[i] = normalizeVNode(c2[i]));
+      patch(c1[i], child, container);
     }
   };
 
   const processText = (
-    n1: string | null,
-    n2: string,
+    n1: VNode | null,
+    n2: VNode,
     container: RendererElement
   ) => {
-    container.textContent = n2;
+    if (n1 == null) {
+      hostInsert((n2.el = hostCreateText(n2.children as string)), container);
+    } else {
+      const el = (n2.el = n1.el!);
+      if (n2.children !== n1.children) {
+        hostSetText(el, n2.children as string);
+      }
+    }
   };
 
   const render: RootRenderFunction = (rootComponent, container) => {
