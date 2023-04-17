@@ -25,9 +25,6 @@ export interface ComponentInternalInstance {
   type: ConcreteComponent;
   appContext: AppContext;
 
-  /**
-   * Vnode representing this component in its parent's vdom tree
-   */
   vnode: VNode;
   next: VNode | null;
 
@@ -35,57 +32,21 @@ export interface ComponentInternalInstance {
   effect: ReactiveEffect;
   scope: EffectScope;
 
-  /**
-   * Resolved component registry, only for components with mixins or extends
-   * @internal
-   */
   components: Record<string, ConcreteComponent> | null;
 
-  /**
-   * resolved props options
-   * @internal
-   */
   propsOptions: NormalizedProps;
-  /**
-   * resolved emits options
-   * @internal
-   */
   emitsOptions: ObjectEmitsOptions | null;
 
-  /**
-   * Root vnode of this component's own vdom tree
-   */
   subTree: VNode;
-
-  // TODO:
-  // directives: Record<string, Directive> | null
-
   render: InternalRenderFunction | null;
   update: () => void;
 
-  /**
-   * Object containing values this component provides for its descendents
-   * @internal
-   */
   provides: Data;
 
-  /**
-   * This is the target for the public instance proxy. It also holds properties
-   * injected by user options (computed, methods etc.) and user-attached
-   * custom properties (via `this.x = ...`)
-   * @internal
-   */
   ctx: Data;
-
-  // state
   data: Data;
   props: Data;
   emit: EmitFn;
-
-  /**
-   * setup related
-   * @internal
-   */
   setupState: Data;
   setupContext: SetupContext | null;
 
@@ -106,11 +67,6 @@ export type InternalRenderFunction = {
     $data: ComponentInternalInstance["data"],
     $options: ComponentInternalInstance["ctx"]
   ): VNodeChild;
-  _rc?: boolean; // isRuntimeCompiled
-
-  // __COMPAT__ only
-  _compatChecked?: boolean; // v3 and already checked for v2 compat
-  _compatWrapped?: boolean; // is wrapped for v2 compat
 };
 
 let uid = 0;
