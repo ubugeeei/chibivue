@@ -1,17 +1,25 @@
 import { ReactiveEffect } from "../reactivity";
 import { ComponentOptions } from "./componentOptions";
+import { Props } from "./componentProps";
 import { VNode, VNodeChild } from "./vnode";
 
 export type Component = ComponentOptions;
 
+export type Data = Record<string, unknown>;
+
 export interface ComponentInternalInstance {
   type: Component;
+
   vnode: VNode;
   subTree: VNode;
   next: VNode | null;
   effect: ReactiveEffect;
   render: InternalRenderFunction;
   update: () => void;
+
+  propsOptions: Props;
+  props: Data;
+
   isMounted: boolean;
 }
 
@@ -26,12 +34,17 @@ export function createComponentInstance(
 
   const instance: ComponentInternalInstance = {
     type,
+
     vnode,
     next: null,
     effect: null!,
     subTree: null!,
     update: null!,
     render: null!,
+
+    propsOptions: type.props || {},
+    props: {},
+
     isMounted: false,
   };
 
