@@ -1,4 +1,5 @@
 import { ReactiveEffect } from "../reactivity";
+import { emit } from "./componentEmits";
 import { ComponentOptions } from "./componentOptions";
 import { Props } from "./componentProps";
 import { VNode, VNodeChild } from "./vnode";
@@ -19,6 +20,7 @@ export interface ComponentInternalInstance {
 
   propsOptions: Props;
   props: Data;
+  emit: (event: string, ...args: any[]) => void;
 
   isMounted: boolean;
 }
@@ -44,9 +46,11 @@ export function createComponentInstance(
 
     propsOptions: type.props || {},
     props: {},
+    emit: null!, // to be set immediately
 
     isMounted: false,
   };
 
+  instance.emit = emit.bind(null, instance);
   return instance;
 }
