@@ -24,7 +24,9 @@ export function updateProps(
   rawProps: Data | null
 ) {
   const { props } = instance;
-  Object.assign(props, rawProps);
+  Object.entries(rawProps ?? {}).forEach(([key, value]) => {
+    props[camelize(key)] = value;
+  });
 }
 
 function setFullProps(
