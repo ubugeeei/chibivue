@@ -25,6 +25,7 @@ export function patchEvent(
   rawName: string,
   value: EventValue | null
 ) {
+  // vei = vue event invokers
   const invokers = el._vei || (el._vei = {});
   const existingInvoker = invokers[rawName];
 
