@@ -1,14 +1,26 @@
 import { createApp } from "chibivue";
 
 const app = createApp({
+  setup() {
+    window.setTimeout(() => {
+      const btn = document.getElementById("btn");
+      btn &&
+        btn.addEventListener("click", () => {
+          const h2 = document.getElementById("hello");
+          h2 && (h2.textContent += "!");
+        });
+    });
+  },
   template: `
     <div class="container" style="text-align: center">
-      <h2>Hello, chibivue!</h2>
+      <h2 id="hello">Hello, chibivue!</h2>
       <img
         width="150px"
         src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png"
       />
       <p><b>chibivue</b> is the minimal Vue.js</p>
+
+      <button id="btn"> click me! </button>
 
       <style>
         .container {
@@ -19,7 +31,6 @@ const app = createApp({
         }
       </style>
     </div>
-
   `,
 });
 
