@@ -1,15 +1,13 @@
-import { createApp } from "chibivue";
+import { createApp, reactive } from "chibivue";
 
 const app = createApp({
   setup() {
-    window.setTimeout(() => {
-      const btn = document.getElementById("btn");
-      btn &&
-        btn.addEventListener("click", () => {
-          const h2 = document.getElementById("hello");
-          h2 && (h2.textContent += "!");
-        });
-    });
+    const state = reactive({ message: "Hello, chibivue!" });
+    const changeMessage = () => {
+      state.message += "!";
+    };
+
+    return { state, changeMessage };
   },
   template: `
     <div class="container" style="text-align: center">

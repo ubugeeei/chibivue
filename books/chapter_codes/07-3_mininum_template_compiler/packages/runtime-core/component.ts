@@ -21,6 +21,7 @@ export interface ComponentInternalInstance {
   propsOptions: Props;
   props: Data;
   emit: (event: string, ...args: any[]) => void;
+  setupState: Data;
 
   isMounted: boolean;
 }
@@ -47,6 +48,7 @@ export function createComponentInstance(
     propsOptions: type.props || {},
     props: {},
     emit: null!, // to be set immediately
+    setupState: {},
 
     isMounted: false,
   };
@@ -61,12 +63,20 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
 
   const component = instance.type as Component;
   if (component.setup) {
-    instance.render = component.setup(instance.props, {
+    const setupResult = component.setup(instance.props, {
       emit: instance.emit,
     }) as InternalRenderFunction;
+
+    // setupResultの型によって分岐をする
+    if (typeof setupResult === "function") {
+      instance.render = setupResult;
+    } else if (typeof setupResult === "object" && setupResult !== null) {
+      instance.setupState = setupResult;
+    } else {
+      // do nothing
+    }
   }
 
-  // ------------------------ ここ
   if (compile && !component.render) {
     const template = component.template ?? "";
     if (template) {
