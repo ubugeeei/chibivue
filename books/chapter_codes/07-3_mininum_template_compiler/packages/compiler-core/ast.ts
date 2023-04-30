@@ -1,6 +1,8 @@
 export const enum NodeTypes {
   ELEMENT,
   TEXT,
+  INTERPOLATION,
+
   ATTRIBUTE,
 }
 
@@ -22,7 +24,7 @@ export interface TextNode extends Node {
   content: string;
 }
 
-export type TemplateChildNode = ElementNode | TextNode;
+export type TemplateChildNode = ElementNode | TextNode | InterpolationNode;
 
 export interface AttributeNode extends Node {
   type: NodeTypes.ATTRIBUTE;
@@ -40,4 +42,9 @@ export interface Position {
   offset: number; // from start of file
   line: number;
   column: number;
+}
+
+export interface InterpolationNode extends Node {
+  type: NodeTypes.INTERPOLATION;
+  content: string;
 }
