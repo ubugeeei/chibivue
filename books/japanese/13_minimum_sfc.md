@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/japanese/12_template_binding.md) | [Next](https://github.com/Ubugeeei/chibivue/japanese/14_break.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/12_template_binding.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/14_break.md)
 
 ---
 title: "SFCで開発したい"
@@ -7,4 +7,4 @@ title: "SFCで開発したい"
 # TODO: タイトルを考える
 
 
-[Prev](https://github.com/Ubugeeei/chibivue/japanese/12_template_binding.md) | [Next](https://github.com/Ubugeeei/chibivue/japanese/14_break.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/12_template_binding.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/14_break.md)

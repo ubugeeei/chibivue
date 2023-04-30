@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/japanese/11_more_complex_parser.md) | [Next](https://github.com/Ubugeeei/chibivue/japanese/13_minimum_sfc.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/11_more_complex_parser.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/13_minimum_sfc.md)
 
 ---
 title: "データバインディング"
@@ -672,4 +672,4 @@ https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/07-3_mininum_
 <!-- ちゃんと動いているようなのでコンパイラ実装を始める際に分割した 3 つのタスクを実装し終えました。やったね！ -->
 
 
-[Prev](https://github.com/Ubugeeei/chibivue/japanese/11_more_complex_parser.md) | [Next](https://github.com/Ubugeeei/chibivue/japanese/13_minimum_sfc.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/11_more_complex_parser.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/13_minimum_sfc.md)

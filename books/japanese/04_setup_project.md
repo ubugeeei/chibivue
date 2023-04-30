@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/japanese/03_vue_core_components.md) | [Next](https://github.com/Ubugeeei/chibivue/japanese/05_create_app_api.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/03_vue_core_components.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/05_create_app_api.md)
 
 ---
 title: "本書の進め方と環境構築"
@@ -204,4 +204,4 @@ pnpm run dev
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/01_project_setup
 
 
-[Prev](https://github.com/Ubugeeei/chibivue/japanese/03_vue_core_components.md) | [Next](https://github.com/Ubugeeei/chibivue/japanese/05_create_app_api.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/03_vue_core_components.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/05_create_app_api.md)

@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/japanese/08_minimum_virtual_dom.md) | [Next](https://github.com/Ubugeeei/chibivue/japanese/10_minimum_template_compiler.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/08_minimum_virtual_dom.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/10_minimum_template_compiler.md)
 
 ---
 title: "コンポーネント指向で開発したい"
@@ -799,4 +799,4 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
 
 <!-- TODO: veiについての説明を書く -->
 
-[Prev](https://github.com/Ubugeeei/chibivue/japanese/08_minimum_virtual_dom.md) | [Next](https://github.com/Ubugeeei/chibivue/japanese/10_minimum_template_compiler.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/08_minimum_virtual_dom.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/10_minimum_template_compiler.md)

@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/japanese/01_about.md) | [Next](https://github.com/Ubugeeei/chibivue/japanese/03_vue_core_components.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/01_about.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/03_vue_core_components.md)
 
 ---
 title: "Vue.jsとは"
@@ -59,4 +59,4 @@ https://ja.vuejs.org/guide/introduction.html#the-progressive-framework
 また、この本は公式のものではなく完全なものではありません。もしかするとおかしな点がいくつか残っていることもあるとおもうので、随時ご指摘いただければと思います。
 
 
-[Prev](https://github.com/Ubugeeei/chibivue/japanese/01_about.md) | [Next](https://github.com/Ubugeeei/chibivue/japanese/03_vue_core_components.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/01_about.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/03_vue_core_components.md)

@@ -1,4 +1,4 @@
-Prev | [Next](https://github.com/Ubugeeei/chibivue/japanese/02_what_is_vue.md)
+Prev | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/02_what_is_vue.md)
 
 ---
 title: "はじめに"
@@ -180,4 +180,4 @@ https://twitter.com/ubugeeei
 https://github.com/Ubugeeei/zenn
 
 
-Prev | [Next](https://github.com/Ubugeeei/chibivue/japanese/02_what_is_vue.md)
+Prev | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/02_what_is_vue.md)
