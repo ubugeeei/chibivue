@@ -167,13 +167,15 @@ function parseInterpolation(
 }
 
 function parseText(context: ParserContext): TextNode {
-  const endToken = "<";
+  const endTokens = ["<", "{{"];
 
   let endIndex = context.source.length;
 
-  const index = context.source.indexOf(endToken, 1);
-  if (index !== -1 && endIndex > index) {
-    endIndex = index;
+  for (let i = 0; i < endTokens.length; i++) {
+    const index = context.source.indexOf(endTokens[i], 1);
+    if (index !== -1 && endIndex > index) {
+      endIndex = index;
+    }
   }
 
   const start = getCursor(context);

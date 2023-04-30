@@ -29,7 +29,7 @@ const app = createApp({
       <br />
 
       <input @input="handleInput"/>
-      <p>{{ state.input }}</p>
+      <p>input value: {{ state.input }}</p>
 
       <style>
         .container {
