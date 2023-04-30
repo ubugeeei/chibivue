@@ -1,4 +1,7 @@
+import { toHandlerKey } from "../shared";
 import {
+  AttributeNode,
+  DirectiveNode,
   ElementNode,
   InterpolationNode,
   NodeTypes,
@@ -32,8 +35,26 @@ const genNode = (node: TemplateChildNode): string => {
 
 const genElement = (el: ElementNode): string => {
   return `h("${el.tag}", {${el.props
-    .map(({ name, value }) => `${name}: "${value?.content}"`)
+    .map((prop) => genProp(prop))
     .join(", ")}}, [${el.children.map((it) => genNode(it)).join(", ")}])`;
+};
+
+const genProp = (prop: AttributeNode | DirectiveNode): string => {
+  switch (prop.type) {
+    case NodeTypes.ATTRIBUTE:
+      return `${prop.name}: "${prop.value?.content}"`;
+    case NodeTypes.DIRECTIVE: {
+      switch (prop.name) {
+        case "on":
+          return `${toHandlerKey(prop.arg)}: _ctx.${prop.exp}`;
+        default:
+          // TODO: other directives
+          throw new Error(`unexpected directive name. got "${prop.name}"`);
+      }
+    }
+    default:
+      throw new Error(`unexpected prop type.`);
+  }
 };
 
 const genText = (text: TextNode): string => {
