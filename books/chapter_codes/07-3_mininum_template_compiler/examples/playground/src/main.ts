@@ -11,7 +11,7 @@ const app = createApp({
   },
   template: `
     <div class="container" style="text-align: center">
-      <h2>{{ message }}</h2>
+      <h2>{{ state.message }}</h2>
       <img
         width="150px"
         src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png"
