@@ -8,13 +8,17 @@ import {
   TemplateChildNode,
   TextNode,
 } from "./ast";
+import { CompilerOptions } from "./options";
 
-export const generate = ({
-  children,
-}: {
-  children: TemplateChildNode[];
-}): string => {
-  return `return function render(_ctx) {
+export const generate = (
+  {
+    children,
+  }: {
+    children: TemplateChildNode[];
+  },
+  option: Required<CompilerOptions>
+): string => {
+  return `${option.isBrowser ? "return " : ""}function render(_ctx) {
   const { h } = ChibiVue;
   return ${genNode(children[0])};
 }`;
