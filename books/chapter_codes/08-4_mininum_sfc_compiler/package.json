@@ -11,5 +11,9 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^18.15.11"
+  },
+  "dependencies": {
+    "@babel/parser": "^7.21.8",
+    "magic-string": "^0.30.0"
   }
 }
