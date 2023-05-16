@@ -6,7 +6,13 @@ import {
   setupComponent,
 } from "./component";
 import { updateProps } from "./componentProps";
-import { VNode, Text, normalizeVNode, createVNode } from "./vnode";
+import {
+  VNode,
+  Text,
+  normalizeVNode,
+  createVNode,
+  isSameVNodeType,
+} from "./vnode";
 
 export type RootRenderFunction<HostElement = RendererElement> = (
   vnode: Component,
@@ -29,6 +35,8 @@ export interface RendererOptions<
 
   insert(child: HostNode, parent: HostNode, anchor?: HostNode | null): void;
 
+  remove(child: HostNode): void;
+
   parentNode(node: HostNode): HostNode | null;
 }
 
@@ -45,6 +53,7 @@ export function createRenderer(options: RendererOptions) {
     createText: hostCreateText,
     setText: hostSetText,
     insert: hostInsert,
+    remove: hostRemove,
     parentNode: hostParentNode,
   } = options;
 
@@ -117,6 +126,131 @@ export function createRenderer(options: RendererOptions) {
     for (let i = 0; i < c2.length; i++) {
       const child = (c2[i] = normalizeVNode(c2[i]));
       patch(c1[i], child, container);
+    }
+  };
+
+  const patchKeyedChildren = (
+    c1: VNode[],
+    c2: VNode[],
+    container: RendererElement
+  ) => {
+    let i = 0;
+    const l2 = c2.length;
+    const e1 = c1.length - 1;
+    const e2 = l2 - 1;
+
+    const keyToNewIndexMap: Map<string | number | symbol, number> = new Map();
+    for (i = 0; i <= e2; i++) {
+      const nextChild = (c2[i] = normalizeVNode(c2[i]));
+      if (nextChild.key != null) {
+        keyToNewIndexMap.set(nextChild.key, i);
+      }
+    }
+
+    let j;
+    let patched = 0;
+    const toBePatched = e2 + 1;
+    let moved = false;
+    let maxNewIndexSoFar = 0;
+
+    const newIndexToOldIndexMap = new Array(toBePatched);
+    for (i = 0; i < toBePatched; i++) newIndexToOldIndexMap[i] = 0;
+
+    for (i = 0; i <= e1; i++) {
+      const prevChild = c1[i];
+      if (patched >= toBePatched) {
+        // all new children have been patched so this can only be a removal
+        unmount(prevChild);
+        continue;
+      }
+      let newIndex;
+      if (prevChild.key != null) {
+        newIndex = keyToNewIndexMap.get(prevChild.key);
+      } else {
+        // key-less node, try to locate a key-less node of the same type
+        for (j = 0; j <= e2; j++) {
+          if (
+            newIndexToOldIndexMap[j] === 0 &&
+            isSameVNodeType(prevChild, c2[j] as VNode)
+          ) {
+            newIndex = j;
+            break;
+          }
+        }
+      }
+      if (newIndex === undefined) {
+        unmount(prevChild);
+      } else {
+        newIndexToOldIndexMap[newIndex] = i + 1;
+        if (newIndex >= maxNewIndexSoFar) {
+          maxNewIndexSoFar = newIndex;
+        } else {
+          moved = true;
+        }
+        patch(prevChild, c2[newIndex] as VNode, container);
+        patched++;
+      }
+    }
+
+    const increasingNewIndexSequence = moved
+      ? getSequence(newIndexToOldIndexMap)
+      : [];
+    j = increasingNewIndexSequence.length - 1;
+    for (i = toBePatched - 1; i >= 0; i--) {
+      const nextIndex = i;
+      const nextChild = c2[nextIndex] as VNode;
+      const anchor =
+        nextIndex + 1 < l2 ? (c2[nextIndex + 1] as VNode).el : parentAnchor;
+      if (newIndexToOldIndexMap[i] === 0) {
+        // mount new
+        patch(null, nextChild, container, anchor);
+      } else if (moved) {
+        // move if:
+        // There is no stable subsequence (e.g. a reverse)
+        // OR current node is not among the stable sequence
+        if (j < 0 || i !== increasingNewIndexSequence[j]) {
+          move(nextChild, container, anchor);
+        } else {
+          j--;
+        }
+      }
+    }
+  };
+
+  const move = (vnode: VNode, container: RendererElement) => {
+    const { el, type } = vnode;
+    if (typeof type === "object") {
+      move(vnode.component!.subTree, container);
+      return;
+    }
+    hostInsert(el!, container);
+  };
+
+  const unmount = (vnode: VNode) => {
+    const { type, children } = vnode;
+    if (typeof type === "object") {
+    }
+    // if (shapeFlag & ShapeFlags.COMPONENT) {
+    //   unmountComponent(vnode.component!);
+    // } else if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+    //   unmountChildren(children as VNode[]);
+    // }
+    remove(vnode);
+  };
+
+  const remove = (vnode: VNode) => {
+    const { el } = vnode;
+    hostRemove(el!);
+  };
+
+  const unmountComponent = (instance: ComponentInternalInstance) => {
+    const { subTree } = instance;
+    unmount(subTree);
+  };
+
+  const unmountChildren = (children: VNode[]) => {
+    for (let i = 0; i < children.length; i++) {
+      unmount(children[i]);
     }
   };
 
