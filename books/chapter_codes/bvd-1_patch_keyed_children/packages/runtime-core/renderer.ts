@@ -57,14 +57,19 @@ export function createRenderer(options: RendererOptions) {
     parentNode: hostParentNode,
   } = options;
 
-  const patch = (n1: VNode | null, n2: VNode, container: RendererElement) => {
+  const patch = (
+    n1: VNode | null,
+    n2: VNode,
+    container: RendererElement,
+    anchor: RendererElement | null
+  ) => {
     const { type } = n2;
     if (type === Text) {
-      processText(n1, n2, container);
+      processText(n1, n2, container, anchor);
     } else if (typeof type === "string") {
-      processElement(n1, n2, container);
+      processElement(n1, n2, container, anchor);
     } else if (typeof type === "object") {
-      processComponent(n1, n2, container);
+      processComponent(n1, n2, container, anchor);
     } else {
       // do nothing
     }
@@ -73,21 +78,26 @@ export function createRenderer(options: RendererOptions) {
   const processElement = (
     n1: VNode | null,
     n2: VNode,
-    container: RendererElement
+    container: RendererElement,
+    anchor: RendererElement | null
   ) => {
     if (n1 === null) {
-      mountElement(n2, container);
+      mountElement(n2, container, anchor);
     } else {
-      patchElement(n1, n2);
+      patchElement(n1, n2, anchor);
     }
   };
 
-  const mountElement = (vnode: VNode, container: RendererElement) => {
+  const mountElement = (
+    vnode: VNode,
+    container: RendererElement,
+    anchor: RendererElement | null
+  ) => {
     let el: RendererElement;
     const { type, props } = vnode;
     el = vnode.el = hostCreateElement(type as string);
 
-    mountChildren(vnode.children as VNode[], el);
+    mountChildren(vnode.children as VNode[], el, anchor);
 
     if (props) {
       for (const key in props) {
@@ -98,19 +108,27 @@ export function createRenderer(options: RendererOptions) {
     hostInsert(el, container);
   };
 
-  const mountChildren = (children: VNode[], container: RendererElement) => {
+  const mountChildren = (
+    children: VNode[],
+    container: RendererElement,
+    anchor: RendererElement | null
+  ) => {
     for (let i = 0; i < children.length; i++) {
       const child = (children[i] = normalizeVNode(children[i]));
-      patch(null, child, container);
+      patch(null, child, container, anchor);
     }
   };
 
-  const patchElement = (n1: VNode, n2: VNode) => {
+  const patchElement = (
+    n1: VNode,
+    n2: VNode,
+    anchor: RendererElement | null
+  ) => {
     const el = (n2.el = n1.el!);
 
     const props = n2.props;
 
-    patchChildren(n1, n2, el);
+    patchChildren(n1, n2, el, anchor);
 
     for (const key in props) {
       if (props[key] !== n1.props?.[key] ?? {}) {
@@ -119,20 +137,26 @@ export function createRenderer(options: RendererOptions) {
     }
   };
 
-  const patchChildren = (n1: VNode, n2: VNode, container: RendererElement) => {
+  const patchChildren = (
+    n1: VNode,
+    n2: VNode,
+    container: RendererElement,
+    anchor: RendererElement | null
+  ) => {
     const c1 = n1.children as VNode[];
     const c2 = n2.children as VNode[];
 
     for (let i = 0; i < c2.length; i++) {
       const child = (c2[i] = normalizeVNode(c2[i]));
-      patch(c1[i], child, container);
+      patch(c1[i], child, container, anchor);
     }
   };
 
   const patchKeyedChildren = (
     c1: VNode[],
     c2: VNode[],
-    container: RendererElement
+    container: RendererElement,
+    parentAnchor: RendererElement | null
   ) => {
     let i = 0;
     const l2 = c2.length;
@@ -257,7 +281,8 @@ export function createRenderer(options: RendererOptions) {
   const processText = (
     n1: VNode | null,
     n2: VNode,
-    container: RendererElement
+    container: RendererElement,
+    anchor: RendererElement | null
   ) => {
     if (n1 == null) {
       hostInsert((n2.el = hostCreateText(n2.children as string)), container);
@@ -272,32 +297,38 @@ export function createRenderer(options: RendererOptions) {
   const processComponent = (
     n1: VNode | null,
     n2: VNode,
-    container: RendererElement
+    container: RendererElement,
+    anchor: RendererElement | null
   ) => {
     if (n1 == null) {
-      mountComponent(n2, container);
+      mountComponent(n2, container, anchor);
     } else {
       updateComponent(n1, n2);
     }
   };
 
-  const mountComponent = (initialVNode: VNode, container: RendererElement) => {
+  const mountComponent = (
+    initialVNode: VNode,
+    container: RendererElement,
+    anchor: RendererElement | null
+  ) => {
     // prettier-ignore
     const instance: ComponentInternalInstance = (initialVNode.component = createComponentInstance(initialVNode));
     setupComponent(instance);
-    setupRenderEffect(instance, initialVNode, container);
+    setupRenderEffect(instance, initialVNode, container, anchor);
   };
 
   const setupRenderEffect = (
     instance: ComponentInternalInstance,
     initialVNode: VNode,
-    container: RendererElement
+    container: RendererElement,
+    anchor: RendererElement | null
   ) => {
     const componentUpdateFn = () => {
       const { render, setupState } = instance;
       if (!instance.isMounted) {
         const subTree = (instance.subTree = normalizeVNode(render(setupState)));
-        patch(null, subTree, container);
+        patch(null, subTree, container, anchor);
         initialVNode.el = subTree.el;
         instance.isMounted = true;
       } else {
@@ -317,7 +348,7 @@ export function createRenderer(options: RendererOptions) {
         const nextTree = normalizeVNode(render(setupState));
         instance.subTree = nextTree;
 
-        patch(prevTree, nextTree, hostParentNode(prevTree.el!)!);
+        patch(prevTree, nextTree, hostParentNode(prevTree.el!)!, anchor);
         next.el = nextTree.el;
       }
     };
@@ -335,7 +366,7 @@ export function createRenderer(options: RendererOptions) {
 
   const render: RootRenderFunction = (rootComponent, container) => {
     const vnode = createVNode(rootComponent, {}, []);
-    patch(null, vnode, container);
+    patch(null, vnode, container, null);
   };
 
   return { render };
