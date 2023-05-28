@@ -2,9 +2,11 @@ import { createApp, h, reactive } from "chibivue";
 
 const app = createApp({
   setup() {
-    const state = reactive({ list: ["a", "b", "c", "d"] });
+    const state = reactive({
+      list: [{ key: "a" }, { key: "b" }, { key: "c" }, { key: "d" }],
+    });
     const updateList = () => {
-      state.list = ["e", "f", "g"];
+      state.list = [{ key: "a" }, { key: "b" }, { key: "d" }, { key: "c" }];
     };
 
     return () =>
@@ -12,7 +14,7 @@ const app = createApp({
         h(
           "ul",
           {},
-          state.list.map((item) => h("li", {}, [item]))
+          state.list.map((item) => h("li", { key: item.key }, [item.key]))
         ),
         h("button", { onClick: updateList }, ["update"]),
       ]);
