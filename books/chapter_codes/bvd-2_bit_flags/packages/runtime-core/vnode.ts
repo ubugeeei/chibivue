@@ -1,3 +1,5 @@
+import { isObject, isString } from "../shared";
+import { ShapeFlags } from "../shared/shapeFlags";
 import { ComponentInternalInstance } from "./component";
 
 export type VNodeTypes = string | typeof Text | object;
@@ -13,6 +15,7 @@ export interface VNode<HostNode = any> {
   key: string | number | symbol | null;
 
   component: ComponentInternalInstance | null;
+  shapeFlag: number;
 }
 
 export interface VNodeProps {
@@ -30,6 +33,12 @@ export function createVNode(
   props: VNodeProps | null,
   children: VNodeNormalizedChildren
 ): VNode {
+  const shapeFlag = isString(type)
+    ? ShapeFlags.ELEMENT
+    : isObject(type)
+    ? ShapeFlags.COMPONENT
+    : 0;
+
   const vnode: VNode = {
     type,
     props,
@@ -37,6 +46,7 @@ export function createVNode(
     el: undefined,
     key: props?.key ?? null,
     component: null,
+    shapeFlag,
   };
   return vnode;
 }
