@@ -198,38 +198,51 @@ app.mount("#app");
 
 ## ★ Basic Virtual DOM 部門
 
-- 大きくなりそうなので項目は随時更新
+- 対応できていないパッチの実装 (key を用いた children の patch)
+- ビットフラグによる管理
+- Fragment の対応
+- スケジューラの実装
+- 対応できていない属性のパッチ実装 (style や class など)
+
+## ★ Reactive System 部門
+
+- effect scope という概念についての説明と実装
+- ref api の実装
+- computed api の実装
+- watch api の実装
 
 ## ★ Basic Component System 部門
 
-大きくなりそうなので項目は随時更新
-
-- provide/inject
-- computed api
-- watch api
-- lifecycle hooks
+- provide/inject の実装
+- lifecycle hooks の実装
+- slot 機能のの実装　(default, named)
+- options api 対応
 
 ## ★ Basic Template Compiler 部門
 
-大きくなりそうなので項目は随時更新
-
-- v-on
-- v-bind
-- v-for
-- v-model
+- component を template にかけるように
+- ディレクティブの実装
+  - v-on (本家の実装に合わせてリファクタ)
+  - v-bind
+  - v-for
+  - v-if
+  - v-model
 
 ## ★ Basic SFC Compiler 部門
 
-大きくなりそうなので項目は随時更新
-
-- SFC の基本
 - script setup
-- style block
+- compiler macro
+  - define props
+  - define emits
+- resolve components
 
-## ★ Web Application Essentials 部門
+## ★ Web Application Essentials 部門 (付録)
 
 - router
 - store
+- suspense
+- keep-alive
+- typescript 対応
 
 # 🧑‍🏫 この本に対する意見や質問について
 
