@@ -3,21 +3,24 @@ import { createApp, h, reactive } from "chibivue";
 const app = createApp({
   setup() {
     const state = reactive({
-      list: [{ key: "a" }, { key: "b" }, { key: "c" }, { key: "d" }],
+      message: "Hello World",
     });
     const updateList = () => {
-      state.list = [{ key: "a" }, { key: "b" }, { key: "d" }, { key: "c" }];
+      state.message = "Hello ChibiVue!";
+      state.message = "Hello ChibiVue!!";
+      state.message = "Hello ChibiVue!!";
+      state.message = "Hello ChibiVue!!";
+      state.message = "Hello ChibiVue!!";
+      state.message = "Hello ChibiVue!! last";
     };
 
-    return () =>
-      h("div", { id: "app" }, [
-        h(
-          "ul",
-          {},
-          state.list.map((item) => h("li", { key: item.key }, [item.key]))
-        ),
+    return () => {
+      console.log("😎 rendered!");
+      return h("div", { id: "app" }, [
+        h("p", {}, [`message: ${state.message}`]),
         h("button", { onClick: updateList }, ["update"]),
       ]);
+    };
   },
 });
 
