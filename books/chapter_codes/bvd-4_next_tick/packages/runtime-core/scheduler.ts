@@ -10,6 +10,15 @@ let isFlushing = false;
 let isFlushPending = false;
 
 const resolvedPromise = Promise.resolve() as Promise<any>;
+let currentFlushPromise: Promise<void> | null = null;
+
+export function nextTick<T = void>(
+  this: T,
+  fn?: (this: T) => void
+): Promise<void> {
+  const p = currentFlushPromise || resolvedPromise;
+  return fn ? p.then(this ? fn.bind(this) : fn) : p;
+}
 
 export function queueJob(job: SchedulerJob) {
   if (
@@ -28,7 +37,7 @@ export function queueJob(job: SchedulerJob) {
 function queueFlush() {
   if (!isFlushing && !isFlushPending) {
     isFlushPending = true;
-    resolvedPromise.then(() => {
+    currentFlushPromise = resolvedPromise.then(() => {
       isFlushPending = false;
       isFlushing = true;
       queue.forEach((job) => {
@@ -38,6 +47,7 @@ function queueFlush() {
       flushIndex = 0;
       queue.length = 0;
       isFlushing = false;
+      currentFlushPromise = null;
     });
   }
 }
