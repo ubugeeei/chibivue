@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/19_patch_other_attrs.md) | Next
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/18_patch_other_attrs.md) | Next
 
 # ★ Basic Virtual DOM 部門
 
@@ -64,5 +64,10 @@
 - typescript  
   -> 7/2
 
+## NOTE:
 
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/19_patch_other_attrs.md) | Next
+- template ref?
+- ssr
+
+
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/18_patch_other_attrs.md) | Next
