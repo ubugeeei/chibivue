@@ -1,11 +1,7 @@
-import { ComponentInternalInstance } from "./component";
-
 export interface SchedulerJob extends Function {
   id?: number;
   pre?: boolean;
   active?: boolean;
-  computed?: boolean;
-  ownerInstance?: ComponentInternalInstance;
 }
 
 export type SchedulerJobs = SchedulerJob | SchedulerJob[];
