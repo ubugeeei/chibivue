@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/19_brs_effect_scope.md) | Next
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/530_scoped_css.md) | Next
 
 # ★ Basic Virtual DOM 部門
 
@@ -17,7 +17,6 @@ NOTE: innerHTML / textContent については再考
 
 ## ★ Basic Reactive System 部門
 
-- effect scope
 - ref api  
   -> 6/3
 - computed api
@@ -25,6 +24,7 @@ NOTE: innerHTML / textContent については再考
   - imm  
     -> 6/10
 - array broken changing
+- effect scope
 
 ## ★ Basic Component System 部門
 
@@ -71,4 +71,4 @@ NOTE: innerHTML / textContent については再考
 - ssr
 
 
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/19_brs_effect_scope.md) | Next
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/530_scoped_css.md) | Next

@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/14_break.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/16_bvd_bit_flags.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/09_minimum_component.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/10_minimum_template_compiler.md)
 
 ---
 title: "key属性とパッチレンダリング(Basic Virtual DOM部門スタート)"
@@ -374,4 +374,4 @@ Todo だけまとめておきます。
 (おすすめなは本家 Vue を実際に読みながらです。)
 
 
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/14_break.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/16_bvd_bit_flags.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/09_minimum_component.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/10_minimum_template_compiler.md)
