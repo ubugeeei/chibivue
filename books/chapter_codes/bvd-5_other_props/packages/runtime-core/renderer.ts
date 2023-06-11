@@ -25,7 +25,14 @@ export interface RendererOptions<
   HostNode = RendererNode,
   HostElement = RendererElement
 > {
-  patchProp(el: HostElement, key: string, value: any): void;
+  patchProp(
+    el: HostElement,
+    key: string,
+    prevValue: any,
+    nextValue: any,
+    prevChildren?: VNode<HostNode>[],
+    unmountChildren?: (children: VNode<HostNode>[]) => void
+  ): void;
 
   createElement(type: string): HostElement;
 
@@ -103,7 +110,14 @@ export function createRenderer(options: RendererOptions) {
 
     if (props) {
       for (const key in props) {
-        hostPatchProp(el, key, props[key]);
+        hostPatchProp(
+          el,
+          key,
+          null,
+          props[key],
+          vnode.children as VNode[],
+          unmountChildren
+        );
       }
     }
 
@@ -128,13 +142,21 @@ export function createRenderer(options: RendererOptions) {
   ) => {
     const el = (n2.el = n1.el!);
 
-    const props = n2.props;
+    const oldProps = n1.props || {};
+    const newProps = n2.props || {};
 
     patchChildren(n1, n2, el, anchor);
 
-    for (const key in props) {
-      if (props[key] !== n1.props?.[key] ?? {}) {
-        hostPatchProp(el, key, props[key]);
+    for (const key in oldProps) {
+      if (!(key in newProps)) {
+        hostPatchProp(el, key, oldProps[key], null);
+      }
+    }
+    for (const key in newProps) {
+      const next = newProps[key];
+      const prev = oldProps[key];
+      if (next !== prev) {
+        hostPatchProp(el, key, prev, next);
       }
     }
   };
