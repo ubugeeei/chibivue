@@ -1,4 +1,4 @@
-import { IfAny } from "../shared";
+import { IfAny, isArray } from "../shared";
 import { Dep, createDep } from "./dep";
 import { getDepFromReactive, trackEffects, triggerEffects } from "./effect";
 import { toReactive } from "./reactive";
@@ -58,7 +58,7 @@ export function shallowRef(value?: unknown) {
 
 /*
  *
- * common
+ * ref common
  *
  */
 function createRef(rawValue: unknown, shallow: boolean) {
@@ -92,6 +92,11 @@ export function triggerRef(ref: Ref) {
   triggerRefValue(ref);
 }
 
+/*
+ *
+ * toRef
+ *
+ */
 export type ToRef<T> = IfAny<T, Ref<T>, [T] extends [Ref] ? T : Ref<T>>;
 export function toRef<T extends object, K extends keyof T>(
   object: T,
@@ -110,6 +115,27 @@ export function toRef(
   return propertyToRef(source, key!, defaultValue);
 }
 
+/*
+ *
+ * toRefs
+ *
+ */
+export type ToRefs<T = any> = {
+  [K in keyof T]: ToRef<T[K]>;
+};
+export function toRefs<T extends object>(object: T): ToRefs<T> {
+  const ret: any = isArray(object) ? new Array(object.length) : {};
+  for (const key in object) {
+    ret[key] = propertyToRef(object, key);
+  }
+  return ret;
+}
+
+/*
+ *
+ * common (to ref)
+ *
+ */
 function propertyToRef(
   source: Record<string, any>,
   key: string,
