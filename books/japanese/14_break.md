@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/13_minimum_sfc.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/15_patch_keyed_children.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/13_minimum_sfc.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/15_bvd_patch_keyed_children.md)
 
 ---
 title: "ちょっと一息"
@@ -350,4 +350,4 @@ Minimal Example 部門ではかなり細かめに実装の手順について説�
 ここから先はこの本はある種のガイドライン程度に捉えて貰って、本編は Vue 本家にあります！
 
 
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/13_minimum_sfc.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/15_patch_keyed_children.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/13_minimum_sfc.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/15_bvd_patch_keyed_children.md)

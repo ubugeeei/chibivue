@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/17_scheduler.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/milestones.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/17_bvd_scheduler.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/19_brs_effect_scope.md)
 
 ---
 title: "対応できていない Props のパッチ"
@@ -99,4 +99,4 @@ removeAttribute / setAttribute で更新されるべきものと `el[key] = valu
 また、キャストだけではなく、そもそも削除としてみなすような値の場合は removeAttribute します。例えば、patch の key が id で value が空文字だった場合です。
 
 
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/17_scheduler.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/milestones.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/17_bvd_scheduler.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/19_brs_effect_scope.md)

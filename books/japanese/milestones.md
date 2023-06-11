@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/18_patch_other_attrs.md) | Next
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/19_brs_effect_scope.md) | Next
 
 # ★ Basic Virtual DOM 部門
 
@@ -15,7 +15,7 @@
 
 NOTE: innerHTML / textContent については再考
 
-## ★ Reactive System 部門
+## ★ Basic Reactive System 部門
 
 - effect scope
 - ref api  
@@ -71,4 +71,4 @@ NOTE: innerHTML / textContent については再考
 - ssr
 
 
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/18_patch_other_attrs.md) | Next
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/19_brs_effect_scope.md) | Next
