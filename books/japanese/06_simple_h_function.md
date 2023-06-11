@@ -22,7 +22,12 @@ app.mount("#app");
 
 これはシンプルは`Hello World.`と画面に描画するための関数でした。  
 メッセージだけでは何とも寂しいので、HTML 要素も描画できるような開発者インターフェースを考えてみましょう。  
-そこで登場するのが`h function`です。この`h`というのは`hyper`の略で、HTML (Hyper Text Markup Language)を JS で記述する関数として提供されます。  
+そこで登場するのが`h function`です。この`h`というのは`hyperscript`の略で、HTML (Hyper Text Markup Language)を JS で記述する関数として提供されます。
+
+> h() is short for hyperscript - which means "JavaScript that produces HTML (hypertext markup language)". This name is inherited from conventions shared by many virtual DOM implementations. A more descriptive name could be createVnode(), but a shorter name helps when you have to call this function many times in a render function.
+
+引用: https://vuejs.org/guide/extras/render-function.html#creating-vnodes
+
 Vue.js の h function についてみてみましょう。
 
 ```ts

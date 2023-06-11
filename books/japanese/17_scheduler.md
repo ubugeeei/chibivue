@@ -111,6 +111,7 @@ app.mount("#app");
 こちらのボタンをクリックしてみてコンソールを覗いてみましょう。
 
 ![old_state_dom](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/books/images/old_state_dom.png)
+
 `state.count`を更新した後にコンソールに出力しているのに、情報が古くなってしまっています。  
 それもそのはずステートを更新しても瞬時に DOM が更新されるわけではなく、コンソールに出力した段階ではまだ DOM は古い状態のままです。
 
@@ -165,6 +166,7 @@ app.mount("#app");
 ```
 
 ![next_tick](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/books/images/next_tick.png)
+
 さて、実際に今のスケジューラの実装を`currentFlushPromise`を保持しておくような実装に書き換えて、nextTick を実装してみましょう!
 
 
