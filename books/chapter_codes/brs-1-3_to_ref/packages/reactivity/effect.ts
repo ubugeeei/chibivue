@@ -59,3 +59,7 @@ export function triggerEffects(dep: Dep | ReactiveEffect[]) {
 function triggerEffect(effect: ReactiveEffect) {
   effect.run();
 }
+
+export function getDepFromReactive(object: any, key: string | number | symbol) {
+  return targetMap.get(object)?.get(key);
+}

@@ -1,5 +1,6 @@
+import { IfAny } from "../shared";
 import { Dep, createDep } from "./dep";
-import { trackEffects, triggerEffects } from "./effect";
+import { getDepFromReactive, trackEffects, triggerEffects } from "./effect";
 import { toReactive } from "./reactive";
 
 declare const RefSymbol: unique symbol;
@@ -89,4 +90,53 @@ class RefImpl<T> {
 
 export function triggerRef(ref: Ref) {
   triggerRefValue(ref);
+}
+
+export type ToRef<T> = IfAny<T, Ref<T>, [T] extends [Ref] ? T : Ref<T>>;
+export function toRef<T extends object, K extends keyof T>(
+  object: T,
+  key: K
+): ToRef<T[K]>;
+export function toRef<T extends object, K extends keyof T>(
+  object: T,
+  key: K,
+  defaultValue: T[K]
+): ToRef<Exclude<T[K], undefined>>;
+export function toRef(
+  source: Record<string, any>,
+  key?: string,
+  defaultValue?: unknown
+): Ref {
+  return propertyToRef(source, key!, defaultValue);
+}
+
+function propertyToRef(
+  source: Record<string, any>,
+  key: string,
+  defaultValue?: unknown
+) {
+  return new ObjectRefImpl(source, key, defaultValue) as any;
+}
+
+class ObjectRefImpl<T extends object, K extends keyof T> {
+  public readonly __v_isRef = true;
+
+  constructor(
+    private readonly _object: T,
+    private readonly _key: K,
+    private readonly _defaultValue?: T[K]
+  ) {}
+
+  get value() {
+    const val = this._object[this._key];
+    return val === undefined ? (this._defaultValue as T[K]) : val;
+  }
+
+  set value(newVal) {
+    this._object[this._key] = newVal;
+  }
+
+  get dep(): Dep | undefined {
+    return getDepFromReactive(this._object, this._key);
+  }
 }

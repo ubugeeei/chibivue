@@ -1,41 +1,16 @@
-import { createApp, h, shallowRef, triggerRef } from "chibivue";
+import { createApp, h, reactive, toRef } from "chibivue";
 
 const app = createApp({
   setup() {
-    const state = shallowRef({ count: 0 });
-    const forceUpdate = () => {
-      triggerRef(state);
-    };
+    const state = reactive({ count: 0 });
+    const stateCountRef = toRef(state, "count");
 
     return () =>
       h("div", {}, [
-        h("p", {}, [`count: ${state.value.count}`]),
-
-        h(
-          "button",
-          {
-            onClick: () => {
-              state.value = { count: state.value.count + 1 };
-            },
-          },
-          ["increment"]
-        ),
-
-        h(
-          "button", // clickしても描画は更新されない
-          {
-            onClick: () => {
-              state.value.count++;
-            },
-          },
-          ["not trigger ..."]
-        ),
-
-        h(
-          "button", // 描画が今の state.value.count が持つ値に更新される
-          { onClick: forceUpdate },
-          ["force update !"]
-        ),
+        h("p", {}, [`state.count: ${state.count}`]),
+        h("p", {}, [`stateCountRef.value: ${stateCountRef.value}`]),
+        h("button", { onClick: () => state.count++ }, ["updateState"]),
+        h("button", { onClick: () => stateCountRef.value++ }, ["updateRef"]),
       ]);
   },
 });
