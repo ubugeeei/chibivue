@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/100_bvd_patch_keyed_children.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/110_bvd_bit_flags.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/009_minimum_component.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/011_more_complex_parser.md)
 
 ---
 title: "小さいテンプレートコンパイラ"
@@ -596,4 +596,4 @@ app.mount("#app");
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/07-1_mininum_template_compiler
 
 
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/100_bvd_patch_keyed_children.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/110_bvd_bit_flags.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/009_minimum_component.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/011_more_complex_parser.md)

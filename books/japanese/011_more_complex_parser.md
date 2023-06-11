@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/110_bvd_bit_flags.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/120_bvd_scheduler.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/010_minimum_template_compiler.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/012_template_binding.md)
 
 ---
 title: "もっと複雑な HTML を書きたい"
@@ -754,4 +754,4 @@ app.mount("#app");
 どうでしょう。機能は少ないにしろ、だんだんと普段の Vue の開発者インターフェースに近づいてきたのではないでしょうか
 
 
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/110_bvd_bit_flags.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/120_bvd_scheduler.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/010_minimum_template_compiler.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/012_template_binding.md)

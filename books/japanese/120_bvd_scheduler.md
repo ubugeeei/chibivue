@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/11_more_complex_parser.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/12_template_binding.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/110_bvd_bit_flags.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/130_bvd_patch_other_attrs.md)
 
 ---
 title: "スケジューラ"
@@ -170,4 +170,4 @@ app.mount("#app");
 さて、実際に今のスケジューラの実装を`currentFlushPromise`を保持しておくような実装に書き換えて、nextTick を実装してみましょう!
 
 
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/11_more_complex_parser.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/12_template_binding.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/110_bvd_bit_flags.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/130_bvd_patch_other_attrs.md)

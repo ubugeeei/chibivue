@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/10_minimum_template_compiler.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/11_more_complex_parser.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/100_bvd_patch_keyed_children.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/120_bvd_scheduler.md)
 
 ---
 title: "ビットによるVNodeの表現"
@@ -83,4 +83,4 @@ export const enum ShapeFlags {
 なんとこのチャプターの説明は以上です。実際に実装していきましょう !
 
 
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/10_minimum_template_compiler.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/11_more_complex_parser.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/100_bvd_patch_keyed_children.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/120_bvd_scheduler.md)
