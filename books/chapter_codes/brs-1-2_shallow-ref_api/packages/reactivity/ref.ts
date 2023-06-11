@@ -86,3 +86,7 @@ class RefImpl<T> {
     triggerRefValue(this);
   }
 }
+
+export function triggerRef(ref: Ref) {
+  triggerRefValue(ref);
+}
