@@ -14,6 +14,12 @@ fn main() {
     let local_books_dir_path =
         dotenv::var("LOCAL_BOOKS_DIR_PATH").expect("LOCAL_BOOKS_DIR_PATH is not set");
 
+    // remove existing dir
+    let _ = std::fs::remove_dir_all(&output_dir_path);
+
+    // create dir
+    std::fs::create_dir_all(&output_dir_path).expect("Failed to create dir");
+
     // load
     let pages_path = format!("{local_books_dir_path}/*.md");
     let paths = glob(&pages_path).expect("Failed to read glob pattern");
