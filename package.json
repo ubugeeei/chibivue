@@ -6,6 +6,11 @@
     "dev:app": "cd example/app && pnpm i && pnpm run dev",
     "test": "vitest"
   },
+  "config": {
+    "commitizen": {
+      "path": "git-cz"
+    }
+  },
   "author": "Ubugeeei <ubuge1122@gmail.com>",
   "devDependencies": {
     "@babel/types": "^7.21.2",
