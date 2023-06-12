@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/130_bvd_patch_other_attrs.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/210_brs_computed_watch.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/130_bvd_patch_other_attrs.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/205_brs_reactive_flags.md)
 
 ---
 title: "ref api (Basic Reactive System 部門スタート)"
@@ -279,8 +279,5 @@ app.mount("#app");
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/brs-1-4_to_refs
 
-- readonly
-- unRef
 
-
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/130_bvd_patch_other_attrs.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/210_brs_computed_watch.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/130_bvd_patch_other_attrs.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/205_brs_reactive_flags.md)
