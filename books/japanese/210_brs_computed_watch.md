@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/205_brs_reactive_flags.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/220_brs_other_apis.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/200_brs_ref_api.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/215_brs___wip___reactive_flags.md)
 
 ---
 title: "computed / watch api"
@@ -29,9 +29,34 @@ function computed<T>(
 ): Ref<T>;
 ```
 
-<!-- まずは読み取り専用の方から考えてみましょう。 -->
+本家の実装は短いながらに少しだけ複雑なので、まずはシンプルな構成を考えてみましょう。
 
-computed は
+最も簡単な方法として思いつくのは、value を get する際に毎度コールバックを発火するという手法でしょう。
+
+```ts
+export class ComputedRefImpl<T> {
+  constructor(private getter: ComputedGetter<T>) {}
+
+  get value() {
+    return this.getter();
+  }
+
+  set value() {}
+}
+```
+
+しかしこれでは computed というか、ただ関数を呼んでいるだけです (そりゃそう。特に何も嬉しくないですね、残念。)
+
+実際には依存関係を追跡し、その値が変更されたときに再計算したいわけです。
+
+どうやって依存関係を追跡するかについてですが、まずは reactive オブジェクトと component の update 関数でリアクティブを構成した時のことを思い出してください。  
+あの時は、reactive オブジェクト(依存)に変更(set)があった際に update 関数を trigger するような実装になっていたかと思います。  
+基本的に考え方はこれと同じで、reactive オブジェクト(依存)に変更(set)があった際に getter 関数を再実行するような仕組みにしてあげればいいわけです。
+
+
+```ts
+
+```
 
 - computed
 - watch
@@ -39,4 +64,4 @@ computed は
 - watchEffect
 
 
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/205_brs_reactive_flags.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/220_brs_other_apis.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/200_brs_ref_api.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/215_brs___wip___reactive_flags.md)
