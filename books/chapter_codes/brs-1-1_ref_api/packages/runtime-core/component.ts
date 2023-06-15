@@ -9,6 +9,7 @@ export type Component = ComponentOptions;
 export type Data = Record<string, unknown>;
 
 export interface ComponentInternalInstance {
+  uid: number;
   type: Component;
 
   vnode: VNode;
@@ -30,12 +31,14 @@ export type InternalRenderFunction = {
   (ctx: Data): VNodeChild;
 };
 
+let uid = 0;
 export function createComponentInstance(
   vnode: VNode
 ): ComponentInternalInstance {
   const type = vnode.type as Component;
 
   const instance: ComponentInternalInstance = {
+    uid: uid++,
     type,
 
     vnode,

@@ -1,3 +1,5 @@
+import { isObject, isString } from "../shared";
+import { ShapeFlags } from "../shared/shapeFlags";
 import { ComponentInternalInstance } from "./component";
 
 export type VNodeTypes = string | typeof Text | object;
@@ -10,8 +12,10 @@ export interface VNode<HostNode = any> {
   children: VNodeNormalizedChildren;
 
   el: HostNode | undefined;
+  key: string | number | symbol | null;
 
   component: ComponentInternalInstance | null;
+  shapeFlag: number;
 }
 
 export interface VNodeProps {
@@ -29,12 +33,20 @@ export function createVNode(
   props: VNodeProps | null,
   children: VNodeNormalizedChildren
 ): VNode {
+  const shapeFlag = isString(type)
+    ? ShapeFlags.ELEMENT
+    : isObject(type)
+    ? ShapeFlags.COMPONENT
+    : 0;
+
   const vnode: VNode = {
     type,
     props,
     children: children,
     el: undefined,
+    key: props?.key ?? null,
     component: null,
+    shapeFlag,
   };
   return vnode;
 }
@@ -45,4 +57,8 @@ export function normalizeVNode(child: VNodeChild): VNode {
   } else {
     return createVNode(Text, null, String(child));
   }
+}
+
+export function isSameVNodeType(n1: VNode, n2: VNode): boolean {
+  return n1.type === n2.type && n1.key === n2.key;
 }
