@@ -33,6 +33,7 @@ Currently, I am still in the process of implementation, but after implementation
   - ✅ h function
   - ✅ patch rendering
   - ✅ scheduler
+    - ✅ nextTick
 - ✅ Component
   - ✅ API
     - ✅ Options API
