@@ -6,9 +6,14 @@ const targetMap = new WeakMap<any, KeyToDepMap>();
 
 export let activeEffect: ReactiveEffect | undefined;
 
+export type EffectScheduler = (...args: any[]) => any;
+
 export class ReactiveEffect<T = any> {
   public deps: Dep[] = [];
-  constructor(public fn: () => T) {}
+  constructor(
+    public fn: () => T,
+    public scheduler: EffectScheduler | null = null
+  ) {}
 
   run() {
     activeEffect = this;
@@ -57,7 +62,11 @@ export function triggerEffects(dep: Dep | ReactiveEffect[]) {
 }
 
 function triggerEffect(effect: ReactiveEffect) {
-  effect.run();
+  if (effect.scheduler) {
+    effect.scheduler();
+  } else {
+    effect.run();
+  }
 }
 
 export function getDepFromReactive(object: any, key: string | number | symbol) {
