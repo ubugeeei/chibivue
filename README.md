@@ -28,6 +28,7 @@ Currently, I am still in the process of implementation, but after implementation
   - ✅ shallowRef
   - ✅ triggerRef
   - ✅ toRef
+  - ✅ toRefs
 - ✅ Virtual Dom & Renderer
   - ✅ h function
   - ✅ patch rendering

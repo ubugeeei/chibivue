@@ -1,3 +1,4 @@
+import { isArray } from "../shared";
 import { IfAny } from "../shared/typeUtils";
 import { Dep, createDep } from "./dep";
 import { getDepFromReactive, trackEffects, triggerEffects } from "./effect";
@@ -92,6 +93,17 @@ export function toRef(
   defaultValue?: unknown
 ): Ref {
   return propertyToRef(source, key!, defaultValue);
+}
+
+export type ToRefs<T = any> = {
+  [K in keyof T]: ToRef<T[K]>;
+};
+export function toRefs<T extends object>(object: T): ToRefs<T> {
+  const ret: any = isArray(object) ? new Array(object.length) : {};
+  for (const key in object) {
+    ret[key] = propertyToRef(object, key);
+  }
+  return ret;
 }
 
 function propertyToRef(
