@@ -2,8 +2,10 @@ import { Dep, createDep } from "./dep";
 import { trackEffects, triggerEffects } from "./effect";
 import { toReactive } from "./reactive";
 
+declare const RefSymbol: unique symbol;
 export interface Ref<T = any> {
   value: T;
+  [RefSymbol]: true;
 }
 
 type RefBase<T> = {
