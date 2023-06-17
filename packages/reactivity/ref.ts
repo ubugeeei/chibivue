@@ -32,6 +32,18 @@ export function ref(value?: unknown) {
   return createRef(value, false);
 }
 
+declare const ShallowRefMarker: unique symbol;
+export type ShallowRef<T = any> = Ref<T> & { [ShallowRefMarker]?: true };
+
+export function shallowRef<T extends object>(
+  value: T
+): T extends Ref ? T : ShallowRef<T>;
+export function shallowRef<T>(value: T): ShallowRef<T>;
+export function shallowRef<T = any>(): ShallowRef<T | undefined>;
+export function shallowRef(value?: unknown) {
+  return createRef(value, true);
+}
+
 function createRef(rawValue: unknown, shallow: boolean) {
   if (isRef(rawValue)) {
     return rawValue;
