@@ -8,6 +8,10 @@ const app = createApp({
       console.log("computed");
       return count.value * 2;
     });
+    const doubleDouble = computed(() => {
+      console.log("computed (doubleDouble)");
+      return double.value * 2;
+    });
 
     const countRef = ref(0);
     const doubleCountRef = computed(() => {
@@ -20,6 +24,7 @@ const app = createApp({
         h("p", {}, [`count: ${count.value}`]),
         h("p", {}, [`count2: ${count2.value}`]),
         h("p", {}, [`double: ${double.value}`]),
+        h("p", {}, [`doubleDouble: ${doubleDouble.value}`]),
         h("p", {}, [`doubleCountRef: ${doubleCountRef.value}`]),
         h("button", { onClick: () => count.value++ }, ["update count"]),
         h("button", { onClick: () => count2.value++ }, ["update count2"]),
