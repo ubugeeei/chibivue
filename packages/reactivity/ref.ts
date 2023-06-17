@@ -71,6 +71,10 @@ class RefImpl<T> {
   }
 }
 
+export function triggerRef(ref: Ref) {
+  triggerRefValue(ref);
+}
+
 export function unref<T>(ref: T | Ref<T>): T {
   return isRef(ref) ? (ref.value as any) : ref;
 }

@@ -25,6 +25,7 @@ Currently, I am still in the process of implementation, but after implementation
   - ✅ reactive
   - ✅ ref
   - ✅ shallowRef
+  - ✅ triggerRef
   - ✅ computed
 - ✅ Virtual Dom & Renderer
   - ✅ h function
