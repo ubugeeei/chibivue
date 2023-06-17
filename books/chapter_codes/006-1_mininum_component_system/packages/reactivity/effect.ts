@@ -10,8 +10,11 @@ export class ReactiveEffect<T = any> {
   constructor(public fn: () => T) {}
 
   run() {
+    let parent: ReactiveEffect | undefined = activeEffect;
     activeEffect = this;
-    return this.fn();
+    const res = this.fn();
+    activeEffect = parent;
+    return res;
   }
 }
 

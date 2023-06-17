@@ -15,8 +15,11 @@ export class ReactiveEffect<T = any> {
   ) {}
 
   run() {
+    let parent: ReactiveEffect | undefined = activeEffect;
     activeEffect = this;
-    return this.fn();
+    const res = this.fn();
+    activeEffect = parent;
+    return res;
   }
 }
 
