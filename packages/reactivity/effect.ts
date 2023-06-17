@@ -88,6 +88,10 @@ function triggerEffect(effect: ReactiveEffect) {
   }
 }
 
+export function getDepFromReactive(object: any, key: string | number | symbol) {
+  return targetMap.get(object)?.get(key);
+}
+
 /**
  *
  * ----------- tests

@@ -24,9 +24,10 @@ Currently, I am still in the process of implementation, but after implementation
 - ✅ Reactive System
   - ✅ reactive
   - ✅ ref
+  - ✅ computed
   - ✅ shallowRef
   - ✅ triggerRef
-  - ✅ computed
+  - ✅ toRef
 - ✅ Virtual Dom & Renderer
   - ✅ h function
   - ✅ patch rendering
