@@ -11,8 +11,8 @@ export function watch<T>(
   source: WatchSource<T>,
   cb: (newValue: T, oldValue: T) => void
 ) {
-  let oldValue: T;
   const getter = () => source();
+  let oldValue = getter();
   const job = () => {
     const newValue = getter();
     if (hasChanged(newValue, oldValue)) {
