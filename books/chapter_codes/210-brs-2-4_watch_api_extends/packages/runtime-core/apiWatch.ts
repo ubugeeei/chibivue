@@ -9,9 +9,14 @@ export type WatchCallback<V = any, OV = any> = (value: V, oldValue: OV) => void;
 
 type OnCleanup = (cleanupFn: () => void) => void;
 
+export interface WatchOptions<Immediate = boolean> {
+  immediate?: Immediate;
+}
+
 export function watch<T>(
   source: WatchSource<T> | WatchSource[],
-  cb: WatchCallback
+  cb: WatchCallback,
+  option?: WatchOptions
 ) {
   let getter: () => any;
   let isMultiSource = false;
@@ -26,12 +31,14 @@ export function watch<T>(
     getter = () => source;
   }
 
-  let oldValue = getter();
+  let oldValue: T | T[];
   const job = () => {
-    const newValue = getter();
+    const newValue = effect.run();
     if (
       isMultiSource
-        ? (newValue as any[]).some((v, i) => hasChanged(v, oldValue[i]))
+        ? (newValue as any[]).some((v, i) =>
+            hasChanged(v, (oldValue as T[])?.[i])
+          )
         : hasChanged(newValue, oldValue)
     ) {
       cb(newValue, oldValue);
@@ -41,5 +48,10 @@ export function watch<T>(
 
   const effect = new ReactiveEffect(getter, job);
 
-  effect.run();
+  // initial run
+  if (option && option.immediate) {
+    job();
+  } else {
+    oldValue = effect.run();
+  }
 }

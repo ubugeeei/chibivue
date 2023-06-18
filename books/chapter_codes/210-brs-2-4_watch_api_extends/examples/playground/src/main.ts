@@ -18,6 +18,8 @@ const app = createApp({
       alert(`count.value or count2.value was changed! ${prev} -> ${crr}`)
     );
 
+    watch(count, () => alert("immediate watcher"), { immediate: true });
+
     return () =>
       h("div", {}, [
         h("p", {}, [`state.count: ${state.count}`]),
