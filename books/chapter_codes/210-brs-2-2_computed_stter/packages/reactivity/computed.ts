@@ -1,6 +1,7 @@
+import { isFunction } from "../shared";
 import { Dep } from "./dep";
 import { ReactiveEffect } from "./effect";
-import { trackRefValue, triggerRefValue } from "./ref";
+import { Ref, trackRefValue, triggerRefValue } from "./ref";
 
 declare const ComputedRefSymbol: unique symbol;
 
@@ -9,7 +10,12 @@ export interface ComputedRef<T = any> {
   [ComputedRefSymbol]: true;
 }
 
-type ComputedGetter<T> = (...args: any[]) => T;
+export type ComputedGetter<T> = (...args: any[]) => T;
+export type ComputedSetter<T> = (v: T) => void;
+export interface WritableComputedOptions<T> {
+  get: ComputedGetter<T>;
+  set: ComputedSetter<T>;
+}
 
 export class ComputedRefImpl<T> {
   public dep?: Dep = undefined;
@@ -20,7 +26,10 @@ export class ComputedRefImpl<T> {
   public readonly __v_isRef = true;
   public _dirty = true;
 
-  constructor(getter: ComputedGetter<T>) {
+  constructor(
+    getter: ComputedGetter<T>,
+    private readonly _setter: ComputedSetter<T>
+  ) {
     this.effect = new ReactiveEffect(getter, () => {
       if (!this._dirty) {
         this._dirty = true;
@@ -38,9 +47,29 @@ export class ComputedRefImpl<T> {
     return this._value;
   }
 
-  set value(newValue: T) {}
+  set value(newValue: T) {
+    this._setter(newValue);
+  }
 }
 
-export function computed<T>(getter: ComputedGetter<T>): ComputedRef<T> {
-  return new ComputedRefImpl(getter) as any;
+export function computed<T>(getterOrOptions: ComputedGetter<T>): ComputedRef<T>;
+export function computed<T>(
+  getterOrOptions: WritableComputedOptions<T>
+): Ref<T>;
+export function computed<T>(
+  getterOrOptions: ComputedGetter<T> | WritableComputedOptions<T>
+) {
+  let getter: ComputedGetter<T>;
+  let setter: ComputedSetter<T>;
+
+  const onlyGetter = isFunction(getterOrOptions);
+
+  if (onlyGetter) {
+    getter = getterOrOptions;
+    setter = () => {};
+  } else {
+    getter = getterOrOptions.get;
+    setter = getterOrOptions.set;
+  }
+  return new ComputedRefImpl(getter, setter) as any;
 }
