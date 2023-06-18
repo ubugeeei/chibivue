@@ -1,9 +1,9 @@
-import { ReactiveEffect, Ref, isRef } from "../reactivity";
+import { ComputedRef, ReactiveEffect, Ref, isRef } from "../reactivity";
 import { hasChanged, isFunction } from "../shared";
 
 export type WatchEffect = (onCleanup: OnCleanup) => void;
 
-export type WatchSource<T = any> = (() => T) | Ref<T>;
+export type WatchSource<T = any> = (() => T) | Ref<T> | ComputedRef<T>;
 
 type OnCleanup = (cleanupFn: () => void) => void;
 

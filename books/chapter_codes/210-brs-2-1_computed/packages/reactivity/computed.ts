@@ -1,10 +1,10 @@
 import { Dep } from "./dep";
 import { ReactiveEffect } from "./effect";
-import { trackRefValue, triggerRefValue } from "./ref";
+import { Ref, trackRefValue, triggerRefValue } from "./ref";
 
 declare const ComputedRefSymbol: unique symbol;
 
-export interface ComputedRef<T = any> {
+export interface ComputedRef<T = any> extends Ref {
   readonly value: T;
   [ComputedRefSymbol]: true;
 }
