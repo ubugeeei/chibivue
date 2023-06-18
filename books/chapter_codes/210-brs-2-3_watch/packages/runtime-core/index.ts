@@ -11,3 +11,5 @@ export { createRenderer } from "./renderer";
 export { h } from "./h";
 
 export { nextTick } from "./scheduler";
+
+export { watch } from "./apiWatch";
