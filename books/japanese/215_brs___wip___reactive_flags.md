@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/210_brs_computed_watch.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/220_brs_other_apis.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/212_brs_reactive_proxy_target_type.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/220_brs_other_apis.md)
 
 ---
 title: "ReactiveFlags による reactive オブジェクトの制御"
@@ -106,4 +106,4 @@ export function shallowReadonly<T extends object>(target: T): Readonly<T> {
 ```
 
 
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/210_brs_computed_watch.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/220_brs_other_apis.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/212_brs_reactive_proxy_target_type.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/220_brs_other_apis.md)

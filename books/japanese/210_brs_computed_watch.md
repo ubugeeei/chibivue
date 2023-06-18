@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/200_brs_ref_api.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/215_brs___wip___reactive_flags.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/200_brs_ref_api.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/212_brs_reactive_proxy_target_type.md)
 
 ---
 title: "computed / watch api"
@@ -137,10 +137,131 @@ const app = createApp({
 app.mount("#app");
 ```
 
-- computed
-- watch
-  - options
-- watchEffect
+ここまでのソースコード:  
+https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-2-1_computed  
+(setter 込みはこちら):  
+https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-2-2_computed_setter
+
+# Watch の実装
+
+https://vuejs.org/api/reactivity-core.html#watch
+
+watch にもいろんな形式の api があります。まずは最も単純な、getter 関数によって監視するような api を実装してみましょう。
+まずは、以下のようなコードが動くことを目指します。
+
+```ts
+import { createApp, h, reactive, watch } from "chibivue";
+
+const app = createApp({
+  setup() {
+    const state = reactive({ count: 0 });
+    watch(
+      () => state.count,
+      () => alert("state.count was changed!")
+    );
+
+    return () =>
+      h("div", {}, [
+        h("p", {}, [`count: ${state.count}`]),
+        h("button", { onClick: () => state.count++ }, ["update state"]),
+      ]);
+  },
+});
+
+app.mount("#app");
+```
+
+watch の実装は reactivity ではなく、runtime-core の方に実装していきます (apiWatch.ts)
+
+さまざまな api が混在しているので、少し複雑に見えますが、範囲を絞ればとても単純なことです。  
+目標とする api(watch 関数)のシグネチャを以下に実装しておくので、是非実装してみてください。  
+今までリアクティビティの知識を培ってきたみなさんなら実装できると思います！
+
+```ts
+export type WatchEffect = (onCleanup: OnCleanup) => void;
+
+export type WatchSource<T = any> = () => T;
+
+type OnCleanup = (cleanupFn: () => void) => void;
+
+export function watch<T>(
+  source: WatchSource<T>,
+  cb: (newValue: T, oldValue: T) => void
+) {
+  // TODO:
+}
+```
+
+ここまでのソースコード:  
+https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-2-3_watch
+
+## watch の その他の api
+
+ベースができてしまえば、後は拡張するだけです。これも特に解説は必要ないでしょう。
+
+- ref の監視
+  ```ts
+  const count = ref(0);
+  watch(count, () => {
+    /** some effects */
+  });
+  ```
+- 複数の source の監視
+
+  ```ts
+  const count = ref(0);
+  const count2 = ref(0);
+  const count3 = ref(0);
+  watch([count, count2, count3], () => {
+    /** some effects */
+  });
+  ``;
+  ```
+
+- immediate
+
+  ```ts
+  const count = ref(0);
+  watch(
+    count,
+    () => {
+      /** some effects */
+    },
+    { immediate: true }
+  );
+  ```
+
+※ ⚠️ WIP
+
+- reactive object
+- deep
+- flush
+
+ここまでのソースコード:  
+https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-2-4_watch_api_extends
+
+# watchEffect
+
+https://vuejs.org/api/reactivity-core.html#watcheffect
+
+watch の実装を使えば watchEffect の実装は簡単です。
+
+```ts
+const count = ref(0);
+
+watchEffect(() => console.log(count.value));
+// -> logs 0
+
+count.value++;
+// -> logs 1
+```
+
+イメージてには immediate のような実装をすれば OK です。
+
+ここまでのソースコード:  
+https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-2-4_watch_effect
+
+# Effect のクリーンナップ
 
 
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/200_brs_ref_api.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/215_brs___wip___reactive_flags.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/200_brs_ref_api.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/212_brs_reactive_proxy_target_type.md)
