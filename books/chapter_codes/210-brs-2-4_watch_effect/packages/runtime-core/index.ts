@@ -12,4 +12,4 @@ export { h } from "./h";
 
 export { nextTick } from "./scheduler";
 
-export { watch } from "./apiWatch";
+export { watch, watchEffect } from "./apiWatch";

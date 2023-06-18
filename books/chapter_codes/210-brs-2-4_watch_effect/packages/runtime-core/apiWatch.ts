@@ -1,13 +1,13 @@
 import { ComputedRef, ReactiveEffect, Ref, isRef } from "../reactivity";
 import { hasChanged, isArray, isFunction } from "../shared";
 
-export type WatchEffect = (onCleanup: OnCleanup) => void;
+export type WatchEffect = () => void;
 
 export type WatchSource<T = any> = (() => T) | Ref<T> | ComputedRef<T>;
 
 export type WatchCallback<V = any, OV = any> = (value: V, oldValue: OV) => void;
 
-type OnCleanup = (cleanupFn: () => void) => void;
+const INITIAL_WATCHER_VALUE = {};
 
 export interface WatchOptions<Immediate = boolean> {
   immediate?: Immediate;
@@ -18,11 +18,23 @@ export function watch<T>(
   cb: WatchCallback,
   option?: WatchOptions
 ) {
+  doWatch(source, cb, option);
+}
+
+export function watchEffect(source: WatchEffect) {
+  doWatch(source, null);
+}
+
+function doWatch(
+  source: WatchSource | WatchSource[] | WatchEffect,
+  cb: WatchCallback | null,
+  option?: WatchOptions
+) {
   let getter: () => any;
   let isMultiSource = false;
   if (isFunction(source)) {
     getter = () => source();
-  } else if (isRef<T>(source)) {
+  } else if (isRef(source)) {
     getter = () => source.value;
   } else if (isArray(source)) {
     isMultiSource = true;
@@ -31,18 +43,26 @@ export function watch<T>(
     getter = () => source;
   }
 
-  let oldValue: T | T[];
+  let oldValue: any = isMultiSource
+    ? new Array((source as []).length).fill(INITIAL_WATCHER_VALUE)
+    : INITIAL_WATCHER_VALUE;
+
   const job = () => {
-    const newValue = effect.run();
-    if (
-      isMultiSource
-        ? (newValue as any[]).some((v, i) =>
-            hasChanged(v, (oldValue as T[])?.[i])
-          )
-        : hasChanged(newValue, oldValue)
-    ) {
-      cb(newValue, oldValue);
-      oldValue = newValue;
+    if (cb) {
+      const newValue = effect.run();
+      if (
+        isMultiSource
+          ? (newValue as any[]).some((v, i) =>
+              hasChanged(v, (oldValue as any[])?.[i])
+            )
+          : hasChanged(newValue, oldValue)
+      ) {
+        cb(newValue, oldValue);
+        oldValue = newValue;
+      }
+    } else {
+      // watchEffect
+      effect.run();
     }
   };
 
