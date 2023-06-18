@@ -29,6 +29,8 @@ Currently, I am still in the process of implementation, but after implementation
   - ✅ triggerRef
   - ✅ toRef
   - ✅ toRefs
+  - ✅ watch
+  - ✅ watchEffect
 - ✅ Virtual Dom & Renderer
   - ✅ h function
   - ✅ patch rendering

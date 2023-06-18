@@ -47,6 +47,9 @@ export const capitalize = (str: string) =>
 export const toHandlerKey = (str: string) =>
   str ? `on${capitalize(str)}` : ``;
 
+export const hasChanged = (value: any, oldValue: any): boolean =>
+  !Object.is(value, oldValue);
+
 export const isReservedProp = /*#__PURE__*/ makeMap(
   // the leading comma is intentional so empty string "" is also included
   ",key,ref,ref_for,ref_key," +
