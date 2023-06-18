@@ -22,3 +22,6 @@ export const capitalize = (str: string) =>
 
 export const toHandlerKey = (str: string) =>
   str ? `on${capitalize(str)}` : ``;
+
+export const hasChanged = (value: any, oldValue: any): boolean =>
+  !Object.is(value, oldValue);

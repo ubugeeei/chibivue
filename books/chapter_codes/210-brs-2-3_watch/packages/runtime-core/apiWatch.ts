@@ -1,4 +1,5 @@
 import { ReactiveEffect } from "../reactivity";
+import { hasChanged } from "../shared";
 
 export type WatchEffect = (onCleanup: OnCleanup) => void;
 
@@ -11,8 +12,14 @@ export function watch<T>(
   cb: (newValue: T, oldValue: T) => void
 ) {
   let oldValue: T;
-  const getter = () => (oldValue = source());
-  const job = () => cb(getter(), oldValue);
+  const getter = () => source();
+  const job = () => {
+    const newValue = getter();
+    if (hasChanged(newValue, oldValue)) {
+      cb(newValue, oldValue);
+      oldValue = newValue;
+    }
+  };
 
   const effect = new ReactiveEffect(getter, job);
   effect.run();
