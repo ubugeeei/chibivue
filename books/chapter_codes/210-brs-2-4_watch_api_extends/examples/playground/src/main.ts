@@ -13,6 +13,11 @@ const app = createApp({
       alert(`count.value was changed! ${prev} -> ${crr}`)
     );
 
+    const count2 = ref(0);
+    watch([count, count2], (crr, prev) =>
+      alert(`count.value or count2.value was changed! ${prev} -> ${crr}`)
+    );
+
     return () =>
       h("div", {}, [
         h("p", {}, [`state.count: ${state.count}`]),
@@ -20,6 +25,9 @@ const app = createApp({
 
         h("p", {}, [`count: ${count.value}`]),
         h("button", { onClick: () => count.value++ }, ["update count"]),
+
+        h("p", {}, [`count2: ${count2.value}`]),
+        h("button", { onClick: () => count2.value++ }, ["update count2"]),
       ]);
   },
 });
