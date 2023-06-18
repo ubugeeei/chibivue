@@ -19,45 +19,76 @@ Currently, I am still in the process of implementation, but after implementation
 <br/>
 <br/>
 
-## status
+# status
 
-- ✅ Reactive System
-  - ✅ reactive
-  - ✅ ref
-  - ✅ computed
-  - ✅ shallowRef
-  - ✅ triggerRef
-  - ✅ toRef
-  - ✅ toRefs
-  - ✅ watch
-  - ✅ watchEffect
-- ✅ Virtual Dom & Renderer
-  - ✅ h function
-  - ✅ patch rendering
-  - ✅ scheduler
-    - ✅ nextTick
-- ✅ Component
-  - ✅ API
-    - ✅ Options API
-    - ✅ Composition API
-  - ✅ lifecycle hooks
-    - ✅ mounted
-  - ✅ props / emit
-  - ✅ provide / inject
-  - ✅ use plugin
-- Template Compiler
-  - ✅ directives
-    - ✅ v-on
-    - ✅ v-for
-    - ✅ v-model
-    - v-if
-  - ✅ mustache
-- ✅ Extensions
-  - ✅ sfc compiler (vite plugin)
-    - ✅ basic
-    - ✅ script setup
-      - ✅ basic
-      - ✅ defineProps / defineEmits
-    - ✅ style block
-  - ✅ store
-  - ✅ router
+## Reactive System
+
+| feature       | impl | book |
+| ------------- | ---- | ---- |
+| reactive      | ✅   | ✅   |
+| ref           | ✅   | ✅   |
+| computed      | ✅   | ✅   |
+| shallowRef    | ✅   | ✅   |
+| triggerRef    | ✅   | ✅   |
+| toRef         | ✅   | ✅   |
+| toRefs        | ✅   | ✅   |
+| watch         | ✅   | ✅   |
+| watchEffect   | ✅   | ✅   |
+| effectScope   | ✅   |      |
+| template refs |      |      |
+
+## Virtual Dom & Renderer
+
+| feature         | impl | book |
+| --------------- | ---- | ---- |
+| h function      | ✅   | ✅   |
+| patch rendering | ✅   | ✅   |
+| key attribute   | ✅   | ✅   |
+| scheduler       | ✅   | ✅   |
+| nextTick        | ✅   | ✅   |
+| ssr             |      |      |
+
+## Component System
+
+| feature          | impl | book |
+| ---------------- | ---- | ---- |
+| Options API      | ✅   |      |
+| Composition API  | ✅   | ✅   |
+| lifecycle hooks  | ✅   |      |
+| props / emit     | ✅   | ✅   |
+| provide / inject | ✅   |      |
+| use plugin       | ✅   |      |
+| slot (default)   |      |      |
+| slot (named)     |      |      |
+| slot (scoped)    |      |      |
+
+## Template Compiler
+
+| feature  | impl | book |
+| -------- | ---- | ---- |
+| v-on     | ✅   |      |
+| v-bind   | ✅   |      |
+| v-for    | ✅   |      |
+| v-model  | ✅   |      |
+| v-if     |      |      |
+| v-show   |      |      |
+| mustache | ✅   |      |
+|          |      |      |
+
+## SFC Compiler
+
+| feature                          | impl | book |
+| -------------------------------- | ---- | ---- |
+| basics (template, script, style) | ✅   | ✅   |
+| scoped css                       |      |      |
+| script setup                     | ✅   |      |
+| compiler macro                   | ✅   |      |
+
+## Extensions and Other Builtin
+
+| feature    | impl | book |
+| ---------- | ---- | ---- |
+| store      | ✅   |      |
+| router     | ✅   |      |
+| keep-alive |      |      |
+| suspense   |      |      |
