@@ -1,4 +1,4 @@
-import { isObject } from "../shared";
+import { isObject, toRawType } from "../shared";
 import { mutableHandlers } from "./baseHandler";
 
 export const enum ReactiveFlags {}
@@ -7,6 +7,31 @@ export interface Target {}
 
 export const reactiveMap = new WeakMap<Target, any>();
 
+const enum TargetType {
+  INVALID = 0,
+  COMMON = 1,
+}
+
+function targetTypeMap(rawType: string) {
+  switch (rawType) {
+    case "Object":
+    case "Array":
+    case "Map":
+    case "Set":
+    case "WeakMap":
+    case "WeakSet":
+      return TargetType.COMMON;
+    default:
+      return TargetType.INVALID;
+  }
+}
+
+function getTargetType(value: Target) {
+  return !Object.isExtensible(value)
+    ? TargetType.INVALID
+    : targetTypeMap(toRawType(value));
+}
+
 export function reactive<T extends object>(target: T) {
   const existingProxy = reactiveMap.get(target);
 
@@ -14,9 +39,13 @@ export function reactive<T extends object>(target: T) {
     return existingProxy;
   }
 
+  const targetType = getTargetType(target);
+  if (targetType === TargetType.INVALID) {
+    return target;
+  }
+
   const proxy = new Proxy(target, mutableHandlers);
   reactiveMap.set(target, proxy);
-
   return proxy;
 }
 
