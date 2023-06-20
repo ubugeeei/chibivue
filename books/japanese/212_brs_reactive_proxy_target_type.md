@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/210_brs_computed_watch.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/215_brs___wip___reactive_flags.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/210_brs_computed_watch.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/220_brs_array_instrumentations.md)
 
 ---
 title: "リアクティブにするオブジェクトとしないオブジェクト"
@@ -221,5 +221,40 @@ export interface VNode<HostNode = any> {
 本家の実装でいうと、setRef という関数です。探して、読んで、実装をしてみましょう！  
 本家の方では配列で ref を持ったり、$ref でアクセスできるようにしたりと色々複雑になっていますが、とりあえず上記のコードが動く程度のものを目指してみましょう。
 
+ついでに、component だった場合は component の setupContext を ref に代入してあげましょう。  
+(※ ここは本当はコンポーネントの proxy を渡すべきなんですが、まだ未実装のため setupContext ということにしています。)
 
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/210_brs_computed_watch.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/215_brs___wip___reactive_flags.md)
+```ts
+import { createApp, h, ref } from "chibivue";
+
+const Child = {
+  setup() {
+    const action = () => alert("clicked!");
+    return { action };
+  },
+
+  template: `<button @click="action">action (child)</button>`,
+};
+
+const app = createApp({
+  setup() {
+    const childRef = ref<any>(null);
+    const childAction = () => {
+      childRef.value?.action();
+    };
+
+    return () =>
+      h("div", {}, [
+        h("div", {}, [
+          h(Child, { ref: childRef }, []),
+          h("button", { onClick: childAction }, ["action (parent)"]),
+        ]),
+      ]);
+  },
+});
+
+app.mount("#app");
+```
+
+
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/210_brs_computed_watch.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/220_brs_array_instrumentations.md)

@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/215_brs___wip___reactive_flags.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/230_brs_other_apis.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/212_brs_reactive_proxy_target_type.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/230_brs_other_apis.md)
 
 ---
 title: "現状の問題点"
@@ -9,4 +9,4 @@ title: "現状の問題点"
 以下のソースコードをご覧ください。
 
 
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/215_brs___wip___reactive_flags.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/230_brs_other_apis.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/212_brs_reactive_proxy_target_type.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/230_brs_other_apis.md)

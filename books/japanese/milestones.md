@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/530_scoped_css.md) | Next
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/999_brs___wip___reactive_flags.md) | Next
 
 # ★ Basic Virtual DOM 部門
 
@@ -64,4 +64,4 @@
 - ssr
 
 
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/530_scoped_css.md) | Next
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/999_brs___wip___reactive_flags.md) | Next
