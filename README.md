@@ -35,7 +35,7 @@ Currently, I am still in the process of implementation, but after implementation
 | watch         | ✅   | ✅   |
 | watchEffect   | ✅   | ✅   |
 | effectScope   | ✅   |      |
-| template refs |      |      |
+| template refs | ✅   | ✅   |
 
 ## Virtual Dom & Renderer
 
