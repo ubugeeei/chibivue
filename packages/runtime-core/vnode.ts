@@ -5,6 +5,7 @@ import { type ComponentInternalInstance } from "./component";
 import { type ComponentPublicInstance } from "./componentPublicInstance";
 import { AppContext } from "./apiCreateApp";
 import { DirectiveBinding } from "./directives";
+import { Ref } from "../reactivity";
 
 export type VNodeTypes =
   | string // html element name
@@ -26,6 +27,7 @@ export interface VNode<HostNode = any> {
   type: VNodeTypes;
   props: VNodeProps | null;
   key: string | number | symbol | null;
+  ref: Ref | null;
 
   // DOM
   el: HostNode | undefined;
@@ -89,6 +91,7 @@ function createBaseVNode(
     type,
     props,
     key: props && props.key,
+    ref: props?.ref ?? null,
     children,
     el: null,
     anchor: null,
@@ -152,6 +155,7 @@ export function cloneVNode<T>(vnode: VNode<T>): VNode<T> {
     type: vnode.type,
     props,
     key: vnode.key,
+    ref: vnode.ref,
     children: isArray(children)
       ? (children as VNode[]).map(cloneVNode)
       : children,
@@ -239,6 +243,7 @@ if (import.meta.vitest) {
         type: "div",
         props: { id: "foo" },
         key: null,
+        ref: null,
         el: null,
         anchor: null,
         children: "bar",
@@ -268,6 +273,7 @@ if (import.meta.vitest) {
         type: "div",
         props: { id: "foo" },
         key: null,
+        ref: null,
         el: null,
         anchor: null,
         children: ["bar"],

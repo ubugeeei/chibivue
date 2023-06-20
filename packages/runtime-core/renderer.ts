@@ -10,6 +10,7 @@ import {
 import { updateProps } from "./componentProps";
 import { renderComponentRoot } from "./componentRenderUtils";
 import { invokeDirectiveHook } from "./directives";
+import { setRef } from "./rendererTemplateRef";
 import {
   SchedulerJob,
   flushPostFlushCbs,
@@ -146,7 +147,7 @@ export function createRenderer(options: RendererOptions) {
     anchor,
     parentComponent = null
   ) => {
-    const { type, shapeFlag } = n2;
+    const { type, ref, shapeFlag } = n2;
     if (type === Text) {
       processText(n1, n2, container, anchor);
     } else if (type === Fragment) {
@@ -155,6 +156,10 @@ export function createRenderer(options: RendererOptions) {
       processElement(n1, n2, container, anchor, parentComponent);
     } else if (shapeFlag & ShapeFlags.COMPONENT) {
       processComponent(n1, n2, container, anchor, parentComponent);
+    }
+
+    if (ref) {
+      setRef(ref, n2);
     }
   };
 
