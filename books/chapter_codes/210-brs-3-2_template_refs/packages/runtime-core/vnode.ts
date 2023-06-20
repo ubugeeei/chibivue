@@ -1,3 +1,4 @@
+import { Ref } from "../reactivity";
 import { isObject, isString } from "../shared";
 import { ShapeFlags } from "../shared/shapeFlags";
 import { ComponentInternalInstance } from "./component";
@@ -13,6 +14,7 @@ export interface VNode<HostNode = any> {
 
   el: HostNode | undefined;
   key: string | number | symbol | null;
+  ref: Ref | null;
 
   component: ComponentInternalInstance | null;
   shapeFlag: number;
@@ -45,6 +47,7 @@ export function createVNode(
     children: children,
     el: undefined,
     key: props?.key ?? null,
+    ref: props?.ref ?? null,
     component: null,
     shapeFlag,
   };
