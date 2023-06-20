@@ -7,7 +7,6 @@ const app = createApp({
       inputRef.value = document.getElementById(
         "my-input"
       ) as HTMLInputElement | null;
-      console.log(inputRef.value);
     };
     const focus = () => {
       inputRef.value?.focus();
