@@ -7,6 +7,7 @@ export const mutableHandlers: ProxyHandler<object> = {
   },
 
   set(target: object, key: string | symbol, value: unknown, receiver: object) {
+    console.log("set", key, value);
     Reflect.set(target, key, value, receiver);
     trigger(target, key);
     return true;
