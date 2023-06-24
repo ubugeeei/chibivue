@@ -10,10 +10,6 @@ function targetTypeMap(rawType: string) {
   switch (rawType) {
     case "Object":
     case "Array":
-    case "Map":
-    case "Set":
-    case "WeakMap":
-    case "WeakSet":
       return TargetType.COMMON;
     default:
       return TargetType.INVALID;
