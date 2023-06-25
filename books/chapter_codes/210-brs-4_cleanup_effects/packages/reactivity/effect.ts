@@ -11,18 +11,57 @@ export type EffectScheduler = (...args: any[]) => any;
 export const ITERATE_KEY = Symbol();
 
 export class ReactiveEffect<T = any> {
-  public deps: Dep[] = [];
+  active = true;
+  deps: Dep[] = [];
+  parent: ReactiveEffect | undefined = undefined;
+
+  private deferStop?: boolean;
+  onStop?: () => void;
+
   constructor(
     public fn: () => T,
     public scheduler: EffectScheduler | null = null
   ) {}
 
   run() {
-    let parent: ReactiveEffect | undefined = activeEffect;
-    activeEffect = this;
-    const res = this.fn();
-    activeEffect = parent;
-    return res;
+    if (!this.active) {
+      return this.fn();
+    }
+
+    try {
+      this.parent = activeEffect;
+      activeEffect = this;
+      const res = this.fn();
+      return res;
+    } finally {
+      activeEffect = this.parent;
+      this.parent = undefined;
+      if (this.deferStop) {
+        this.stop();
+      }
+    }
+  }
+
+  stop() {
+    if (activeEffect === this) {
+      this.deferStop = true;
+    } else if (this.active) {
+      cleanupEffect(this);
+      if (this.onStop) {
+        this.onStop();
+      }
+      this.active = false;
+    }
+  }
+}
+
+function cleanupEffect(effect: ReactiveEffect) {
+  const { deps } = effect;
+  if (deps.length) {
+    for (let i = 0; i < deps.length; i++) {
+      deps[i].delete(effect);
+    }
+    deps.length = 0;
   }
 }
 

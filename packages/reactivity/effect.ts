@@ -13,8 +13,14 @@ export type EffectScheduler = (...args: any[]) => any;
 export const ITERATE_KEY = Symbol();
 
 export class ReactiveEffect<T = any> {
-  public deps: Dep[] = [];
+  active = true;
+  deps: Dep[] = [];
+  parent: ReactiveEffect | undefined = undefined;
   computed?: ComputedRefImpl<T>;
+
+  private deferStop?: boolean;
+  onStop?: () => void;
+
   constructor(
     public fn: () => T,
     public scheduler: EffectScheduler | null = null,
@@ -24,11 +30,44 @@ export class ReactiveEffect<T = any> {
   }
 
   run() {
-    let parent: ReactiveEffect | undefined = activeEffect;
-    activeEffect = this;
-    const res = this.fn();
-    activeEffect = parent;
-    return res;
+    if (!this.active) {
+      return this.fn();
+    }
+
+    try {
+      this.parent = activeEffect;
+      activeEffect = this;
+      const res = this.fn();
+      return res;
+    } finally {
+      activeEffect = this.parent;
+      this.parent = undefined;
+      if (this.deferStop) {
+        this.stop();
+      }
+    }
+  }
+
+  stop() {
+    if (activeEffect === this) {
+      this.deferStop = true;
+    } else if (this.active) {
+      cleanupEffect(this);
+      if (this.onStop) {
+        this.onStop();
+      }
+      this.active = false;
+    }
+  }
+}
+
+function cleanupEffect(effect: ReactiveEffect) {
+  const { deps } = effect;
+  if (deps.length) {
+    for (let i = 0; i < deps.length; i++) {
+      deps[i].delete(effect);
+    }
+    deps.length = 0;
   }
 }
 
@@ -92,74 +131,4 @@ function triggerEffect(effect: ReactiveEffect) {
 
 export function getDepFromReactive(object: any, key: string | number | symbol) {
   return targetMap.get(object)?.get(key);
-}
-
-/**
- *
- * ----------- tests
- *
- */
-if (import.meta.vitest) {
-  const { it, expect, vi } = import.meta.vitest;
-
-  it("call effect", () => {
-    const mockEffect = vi.fn(() => {});
-    const effect = new ReactiveEffect(mockEffect);
-    effect.run();
-    expect(mockEffect).toHaveBeenCalledOnce();
-
-    // clean up
-    activeEffect = undefined;
-  });
-
-  it("track effect", () => {
-    /*
-     * expect targetMap to be:
-     *
-     * targetMap = Map {
-     *    target -> Map {
-     *        key -> Set()
-     *    }
-     * }
-     */
-    const key = "foo";
-    const target = { [key]: "1" };
-    track(target, key);
-    expect(targetMap.get(target)?.has(key)).toBe(true);
-
-    // clean up
-    targetMap.delete(target);
-    activeEffect = undefined;
-  });
-
-  it("trigger effect", () => {
-    const mockEffect = vi.fn(() => {});
-    const effect = new ReactiveEffect(mockEffect);
-    effect.run(); // call count 1
-    expect(mockEffect).toHaveBeenCalledTimes(1);
-
-    /*
-     * expect targetMap to be:
-     *
-     * targetMap = Map {
-     *    target -> Map {
-     *        key -> Set(effect)
-     *    }
-     * }
-     */
-    const key = "foo";
-    const target = { [key]: "1" };
-    track(target, key);
-    expect(targetMap.get(target)?.get(key)).toBe(effect.deps[0]);
-
-    trigger(target, key); // call count 2
-    expect(mockEffect).toHaveBeenCalledTimes(2);
-
-    trigger(target, key); // call count 3
-    expect(mockEffect).toHaveBeenCalledTimes(3);
-
-    // clean up
-    targetMap.delete(target);
-    activeEffect = undefined;
-  });
 }

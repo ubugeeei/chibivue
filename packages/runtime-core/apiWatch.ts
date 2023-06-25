@@ -13,7 +13,11 @@ export type WatchEffect = () => void;
 
 export type WatchSource<T = any> = (() => T) | Ref<T> | ComputedRef<T>;
 
-export type WatchCallback<V = any, OV = any> = (value: V, oldValue: OV) => void;
+export type WatchCallback<V = any, OV = any> = (
+  value: V,
+  oldValue: OV,
+  onCleanup: OnCleanup
+) => void;
 
 const INITIAL_WATCHER_VALUE = {};
 
@@ -22,12 +26,14 @@ export interface WatchOptions<Immediate = boolean> {
   deep?: boolean;
 }
 
+type OnCleanup = (cleanupFn: () => void) => void;
+
 export function watch<T>(
   source: WatchSource<T> | WatchSource[],
   cb: WatchCallback,
   option?: WatchOptions
 ) {
-  doWatch(source, cb, option);
+  return doWatch(source, cb, option);
 }
 
 export function watchEffect(source: WatchEffect) {
@@ -58,6 +64,13 @@ function doWatch(
     getter = () => traverse(baseGetter());
   }
 
+  let cleanup: () => void;
+  let onCleanup: OnCleanup = (fn: () => void) => {
+    cleanup = effect.onStop = () => {
+      fn();
+    };
+  };
+
   let oldValue: any = isMultiSource
     ? new Array((source as []).length).fill(INITIAL_WATCHER_VALUE)
     : INITIAL_WATCHER_VALUE;
@@ -73,7 +86,11 @@ function doWatch(
             )
           : hasChanged(newValue, oldValue))
       ) {
-        cb(newValue, oldValue);
+        // cleanup before running cb again
+        if (cleanup) {
+          cleanup();
+        }
+        cb(newValue, oldValue, onCleanup);
         oldValue = newValue;
       }
     } else {
@@ -90,6 +107,12 @@ function doWatch(
   } else {
     oldValue = effect.run();
   }
+
+  const unwatch = () => {
+    effect.stop();
+  };
+
+  return unwatch;
 }
 
 export function traverse(value: unknown, seen?: Set<unknown>) {

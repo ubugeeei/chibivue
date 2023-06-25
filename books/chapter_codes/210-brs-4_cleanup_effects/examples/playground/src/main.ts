@@ -1,30 +1,27 @@
-import { createApp, h, reactive } from "chibivue";
+import { createApp, h, reactive, watch } from "chibivue";
 
-const ReactiveCollection = {
+const app = createApp({
   setup() {
-    const state = reactive({ map: new Map(), set: new Set() });
+    const state = reactive({ count: 0 });
+    const increment = () => {
+      state.count++;
+    };
+
+    const unwatch = watch(
+      () => state.count,
+      (newValue, oldValue, cleanup) => {
+        alert(`New value: ${newValue}, old value: ${oldValue}`);
+        cleanup(() => alert("Clean Up!"));
+      }
+    );
 
     return () =>
       h("div", {}, [
-        h("h1", {}, [`ReactiveCollection`]),
-
-        h("p", {}, [
-          `map (${state.map.size}): ${JSON.stringify([...state.map])}`,
-        ]),
-        h("button", { onClick: () => state.map.set(Date.now(), "item") }, [
-          "update map",
-        ]),
-
-        h("p", {}, [
-          `set (${state.set.size}): ${JSON.stringify([...state.set])}`,
-        ]),
-        h("button", { onClick: () => state.set.add("item") }, ["update set"]),
+        h("p", {}, [`count: ${state.count}`]),
+        h("button", { onClick: increment }, [`increment`]),
+        h("button", { onClick: unwatch }, [`unwatch`]),
       ]);
   },
-};
-
-const app = createApp({
-  setup: () => () => h("div", {}, [h(ReactiveCollection, {}, [])]),
 });
 
 app.mount("#app");
