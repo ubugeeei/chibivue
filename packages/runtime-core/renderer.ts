@@ -655,7 +655,8 @@ export function createRenderer(options: RendererOptions) {
   };
 
   const unmountComponent = (instance: ComponentInternalInstance) => {
-    const { subTree } = instance;
+    const { subTree, scope } = instance;
+    scope.stop();
     unmount(subTree);
   };
 

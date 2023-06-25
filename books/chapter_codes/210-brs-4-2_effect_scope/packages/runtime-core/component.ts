@@ -1,4 +1,4 @@
-import { ReactiveEffect } from "../reactivity";
+import { EffectScope, ReactiveEffect } from "../reactivity";
 import { emit } from "./componentEmits";
 import { ComponentOptions } from "./componentOptions";
 import { Props, initProps } from "./componentProps";
@@ -18,6 +18,8 @@ export interface ComponentInternalInstance {
   effect: ReactiveEffect;
   render: InternalRenderFunction;
   update: () => void;
+
+  scope: EffectScope;
 
   propsOptions: Props;
   props: Data;
@@ -48,6 +50,8 @@ export function createComponentInstance(
     update: null!,
     render: null!,
 
+    scope: new EffectScope(),
+
     propsOptions: type.props || {},
     props: {},
     emit: null!, // to be set immediately
@@ -66,9 +70,11 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
 
   const component = instance.type as Component;
   if (component.setup) {
+    instance.scope.on();
     const setupResult = component.setup(instance.props, {
       emit: instance.emit,
     }) as InternalRenderFunction;
+    instance.scope.off();
 
     // setupResultの型によって分岐をする
     if (typeof setupResult === "function") {

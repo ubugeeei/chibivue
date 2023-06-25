@@ -1,5 +1,6 @@
 import { isArray } from "../shared";
 import { Dep, createDep } from "./dep";
+import { EffectScope, recordEffectScope } from "./effectScope";
 
 type KeyToDepMap = Map<any, Dep>;
 const targetMap = new WeakMap<any, KeyToDepMap>();
@@ -20,8 +21,11 @@ export class ReactiveEffect<T = any> {
 
   constructor(
     public fn: () => T,
-    public scheduler: EffectScheduler | null = null
-  ) {}
+    public scheduler: EffectScheduler | null = null,
+    scope?: EffectScope
+  ) {
+    recordEffectScope(this, scope);
+  }
 
   run() {
     if (!this.active) {

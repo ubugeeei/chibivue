@@ -16,3 +16,5 @@ export {
   type ComputedSetter,
   type WritableComputedOptions,
 } from "./computed";
+
+export { EffectScope } from "./effectScope";
