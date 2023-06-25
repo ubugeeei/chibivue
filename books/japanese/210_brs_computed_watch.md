@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/200_brs_ref_api.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/212_brs_reactive_proxy_target_type.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/200_brs_ref_api.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/212_brs_reactive_proxy_handlers.md)
 
 ---
 title: "computed / watch api"
@@ -231,13 +231,29 @@ https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-2-3_w
   );
   ```
 
-※ ⚠️ WIP
+- deep
+
+  ```ts
+  const state = reactive({ count: 0 });
+  watch(
+    () => state,
+    () => {
+      /** some effects */
+    },
+    { deep: true }
+  );
+  ```
 
 - reactive object
-- deep
-- flush
 
-ここまでのソースコード:  
+  ```ts
+  const state = reactive({ count: 0 });
+  watch(state, () => {
+    /** some effects */
+  }); // automatically in deep mode
+  ```
+
+ここまでのソースコード:
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-2-4_watch_api_extends
 
 # watchEffect
@@ -261,7 +277,9 @@ count.value++;
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-2-4_watch_effect
 
-# Effect のクリーンナップ
+---
+
+※ クリーンアップについては別のチャプターで行います。
 
 
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/200_brs_ref_api.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/212_brs_reactive_proxy_target_type.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/200_brs_ref_api.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/212_brs_reactive_proxy_handlers.md)

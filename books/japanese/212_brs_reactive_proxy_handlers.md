@@ -1,10 +1,10 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/210_brs_computed_watch.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/220_brs_array_instrumentations.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/210_brs_computed_watch.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/220_brs_effect_scope.md)
 
 ---
-title: "リアクティブにするオブジェクトとしないオブジェクト"
+title: "様々な Reactive Proxy Handler"
 ---
 
-# 問題点
+# reactive にしたくないオブジェクト
 
 さて、ここでは現状のリアクティブシステムのある問題について解決していきます。  
 まずは以下のコードを動かしてみてください。
@@ -114,10 +114,11 @@ app.mount("#app");
 
 ```ts
 // shared/general.ts
-export const objectToString = Object.prototype.toString;
+export const objectToString = Object.prototype.toString; // isMapやisSetなどで既出
 export const toTypeString = (value: unknown): string =>
   objectToString.call(value);
 
+// 今回追加する関数
 export const toRawType = (value: unknown): string => {
   return toTypeString(value).slice(8, -1);
 };
@@ -140,10 +141,6 @@ function targetTypeMap(rawType: string) {
   switch (rawType) {
     case "Object":
     case "Array":
-    case "Map":
-    case "Set":
-    case "WeakMap":
-    case "WeakSet":
       return TargetType.COMMON;
     default:
       return TargetType.INVALID;
@@ -173,7 +170,7 @@ export function reactive<T extends object>(target: T): T {
 
 ![focus_in_element](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/books/images/focus_in_element.png)
 
-## TemplateRefs を実装してみる
+# TemplateRefs を実装してみる
 
 せっかく Ref に HTML 要素を入れられるようになったので、TemplateRef を実装してみましょう。
 
@@ -256,5 +253,94 @@ const app = createApp({
 app.mount("#app");
 ```
 
+# Collection 系の組み込みオブジェクトに対応する
 
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/210_brs_computed_watch.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/220_brs_array_instrumentations.md)
+今、reactive.ts の実装を見てみると、Object と Array のみを対象としています。
+
+```ts
+function targetTypeMap(rawType: string) {
+  switch (rawType) {
+    case "Object":
+    case "Array":
+      return TargetType.COMMON;
+    default:
+      return TargetType.INVALID;
+  }
+}
+```
+
+Vue.js では、これらに加え、Map, Set, WeakMap, WeakSet に対応しています。
+
+https://github.com/vuejs/core/blob/9f8e98af891f456cc8cc9019a31704e5534d1f08/packages/reactivity/src/reactive.ts#L43C1-L56C2
+
+そして、これらのオブジェクトは別の Proxy ハンドラとして実装されています。それが、`collectionHandlers`と呼ばれるものです。
+
+ここでは、この collectionHandlers を実装し、以下のようなコードが動くことを目指します。
+
+```ts
+const app = createApp({
+  setup() {
+    const state = reactive({ map: new Map(), set: new Set() });
+
+    return () =>
+      h("div", {}, [
+        h("h1", {}, [`ReactiveCollection`]),
+
+        h("p", {}, [
+          `map (${state.map.size}): ${JSON.stringify([...state.map])}`,
+        ]),
+        h("button", { onClick: () => state.map.set(Date.now(), "item") }, [
+          "update map",
+        ]),
+
+        h("p", {}, [
+          `set (${state.set.size}): ${JSON.stringify([...state.set])}`,
+        ]),
+        h("button", { onClick: () => state.set.add("item") }, ["update set"]),
+      ]);
+  },
+});
+
+app.mount("#app");
+```
+
+collectionHandlers では、add や set, delete といったメソッドの getter にハンドラを実装します。  
+それらを実装しているのが collectionHandlers.ts です。  
+https://github.com/vuejs/core/blob/9f8e98af891f456cc8cc9019a31704e5534d1f08/packages/reactivity/src/collectionHandlers.ts#L0-L1  
+TargetType を判別し、collection 型の場合 h にはこのハンドラを元に Proxy を生成します。  
+実際に実装してみましょう!
+
+注意点としては、Reflect の receiver に target 自身を渡す点で、target 自体に Proxy が設定されていた場合に無限ループになることがある点です。  
+これを回避するために target に対して生のデータも持たせておくような構造に変更し、Proxy のハンドラを実装するにあたってはこの生データを操作するように変更します。
+
+```ts
+export const enum ReactiveFlags {
+  RAW = "__v_raw",
+}
+
+export interface Target {
+  [ReactiveFlags.RAW]?: any;
+}
+```
+
+厳密には今までの通常の reactive ハンドラでもこの実装をしておくべきだったのですが、今までは特に問題なかったという点と余計な説明をなるべく省くために省略していました。  
+getter に入ってきたの key が ReactiveFlags.RAW の場合には Proxy ではなく生のデータを返すような実装にしてみましょう。
+
+それに伴って、target から再帰的に生データをとり、最終的に全てが生の状態のデータを取得する toRaw という関数も実装しています。
+
+```ts
+export function toRaw<T>(observed: T): T {
+  const raw = observed && (observed as Target)[ReactiveFlags.RAW];
+  return raw ? toRaw(raw) : observed;
+}
+```
+
+ちなみに、この toRaw 関数は API としても提供されている関数です。
+
+https://ja.vuejs.org/api/reactivity-advanced.html#toraw
+
+ここまでのソースコード:  
+https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-3-3_proxy_handler_improvement
+
+
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/210_brs_computed_watch.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/220_brs_effect_scope.md)

@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/220_brs_array_instrumentations.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/299_brs_effect_scope.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/220_brs_effect_scope.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/300_bcs_provide_inject.md)
 
 ---
 title: " その他の api"
@@ -17,4 +17,4 @@ title: " その他の api"
 - isReadonly
 
 
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/220_brs_array_instrumentations.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/299_brs_effect_scope.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/220_brs_effect_scope.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/300_bcs_provide_inject.md)
