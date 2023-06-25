@@ -1,11 +1,16 @@
+import { isObject } from "../shared";
 import { track, trigger } from "./effect";
-import { type Target } from "./reactive";
+import { reactive, type Target } from "./reactive";
 
 const get = createGetter();
 function createGetter() {
   return function get(target: Target, key: string | symbol, receiver: object) {
     track(target, key);
-    return Reflect.get(target, key, receiver);
+    const res = Reflect.get(target, key, receiver);
+    if (isObject(res)) {
+      return reactive(res);
+    }
+    return res;
   };
 }
 
