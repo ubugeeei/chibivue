@@ -10,6 +10,8 @@ export let activeEffect: ReactiveEffect | undefined;
 
 export type EffectScheduler = (...args: any[]) => any;
 
+export const ITERATE_KEY = Symbol();
+
 export class ReactiveEffect<T = any> {
   public deps: Dep[] = [];
   computed?: ComputedRefImpl<T>;
