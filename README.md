@@ -32,6 +32,7 @@ Currently, I am still in the process of implementation, but after implementation
 | triggerRef    | ✅   | ✅   |
 | toRef         | ✅   | ✅   |
 | toRefs        | ✅   | ✅   |
+| toRaw         | ✅   | ✅   |
 | watch         | ✅   | ✅   |
 | watchEffect   | ✅   | ✅   |
 | effectScope   | ✅   |      |
