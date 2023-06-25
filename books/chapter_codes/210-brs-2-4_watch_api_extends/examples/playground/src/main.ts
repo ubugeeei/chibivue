@@ -20,6 +20,14 @@ const app = createApp({
 
     watch(count, () => alert("immediate watcher"), { immediate: true });
 
+    watch(
+      () => state,
+      () => alert("deep watcher"),
+      { deep: true }
+    );
+
+    watch(state, () => alert("deep watcher (auto)"));
+
     return () =>
       h("div", {}, [
         h("p", {}, [`state.count: ${state.count}`]),
