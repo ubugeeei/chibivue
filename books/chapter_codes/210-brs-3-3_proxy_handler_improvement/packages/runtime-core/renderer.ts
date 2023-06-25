@@ -386,7 +386,7 @@ export function createRenderer(options: RendererOptions) {
 
     const effect = (instance.effect = new ReactiveEffect(
       componentUpdateFn,
-      () => queueJob(componentUpdateFn)
+      () => queueJob(update)
     ));
     const update: SchedulerJob = (instance.update = () => effect.run());
     update.id = instance.uid;
