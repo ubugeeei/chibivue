@@ -23,20 +23,23 @@ Currently, I am still in the process of implementation, but after implementation
 
 ## Reactive System
 
-| feature       | impl | book |
-| ------------- | ---- | ---- |
-| reactive      | ✅   | ✅   |
-| ref           | ✅   | ✅   |
-| computed      | ✅   | ✅   |
-| shallowRef    | ✅   | ✅   |
-| triggerRef    | ✅   | ✅   |
-| toRef         | ✅   | ✅   |
-| toRefs        | ✅   | ✅   |
-| toRaw         | ✅   | ✅   |
-| watch         | ✅   | ✅   |
-| watchEffect   | ✅   | ✅   |
-| effectScope   | ✅   |      |
-| template refs | ✅   | ✅   |
+| feature         | impl | book |
+| --------------- | ---- | ---- |
+| reactive        | ✅   | ✅   |
+| ref             | ✅   | ✅   |
+| computed        | ✅   | ✅   |
+| shallowRef      | ✅   | ✅   |
+| triggerRef      | ✅   | ✅   |
+| toRef           | ✅   | ✅   |
+| toRefs          | ✅   | ✅   |
+| toRaw           | ✅   | ✅   |
+| isRef           | ✅   | ✅   |
+| watch           | ✅   | ✅   |
+| watchEffect     | ✅   | ✅   |
+| effectScope     | ✅   | ✅   |
+| getCurrentScope | ✅   | ✅   |
+| onScopeDispose  | ✅   | ✅   |
+| template refs   | ✅   | ✅   |
 
 ## Virtual Dom & Renderer
 
