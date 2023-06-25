@@ -1,6 +1,6 @@
 import { createApp, h, reactive, watch } from "chibivue";
 
-const app = createApp({
+const Component = {
   setup() {
     const state = reactive({ count: 0 });
     const increment = () => {
@@ -20,6 +20,22 @@ const app = createApp({
         h("p", {}, [`count: ${state.count}`]),
         h("button", { onClick: increment }, [`increment`]),
         h("button", { onClick: unwatch }, [`unwatch`]),
+      ]);
+  },
+};
+
+const app = createApp({
+  setup() {
+    const isMounted = reactive({ value: false });
+    const toggle = () => {
+      isMounted.value = !isMounted.value;
+    };
+
+    return () =>
+      h("div", {}, [
+        h("p", {}, [`isMounted: ${isMounted.value}`]),
+        h("button", { onClick: toggle }, [`toggle`]),
+        isMounted.value ? h(Component, {}, []) : h("div", {}, []),
       ]);
   },
 });
