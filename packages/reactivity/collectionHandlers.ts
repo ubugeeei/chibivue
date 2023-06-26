@@ -1,6 +1,6 @@
 import { hasChanged, hasOwn, isMap } from "../shared";
 import { ITERATE_KEY, track, trigger } from "./effect";
-import { ReactiveFlags, toRaw, toReactive } from "./reactive";
+import { ReactiveFlags, toRaw, toReactive, toReadonly } from "./reactive";
 
 export type CollectionTypes = IterableCollections | WeakCollections;
 
@@ -91,7 +91,7 @@ function clear(this: IterableCollections) {
   return result;
 }
 
-function createForEach() {
+function createForEach(isReadonly: boolean) {
   return function forEach(
     this: IterableCollections,
     callback: Function,
@@ -100,14 +100,10 @@ function createForEach() {
     const observed = this as any;
     const target = observed[ReactiveFlags.RAW];
     const rawTarget = toRaw(target);
-    track(rawTarget, ITERATE_KEY);
+    const wrap = isReadonly ? toReadonly : toReactive;
+    !isReadonly && track(rawTarget, ITERATE_KEY);
     return target.forEach((value: unknown, key: unknown) => {
-      return callback.call(
-        thisArg,
-        toReactive(value),
-        toReactive(key),
-        observed
-      );
+      return callback.call(thisArg, wrap(value), wrap(key), observed);
     });
   };
 }
@@ -156,6 +152,12 @@ function createIterableMethod(method: string | symbol) {
   };
 }
 
+function createReadonlyMethod(): Function {
+  return function (this: CollectionTypes, ...args: unknown[]) {
+    return this;
+  };
+}
+
 function createInstrumentations() {
   const mutableInstrumentations: Record<string, Function | number> = {
     get(this: MapTypes, key: unknown) {
@@ -169,32 +171,60 @@ function createInstrumentations() {
     set,
     delete: deleteEntry,
     clear,
-    forEach: createForEach(),
+    forEach: createForEach(false),
+  };
+
+  const readonlyInstrumentations: Record<string, Function | number> = {
+    get(this: MapTypes, key: unknown) {
+      return get(this, key);
+    },
+    get size() {
+      return size(this as unknown as IterableCollections);
+    },
+    has(this: MapTypes, key: unknown) {
+      return has.call(this, key);
+    },
+    add: createReadonlyMethod(),
+    set: createReadonlyMethod(),
+    delete: createReadonlyMethod(),
+    clear: createReadonlyMethod(),
+    forEach: createForEach(true),
   };
 
   const iteratorMethods = ["keys", "values", "entries", Symbol.iterator];
   iteratorMethods.forEach((method) => {
     mutableInstrumentations[method as string] = createIterableMethod(method);
+    readonlyInstrumentations[method as string] = createIterableMethod(method);
   });
 
-  return { mutableInstrumentations };
+  return { mutableInstrumentations, readonlyInstrumentations };
 }
 
-function createInstrumentationGetter() {
+function createInstrumentationGetter(isReadonly: boolean) {
   return (
     target: CollectionTypes,
     key: string | symbol,
     receiver: CollectionTypes
   ) => {
-    const { mutableInstrumentations } = createInstrumentations();
+    const { mutableInstrumentations, readonlyInstrumentations } =
+      createInstrumentations();
 
-    if (key === ReactiveFlags.RAW) {
+    if (key === ReactiveFlags.IS_REACTIVE) {
+      return !isReadonly;
+    } else if (key === ReactiveFlags.IS_READONLY) {
+      return isReadonly;
+    } else if (key === ReactiveFlags.RAW) {
       return target;
     }
 
     return Reflect.get(
-      hasOwn(mutableInstrumentations, key) && key in target
-        ? mutableInstrumentations
+      hasOwn(
+        isReadonly ? readonlyInstrumentations : mutableInstrumentations,
+        key
+      ) && key in target
+        ? isReadonly
+          ? readonlyInstrumentations
+          : mutableInstrumentations
         : target,
       key,
       receiver
@@ -203,5 +233,9 @@ function createInstrumentationGetter() {
 }
 
 export const mutableCollectionHandlers: ProxyHandler<CollectionTypes> = {
-  get: createInstrumentationGetter(),
+  get: createInstrumentationGetter(false),
+};
+
+export const readonlyCollectionHandlers: ProxyHandler<CollectionTypes> = {
+  get: /*#__PURE__*/ createInstrumentationGetter(true),
 };

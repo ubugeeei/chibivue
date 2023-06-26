@@ -1,19 +1,21 @@
-import { isArray } from "../shared";
-import { IfAny } from "../shared/typeUtils";
+import { IfAny, isArray } from "../shared";
+import { CollectionTypes } from "./collectionHandlers";
 import { Dep, createDep } from "./dep";
 import { getDepFromReactive, trackEffects, triggerEffects } from "./effect";
-import { toReactive } from "./reactive";
+import { ShallowReactiveMarker, toReactive } from "./reactive";
 
 declare const RefSymbol: unique symbol;
-export interface Ref<T = any> {
-  value: T;
-  [RefSymbol]: true;
-}
+export declare const RawSymbol: unique symbol;
 
 type RefBase<T> = {
   dep?: Dep;
   value: T;
 };
+
+export interface Ref<T = any> {
+  value: T;
+  [RefSymbol]: true;
+}
 
 export function trackRefValue(ref: RefBase<any>) {
   trackEffects(ref.dep || (ref.dep = createDep()));
@@ -28,12 +30,22 @@ export function isRef(r: any): r is Ref {
   return !!(r && r.__v_isRef === true);
 }
 
+/*
+ *
+ * ref
+ *
+ */
 export function ref<T = any>(): Ref<T | undefined>;
 export function ref<T = any>(value: T): Ref<T>;
 export function ref(value?: unknown) {
   return createRef(value, false);
 }
 
+/*
+ *
+ * shallow ref
+ *
+ */
 declare const ShallowRefMarker: unique symbol;
 export type ShallowRef<T = any> = Ref<T> & { [ShallowRefMarker]?: true };
 
@@ -46,6 +58,11 @@ export function shallowRef(value?: unknown) {
   return createRef(value, true);
 }
 
+/*
+ *
+ * ref common
+ *
+ */
 function createRef(rawValue: unknown, shallow: boolean) {
   if (isRef(rawValue)) {
     return rawValue;
@@ -68,7 +85,7 @@ class RefImpl<T> {
   }
 
   set value(newVal) {
-    this._value = toReactive(newVal);
+    this._value = this.__v_isShallow ? newVal : toReactive(newVal);
     triggerRefValue(this);
   }
 }
@@ -123,7 +140,11 @@ class CustomRefImpl<T> {
 export function customRef<T>(factory: CustomRefFactory<T>): Ref<T> {
   return new CustomRefImpl(factory) as any;
 }
-
+/*
+ *
+ * toRef
+ *
+ */
 export type ToRef<T> = IfAny<T, Ref<T>, [T] extends [Ref] ? T : Ref<T>>;
 export function toRef<T extends object, K extends keyof T>(
   object: T,
@@ -142,6 +163,11 @@ export function toRef(
   return propertyToRef(source, key!, defaultValue);
 }
 
+/*
+ *
+ * toRefs
+ *
+ */
 export type ToRefs<T = any> = {
   [K in keyof T]: ToRef<T[K]>;
 };
@@ -153,6 +179,11 @@ export function toRefs<T extends object>(object: T): ToRefs<T> {
   return ret;
 }
 
+/*
+ *
+ * common (to ref)
+ *
+ */
 function propertyToRef(
   source: Record<string, any>,
   key: string,
@@ -184,31 +215,27 @@ class ObjectRefImpl<T extends object, K extends keyof T> {
   }
 }
 
-const shallowUnwrapHandlers: ProxyHandler<any> = {
-  get: (target, key, receiver) => unref(Reflect.get(target, key, receiver)),
-  set: (target, key, value, receiver) => {
-    const oldValue = target[key];
-    if (isRef(oldValue) && !isRef(value)) {
-      oldValue.value = value;
-      return true;
-    } else {
-      return Reflect.set(target, key, value, receiver);
+type BaseTypes = string | number | boolean;
+export interface RefUnwrapBailTypes {}
+
+export type UnwrapRef<T> = T extends ShallowRef<infer V>
+  ? V
+  : T extends Ref<infer V>
+  ? UnwrapRefSimple<V>
+  : UnwrapRefSimple<T>;
+
+export type UnwrapRefSimple<T> = T extends
+  | Function
+  | CollectionTypes
+  | BaseTypes
+  | Ref
+  | RefUnwrapBailTypes[keyof RefUnwrapBailTypes]
+  | { [RawSymbol]?: true }
+  ? T
+  : T extends ReadonlyArray<any>
+  ? { [K in keyof T]: UnwrapRefSimple<T[K]> }
+  : T extends object & { [ShallowReactiveMarker]?: never }
+  ? {
+      [P in keyof T]: P extends symbol ? T[P] : UnwrapRef<T[P]>;
     }
-  },
-};
-
-export function proxyRefs<T extends object>(
-  objectWithRefs: T
-): ShallowUnwrapRef<T> {
-  return new Proxy(objectWithRefs, shallowUnwrapHandlers);
-}
-
-export type ShallowUnwrapRef<T> = {
-  [K in keyof T]: T[K] extends Ref<infer V>
-    ? V // if `V` is `unknown` that means it does not extend `Ref` and is undefined
-    : T[K] extends Ref<infer V> | undefined
-    ? unknown extends V
-      ? undefined
-      : V | undefined
-    : T[K];
-};
+  : T;

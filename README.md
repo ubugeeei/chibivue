@@ -28,6 +28,7 @@ Currently, I am still in the process of implementation, but after implementation
 | reactive        | ✅   | ✅   |
 | ref             | ✅   | ✅   |
 | computed        | ✅   | ✅   |
+| readonly        | ✅   | ✅   |
 | shallowRef      | ✅   | ✅   |
 | triggerRef      | ✅   | ✅   |
 | toRef           | ✅   | ✅   |

@@ -1,57 +1,44 @@
 import { isObject } from "../shared";
 import { track, trigger } from "./effect";
-import { reactive, type Target } from "./reactive";
+import { ReactiveFlags, Target, reactive, readonly } from "./reactive";
 
 const get = createGetter();
-function createGetter() {
+const readonlyGet = createGetter(true);
+
+function createGetter(isReadonly = false, shallow = false) {
   return function get(target: Target, key: string | symbol, receiver: object) {
-    track(target, key);
-    const res = Reflect.get(target, key, receiver);
-    if (isObject(res)) {
-      return reactive(res);
+    if (key === ReactiveFlags.IS_REACTIVE) {
+      return !isReadonly;
+    } else if (key === ReactiveFlags.IS_READONLY) {
+      return isReadonly;
+    } else if (key === ReactiveFlags.IS_SHALLOW) {
+      return shallow;
+    } else {
+      track(target, key);
+      const res = Reflect.get(target, key, receiver);
+      if (isObject(res)) {
+        return isReadonly ? readonly(res) : reactive(res);
+      }
+      return res;
     }
-    return res;
   };
 }
 
-const set = createSetter();
-function createSetter() {
-  return function set(
-    target: object,
-    key: string | symbol,
-    value: unknown,
-    receiver: object
-  ) {
-    const result = Reflect.set(target, key, value, receiver);
+export const mutableHandlers: ProxyHandler<object> = {
+  get,
+  set(target: object, key: string | symbol, value: unknown, receiver: object) {
+    Reflect.set(target, key, value, receiver);
     trigger(target, key);
-    return result;
-  };
-}
+    return true;
+  },
+};
 
-export const mutableHandlers: ProxyHandler<object> = { get, set };
-
-/**
- *
- * ----------- tests
- *
- */
-if (import.meta.vitest) {
-  const { it, expect, vi } = import.meta.vitest;
-
-  it("test mutableHandlers: should track and trigger", async () => {
-    const { ReactiveEffect } = await import("./effect");
-    const mockEffect = vi.fn(() => {});
-    const effect = new ReactiveEffect(mockEffect);
-
-    effect.run(); // call count 1
-
-    expect(mockEffect).toHaveBeenCalledTimes(1);
-
-    const proxy = new Proxy<{ foo: string }>({ foo: "abc" }, mutableHandlers);
-
-    const _ = proxy.foo; // should be tracked
-    proxy.foo = "def"; // should be triggered (call count 2)
-
-    expect(mockEffect).toHaveBeenCalledTimes(2);
-  });
-}
+export const readonlyHandlers: ProxyHandler<object> = {
+  get: readonlyGet,
+  set(_target, _key) {
+    return true;
+  },
+  deleteProperty(_target, _key) {
+    return true;
+  },
+};

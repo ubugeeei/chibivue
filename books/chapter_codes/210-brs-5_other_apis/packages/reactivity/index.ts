@@ -9,7 +9,7 @@ export {
   unref,
   type Ref,
 } from "./ref";
-export { reactive } from "./reactive";
+export { reactive, readonly } from "./reactive";
 export { ReactiveEffect } from "./effect";
 export {
   computed,

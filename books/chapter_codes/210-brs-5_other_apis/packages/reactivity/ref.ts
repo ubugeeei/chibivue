@@ -1,9 +1,11 @@
 import { IfAny, isArray } from "../shared";
+import { CollectionTypes } from "./collectionHandlers";
 import { Dep, createDep } from "./dep";
 import { getDepFromReactive, trackEffects, triggerEffects } from "./effect";
-import { toReactive } from "./reactive";
+import { ShallowReactiveMarker, toReactive } from "./reactive";
 
 declare const RefSymbol: unique symbol;
+export declare const RawSymbol: unique symbol;
 
 type RefBase<T> = {
   dep?: Dep;
@@ -212,3 +214,28 @@ class ObjectRefImpl<T extends object, K extends keyof T> {
     return getDepFromReactive(this._object, this._key);
   }
 }
+
+type BaseTypes = string | number | boolean;
+export interface RefUnwrapBailTypes {}
+
+export type UnwrapRef<T> = T extends ShallowRef<infer V>
+  ? V
+  : T extends Ref<infer V>
+  ? UnwrapRefSimple<V>
+  : UnwrapRefSimple<T>;
+
+export type UnwrapRefSimple<T> = T extends
+  | Function
+  | CollectionTypes
+  | BaseTypes
+  | Ref
+  | RefUnwrapBailTypes[keyof RefUnwrapBailTypes]
+  | { [RawSymbol]?: true }
+  ? T
+  : T extends ReadonlyArray<any>
+  ? { [K in keyof T]: UnwrapRefSimple<T[K]> }
+  : T extends object & { [ShallowReactiveMarker]?: never }
+  ? {
+      [P in keyof T]: P extends symbol ? T[P] : UnwrapRef<T[P]>;
+    }
+  : T;
