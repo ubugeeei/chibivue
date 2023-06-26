@@ -77,6 +77,12 @@ export function triggerRef(ref: Ref) {
   triggerRefValue(ref);
 }
 
+export type MaybeRef<T = any> = T | Ref<T>;
+export type MaybeRefOrGetter<T = any> = MaybeRef<T> | (() => T);
+export function unref<T>(ref: MaybeRef<T>): T {
+  return isRef(ref) ? ref.value : ref;
+}
+
 /*
  *
  * custom ref
@@ -176,10 +182,6 @@ class ObjectRefImpl<T extends object, K extends keyof T> {
   get dep(): Dep | undefined {
     return getDepFromReactive(this._object, this._key);
   }
-}
-
-export function unref<T>(ref: T | Ref<T>): T {
-  return isRef(ref) ? (ref.value as any) : ref;
 }
 
 const shallowUnwrapHandlers: ProxyHandler<any> = {

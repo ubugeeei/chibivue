@@ -8,6 +8,7 @@
     "estree",
     "RAWTEXT",
     "RCDATA",
+    "unref",
     "vdom",
     "vnode",
     "Vnodes"

@@ -40,6 +40,7 @@ Currently, I am still in the process of implementation, but after implementation
 | getCurrentScope | ✅   | ✅   |
 | onScopeDispose  | ✅   | ✅   |
 | customRef       | ✅   | ✅   |
+| unref           | ✅   | ✅   |
 | template refs   | ✅   | ✅   |
 
 ## Virtual Dom & Renderer

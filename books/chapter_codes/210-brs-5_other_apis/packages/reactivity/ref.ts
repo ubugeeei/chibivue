@@ -92,6 +92,12 @@ export function triggerRef(ref: Ref) {
   triggerRefValue(ref);
 }
 
+export type MaybeRef<T = any> = T | Ref<T>;
+export type MaybeRefOrGetter<T = any> = MaybeRef<T> | (() => T);
+export function unref<T>(ref: MaybeRef<T>): T {
+  return isRef(ref) ? ref.value : ref;
+}
+
 /*
  *
  * custom ref
