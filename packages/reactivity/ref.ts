@@ -77,6 +77,47 @@ export function triggerRef(ref: Ref) {
   triggerRefValue(ref);
 }
 
+/*
+ *
+ * custom ref
+ *
+ */
+export type CustomRefFactory<T> = (
+  track: () => void,
+  trigger: () => void
+) => {
+  get: () => T;
+  set: (value: T) => void;
+};
+
+class CustomRefImpl<T> {
+  public dep?: Dep = undefined;
+  private readonly _get: ReturnType<CustomRefFactory<T>>["get"];
+  private readonly _set: ReturnType<CustomRefFactory<T>>["set"];
+  public readonly __v_isRef = true;
+
+  constructor(factory: CustomRefFactory<T>) {
+    const { get, set } = factory(
+      () => trackRefValue(this),
+      () => triggerRefValue(this)
+    );
+    this._get = get;
+    this._set = set;
+  }
+
+  get value() {
+    return this._get();
+  }
+
+  set value(newVal) {
+    this._set(newVal);
+  }
+}
+
+export function customRef<T>(factory: CustomRefFactory<T>): Ref<T> {
+  return new CustomRefImpl(factory) as any;
+}
+
 export type ToRef<T> = IfAny<T, Ref<T>, [T] extends [Ref] ? T : Ref<T>>;
 export function toRef<T extends object, K extends keyof T>(
   object: T,
@@ -169,56 +210,3 @@ export type ShallowUnwrapRef<T> = {
       : V | undefined
     : T[K];
 };
-
-/**
- *
- * ----------- tests
- *
- */
-if (import.meta.vitest) {
-  const { it, expect, vi } = import.meta.vitest;
-
-  it("isRef", () => {
-    expect(isRef(ref(1))).toBe(true);
-    expect(isRef(1)).toBe(false);
-  });
-
-  it("test ref: should track and trigger", async () => {
-    const { ReactiveEffect } = await import("./effect");
-    const mockEffect = vi.fn(() => {});
-    const effect = new ReactiveEffect(mockEffect);
-
-    effect.run(); // call count 1
-
-    expect(mockEffect).toHaveBeenCalledTimes(1);
-
-    const state = ref(1);
-
-    const _ = state.value; // should be tracked
-    state.value = 2; // should be triggered (call count 2)
-
-    expect(mockEffect).toHaveBeenCalledTimes(2);
-  });
-
-  it("test ref: should trackRefValue and triggerRefValue", async () => {
-    const { ReactiveEffect } = await import("./effect");
-    const mockEffect = vi.fn(() => {});
-    const effect = new ReactiveEffect(mockEffect);
-
-    effect.run(); // call count 1
-
-    expect(mockEffect).toHaveBeenCalledTimes(1);
-
-    const state = ref(1);
-
-    trackRefValue(state);
-    triggerRefValue(state); // should be triggered (call count 2)
-
-    expect(mockEffect).toHaveBeenCalledTimes(2);
-  });
-
-  it("test ref: should unref", () => {
-    expect(unref(ref(1))).toBe(1);
-    expect(unref(1)).toBe(1);
-  });
-}

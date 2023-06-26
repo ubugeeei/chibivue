@@ -1,42 +1,47 @@
-import { createApp, h, reactive, watch } from "chibivue";
+import { createApp, customRef, h } from "chibivue";
 
-const Component = {
-  setup() {
-    const state = reactive({ count: 0 });
-    const increment = () => {
-      state.count++;
+export function useDebouncedRef<T>(value: T, delay = 1000) {
+  let timeout: number;
+  return customRef((track, trigger) => {
+    return {
+      get() {
+        track();
+        return value;
+      },
+      set(newValue: T) {
+        window.clearTimeout(timeout);
+        timeout = window.setTimeout(() => {
+          value = newValue;
+          trigger();
+        }, delay);
+      },
     };
+  });
+}
 
-    const unwatch = watch(
-      () => state.count,
-      (newValue, oldValue, cleanup) => {
-        alert(`New value: ${newValue}, old value: ${oldValue}`);
-        cleanup(() => alert("Clean Up!"));
-      }
-    );
+const CustomRef = {
+  setup() {
+    const text = useDebouncedRef("hello");
 
     return () =>
       h("div", {}, [
-        h("p", {}, [`count: ${state.count}`]),
-        h("button", { onClick: increment }, [`increment`]),
-        h("button", { onClick: unwatch }, [`unwatch`]),
+        h("h1", {}, ["CustomRef"]),
+        h("p", {}, [`${text.value}`]),
+        h(
+          "input",
+          {
+            value: text.value,
+            onInput: (e: any) => (text.value = e.target.value),
+          },
+          []
+        ),
       ]);
   },
 };
 
 const app = createApp({
   setup() {
-    const isMounted = reactive({ value: false });
-    const toggle = () => {
-      isMounted.value = !isMounted.value;
-    };
-
-    return () =>
-      h("div", {}, [
-        h("p", {}, [`isMounted: ${isMounted.value}`]),
-        h("button", { onClick: toggle }, [`toggle`]),
-        isMounted.value ? h(Component, {}, []) : h("div", {}, []),
-      ]);
+    return () => h("div", {}, [h(CustomRef, {}, [])]);
   },
 });
 

@@ -5,6 +5,7 @@ export {
   toRef,
   toRefs,
   isRef,
+  customRef,
   type Ref,
 } from "./ref";
 export { reactive } from "./reactive";
