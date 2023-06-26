@@ -39,6 +39,7 @@ Currently, I am still in the process of implementation, but after implementation
 | effectScope     | ✅   | ✅   |
 | getCurrentScope | ✅   | ✅   |
 | onScopeDispose  | ✅   | ✅   |
+| customRef       | ✅   | ✅   |
 | template refs   | ✅   | ✅   |
 
 ## Virtual Dom & Renderer
