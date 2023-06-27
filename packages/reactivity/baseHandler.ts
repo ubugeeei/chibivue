@@ -1,8 +1,16 @@
-import { isObject } from "../shared";
+import { hasChanged, isObject } from "../shared";
 import { track, trigger } from "./effect";
-import { ReactiveFlags, Target, reactive, readonly } from "./reactive";
+import {
+  ReactiveFlags,
+  Target,
+  isReadonly,
+  reactive,
+  readonly,
+  toRaw,
+} from "./reactive";
 
 const get = createGetter();
+const shallowGet = createGetter(false, true);
 const readonlyGet = createGetter(true);
 
 function createGetter(isReadonly = false, shallow = false) {
@@ -24,14 +32,35 @@ function createGetter(isReadonly = false, shallow = false) {
   };
 }
 
-export const mutableHandlers: ProxyHandler<object> = {
-  get,
-  set(target: object, key: string | symbol, value: unknown, receiver: object) {
-    Reflect.set(target, key, value, receiver);
-    trigger(target, key);
-    return true;
-  },
-};
+const set = createSetter();
+const shallowSet = createSetter(true);
+
+function createSetter(shallow = false) {
+  return function set(
+    target: object,
+    key: string | symbol,
+    value: unknown,
+    receiver: object
+  ): boolean {
+    if (isReadonly(target)) return false;
+
+    let oldValue = (target as any)[key];
+    if (!shallow) {
+      oldValue = toRaw(oldValue);
+      value = toRaw(value);
+    } else {
+    }
+
+    const result = Reflect.set(target, key, value, receiver);
+    if (hasChanged(value, oldValue)) {
+      trigger(target, key);
+    }
+
+    return result;
+  };
+}
+
+export const mutableHandlers: ProxyHandler<object> = { get, set };
 
 export const readonlyHandlers: ProxyHandler<object> = {
   get: readonlyGet,
@@ -42,3 +71,8 @@ export const readonlyHandlers: ProxyHandler<object> = {
     return true;
   },
 };
+
+export const shallowReactiveHandlers = Object.assign({}, mutableHandlers, {
+  get: shallowGet,
+  set: shallowSet,
+});

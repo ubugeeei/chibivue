@@ -1,5 +1,9 @@
 import { isObject, toRawType } from "../shared";
-import { mutableHandlers, readonlyHandlers } from "./baseHandler";
+import {
+  mutableHandlers,
+  readonlyHandlers,
+  shallowReactiveHandlers,
+} from "./baseHandler";
 import {
   mutableCollectionHandlers,
   readonlyCollectionHandlers,
@@ -59,6 +63,15 @@ export function reactive<T extends object>(target: T): T {
 
 export declare const ShallowReactiveMarker: unique symbol;
 export type ShallowReactive<T> = T & { [ShallowReactiveMarker]?: true };
+export function shallowReactive<T extends object>(
+  target: T
+): ShallowReactive<T> {
+  return createReactiveObject(
+    target,
+    shallowReactiveHandlers,
+    shallowReactiveHandlers
+  );
+}
 
 type Primitive = string | number | boolean | bigint | symbol | undefined | null;
 type Builtin = Primitive | Function | Date | Error | RegExp;
@@ -109,6 +122,21 @@ function createReactiveObject<T extends object>(
     targetType === TargetType.COLLECTION ? collectionHandlers : baseHandlers
   );
   return proxy;
+}
+
+export function isReadonly(value: unknown): boolean {
+  return !!(value && (value as Target)[ReactiveFlags.IS_READONLY]);
+}
+
+export function isReactive(value: unknown): boolean {
+  if (isReadonly(value)) {
+    return isReactive((value as Target)[ReactiveFlags.RAW]);
+  }
+  return !!(value && (value as Target)[ReactiveFlags.IS_REACTIVE]);
+}
+
+export function isProxy(value: unknown): boolean {
+  return isReactive(value) || isReadonly(value);
 }
 
 export const toReactive = <T extends unknown>(value: T): T =>
