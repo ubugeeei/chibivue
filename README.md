@@ -25,23 +25,27 @@ Currently, I am still in the process of implementation, but after implementation
 
 | feature         | impl | book |
 | --------------- | ---- | ---- |
-| reactive        | ✅   | ✅   |
 | ref             | ✅   | ✅   |
 | computed        | ✅   | ✅   |
+| reactive        | ✅   | ✅   |
 | readonly        | ✅   | ✅   |
-| shallowRef      | ✅   | ✅   |
-| triggerRef      | ✅   | ✅   |
-| toRef           | ✅   | ✅   |
-| toRefs          | ✅   | ✅   |
-| toRaw           | ✅   | ✅   |
-| isRef           | ✅   | ✅   |
 | watch           | ✅   | ✅   |
 | watchEffect     | ✅   | ✅   |
+| isRef           | ✅   | ✅   |
+| unref           | ✅   | ✅   |
+| toRef           | ✅   | ✅   |
+| toRefs          | ✅   | ✅   |
+| isProxy         | ✅   | ✅   |
+| isReactive      | ✅   | ✅   |
+| isReadonly      | ✅   | ✅   |
+| shallowRef      | ✅   | ✅   |
+| triggerRef      | ✅   | ✅   |
+| shallowReactive | ✅   | ✅   |
+| customRef       | ✅   | ✅   |
+| toRaw           | ✅   | ✅   |
 | effectScope     | ✅   | ✅   |
 | getCurrentScope | ✅   | ✅   |
 | onScopeDispose  | ✅   | ✅   |
-| customRef       | ✅   | ✅   |
-| unref           | ✅   | ✅   |
 | template refs   | ✅   | ✅   |
 
 ## Virtual Dom & Renderer
