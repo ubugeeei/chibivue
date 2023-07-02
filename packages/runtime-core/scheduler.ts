@@ -1,3 +1,5 @@
+import { isArray } from "../shared";
+
 export interface SchedulerJob extends Function {
   id?: number;
   pre?: boolean;
@@ -59,6 +61,20 @@ function queueFlush() {
     isFlushPending = true;
     currentFlushPromise = resolvedPromise.then(flushJobs);
   }
+}
+
+export function queuePostFlushCb(cb: SchedulerJobs) {
+  if (!isArray(cb)) {
+    if (
+      !activePostFlushCbs ||
+      !activePostFlushCbs.includes(cb, postFlushIndex)
+    ) {
+      pendingPostFlushCbs.push(cb);
+    }
+  } else {
+    pendingPostFlushCbs.push(...cb);
+  }
+  queueFlush();
 }
 
 export function flushPreFlushCbs(i = isFlushing ? flushIndex + 1 : 0) {

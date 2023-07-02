@@ -2,6 +2,7 @@ import {
   ComponentInternalInstance,
   currentInstance,
   setCurrentInstance,
+  unsetCurrentInstance,
 } from "./component";
 import { LifecycleHooks } from "./enums";
 
@@ -12,11 +13,14 @@ export function injectHook(
 ): Function | undefined {
   if (target) {
     const hooks = target[type] || (target[type] = []);
+
     const wrappedHook = (...args: unknown[]) => {
       setCurrentInstance(target);
-      const res = hook(...args);
+      const res = hook(args);
+      unsetCurrentInstance();
       return res;
     };
+
     hooks.push(wrappedHook);
     return wrappedHook;
   }

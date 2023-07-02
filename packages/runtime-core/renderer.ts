@@ -1,4 +1,5 @@
 import { ReactiveEffect } from "../reactivity/effect";
+import { invokeArrayFns } from "../shared";
 import { ShapeFlags } from "../shared/shapeFlags";
 import { createAppAPI } from "./apiCreateApp";
 import {
@@ -16,6 +17,7 @@ import {
   flushPostFlushCbs,
   flushPreFlushCbs,
   queueJob,
+  queuePostFlushCb,
 } from "./scheduler";
 import {
   Text,
@@ -337,19 +339,30 @@ export function createRenderer(options: RendererOptions) {
     anchor
   ) => {
     const componentUpdateFn = () => {
+      const { bm, m, bu, u } = instance;
+
       if (!instance.isMounted) {
-        const { m } = instance;
+        // beforeMount hook
+        if (bm) {
+          invokeArrayFns(bm);
+        }
+
         const subTree = (instance.subTree = renderComponentRoot(instance));
         patch(null, subTree, container, anchor, instance);
         initialVNode.el = subTree.el;
+        instance.isMounted = true;
 
         // mounted hook
-        // NOTE: scheduled on post-render
-        Promise.resolve().then(() => m?.forEach((cb) => cb()));
-
-        instance.isMounted = true;
+        if (m) {
+          queuePostFlushCb(m);
+        }
       } else {
         let { next, vnode } = instance;
+
+        // beforeUpdate hook
+        if (bu) {
+          invokeArrayFns(bu);
+        }
 
         if (next) {
           next.el = vnode.el;
@@ -370,6 +383,11 @@ export function createRenderer(options: RendererOptions) {
           instance
         );
         next.el = nextTree.el;
+
+        // updated hook
+        if (u) {
+          queuePostFlushCb(u);
+        }
       }
     };
     const effect = (instance.effect = new ReactiveEffect(
@@ -655,9 +673,20 @@ export function createRenderer(options: RendererOptions) {
   };
 
   const unmountComponent = (instance: ComponentInternalInstance) => {
-    const { subTree, scope } = instance;
+    const { subTree, scope, bum, um } = instance;
+
+    // beforeUnmount hook
+    if (bum) {
+      invokeArrayFns(bum);
+    }
+
     scope.stop();
     unmount(subTree);
+
+    // unmounted hook
+    if (um) {
+      queuePostFlushCb(um);
+    }
   };
 
   const unmountChildren: UnmountChildrenFn = (children) => {

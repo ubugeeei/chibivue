@@ -12,4 +12,13 @@ export { h } from "./h";
 
 export { nextTick } from "./scheduler";
 
+export {
+  onBeforeMount,
+  onBeforeUnmount,
+  onBeforeUpdate,
+  onMounted,
+  onUnmounted,
+  onUpdated,
+} from "./apiLifecycle";
+
 export { watch, watchEffect } from "./apiWatch";

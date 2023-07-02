@@ -1,4 +1,5 @@
 import { ReactiveEffect } from "../reactivity";
+import { invokeArrayFns } from "../shared";
 import { ShapeFlags } from "../shared/shapeFlags";
 import {
   Component,
@@ -8,7 +9,12 @@ import {
 } from "./component";
 import { updateProps } from "./componentProps";
 import { setRef } from "./rendererTemplateRef";
-import { SchedulerJob, queueJob } from "./scheduler";
+import {
+  SchedulerJob,
+  flushPostFlushCbs,
+  queueJob,
+  queuePostFlushCb,
+} from "./scheduler";
 import {
   VNode,
   Text,
@@ -295,9 +301,20 @@ export function createRenderer(options: RendererOptions) {
   };
 
   const unmountComponent = (instance: ComponentInternalInstance) => {
-    const { subTree, scope } = instance;
+    const { subTree, scope, bum, um } = instance;
+
+    // beforeUnmount hook
+    if (bum) {
+      invokeArrayFns(bum);
+    }
+
     scope.stop();
     unmount(subTree);
+
+    // unmounted hook
+    if (um) {
+      queuePostFlushCb(um);
+    }
   };
 
   const unmountChildren = (children: VNode[]) => {
@@ -357,14 +374,28 @@ export function createRenderer(options: RendererOptions) {
     anchor: RendererElement | null
   ) => {
     const componentUpdateFn = () => {
-      const { render, setupState } = instance;
+      const { render, setupState, bm, m, bu, u } = instance;
+
       if (!instance.isMounted) {
+        // beforeMount hook
+        if (bm) {
+          invokeArrayFns(bm);
+        }
         const subTree = (instance.subTree = normalizeVNode(render(setupState)));
         patch(null, subTree, container, anchor);
         initialVNode.el = subTree.el;
         instance.isMounted = true;
+        // mounted hook
+        if (m) {
+          queuePostFlushCb(m);
+        }
       } else {
         let { next, vnode } = instance;
+
+        // beforeUpdate hook
+        if (bu) {
+          invokeArrayFns(bu);
+        }
 
         if (next) {
           next.el = vnode.el;
@@ -382,6 +413,11 @@ export function createRenderer(options: RendererOptions) {
 
         patch(prevTree, nextTree, hostParentNode(prevTree.el!)!, anchor);
         next.el = nextTree.el;
+
+        // updated hook
+        if (u) {
+          queuePostFlushCb(u);
+        }
       }
     };
 
@@ -404,6 +440,7 @@ export function createRenderer(options: RendererOptions) {
   const render: RootRenderFunction = (rootComponent, container) => {
     const vnode = createVNode(rootComponent, {}, []);
     patch(null, vnode, container, null);
+    flushPostFlushCbs();
   };
 
   return { render };

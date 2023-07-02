@@ -52,7 +52,12 @@ export interface ComponentInternalInstance {
 
   // lifecycle
   isMounted: boolean;
+  [LifecycleHooks.BEFORE_MOUNT]: LifecycleHook;
   [LifecycleHooks.MOUNTED]: LifecycleHook;
+  [LifecycleHooks.BEFORE_UPDATE]: LifecycleHook;
+  [LifecycleHooks.UPDATED]: LifecycleHook;
+  [LifecycleHooks.BEFORE_UNMOUNT]: LifecycleHook;
+  [LifecycleHooks.UNMOUNTED]: LifecycleHook;
 }
 
 // TODO: type as generic
@@ -103,8 +108,14 @@ export function createComponentInstance(
 
     setupState: {},
     setupContext: null,
+
     isMounted: false,
-    m: null,
+    [LifecycleHooks.BEFORE_MOUNT]: null,
+    [LifecycleHooks.MOUNTED]: null,
+    [LifecycleHooks.BEFORE_UPDATE]: null,
+    [LifecycleHooks.UPDATED]: null,
+    [LifecycleHooks.BEFORE_UNMOUNT]: null,
+    [LifecycleHooks.UNMOUNTED]: null,
   };
 
   instance.ctx = { _: instance };

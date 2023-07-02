@@ -1,47 +1,61 @@
-import { createApp, customRef, h } from "chibivue";
+import {
+  createApp,
+  h,
+  onBeforeMount,
+  onBeforeUnmount,
+  onBeforeUpdate,
+  onMounted,
+  onUnmounted,
+  onUpdated,
+  ref,
+} from "chibivue";
 
-export function useDebouncedRef<T>(value: T, delay = 1000) {
-  let timeout: number;
-  return customRef((track, trigger) => {
-    return {
-      get() {
-        track();
-        return value;
-      },
-      set(newValue: T) {
-        window.clearTimeout(timeout);
-        timeout = window.setTimeout(() => {
-          value = newValue;
-          trigger();
-        }, delay);
-      },
-    };
-  });
-}
-
-const CustomRef = {
+const Child = {
   setup() {
-    const text = useDebouncedRef("hello");
+    const count = ref(0);
+    onBeforeMount(() => {
+      console.log("onBeforeMount");
+    });
+
+    onUnmounted(() => {
+      console.log("onUnmounted");
+    });
+
+    onBeforeUnmount(() => {
+      console.log("onBeforeUnmount");
+    });
+
+    onBeforeUpdate(() => {
+      console.log("onBeforeUpdate");
+    });
+
+    onUpdated(() => {
+      console.log("onUpdated");
+    });
+
+    onMounted(() => {
+      console.log("onMounted");
+    });
 
     return () =>
       h("div", {}, [
-        h("h1", {}, ["CustomRef"]),
-        h("p", {}, [`${text.value}`]),
-        h(
-          "input",
-          {
-            value: text.value,
-            onInput: (e: any) => (text.value = e.target.value),
-          },
-          []
-        ),
+        h("p", {}, [`${count.value}`]),
+        h("button", { onClick: () => count.value++ }, ["increment"]),
       ]);
   },
 };
 
 const app = createApp({
   setup() {
-    return () => h("div", {}, [h(CustomRef, {}, [])]);
+    const mountFlag = ref(true);
+
+    return () =>
+      h("div", {}, [
+        h("button", { onClick: () => (mountFlag.value = !mountFlag.value) }, [
+          "toggle",
+        ]),
+        mountFlag.value ? h(Child, {}, []) : h("p", {}, ["unmounted"]),
+      ]);
   },
 });
 

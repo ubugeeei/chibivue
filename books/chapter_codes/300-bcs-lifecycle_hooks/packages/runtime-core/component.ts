@@ -2,11 +2,14 @@ import { EffectScope, ReactiveEffect } from "../reactivity";
 import { emit } from "./componentEmits";
 import { ComponentOptions } from "./componentOptions";
 import { Props, initProps } from "./componentProps";
+import { LifecycleHooks } from "./enums";
 import { VNode, VNodeChild } from "./vnode";
 
 export type Component = ComponentOptions;
 
 export type Data = Record<string, unknown>;
+
+type LifecycleHook<TFn = Function> = TFn[] | null;
 
 export interface ComponentInternalInstance {
   uid: number;
@@ -27,6 +30,12 @@ export interface ComponentInternalInstance {
   setupState: Data;
 
   isMounted: boolean;
+  [LifecycleHooks.BEFORE_MOUNT]: LifecycleHook;
+  [LifecycleHooks.MOUNTED]: LifecycleHook;
+  [LifecycleHooks.BEFORE_UPDATE]: LifecycleHook;
+  [LifecycleHooks.UPDATED]: LifecycleHook;
+  [LifecycleHooks.BEFORE_UNMOUNT]: LifecycleHook;
+  [LifecycleHooks.UNMOUNTED]: LifecycleHook;
 }
 
 export type InternalRenderFunction = {
@@ -58,11 +67,28 @@ export function createComponentInstance(
     setupState: {},
 
     isMounted: false,
+    [LifecycleHooks.BEFORE_MOUNT]: null,
+    [LifecycleHooks.MOUNTED]: null,
+    [LifecycleHooks.BEFORE_UPDATE]: null,
+    [LifecycleHooks.UPDATED]: null,
+    [LifecycleHooks.BEFORE_UNMOUNT]: null,
+    [LifecycleHooks.UNMOUNTED]: null,
   };
 
   instance.emit = emit.bind(null, instance);
   return instance;
 }
+
+export let currentInstance: ComponentInternalInstance | null = null;
+export const setCurrentInstance = (instance: ComponentInternalInstance) => {
+  currentInstance = instance;
+  instance.scope.on();
+};
+
+export const unsetCurrentInstance = () => {
+  currentInstance && currentInstance.scope.off();
+  currentInstance = null;
+};
 
 export const setupComponent = (instance: ComponentInternalInstance) => {
   const { props } = instance.vnode;
@@ -70,11 +96,11 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
 
   const component = instance.type as Component;
   if (component.setup) {
-    instance.scope.on();
+    setCurrentInstance(instance);
     const setupResult = component.setup(instance.props, {
       emit: instance.emit,
     }) as InternalRenderFunction;
-    instance.scope.off();
+    unsetCurrentInstance();
 
     // setupResultの型によって分岐をする
     if (typeof setupResult === "function") {
