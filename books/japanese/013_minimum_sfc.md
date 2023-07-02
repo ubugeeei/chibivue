@@ -216,7 +216,7 @@ pnpm run dev
 ちゃんとソースコードが改変されていることがわかります。
 
 ここまでのソースコード:  
-https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/08-1_mininum_sfc_compiler
+https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/008-1_mininum_sfc_compiler
 
 # SFC コンパイラを実装していく
 
@@ -618,7 +618,7 @@ export default function vitePluginChibivue(): Plugin {
 無事にパースできているようです。やったね！
 
 ここまでのソースコード:  
-https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/08-2_mininum_sfc_compiler
+https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/008-2_mininum_sfc_compiler
 
 # template 部分のコンパイル
 
@@ -740,7 +740,7 @@ export default function vitePluginChibivue(): Plugin {
 上手くコンパイルできているようです。あとは同じ要領で、どうにかして script を引っこ抜いて default exports に突っ込めば OK です。
 
 ここまでのソースコード:  
-https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/08-3_mininum_sfc_compiler
+https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/008-3_mininum_sfc_compiler
 
 # script 部分のコンパイル
 
@@ -1261,6 +1261,6 @@ export default function vitePluginChibivue(): Plugin {
 これで SFC が使えるようになりました！
 
 ここまでのソースコード:  
-https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/08-4_mininum_sfc_compiler
+https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/008-4_mininum_sfc_compiler
 
 [Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/012_template_binding.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/014_break.md)

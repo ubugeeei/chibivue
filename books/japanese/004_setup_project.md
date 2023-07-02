@@ -199,9 +199,8 @@ pnpm run dev
 
 ![hello chibivue](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/books/images/hello_chibivue.png)
 
-ここまでのソースコード
-
-https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/01_project_setup
+ここまでのソースコード:  
+https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/001_project_setup
 
 
 [Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/003_vue_core_components.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/005_create_app_api.md)

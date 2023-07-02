@@ -593,7 +593,7 @@ app.mount("#app");
 ちゃんと実装できているようです！
 
 ここまでのソースコード:  
-https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/07-1_mininum_template_compiler
+https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/007-1_mininum_template_compiler
 
 
 [Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/009_minimum_component.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/011_more_complex_parser.md)
