@@ -65,7 +65,7 @@ Currently, I am still in the process of implementation, but after implementation
 | ---------------- | ---- | ---- |
 | Options API      | ✅   |      |
 | Composition API  | ✅   | ✅   |
-| lifecycle hooks  | ✅   |      |
+| lifecycle hooks  | ✅   | ✅   |
 | props / emit     | ✅   | ✅   |
 | provide / inject | ✅   |      |
 | use plugin       | ✅   |      |
