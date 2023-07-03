@@ -1,4 +1,5 @@
 import { EffectScope, ReactiveEffect } from "../reactivity";
+import { AppContext, createAppContext } from "./apiCreateApp";
 import { emit } from "./componentEmits";
 import { ComponentOptions } from "./componentOptions";
 import { Props, initProps } from "./componentProps";
@@ -14,6 +15,8 @@ type LifecycleHook<TFn = Function> = TFn[] | null;
 export interface ComponentInternalInstance {
   uid: number;
   type: Component;
+  parent: ComponentInternalInstance | null;
+  appContext: AppContext;
 
   vnode: VNode;
   subTree: VNode;
@@ -22,6 +25,7 @@ export interface ComponentInternalInstance {
   render: InternalRenderFunction;
   update: () => void;
 
+  provides: Data;
   scope: EffectScope;
 
   propsOptions: Props;
@@ -42,15 +46,24 @@ export type InternalRenderFunction = {
   (ctx: Data): VNodeChild;
 };
 
+const emptyAppContext = createAppContext();
+
 let uid = 0;
+
 export function createComponentInstance(
-  vnode: VNode
+  vnode: VNode,
+  parent: ComponentInternalInstance | null
 ): ComponentInternalInstance {
   const type = vnode.type as Component;
+
+  const appContext =
+    (parent ? parent.appContext : vnode.appContext) || emptyAppContext;
 
   const instance: ComponentInternalInstance = {
     uid: uid++,
     type,
+    parent,
+    appContext,
 
     vnode,
     next: null,
@@ -59,6 +72,7 @@ export function createComponentInstance(
     update: null!,
     render: null!,
 
+    provides: parent ? parent.provides : Object.create(appContext.provides),
     scope: new EffectScope(),
 
     propsOptions: type.props || {},

@@ -1,6 +1,7 @@
 import { Ref } from "../reactivity";
 import { isObject, isString } from "../shared";
 import { ShapeFlags } from "../shared/shapeFlags";
+import { AppContext } from "./apiCreateApp";
 import { ComponentInternalInstance } from "./component";
 
 export type VNodeTypes = string | typeof Text | object;
@@ -18,6 +19,9 @@ export interface VNode<HostNode = any> {
 
   component: ComponentInternalInstance | null;
   shapeFlag: number;
+
+  // application root node only
+  appContext: AppContext | null;
 }
 
 export interface VNodeProps {
@@ -50,6 +54,7 @@ export function createVNode(
     ref: props?.ref ?? null,
     component: null,
     shapeFlag,
+    appContext: null,
   };
   return vnode;
 }

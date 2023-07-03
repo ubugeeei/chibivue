@@ -1,62 +1,39 @@
 import {
+  InjectionKey,
   createApp,
   h,
-  onBeforeMount,
-  onBeforeUnmount,
-  onBeforeUpdate,
-  onMounted,
-  onUnmounted,
-  onUpdated,
-  ref,
+  inject,
+  provide,
+  reactive,
 } from "chibivue";
 
 const Child = {
   setup() {
-    const count = ref(0);
-    onBeforeMount(() => {
-      console.log("onBeforeMount");
-    });
+    const rootState = inject<{ count: number }>("RootState");
+    const logger = inject(LoggerKey);
 
-    onUnmounted(() => {
-      console.log("onUnmounted");
-    });
+    const action = () => {
+      rootState && rootState.count++;
+      logger?.("Hello from Child.");
+    };
 
-    onBeforeUnmount(() => {
-      console.log("onBeforeUnmount");
-    });
-
-    onBeforeUpdate(() => {
-      console.log("onBeforeUpdate");
-    });
-
-    onUpdated(() => {
-      console.log("onUpdated");
-    });
-
-    onMounted(() => {
-      console.log("onMounted");
-    });
-
-    return () =>
-      h("div", {}, [
-        h("p", {}, [`${count.value}`]),
-        h("button", { onClick: () => count.value++ }, ["increment"]),
-      ]);
+    return () => h("button", { onClick: action }, ["action"]);
   },
 };
 
 const app = createApp({
   setup() {
-    const mountFlag = ref(true);
+    const state = reactive({ count: 1 });
+    provide("RootState", state);
 
     return () =>
-      h("div", {}, [
-        h("button", { onClick: () => (mountFlag.value = !mountFlag.value) }, [
-          "toggle",
-        ]),
-        mountFlag.value ? h(Child, {}, []) : h("p", {}, ["unmounted"]),
-      ]);
+      h("div", {}, [h("p", {}, [`${state.count}`]), h(Child, {}, [])]);
   },
 });
+
+type Logger = (...args: any) => void;
+const LoggerKey = Symbol() as InjectionKey<Logger>;
+
+app.provide(LoggerKey, window.console.log);
 
 app.mount("#app");

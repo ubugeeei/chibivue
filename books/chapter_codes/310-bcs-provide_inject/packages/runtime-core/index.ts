@@ -22,3 +22,5 @@ export {
 } from "./apiLifecycle";
 
 export { watch, watchEffect } from "./apiWatch";
+
+export { provide, inject, type InjectionKey } from "./apiInject";
