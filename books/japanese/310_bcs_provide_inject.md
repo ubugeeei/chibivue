@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/300_bcs_lifecycle_hooks.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/320_bcs_component_slot.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/300_bcs_lifecycle_hooks.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/315_bcs_component_proxy_setup_context.md)
 
 ---
 title: "Provide/Inject の実装"
@@ -84,4 +84,4 @@ app.provide(LoggerKey, window.console.log);
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/310-bcs-provide_inject
 
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/300_bcs_lifecycle_hooks.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/320_bcs_component_slot.md)
+[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/300_bcs_lifecycle_hooks.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/315_bcs_component_proxy_setup_context.md)

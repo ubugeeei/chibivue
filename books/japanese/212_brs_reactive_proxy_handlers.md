@@ -253,6 +253,9 @@ const app = createApp({
 app.mount("#app");
 ```
 
+ここまでのソースコード:  
+https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-3-2_template_refs
+
 # Collection 系の組み込みオブジェクトに対応する
 
 今、reactive.ts の実装を見てみると、Object と Array のみを対象としています。

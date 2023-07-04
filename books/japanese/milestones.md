@@ -16,18 +16,18 @@
   -> 6/3
 - computed api ✅
 - watch api ✅
-  - imm
-  - cleanup (doing)
-- deeply reactive
-- template ref
-- array broken changing
-- custom ref
-- effect scope
+  - imm ✅
+  - cleanup ✅ 
+- deeply reactive ✅
+- template ref ✅
+- custom ref ✅
+- effect scope ✅
 
 # ★ Basic Component System 部門
 
-- provide/inject
-- lifecycle hooks
+- lifecycle hooks ✅
+- provide/inject ✅
+- proxy
 - slot
   - default
   - named
