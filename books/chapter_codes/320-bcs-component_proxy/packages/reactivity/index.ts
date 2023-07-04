@@ -15,6 +15,7 @@ export {
   isProxy,
   isReactive,
   isReadonly,
+  
 } from "./reactive";
 export { ReactiveEffect } from "./effect";
 export {

@@ -10,7 +10,7 @@ export interface PropOptions<T = any> {
   default?: null | undefined | object;
 }
 
-export type PropType<T> = { new (...args: any[]): T & {} };
+export type PropType<T> = { new (...args: any[]): T & {} } | { (): T };
 
 export function initProps(
   instance: ComponentInternalInstance,

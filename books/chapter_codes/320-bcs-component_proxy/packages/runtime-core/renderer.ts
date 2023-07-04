@@ -2,7 +2,6 @@ import { ReactiveEffect } from "../reactivity";
 import { invokeArrayFns } from "../shared";
 import { ShapeFlags } from "../shared/shapeFlags";
 import {
-  Component,
   ComponentInternalInstance,
   createComponentInstance,
   setupComponent,
@@ -15,13 +14,7 @@ import {
   queueJob,
   queuePostFlushCb,
 } from "./scheduler";
-import {
-  VNode,
-  Text,
-  normalizeVNode,
-  createVNode,
-  isSameVNodeType,
-} from "./vnode";
+import { VNode, Text, normalizeVNode, isSameVNodeType } from "./vnode";
 
 export type RootRenderFunction<HostElement = RendererElement> = (
   vnode: VNode | null,
@@ -379,31 +372,24 @@ export function createRenderer(options: RendererOptions) {
     // prettier-ignore
     const instance: ComponentInternalInstance = (initialVNode.component = createComponentInstance(initialVNode,parentComponent));
     setupComponent(instance);
-    setupRenderEffect(
-      instance,
-      initialVNode,
-      container,
-      anchor,
-      parentComponent
-    );
+    setupRenderEffect(instance, initialVNode, container, anchor);
   };
 
   const setupRenderEffect = (
     instance: ComponentInternalInstance,
     initialVNode: VNode,
     container: RendererElement,
-    anchor: RendererElement | null,
-    parentComponent: ComponentInternalInstance | null
+    anchor: RendererElement | null
   ) => {
     const componentUpdateFn = () => {
-      const { render, setupState, bm, m, bu, u } = instance;
+      const { render, setupState, bm, m, bu, u, proxy } = instance;
 
       if (!instance.isMounted) {
         // beforeMount hook
         if (bm) {
           invokeArrayFns(bm);
         }
-        const subTree = (instance.subTree = normalizeVNode(render(setupState)));
+        const subTree = (instance.subTree = normalizeVNode(render(proxy!)));
         patch(null, subTree, container, anchor, instance);
         initialVNode.el = subTree.el;
         instance.isMounted = true;
@@ -430,7 +416,7 @@ export function createRenderer(options: RendererOptions) {
         }
 
         const prevTree = instance.subTree;
-        const nextTree = normalizeVNode(render(setupState));
+        const nextTree = normalizeVNode(render(proxy!));
         instance.subTree = nextTree;
 
         patch(

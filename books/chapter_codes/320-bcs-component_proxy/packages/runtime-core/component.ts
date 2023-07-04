@@ -3,6 +3,10 @@ import { AppContext, createAppContext } from "./apiCreateApp";
 import { emit } from "./componentEmits";
 import { ComponentOptions } from "./componentOptions";
 import { Props, initProps } from "./componentProps";
+import {
+  ComponentPublicInstance,
+  PublicInstanceProxyHandlers,
+} from "./componentPublicInstance";
 import { LifecycleHooks } from "./enums";
 import { VNode, VNodeChild } from "./vnode";
 
@@ -21,6 +25,7 @@ export interface ComponentInternalInstance {
   vnode: VNode;
   subTree: VNode;
   next: VNode | null;
+
   effect: ReactiveEffect;
   render: InternalRenderFunction;
   update: () => void;
@@ -33,6 +38,9 @@ export interface ComponentInternalInstance {
   emit: (event: string, ...args: any[]) => void;
   setupState: Data;
 
+  proxy: ComponentPublicInstance | null;
+  ctx: Data;
+
   isMounted: boolean;
   [LifecycleHooks.BEFORE_MOUNT]: LifecycleHook;
   [LifecycleHooks.MOUNTED]: LifecycleHook;
@@ -43,7 +51,7 @@ export interface ComponentInternalInstance {
 }
 
 export type InternalRenderFunction = {
-  (ctx: Data): VNodeChild;
+  (ctx: ComponentPublicInstance ): VNodeChild;
 };
 
 const emptyAppContext = createAppContext();
@@ -80,6 +88,9 @@ export function createComponentInstance(
     emit: null!, // to be set immediately
     setupState: {},
 
+    proxy: null,
+    ctx: {},
+
     isMounted: false,
     [LifecycleHooks.BEFORE_MOUNT]: null,
     [LifecycleHooks.MOUNTED]: null,
@@ -90,6 +101,9 @@ export function createComponentInstance(
   };
 
   instance.emit = emit.bind(null, instance);
+
+  instance.ctx = { _: instance };
+
   return instance;
 }
 
@@ -109,6 +123,9 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
   initProps(instance, props);
 
   const component = instance.type as Component;
+
+  instance.proxy = new Proxy(instance.ctx, PublicInstanceProxyHandlers);
+
   if (component.setup) {
     setCurrentInstance(instance);
     const setupResult = component.setup(instance.props, {
@@ -116,7 +133,6 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
     }) as InternalRenderFunction;
     unsetCurrentInstance();
 
-    // setupResultの型によって分岐をする
     if (typeof setupResult === "function") {
       instance.render = setupResult;
     } else if (typeof setupResult === "object" && setupResult !== null) {

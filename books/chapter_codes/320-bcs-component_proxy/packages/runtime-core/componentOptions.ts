@@ -1,11 +1,16 @@
-import { Data } from "./component";
+import { PropType } from "./componentProps";
+import { ComponentPublicInstance } from "./componentPublicInstance";
+import { VNode } from "./vnode";
 
-export type ComponentOptions = {
-  props?: Record<string, any>;
+export type ComponentOptions<P = {}, B = {}> = {
+  props?: P;
   setup?: (
-    props: Record<string, any>,
+    props: InferPropTypes<P>,
     ctx: { emit: (event: string, ...args: any[]) => void }
-  ) => Function | Record<string, unknown> | void;
-  render?: Function;
+  ) => (() => VNode) | B;
+  render?: (ctx: ComponentPublicInstance<InferPropTypes<P>, B>) => VNode;
   template?: string;
 };
+
+type InferPropTypes<T> = { [K in keyof T]: InferPropType<T[K]> };
+type InferPropType<T> = T extends { type: PropType<infer U> } ? U : never;

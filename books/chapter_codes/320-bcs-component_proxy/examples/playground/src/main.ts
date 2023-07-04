@@ -1,39 +1,44 @@
 import {
-  InjectionKey,
+  PropType,
   createApp,
+  defineComponent,
   h,
-  inject,
-  provide,
   reactive,
+  ref,
 } from "chibivue";
 
-const Child = {
-  setup() {
-    const rootState = inject<{ count: number }>("RootState");
-    const logger = inject(LoggerKey);
-
-    const action = () => {
-      rootState && rootState.count++;
-      logger?.("Hello from Child.");
-    };
-
-    return () => h("button", { onClick: action }, ["action"]);
+const Child = defineComponent({
+  props: {
+    parentCount: {
+      type: Number as PropType<number>,
+    },
   },
-};
-
-const app = createApp({
   setup() {
-    const state = reactive({ count: 1 });
-    provide("RootState", state);
+    const count = ref(0);
+    return { count };
+  },
+  render(ctx) {
+    return h("div", {}, [
+      h("p", {}, [`child count: ${ctx.count.value}`]),
+      h("button", { onClick: () => ctx.count.value++ }, [`increment(child)`]),
 
-    return () =>
-      h("div", {}, [h("p", {}, [`${state.count}`]), h(Child, {}, [])]);
+      h("p", {}, [`parent count: ${ctx.parentCount}`]),
+    ]);
   },
 });
 
-type Logger = (...args: any) => void;
-const LoggerKey = Symbol() as InjectionKey<Logger>;
+const app = createApp({
+  setup() {
+    const state = reactive({ count: 0 });
 
-app.provide(LoggerKey, window.console.log);
+    return () =>
+      h("div", {}, [
+        h("p", {}, [
+          h(Child, { parentCount: state.count }, []),
+          h("button", { onClick: () => state.count++ }, [`increment (parent)`]),
+        ]),
+      ]);
+  },
+});
 
 app.mount("#app");
