@@ -5,25 +5,29 @@ import {
   ConcreteComponent,
 } from "./component";
 import { ObjectEmitsOptions } from "./componentEmits";
+import { PropType } from "./componentProps";
 import { VNodeChild, type VNode } from "./vnode";
 
 export type RenderFunction = () => VNodeChild;
 
-export type ComponentOptions = {
+export type ComponentOptions<P = {}, B = {}> = {
   name?: string;
   data?: () => Record<string, unknown>;
-  props?: Record<string, any>;
+  props?: P;
   emits?: ObjectEmitsOptions;
   methods?: { [key: string]: Function };
   computed?: { [key: string]: Function };
   setup?: (
-    props: Record<string, any>,
+    props: InferPropTypes<P>,
     ctx: { emit: (event: string, ...args: any[]) => void }
-  ) => Record<string, unknown> | (() => VNode);
+  ) => (() => VNode) | B;
   render?: Function;
   template?: string;
   components?: Record<string, ConcreteComponent>;
 };
+
+type InferPropTypes<T> = { [K in keyof T]: InferPropType<T[K]> };
+type InferPropType<T> = T extends { type: PropType<infer U> } ? U : never;
 
 export function applyOptions(instance: ComponentInternalInstance) {
   const options = instance.type;

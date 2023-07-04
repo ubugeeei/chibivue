@@ -2,14 +2,26 @@ import { hasOwn } from "../shared";
 import { Data, type ComponentInternalInstance } from "./component";
 import { type ComponentOptions } from "./componentOptions";
 
-export class ComponentPublicInstance {
-  $!: ComponentInternalInstance;
-  $data!: Record<string, unknown>;
-  $prop!: Data; // TODO: type as generic
-  $options!: ComponentOptions;
-  $el!: Element;
-  $mount!: (el?: Element | string) => ComponentPublicInstance;
-}
+export type ComponentPublicInstanceConstructor<
+  T extends ComponentPublicInstance<
+    Props,
+    RawBindings
+  > = ComponentPublicInstance<any>,
+  Props = any,
+  RawBindings = any
+> = {
+  new (...args: any[]): T;
+};
+
+export type ComponentPublicInstance<P = {}, B = {}> = {
+  $: ComponentInternalInstance;
+  $data: Record<string, unknown>;
+  $prop: Data; // TODO: type as generic
+  $options: ComponentOptions;
+  $el: Element;
+  $mount: (el?: Element | string) => ComponentPublicInstance;
+} & P &
+  B;
 
 export interface ComponentRenderContext {
   [key: string]: any;
