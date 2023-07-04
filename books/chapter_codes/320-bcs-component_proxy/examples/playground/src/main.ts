@@ -20,9 +20,21 @@ const Child = defineComponent({
   render(ctx) {
     return h("div", {}, [
       h("p", {}, [`child count: ${ctx.count.value}`]),
-      h("button", { onClick: () => ctx.count.value++ }, [`increment(child)`]),
+      h(
+        "button",
+        {
+          onClick: () => ctx.count.value++,
+          // ^?
+        },
+        [`increment(child)`]
+      ),
 
-      h("p", {}, [`parent count: ${ctx.parentCount}`]),
+      h("p", {}, [
+        `parent count: ${
+          ctx.parentCount
+          // ^?
+        }`,
+      ]),
     ]);
   },
 });
