@@ -382,7 +382,7 @@ export function createRenderer(options: RendererOptions) {
     anchor: RendererElement | null
   ) => {
     const componentUpdateFn = () => {
-      const { render, setupState, bm, m, bu, u, proxy } = instance;
+      const { render, bm, m, bu, u, proxy } = instance;
 
       if (!instance.isMounted) {
         // beforeMount hook

@@ -1,13 +1,11 @@
+import { SetupContext } from "./component";
 import { PropType } from "./componentProps";
 import { ComponentPublicInstance } from "./componentPublicInstance";
 import { VNode } from "./vnode";
 
 export type ComponentOptions<P = {}, B = {}> = {
   props?: P;
-  setup?: (
-    props: InferPropTypes<P>,
-    ctx: { emit: (event: string, ...args: any[]) => void }
-  ) => (() => VNode) | B;
+  setup?: (props: InferPropTypes<P>, ctx: SetupContext) => (() => VNode) | B;
   render?: (ctx: ComponentPublicInstance<InferPropTypes<P>, B>) => VNode;
   template?: string;
 };

@@ -16,6 +16,11 @@ export type Data = Record<string, unknown>;
 
 type LifecycleHook<TFn = Function> = TFn[] | null;
 
+export type SetupContext = {
+  emit: (e: string, ...args: any[]) => void;
+  expose: (exposed?: Record<string, any>) => void;
+};
+
 export interface ComponentInternalInstance {
   uid: number;
   type: Component;
@@ -37,8 +42,12 @@ export interface ComponentInternalInstance {
   props: Data;
   emit: (event: string, ...args: any[]) => void;
   setupState: Data;
+  setupContext: SetupContext | null;
 
   proxy: ComponentPublicInstance | null;
+  exposed: Record<string, any> | null;
+  exposeProxy: Record<string, any> | null;
+
   ctx: Data;
 
   isMounted: boolean;
@@ -51,7 +60,7 @@ export interface ComponentInternalInstance {
 }
 
 export type InternalRenderFunction = {
-  (ctx: ComponentPublicInstance ): VNodeChild;
+  (ctx: ComponentPublicInstance): VNodeChild;
 };
 
 const emptyAppContext = createAppContext();
@@ -87,8 +96,11 @@ export function createComponentInstance(
     props: {},
     emit: null!, // to be set immediately
     setupState: {},
+    setupContext: null,
 
     proxy: null,
+    exposed: null,
+    exposeProxy: null,
     ctx: {},
 
     isMounted: false,
@@ -128,9 +140,11 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
 
   if (component.setup) {
     setCurrentInstance(instance);
-    const setupResult = component.setup(instance.props, {
-      emit: instance.emit,
-    }) as InternalRenderFunction;
+    const setupContext = (instance.setupContext = createSetupContext(instance));
+    const setupResult = component.setup(
+      instance.props,
+      setupContext
+    ) as InternalRenderFunction;
     unsetCurrentInstance();
 
     if (typeof setupResult === "function") {
@@ -154,6 +168,36 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
     instance.render = render as InternalRenderFunction;
   }
 };
+
+export function createSetupContext(
+  instance: ComponentInternalInstance
+): SetupContext {
+  const expose: SetupContext["expose"] = (exposed) => {
+    instance.exposed = exposed || {};
+  };
+  return {
+    emit: instance.emit,
+    expose,
+  };
+}
+
+export function getExposeProxy(instance: ComponentInternalInstance) {
+  if (instance.exposed) {
+    return (
+      instance.exposeProxy ||
+      (instance.exposeProxy = new Proxy(instance.exposed, {
+        get(target, key: string) {
+          if (key in target) {
+            return target[key];
+          }
+        },
+        has(target, key: string) {
+          return key in target;
+        },
+      }))
+    );
+  }
+}
 
 type CompileFunction = (template: string) => InternalRenderFunction;
 let compile: CompileFunction | undefined;

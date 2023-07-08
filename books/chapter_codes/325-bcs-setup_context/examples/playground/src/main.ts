@@ -1,54 +1,43 @@
-import {
-  PropType,
-  createApp,
-  defineComponent,
-  h,
-  reactive,
-  ref,
-} from "chibivue";
+import { createApp, defineComponent, h, ref } from "chibivue";
 
 const Child = defineComponent({
-  props: {
-    parentCount: {
-      type: Number as PropType<number>,
-    },
+  setup(_, { expose }) {
+    const count = ref(0);
+    const count2 = ref(0);
+    expose({ count });
+    return { count, count2 };
   },
+  template: `<p>hello</p>`,
+});
+
+const Child2 = defineComponent({
   setup() {
     const count = ref(0);
-    return { count };
+    const count2 = ref(0);
+    return { count, count2 };
   },
-  render(ctx) {
-    return h("div", {}, [
-      h("p", {}, [`child count: ${ctx.count.value}`]),
-      h(
-        "button",
-        {
-          onClick: () => ctx.count.value++,
-          // ^?
-        },
-        [`increment(child)`]
-      ),
-
-      h("p", {}, [
-        `parent count: ${
-          ctx.parentCount
-          // ^?
-        }`,
-      ]),
-    ]);
-  },
+  template: `<p>hello</p>`,
 });
 
 const app = createApp({
   setup() {
-    const state = reactive({ count: 0 });
+    const child = ref();
+    const child2 = ref();
+
+    const increment = () => {
+      console.log(
+        child.value.count,
+        child.value.count2, // cannot access
+        child2.value.count,
+        child2.value.count2
+      );
+    };
 
     return () =>
       h("div", {}, [
-        h("p", {}, [
-          h(Child, { parentCount: state.count }, []),
-          h("button", { onClick: () => state.count++ }, [`increment (parent)`]),
-        ]),
+        h(Child, { ref: child }, []),
+        h(Child2, { ref: child2 }, []),
+        h("button", { onClick: increment }, ["increment"]),
       ]);
   },
 });
