@@ -69,7 +69,7 @@ Currently, I am still in the process of implementation, but after implementation
 | props / emit     | ✅   | ✅   |
 | expose           | ✅   | ✅   |
 | provide / inject | ✅   | ✅   |
-| slot (default)   |      |      |
+| slot (default)   | ✅   | ✅   |
 | slot (named)     |      |      |
 | slot (scoped)    |      |      |
 
