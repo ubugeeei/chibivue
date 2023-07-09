@@ -67,8 +67,8 @@ Currently, I am still in the process of implementation, but after implementation
 | Composition API  | ✅   | ✅   |
 | lifecycle hooks  | ✅   | ✅   |
 | props / emit     | ✅   | ✅   |
+| expose           | ✅   | ✅   |
 | provide / inject | ✅   | ✅   |
-| use plugin       | ✅   |      |
 | slot (default)   |      |      |
 | slot (named)     |      |      |
 | slot (scoped)    |      |      |
