@@ -1,8 +1,9 @@
 import { Ref } from "../reactivity";
-import { isObject, isString } from "../shared";
+import { isArray, isFunction, isObject, isString } from "../shared";
 import { ShapeFlags } from "../shared/shapeFlags";
 import { AppContext } from "./apiCreateApp";
-import { ComponentInternalInstance } from "./component";
+import { ComponentInternalInstance, currentInstance } from "./component";
+import { RawSlots } from "./componentSlots";
 
 export type VNodeTypes = string | typeof Text | object;
 
@@ -28,7 +29,7 @@ export interface VNodeProps {
   [key: string]: any;
 }
 
-export type VNodeNormalizedChildren = string | VNodeArrayChildren;
+export type VNodeNormalizedChildren = string | VNodeArrayChildren | RawSlots;
 export type VNodeArrayChildren = Array<VNodeArrayChildren | VNodeChildAtom>;
 
 export type VNodeChild = VNodeChildAtom | VNodeArrayChildren;
@@ -37,7 +38,7 @@ type VNodeChildAtom = VNode | string;
 export function createVNode(
   type: VNodeTypes,
   props: VNodeProps | null,
-  children: VNodeNormalizedChildren
+  children: any
 ): VNode {
   const shapeFlag = isString(type)
     ? ShapeFlags.ELEMENT
@@ -56,7 +57,27 @@ export function createVNode(
     shapeFlag,
     appContext: null,
   };
+
+  normalizeChildren(vnode, children);
+
   return vnode;
+}
+
+export function normalizeChildren(vnode: VNode, children: unknown) {
+  let type = 0;
+  if (children == null) {
+    children = null;
+  } else if (isFunction(children)) {
+    children = { default: children };
+    type = ShapeFlags.SLOTS_CHILDREN;
+  } else if (isArray(children)) {
+    type = ShapeFlags.ARRAY_CHILDREN;
+  } else {
+    children = String(children);
+    type = ShapeFlags.TEXT_CHILDREN;
+  }
+  vnode.children = children as VNodeNormalizedChildren;
+  vnode.shapeFlag |= type;
 }
 
 export function normalizeVNode(child: VNodeChild): VNode {

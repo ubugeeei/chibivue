@@ -8,6 +8,7 @@ import {
   ComponentPublicInstance,
   PublicInstanceProxyHandlers,
 } from "./componentPublicInstance";
+import { InternalSlots, SlotsType, UnwrapSlotsType, initSlots } from "./componentSlots";
 import { LifecycleHooks } from "./enums";
 import { VNode, VNodeChild } from "./vnode";
 
@@ -17,7 +18,8 @@ export type Data = Record<string, unknown>;
 
 type LifecycleHook<TFn = Function> = TFn[] | null;
 
-export type SetupContext = {
+export type SetupContext<S extends SlotsType = {}> = {
+  slots: UnwrapSlotsType<S>;
   emit: (e: string, ...args: any[]) => void;
   expose: (exposed?: Record<string, any>) => void;
 };
@@ -41,7 +43,9 @@ export interface ComponentInternalInstance {
 
   propsOptions: Props;
   props: Data;
+  slots: InternalSlots;
   emit: (event: string, ...args: any[]) => void;
+
   setupState: Data;
   setupContext: SetupContext | null;
 
@@ -95,7 +99,9 @@ export function createComponentInstance(
 
     propsOptions: type.props || {},
     props: {},
+    slots: {},
     emit: null!, // to be set immediately
+
     setupState: {},
     setupContext: null,
 
@@ -132,8 +138,9 @@ export const unsetCurrentInstance = () => {
 };
 
 export const setupComponent = (instance: ComponentInternalInstance) => {
-  const { props } = instance.vnode;
+  const { props, children } = instance.vnode;
   initProps(instance, props);
+  initSlots(instance, children)
 
   const { setup, render, template } = instance.type as Component;
 
@@ -175,6 +182,7 @@ export function createSetupContext(
     instance.exposed = exposed || {};
   };
   return {
+    slots: instance.slots,
     emit: instance.emit,
     expose,
   };

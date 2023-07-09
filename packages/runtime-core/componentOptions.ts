@@ -3,6 +3,7 @@ import {
   InternalRenderFunction,
   type ComponentInternalInstance,
   ConcreteComponent,
+  SetupContext,
 } from "./component";
 import { ObjectEmitsOptions } from "./componentEmits";
 import { PropType } from "./componentProps";
@@ -17,10 +18,7 @@ export type ComponentOptions<P = {}, B = {}> = {
   emits?: ObjectEmitsOptions;
   methods?: { [key: string]: Function };
   computed?: { [key: string]: Function };
-  setup?: (
-    props: InferPropTypes<P>,
-    ctx: { emit: (event: string, ...args: any[]) => void }
-  ) => (() => VNode) | B;
+  setup?: (props: InferPropTypes<P>, ctx: SetupContext) => (() => VNode) | B;
   render?: Function;
   template?: string;
   components?: Record<string, ConcreteComponent>;

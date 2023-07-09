@@ -1,5 +1,5 @@
 import { ShapeFlags } from "../shared/shapeFlags";
-import { isArray, isObject, isString } from "../shared";
+import { isArray, isFunction, isObject, isString } from "../shared";
 import { currentRenderingInstance } from "./componentRenderContext";
 import { type ComponentInternalInstance } from "./component";
 import { type ComponentPublicInstance } from "./componentPublicInstance";
@@ -119,6 +119,9 @@ export function normalizeChildren(vnode: VNode, children: unknown) {
   let type = 0;
   if (children == null) {
     children = null;
+  } else if (isFunction(children)) {
+    children = { default: children };
+    type = ShapeFlags.SLOTS_CHILDREN;
   } else if (isArray(children)) {
     type = ShapeFlags.ARRAY_CHILDREN;
   } else if (typeof children === "object") {

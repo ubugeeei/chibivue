@@ -10,6 +10,12 @@ import {
   ComponentPublicInstance,
   PublicInstanceProxyHandlers,
 } from "./componentPublicInstance";
+import {
+  InternalSlots,
+  SlotsType,
+  UnwrapSlotsType,
+  initSlots,
+} from "./componentSlots";
 import { LifecycleHooks } from "./enums";
 import { VNode, VNodeChild } from "./vnode";
 
@@ -48,7 +54,9 @@ export interface ComponentInternalInstance {
   ctx: Data;
   data: Data;
   props: Data;
+  slots: InternalSlots;
   emit: EmitFn;
+
   setupState: Data;
   setupContext: SetupContext | null;
 
@@ -66,7 +74,8 @@ export interface ComponentInternalInstance {
 export type EmitFn = (event: string, ...args: any[]) => void;
 
 // TODO: type as generic
-export type SetupContext = {
+export type SetupContext<S extends SlotsType = {}> = {
+  slots: UnwrapSlotsType<S>;
   emit: EmitFn;
   expose: (exposed?: Record<string, any>) => void;
 };
@@ -112,6 +121,7 @@ export function createComponentInstance(
     ctx: {},
     data: {},
     props: {},
+    slots: {},
 
     setupState: {},
     setupContext: null,
@@ -146,8 +156,9 @@ export const unsetCurrentInstance = () => {
 };
 
 export const setupComponent = (instance: ComponentInternalInstance) => {
-  const { props } = instance.vnode;
+  const { props, children } = instance.vnode;
   initProps(instance, props);
+  initSlots(instance, children);
 
   const Component = instance.type as ComponentOptions;
 
@@ -211,5 +222,5 @@ export function createSetupContext(
   const expose: SetupContext["expose"] = (exposed) => {
     instance.exposed = exposed || {};
   };
-  return { emit: instance.emit, expose };
+  return { slots: instance.slots, emit: instance.emit, expose };
 }

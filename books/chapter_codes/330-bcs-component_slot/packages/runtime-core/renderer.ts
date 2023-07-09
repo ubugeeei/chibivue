@@ -61,6 +61,7 @@ export function createRenderer(options: RendererOptions) {
     createElement: hostCreateElement,
     createText: hostCreateText,
     setText: hostSetText,
+    setElementText: hostSetElementText,
     insert: hostInsert,
     remove: hostRemove,
     parentNode: hostParentNode,
@@ -110,10 +111,14 @@ export function createRenderer(options: RendererOptions) {
     parentComponent: ComponentInternalInstance | null
   ) => {
     let el: RendererElement;
-    const { type, props } = vnode;
+    const { type, props, shapeFlag } = vnode;
     el = vnode.el = hostCreateElement(type as string);
 
-    mountChildren(vnode.children as VNode[], el, anchor, parentComponent);
+    if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
+      hostSetElementText(el, vnode.children as string);
+    } else if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+      mountChildren(vnode.children as VNode[], el, anchor, parentComponent);
+    }
 
     if (props) {
       for (const key in props) {
