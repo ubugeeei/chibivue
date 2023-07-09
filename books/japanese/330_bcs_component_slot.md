@@ -23,7 +23,7 @@ const MyComponent = defineComponent({
 
 const app = createApp({
   setup() {
-    return h(MyComponent, {}, () => "hello");
+    return () => h(MyComponent, {}, () => "hello");
   },
 });
 ```
@@ -40,7 +40,51 @@ h 関数も第 3 引数として配列だけではなく、レンダー関数を
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/330-bcs-component_slot
 
-# 名前付きスロットの実装
+# 名前付きスロット/スコープ付きスロットの実装
+
+デフォルトスロットの拡張です。  
+今度は関数ではなく、オブジェクトとで渡せるようにしてみましょう。
+
+スコープ付きスロットに関しては、レンダー関数の引数を定義してあげるだけです。  
+これをみても分かる通り、レンダー関数を使用する際はスコープ付きスロットという区別をわざわざする必要もないように感じます。  
+それはその通りで、スロットの正体はただのコールバック関数で、それに引数を持たせるためにスコープ付きスロットという名前で API を提供しています。  
+もちろん、これから Basic Template Compiler の部門でスコープ付きスロットを扱えるようなコンパイラを実装しますが、それはこれらの形に変換されているのです。
+
+https://vuejs.org/guide/components/slots.html#scoped-slots
+
+```ts
+const MyComponent = defineComponent({
+  setup(_, { slots }) {
+    return () =>
+      h("div", {}, [
+        slots.default?.(),
+        h("br", {}, []),
+        slots.myNamedSlot?.(),
+        h("br", {}, []),
+        slots.myScopedSlot2?.({ message: "hello!" }),
+      ]);
+  },
+});
+
+const app = createApp({
+  setup() {
+    return () =>
+      h(
+        MyComponent,
+        {},
+        {
+          default: () => "hello",
+          myNamedSlot: () => "hello2",
+          myScopedSlot2: (scope: { message: string }) =>
+            `message: ${scope.message}`,
+        }
+      );
+  },
+});
+```
+
+ここまでのソースコード:  
+https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/330.5-bcs-slot_extend
 
 
 [Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/320_bcs_component_proxy_setup_context.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/340_bcs_options_api.md)
