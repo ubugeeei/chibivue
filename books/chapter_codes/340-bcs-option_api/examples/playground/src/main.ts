@@ -1,32 +1,21 @@
-import { createApp, defineComponent, h } from "chibivue";
+import { createApp, defineComponent, h, ref } from "chibivue";
 
-const MyComponent = defineComponent({
-  setup(_, { slots }) {
-    return () =>
-      h("div", {}, [
-        slots.default?.(),
-        h("br", {}, []),
-        slots.myNamedSlot?.(),
-        h("br", {}, []),
-        slots.myScopedSlot2?.({ message: "hello!" }),
-      ]);
-  },
-});
-
-const app = createApp({
+const App = defineComponent({
   setup() {
-    return () =>
-      h(
-        MyComponent,
-        {},
-        {
-          default: () => "hello",
-          myNamedSlot: () => "hello2",
-          myScopedSlot2: (scope: { message: string }) =>
-            `message: ${scope.message}`,
-        }
-      );
+    const count = ref(0);
+    return { count };
+  },
+
+  data() {
+    return { count2: 0 };
+  },
+
+  render(ctx) {
+    console.log(ctx.count2);
+    return h("div", {}, [`${ctx.count}`]);
   },
 });
+
+const app = createApp(App);
 
 app.mount("#app");

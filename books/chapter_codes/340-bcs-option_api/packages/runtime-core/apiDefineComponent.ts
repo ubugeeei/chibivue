@@ -3,11 +3,12 @@ import { ComponentPublicInstanceConstructor } from "./componentPublicInstance";
 
 type DefineComponent<
   PropsOrPropOptions = {},
-  RawBindings = {}
-> = ComponentPublicInstanceConstructor<PropsOrPropOptions, RawBindings>;
+  RawBindings = {},
+  D = {}
+> = ComponentPublicInstanceConstructor<PropsOrPropOptions, RawBindings, D>;
 
-export function defineComponent<PropsOptions, RawBindings>(
-  options: ComponentOptions<PropsOptions, RawBindings>
-): DefineComponent<PropsOptions, RawBindings> {
+export function defineComponent<PropsOptions = {}, RawBindings = {}, D = {}>(
+  options: ComponentOptions<PropsOptions, RawBindings, D>
+): DefineComponent<PropsOptions, RawBindings, D> {
   return options as any;
 }

@@ -4,18 +4,21 @@ import { ComponentInternalInstance, Data } from "./component";
 export type ComponentPublicInstanceConstructor<
   T extends ComponentPublicInstance<
     Props,
-    RawBindings
+    RawBindings,
+    D
   > = ComponentPublicInstance<any>,
   Props = any,
-  RawBindings = any
+  RawBindings = any,
+  D = any
 > = {
   new (...args: any[]): T;
 };
 
-export type ComponentPublicInstance<P = {}, B = {}> = {
+export type ComponentPublicInstance<P = {}, B = {}, D = {}> = {
   $: ComponentInternalInstance;
 } & P &
-  B;
+  B &
+  D;
 
 export interface ComponentRenderContext {
   [key: string]: any;
@@ -26,7 +29,7 @@ const hasSetupBinding = (state: Data, key: string) => hasOwn(state, key);
 
 export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
   get({ _: instance }: ComponentRenderContext, key: string) {
-    const { setupState, props } = instance;
+    const { setupState, props, data } = instance;
 
     let normalizedProps;
     if (hasSetupBinding(setupState, key)) {
@@ -36,6 +39,8 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
       hasOwn(normalizedProps, key)
     ) {
       return props![key];
+    } else if (hasOwn(data, key)) {
+      return instance.data[key];
     }
   },
   set(
@@ -43,9 +48,12 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
     key: string,
     value: any
   ): boolean {
-    const { setupState } = instance;
+    const { setupState, data } = instance;
     if (hasSetupBinding(setupState, key)) {
       setupState[key] = value;
+      return true;
+    } else if (hasOwn(data, key)) {
+      instance.data[key] = value;
       return true;
     }
     return true;

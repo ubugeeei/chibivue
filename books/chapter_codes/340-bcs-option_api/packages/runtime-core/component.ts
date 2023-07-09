@@ -2,17 +2,31 @@ import { EffectScope, ReactiveEffect } from "../reactivity";
 import { proxyRefs } from "../reactivity/ref";
 import { AppContext, createAppContext } from "./apiCreateApp";
 import { emit } from "./componentEmits";
-import { ComponentOptions } from "./componentOptions";
+import { ComponentOptions, applyOptions } from "./componentOptions";
 import { Props, initProps } from "./componentProps";
 import {
   ComponentPublicInstance,
+  ComponentPublicInstanceConstructor,
   PublicInstanceProxyHandlers,
 } from "./componentPublicInstance";
-import { InternalSlots, SlotsType, UnwrapSlotsType, initSlots } from "./componentSlots";
+import {
+  InternalSlots,
+  SlotsType,
+  UnwrapSlotsType,
+  initSlots,
+} from "./componentSlots";
 import { LifecycleHooks } from "./enums";
 import { VNode, VNodeChild } from "./vnode";
 
-export type Component = ComponentOptions;
+export type ConcreteComponent<
+  Props = {},
+  RawBindings = any,
+  D = any
+> = ComponentOptions<Props, RawBindings, D>;
+
+export type Component<P = any> =
+  | ConcreteComponent<P>
+  | ComponentPublicInstanceConstructor<P>;
 
 export type Data = Record<string, unknown>;
 
@@ -26,7 +40,7 @@ export type SetupContext<S extends SlotsType = {}> = {
 
 export interface ComponentInternalInstance {
   uid: number;
-  type: Component;
+  type: ConcreteComponent;
   parent: ComponentInternalInstance | null;
   appContext: AppContext;
 
@@ -55,6 +69,8 @@ export interface ComponentInternalInstance {
 
   ctx: Data;
 
+  data: Data;
+
   isMounted: boolean;
   [LifecycleHooks.BEFORE_MOUNT]: LifecycleHook;
   [LifecycleHooks.MOUNTED]: LifecycleHook;
@@ -76,7 +92,7 @@ export function createComponentInstance(
   vnode: VNode,
   parent: ComponentInternalInstance | null
 ): ComponentInternalInstance {
-  const type = vnode.type as Component;
+  const type = vnode.type as ConcreteComponent;
 
   const appContext =
     (parent ? parent.appContext : vnode.appContext) || emptyAppContext;
@@ -110,6 +126,8 @@ export function createComponentInstance(
     exposeProxy: null,
     ctx: {},
 
+    data: {},
+
     isMounted: false,
     [LifecycleHooks.BEFORE_MOUNT]: null,
     [LifecycleHooks.MOUNTED]: null,
@@ -140,9 +158,9 @@ export const unsetCurrentInstance = () => {
 export const setupComponent = (instance: ComponentInternalInstance) => {
   const { props, children } = instance.vnode;
   initProps(instance, props);
-  initSlots(instance, children)
+  initSlots(instance, children);
 
-  const { setup, render, template } = instance.type as Component;
+  const { setup, render, template } = instance.type as ConcreteComponent;
 
   instance.proxy = new Proxy(instance.ctx, PublicInstanceProxyHandlers);
 
@@ -173,6 +191,10 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
   if (render) {
     instance.render = render as InternalRenderFunction;
   }
+
+  setCurrentInstance(instance);
+  applyOptions(instance);
+  unsetCurrentInstance();
 };
 
 export function createSetupContext(
