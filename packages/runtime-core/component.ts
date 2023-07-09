@@ -43,6 +43,8 @@ export interface ComponentInternalInstance {
 
   provides: Data;
 
+  exposed: Record<string, any> | null;
+  exposeProxy: Record<string, any> | null;
   ctx: Data;
   data: Data;
   props: Data;
@@ -64,7 +66,10 @@ export interface ComponentInternalInstance {
 export type EmitFn = (event: string, ...args: any[]) => void;
 
 // TODO: type as generic
-export type SetupContext = { emit: EmitFn };
+export type SetupContext = {
+  emit: EmitFn;
+  expose: (exposed?: Record<string, any>) => void;
+};
 
 export type InternalRenderFunction = {
   (
@@ -102,6 +107,8 @@ export function createComponentInstance(
     emitsOptions: type.emits || {},
     emit: null!, // to be set immediately
 
+    exposed: null,
+    exposeProxy: null,
     ctx: {},
     data: {},
     props: {},
@@ -173,13 +180,27 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
   unsetCurrentInstance();
 };
 
+export function getExposeProxy(instance: ComponentInternalInstance) {
+  if (instance.exposed) {
+    return (
+      instance.exposeProxy ||
+      (instance.exposeProxy = new Proxy(proxyRefs(instance.exposed), {
+        get(target, key: string) {
+          if (key in target) {
+            return target[key];
+          }
+        },
+        has(target, key: string) {
+          return key in target;
+        },
+      }))
+    );
+  }
+}
+
 type CompileFunction = (template: string | object) => InternalRenderFunction;
 let compile: CompileFunction | undefined;
 
-/**
- * For runtime-dom to register the compiler.
- * Note the exported method uses any to avoid d.ts relying on the compiler types.
- */
 export function registerRuntimeCompiler(_compile: any) {
   compile = _compile;
 }
@@ -187,5 +208,8 @@ export function registerRuntimeCompiler(_compile: any) {
 export function createSetupContext(
   instance: ComponentInternalInstance
 ): SetupContext {
-  return { emit: instance.emit };
+  const expose: SetupContext["expose"] = (exposed) => {
+    instance.exposed = exposed || {};
+  };
+  return { emit: instance.emit, expose };
 }
