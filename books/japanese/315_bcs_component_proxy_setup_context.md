@@ -113,5 +113,181 @@ https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/320-bcs-compo
 
 # setupContext
 
+https://ja.vuejs.org/api/composition-api-setup.html#setup-context
+
+Vue には setupContext という概念があります。これは setup 内に公開される context で、emit や expose などが挙げられます。
+
+現時点では emit は仕えるようにはなっているものの、少々雑に実装してしまっています。
+
+```ts
+const setupResult = component.setup(instance.props, {
+  emit: instance.emit,
+});
+```
+
+SetupContext というインターフェースをきちんと定義して、インスタンスが持つオブジェクトとして表現しましょう。
+
+```ts
+export interface ComponentInternalInstance {
+  // .
+  // .
+  // .
+  setupContext: SetupContext | null; // 追加
+}
+
+export type SetupContext = {
+  emit: (e: string, ...args: any[]) => void;
+};
+```
+
+そして、インスタンスを生成する際に setupContext を生成し、setup 関数を実行する際の第二引数にこのオブジェクトを渡すようにしましょう。
+
+## expose
+
+ここまでできたら emit 以外の SetupContext も実装してみます。  
+今回は例として、expose を実装してみます。
+
+expose は、パブリックなプロパティを明示できる関数です。  
+以下のような開発者インターフェースを目指しましょう。
+
+```ts
+const Child = defineComponent({
+  setup(_, { expose }) {
+    const count = ref(0);
+    const count2 = ref(0);
+    expose({ count });
+    return { count, count2 };
+  },
+  template: `<p>hello</p>`,
+});
+
+const Child2 = defineComponent({
+  setup() {
+    const count = ref(0);
+    const count2 = ref(0);
+    return { count, count2 };
+  },
+  template: `<p>hello</p>`,
+});
+
+const app = createApp({
+  setup() {
+    const child = ref();
+    const child2 = ref();
+
+    const log = () => {
+      console.log(
+        child.value.count,
+        child.value.count2, // cannot access
+        child2.value.count,
+        child2.value.count2
+      );
+    };
+
+    return () =>
+      h("div", {}, [
+        h(Child, { ref: child }, []),
+        h(Child2, { ref: child2 }, []),
+        h("button", { onClick: log }, ["log"]),
+      ]);
+  },
+});
+```
+
+expose を使用しないコンポーネントでは今まで通り、デフォルトで全てが public です。
+
+方向性としては、インスタンス内に `exposed` というオブジェクトを持つことにし、ここに値が設定されていれば templateRef に関してはこのオブジェクトを ref に渡す感じです。
+
+```ts
+export interface ComponentInternalInstance {
+  // .
+  // .
+  // .
+  exposed: Record<string, any> | null; // 追加
+}
+```
+
+そしてここにオブジェクトを登録できるように expose 関数を実装していきましょう。
+
+# ProxyRefs
+
+このチャプターで proxy や exposedProxy を実装してきましたが、実は少々本家の Vue とは違う部分があります。  
+それは、「ref は unwrap される」という点です。(proxy の場合は proxy というより setupState がこの性質を持っています。)
+
+これらは ProxyRefs というプロキシで実装されていて、handler は`shallowUnwrapHandlers`という名前で実装されています。  
+これにより、template を記述する際や proxy を扱う際に ref 特有の value の冗長さを排除できるようになっています。
+
+```ts
+const shallowUnwrapHandlers: ProxyHandler<any> = {
+  get: (target, key, receiver) => unref(Reflect.get(target, key, receiver)),
+  set: (target, key, value, receiver) => {
+    const oldValue = target[key];
+    if (isRef(oldValue) && !isRef(value)) {
+      oldValue.value = value;
+      return true;
+    } else {
+      return Reflect.set(target, key, value, receiver);
+    }
+  },
+};
+```
+
+```vue
+<template>
+  <!-- <p>{{ count.value }}</p>  このように書く必要はない -->
+  <p>{{ count }}</p>
+</template>
+```
+
+ここまで実装すると以下のようなコードが動くようになるはずです。
+
+```ts
+import { createApp, defineComponent, h, ref } from "chibivue";
+
+const Child = defineComponent({
+  setup(_, { expose }) {
+    const count = ref(0);
+    const count2 = ref(0);
+    expose({ count });
+    return { count, count2 };
+  },
+  template: `<p>child {{ count }} {{ count2 }}</p>`,
+});
+
+const Child2 = defineComponent({
+  setup() {
+    const count = ref(0);
+    const count2 = ref(0);
+    return { count, count2 };
+  },
+  template: `<p>child2 {{ count }} {{ count2 }}</p>`,
+});
+
+const app = createApp({
+  setup() {
+    const child = ref();
+    const child2 = ref();
+
+    const increment = () => {
+      child.value.count++;
+      child.value.count2++; // cannot access
+      child2.value.count++;
+      child2.value.count2++;
+    };
+
+    return () =>
+      h("div", {}, [
+        h(Child, { ref: child }, []),
+        h(Child2, { ref: child2 }, []),
+        h("button", { onClick: increment }, ["increment"]),
+      ]);
+  },
+});
+
+app.mount("#app");
+```
+
+ここまでのソースコード:  
+https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/325-bcs-setup_context
 
 [Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/310_bcs_provide_inject.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/320_bcs_component_slot.md)
