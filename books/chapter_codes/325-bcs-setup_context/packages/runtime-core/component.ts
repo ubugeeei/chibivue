@@ -1,4 +1,5 @@
 import { EffectScope, ReactiveEffect } from "../reactivity";
+import { proxyRefs } from "../reactivity/ref";
 import { AppContext, createAppContext } from "./apiCreateApp";
 import { emit } from "./componentEmits";
 import { ComponentOptions } from "./componentOptions";
@@ -134,14 +135,14 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
   const { props } = instance.vnode;
   initProps(instance, props);
 
-  const component = instance.type as Component;
+  const { setup, render, template } = instance.type as Component;
 
   instance.proxy = new Proxy(instance.ctx, PublicInstanceProxyHandlers);
 
-  if (component.setup) {
+  if (setup) {
     setCurrentInstance(instance);
     const setupContext = (instance.setupContext = createSetupContext(instance));
-    const setupResult = component.setup(
+    const setupResult = setup(
       instance.props,
       setupContext
     ) as InternalRenderFunction;
@@ -150,20 +151,18 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
     if (typeof setupResult === "function") {
       instance.render = setupResult;
     } else if (typeof setupResult === "object" && setupResult !== null) {
-      instance.setupState = setupResult;
+      instance.setupState = proxyRefs(setupResult);
     } else {
       // do nothing
     }
   }
 
-  if (compile && !component.render) {
-    const template = component.template ?? "";
+  if (compile && !render) {
     if (template) {
       instance.render = compile(template);
     }
   }
 
-  const { render } = component;
   if (render) {
     instance.render = render as InternalRenderFunction;
   }
@@ -185,7 +184,7 @@ export function getExposeProxy(instance: ComponentInternalInstance) {
   if (instance.exposed) {
     return (
       instance.exposeProxy ||
-      (instance.exposeProxy = new Proxy(instance.exposed, {
+      (instance.exposeProxy = new Proxy(proxyRefs(instance.exposed), {
         get(target, key: string) {
           if (key in target) {
             return target[key];

@@ -2,7 +2,7 @@ import { IfAny, isArray } from "../shared";
 import { CollectionTypes } from "./collectionHandlers";
 import { Dep, createDep } from "./dep";
 import { getDepFromReactive, trackEffects, triggerEffects } from "./effect";
-import { ShallowReactiveMarker, toReactive } from "./reactive";
+import { ShallowReactiveMarker, isReactive, toReactive } from "./reactive";
 
 declare const RefSymbol: unique symbol;
 export declare const RawSymbol: unique symbol;
@@ -98,6 +98,27 @@ export type MaybeRef<T = any> = T | Ref<T>;
 export type MaybeRefOrGetter<T = any> = MaybeRef<T> | (() => T);
 export function unref<T>(ref: MaybeRef<T>): T {
   return isRef(ref) ? ref.value : ref;
+}
+
+const shallowUnwrapHandlers: ProxyHandler<any> = {
+  get: (target, key, receiver) => unref(Reflect.get(target, key, receiver)),
+  set: (target, key, value, receiver) => {
+    const oldValue = target[key];
+    if (isRef(oldValue) && !isRef(value)) {
+      oldValue.value = value;
+      return true;
+    } else {
+      return Reflect.set(target, key, value, receiver);
+    }
+  },
+};
+
+export function proxyRefs<T extends object>(
+  objectWithRefs: T
+): ShallowUnwrapRef<T> {
+  return isReactive(objectWithRefs)
+    ? objectWithRefs
+    : new Proxy(objectWithRefs, shallowUnwrapHandlers);
 }
 
 /*
@@ -239,3 +260,13 @@ export type UnwrapRefSimple<T> = T extends
       [P in keyof T]: P extends symbol ? T[P] : UnwrapRef<T[P]>;
     }
   : T;
+
+export type ShallowUnwrapRef<T> = {
+  [K in keyof T]: T[K] extends Ref<infer V>
+    ? V // if `V` is `unknown` that means it does not extend `Ref` and is undefined
+    : T[K] extends Ref<infer V> | undefined
+    ? unknown extends V
+      ? undefined
+      : V | undefined
+    : T[K];
+};
