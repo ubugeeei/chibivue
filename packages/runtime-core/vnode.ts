@@ -117,6 +117,8 @@ export { createVNode as createElementVNode };
 
 export function normalizeChildren(vnode: VNode, children: unknown) {
   let type = 0;
+  const { shapeFlag } = vnode;
+
   if (children == null) {
     children = null;
   } else if (isFunction(children)) {
@@ -125,8 +127,11 @@ export function normalizeChildren(vnode: VNode, children: unknown) {
   } else if (isArray(children)) {
     type = ShapeFlags.ARRAY_CHILDREN;
   } else if (typeof children === "object") {
-    normalizeChildren(vnode, vnode.children);
-    return;
+    if (shapeFlag & ShapeFlags.ELEMENT) {
+      return;
+    } else {
+      type = ShapeFlags.SLOTS_CHILDREN;
+    }
   } else {
     children = String(children);
     type = ShapeFlags.TEXT_CHILDREN;
