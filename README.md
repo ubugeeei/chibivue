@@ -61,30 +61,33 @@ Currently, I am still in the process of implementation, but after implementation
 
 ## Component System
 
-| feature          | impl | book |
-| ---------------- | ---- | ---- |
-| Options API      | ✅   |      |
-| Composition API  | ✅   | ✅   |
-| lifecycle hooks  | ✅   | ✅   |
-| props / emit     | ✅   | ✅   |
-| expose           | ✅   | ✅   |
-| provide / inject | ✅   | ✅   |
-| slot (default)   | ✅   | ✅   |
-| slot (named)     |      |      |
-| slot (scoped)    |      |      |
+| feature                      | impl | book |
+| ---------------------------- | ---- | ---- |
+| Options API                  | ✅   |      |
+| Composition API              | ✅   | ✅   |
+| lifecycle hooks              | ✅   | ✅   |
+| props / emit                 | ✅   | ✅   |
+| expose                       | ✅   | ✅   |
+| provide / inject             | ✅   | ✅   |
+| slot (default)               | ✅   | ✅   |
+| slot (named/scoped)          | ✅   | ✅   |
+| async component and suspense |      |      |
 
 ## Template Compiler
 
-| feature  | impl | book |
-| -------- | ---- | ---- |
-| v-on     | ✅   |      |
-| v-bind   | ✅   |      |
-| v-for    | ✅   |      |
-| v-model  | ✅   |      |
-| v-if     |      |      |
-| v-show   |      |      |
-| mustache | ✅   |      |
-|          |      |      |
+| feature           | impl | book |
+| ----------------- | ---- | ---- |
+| v-on              | ✅   |      |
+| v-bind            | ✅   |      |
+| v-for             | ✅   |      |
+| v-model           | ✅   |      |
+| v-if              |      |      |
+| v-show            |      |      |
+| mustache          | ✅   |      |
+| slot (default)    |      |      |
+| slot (named)      |      |      |
+| slot (scoped)     |      |      |
+| dynamic component |      |      |
 
 ## SFC Compiler
 
