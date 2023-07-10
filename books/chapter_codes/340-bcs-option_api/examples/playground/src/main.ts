@@ -16,6 +16,12 @@ const App = defineComponent({
     },
   },
 
+  methods: {
+    hello() {
+      console.log("hello");
+    },
+  },
+
   render(ctx) {
     console.log(ctx.count2);
     return h("div", {}, [`${ctx.count}`]);

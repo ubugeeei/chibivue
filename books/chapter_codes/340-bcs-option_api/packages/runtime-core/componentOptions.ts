@@ -7,22 +7,27 @@ import {
 import { isFunction } from "../shared";
 import { ComponentInternalInstance, SetupContext } from "./component";
 import { PropType } from "./componentProps";
-import { ComponentPublicInstance } from "./componentPublicInstance";
+import {
+  ComponentPublicInstance,
+  CreateComponentPublicInstance,
+} from "./componentPublicInstance";
 import { VNode } from "./vnode";
 
 export type ComponentOptions<
   P = {},
   B = {},
   D = any,
-  C extends ComputedOptions = ComputedOptions
+  C extends ComputedOptions = ComputedOptions,
+  M extends MethodOptions = MethodOptions
 > = {
   props?: P;
   data?: (this: ComponentPublicInstance<ResolveProps<P>, B>) => D;
   computed?: C;
+  methods?: M;
   setup?: (props: ResolveProps<P>, ctx: SetupContext) => (() => VNode) | B;
   render?: (ctx: ComponentPublicInstance<ResolveProps<P>, B, D>) => VNode;
   template?: string;
-} & ThisType<P & B & D & C>;
+} & ThisType<CreateComponentPublicInstance<ResolveProps<P>, B, D, C, M>>;
 
 export type ResolveProps<T> = { [K in keyof T]: InferPropType<T[K]> };
 type InferPropType<T> = T extends { type: PropType<infer U> } ? U : never;
@@ -31,6 +36,10 @@ export type ComputedOptions = Record<
   string,
   ComputedGetter<any> | WritableComputedOptions<any>
 >;
+
+export interface MethodOptions {
+  [key: string]: Function;
+}
 
 export type ExtractComputedReturns<T extends any> = {
   [key in keyof T]: T[key] extends { get: (...args: any[]) => infer TReturn }
@@ -45,7 +54,16 @@ export function applyOptions(instance: ComponentInternalInstance) {
   const publicThis = instance.proxy! as any;
   const ctx = instance.ctx;
 
-  const { data: dataOptions, computed: computedOptions } = options;
+  const { data: dataOptions, computed: computedOptions, methods } = options;
+
+  if (methods) {
+    for (const key in methods) {
+      const methodHandler = methods[key];
+      if (isFunction(methodHandler)) {
+        ctx[key] = methodHandler.bind(publicThis);
+      }
+    }
+  }
 
   if (dataOptions) {
     const data = dataOptions.call(publicThis);
