@@ -1,14 +1,34 @@
-import { ComponentOptions } from "./componentOptions";
-import { ComponentPublicInstanceConstructor } from "./componentPublicInstance";
+import {
+  ComponentOptions,
+  ComputedOptions,
+  ResolveProps,
+} from "./componentOptions";
+import {
+  ComponentPublicInstanceConstructor,
+  CreateComponentPublicInstance,
+} from "./componentPublicInstance";
 
 type DefineComponent<
-  PropsOrPropOptions = {},
+  PropOptions = {},
   RawBindings = {},
-  D = {}
-> = ComponentPublicInstanceConstructor<PropsOrPropOptions, RawBindings, D>;
+  D = {},
+  C extends ComputedOptions = {},
+  Props = ResolveProps<PropOptions>
+> = ComponentPublicInstanceConstructor<
+  CreateComponentPublicInstance<Props, RawBindings, D, C>,
+  Props,
+  RawBindings,
+  D,
+  C
+>;
 
-export function defineComponent<PropsOptions = {}, RawBindings = {}, D = {}>(
-  options: ComponentOptions<PropsOptions, RawBindings, D>
-): DefineComponent<PropsOptions, RawBindings, D> {
+export function defineComponent<
+  PropsOptions = {},
+  RawBindings = {},
+  D = {},
+  C extends ComputedOptions = ComputedOptions
+>(
+  options: ComponentOptions<PropsOptions, RawBindings, D, C>
+): DefineComponent<PropsOptions, RawBindings, D, C> {
   return options as any;
 }

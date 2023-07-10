@@ -70,6 +70,7 @@ export interface ComponentInternalInstance {
   ctx: Data;
 
   data: Data;
+  computed: Data;
 
   isMounted: boolean;
   [LifecycleHooks.BEFORE_MOUNT]: LifecycleHook;
@@ -127,6 +128,7 @@ export function createComponentInstance(
     ctx: {},
 
     data: {},
+    computed: {},
 
     isMounted: false,
     [LifecycleHooks.BEFORE_MOUNT]: null,

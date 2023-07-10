@@ -10,6 +10,12 @@ const App = defineComponent({
     return { count2: 0 };
   },
 
+  computed: {
+    double() {
+      return this.count2 * 2;
+    },
+  },
+
   render(ctx) {
     console.log(ctx.count2);
     return h("div", {}, [`${ctx.count}`]);
