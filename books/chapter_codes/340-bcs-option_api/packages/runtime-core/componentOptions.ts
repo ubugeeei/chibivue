@@ -4,8 +4,9 @@ import {
   computed,
   reactive,
 } from "../reactivity";
-import { isFunction } from "../shared";
-import { ComponentInternalInstance, SetupContext } from "./component";
+import { isArray, isFunction, isObject, isString } from "../shared";
+import { WatchCallback, WatchOptions, watch } from "./apiWatch";
+import { ComponentInternalInstance, Data, SetupContext } from "./component";
 import { PropType } from "./componentProps";
 import {
   ComponentPublicInstance,
@@ -24,6 +25,7 @@ export type ComponentOptions<
   data?: (this: ComponentPublicInstance<ResolveProps<P>, B>) => D;
   computed?: C;
   methods?: M;
+  watch?: ComponentWatchOptions;
   setup?: (props: ResolveProps<P>, ctx: SetupContext) => (() => VNode) | B;
   render?: (
     ctx: CreateComponentPublicInstance<ResolveProps<P>, B, D, C, M>
@@ -39,10 +41,6 @@ export type ComputedOptions = Record<
   ComputedGetter<any> | WritableComputedOptions<any>
 >;
 
-export interface MethodOptions {
-  [key: string]: Function;
-}
-
 export type ExtractComputedReturns<T extends any> = {
   [key in keyof T]: T[key] extends { get: (...args: any[]) => infer TReturn }
     ? TReturn
@@ -51,12 +49,31 @@ export type ExtractComputedReturns<T extends any> = {
     : never;
 };
 
+export interface MethodOptions {
+  [key: string]: Function;
+}
+
+export type ObjectWatchOptionItem = {
+  handler: WatchCallback | string;
+} & WatchOptions;
+
+type WatchOptionItem = string | WatchCallback | ObjectWatchOptionItem;
+
+type ComponentWatchOptionItem = WatchOptionItem | WatchOptionItem[];
+
+type ComponentWatchOptions = Record<string, ComponentWatchOptionItem>;
+
 export function applyOptions(instance: ComponentInternalInstance) {
   const { type: options } = instance;
   const publicThis = instance.proxy! as any;
   const ctx = instance.ctx;
 
-  const { data: dataOptions, computed: computedOptions, methods } = options;
+  const {
+    data: dataOptions,
+    computed: computedOptions,
+    methods,
+    watch: watchOptions,
+  } = options;
 
   if (methods) {
     for (const key in methods) {
@@ -94,6 +111,40 @@ export function applyOptions(instance: ComponentInternalInstance) {
         get: () => c.value,
         set: (v) => (c.value = v),
       });
+    }
+  }
+
+  if (watchOptions) {
+    for (const key in watchOptions) {
+      createWatcher(watchOptions[key], ctx, publicThis, key);
+    }
+  }
+}
+
+export function createWatcher(
+  raw: ComponentWatchOptionItem,
+  ctx: Data,
+  publicThis: ComponentPublicInstance,
+  key: string
+) {
+  const getter = () => (publicThis as any)[key];
+  if (isString(raw)) {
+    const handler = ctx[raw];
+    if (isFunction(handler)) {
+      watch(getter, handler as WatchCallback);
+    }
+  } else if (isFunction(raw)) {
+    watch(getter, raw.bind(publicThis));
+  } else if (isObject(raw)) {
+    if (isArray(raw)) {
+      raw.forEach((r) => createWatcher(r, ctx, publicThis, key));
+    } else {
+      const handler = isFunction(raw.handler)
+        ? raw.handler.bind(publicThis)
+        : (ctx[raw.handler] as WatchCallback);
+      if (isFunction(handler)) {
+        watch(getter, handler, raw);
+      }
     }
   }
 }

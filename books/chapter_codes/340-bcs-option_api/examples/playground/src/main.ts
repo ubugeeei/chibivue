@@ -22,11 +22,17 @@ const App = defineComponent({
     },
   },
 
+  watch: {
+    count2() {
+      alert(`count2 changed: ${this.count2}`);
+    },
+  },
+
   render(ctx) {
     return h("div", {}, [
       h("button", { onClick: ctx.hello }, ["hello"]),
-      `${ctx.count2}`,
-      `${ctx.count}`,
+      `${ctx.count2}\n`,
+      `${ctx.count}\n`,
     ]);
   },
 });
