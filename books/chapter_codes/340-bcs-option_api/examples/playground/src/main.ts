@@ -18,13 +18,16 @@ const App = defineComponent({
 
   methods: {
     hello() {
-      console.log("hello");
+      this.count2++;
     },
   },
 
   render(ctx) {
-    console.log(ctx.count2);
-    return h("div", {}, [`${ctx.count}`]);
+    return h("div", {}, [
+      h("button", { onClick: ctx.hello }, ["hello"]),
+      `${ctx.count2}`,
+      `${ctx.count}`,
+    ]);
   },
 });
 
