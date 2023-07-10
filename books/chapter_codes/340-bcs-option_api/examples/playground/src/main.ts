@@ -28,6 +28,34 @@ const App = defineComponent({
     },
   },
 
+  created() {
+    console.log("created");
+  },
+
+  beforeMount() {
+    console.log("beforeMount");
+  },
+
+  mounted() {
+    console.log("mounted");
+  },
+
+  beforeUpdate() {
+    console.log("beforeUpdate");
+  },
+
+  updated() {
+    console.log("updated");
+  },
+
+  beforeUnmount() {
+    console.log("beforeUnmount");
+  },
+
+  unmounted() {
+    console.log("unmounted");
+  },
+
   render(ctx) {
     return h("div", {}, [
       h("button", { onClick: ctx.hello }, ["hello"]),

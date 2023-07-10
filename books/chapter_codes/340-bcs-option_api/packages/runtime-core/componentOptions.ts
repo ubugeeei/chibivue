@@ -5,6 +5,14 @@ import {
   reactive,
 } from "../reactivity";
 import { isArray, isFunction, isObject, isString } from "../shared";
+import {
+  onBeforeMount,
+  onBeforeUnmount,
+  onBeforeUpdate,
+  onMounted,
+  onUnmounted,
+  onUpdated,
+} from "./apiLifecycle";
 import { WatchCallback, WatchOptions, watch } from "./apiWatch";
 import { ComponentInternalInstance, Data, SetupContext } from "./component";
 import { PropType } from "./componentProps";
@@ -31,6 +39,15 @@ export type ComponentOptions<
     ctx: CreateComponentPublicInstance<ResolveProps<P>, B, D, C, M>
   ) => VNode;
   template?: string;
+
+  beforeCreate?(): void;
+  created?(): void;
+  beforeMount?(): void;
+  mounted?(): void;
+  beforeUpdate?(): void;
+  updated?(): void;
+  beforeUnmount?(): void;
+  unmounted?(): void;
 } & ThisType<CreateComponentPublicInstance<ResolveProps<P>, B, D, C, M>>;
 
 export type ResolveProps<T> = { [K in keyof T]: InferPropType<T[K]> };
@@ -73,6 +90,14 @@ export function applyOptions(instance: ComponentInternalInstance) {
     computed: computedOptions,
     methods,
     watch: watchOptions,
+    // lifecycle
+    created,
+    beforeMount,
+    mounted,
+    beforeUpdate,
+    updated,
+    beforeUnmount,
+    unmounted,
   } = options;
 
   if (methods) {
@@ -119,6 +144,26 @@ export function applyOptions(instance: ComponentInternalInstance) {
       createWatcher(watchOptions[key], ctx, publicThis, key);
     }
   }
+
+  created?.();
+
+  function registerLifecycleHook(
+    register: Function,
+    hook?: Function | Function[]
+  ) {
+    if (isArray(hook)) {
+      hook.forEach((_hook) => register(_hook.bind(publicThis)));
+    } else if (hook) {
+      register(hook.bind(publicThis));
+    }
+  }
+
+  registerLifecycleHook(onBeforeMount, beforeMount);
+  registerLifecycleHook(onMounted, mounted);
+  registerLifecycleHook(onBeforeUpdate, beforeUpdate);
+  registerLifecycleHook(onUpdated, updated);
+  registerLifecycleHook(onBeforeUnmount, beforeUnmount);
+  registerLifecycleHook(onUnmounted, unmounted);
 }
 
 export function createWatcher(
