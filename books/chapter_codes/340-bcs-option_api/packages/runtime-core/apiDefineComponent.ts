@@ -14,7 +14,7 @@ type DefineComponent<
   RawBindings = {},
   D = {},
   C extends ComputedOptions = {},
-  M extends MethodOptions = MethodOptions,
+  M extends MethodOptions = {},
   Props = ResolveProps<PropOptions>
 > = ComponentPublicInstanceConstructor<
   CreateComponentPublicInstance<Props, RawBindings, D, C, M>,
@@ -28,8 +28,8 @@ export function defineComponent<
   PropsOptions = {},
   RawBindings = {},
   D = {},
-  C extends ComputedOptions = ComputedOptions,
-  M extends MethodOptions = MethodOptions
+  C extends ComputedOptions = {},
+  M extends MethodOptions = {}
 >(
   options: ComponentOptions<PropsOptions, RawBindings, D, C, M>
 ): DefineComponent<PropsOptions, RawBindings, D, C, M> {

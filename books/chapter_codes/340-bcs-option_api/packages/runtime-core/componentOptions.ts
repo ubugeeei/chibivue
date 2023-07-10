@@ -16,7 +16,7 @@ import { VNode } from "./vnode";
 export type ComponentOptions<
   P = {},
   B = {},
-  D = any,
+  D = {},
   C extends ComputedOptions = ComputedOptions,
   M extends MethodOptions = MethodOptions
 > = {
@@ -25,7 +25,9 @@ export type ComponentOptions<
   computed?: C;
   methods?: M;
   setup?: (props: ResolveProps<P>, ctx: SetupContext) => (() => VNode) | B;
-  render?: (ctx: ComponentPublicInstance<ResolveProps<P>, B, D>) => VNode;
+  render?: (
+    ctx: CreateComponentPublicInstance<ResolveProps<P>, B, D, C, M>
+  ) => VNode;
   template?: string;
 } & ThisType<CreateComponentPublicInstance<ResolveProps<P>, B, D, C, M>>;
 
