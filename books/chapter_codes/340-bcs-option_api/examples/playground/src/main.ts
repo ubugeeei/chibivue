@@ -8,7 +8,12 @@ const Child = defineComponent({
   },
 
   render(ctx) {
-    return h("div", {}, [`injected: ${ctx.injectedCount}`]);
+    return h("div", {}, [
+      h("button", { onClick: () => ctx.$emit("update:count") }, [
+        "update count",
+      ]),
+      `injected: ${ctx.injectedCount}`,
+    ]);
   },
 });
 
@@ -76,7 +81,7 @@ const App = defineComponent({
       h("br", {}, []),
       `${ctx.count}\n`,
       h("br", {}, []),
-      h(Child, {}, []),
+      h(Child, { "onUpdate:count": () => ctx.count2++ }, []),
     ]);
   },
 

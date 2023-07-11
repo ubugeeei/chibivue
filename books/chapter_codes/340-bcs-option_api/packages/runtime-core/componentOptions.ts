@@ -23,6 +23,7 @@ import {
   ComponentPublicInstance,
   CreateComponentPublicInstance,
 } from "./componentPublicInstance";
+import { SlotsType } from "./componentSlots";
 import { VNode } from "./vnode";
 
 export type ComponentOptions<
@@ -32,6 +33,12 @@ export type ComponentOptions<
   C extends ComputedOptions = ComputedOptions,
   M extends MethodOptions = MethodOptions,
   I extends ComponentInjectOptions = ComponentInjectOptions,
+  S extends SlotsType = {},
+  E extends (event: string, ...args: any[]) => void = (
+    event: string,
+    ...args: any[]
+  ) => void,
+  EE extends string = string,
   II extends string = string
 > = {
   props?: P;
@@ -41,6 +48,8 @@ export type ComponentOptions<
   watch?: ComponentWatchOptions;
   provide?: ComponentProvideOptions;
   inject?: I | II[];
+  emits?: (E | EE[]) & ThisType<void>;
+  slots?: S;
 
   setup?: (props: ResolveProps<P>, ctx: SetupContext) => (() => VNode) | B;
 

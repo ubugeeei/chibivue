@@ -9,6 +9,7 @@ import {
   ComponentPublicInstanceConstructor,
   CreateComponentPublicInstance,
 } from "./componentPublicInstance";
+import { SlotsType } from "./componentSlots";
 
 type DefineComponent<
   PropOptions = {},
@@ -17,13 +18,24 @@ type DefineComponent<
   C extends ComputedOptions = {},
   M extends MethodOptions = {},
   I extends ComponentInjectOptions = {},
+  S extends SlotsType = {},
+  E extends (event: string, ...args: any[]) => void = (
+    event: string,
+    ...args: any[]
+  ) => void,
+  EE extends string = string,
   Props = ResolveProps<PropOptions>
 > = ComponentPublicInstanceConstructor<
-  CreateComponentPublicInstance<Props, RawBindings, D, C, M, I>,
+  CreateComponentPublicInstance<Props, RawBindings, D, C, M, I, S, E, EE>,
   Props,
   RawBindings,
   D,
-  C
+  C,
+  M,
+  I,
+  S,
+  E,
+  EE
 >;
 
 export function defineComponent<
@@ -32,9 +44,15 @@ export function defineComponent<
   D = {},
   C extends ComputedOptions = {},
   M extends MethodOptions = {},
-  I extends ComponentInjectOptions = {}
+  I extends ComponentInjectOptions = {},
+  S extends SlotsType = {},
+  E extends (event: string, ...args: any[]) => void = (
+    event: string,
+    ...args: any[]
+  ) => void,
+  EE extends string = string
 >(
-  options: ComponentOptions<PropsOptions, RawBindings, D, C, M, I>
-): DefineComponent<PropsOptions, RawBindings, D, C, M, I> {
+  options: ComponentOptions<PropsOptions, RawBindings, D, C, M, I, S, E, EE>
+): DefineComponent<PropsOptions, RawBindings, D, C, M, I, S, E, EE> {
   return options as any;
 }
