@@ -1,4 +1,16 @@
-import { createApp, defineComponent, h, ref } from "chibivue";
+import { computed, createApp, defineComponent, h, ref } from "chibivue";
+
+const CountInjectionKey = Symbol();
+
+const Child = defineComponent({
+  inject: {
+    injectedCount: { from: CountInjectionKey },
+  },
+
+  render(ctx) {
+    return h("div", {}, [`injected: ${ctx.injectedCount}`]);
+  },
+});
 
 const App = defineComponent({
   setup() {
@@ -24,7 +36,7 @@ const App = defineComponent({
 
   watch: {
     count2() {
-      alert(`count2 changed: ${this.count2}`);
+      console.log(`count2 changed: ${this.count2}`);
     },
   },
 
@@ -59,9 +71,17 @@ const App = defineComponent({
   render(ctx) {
     return h("div", {}, [
       h("button", { onClick: ctx.hello }, ["hello"]),
+      h("br", {}, []),
       `${ctx.count2}\n`,
+      h("br", {}, []),
       `${ctx.count}\n`,
+      h("br", {}, []),
+      h(Child, {}, []),
     ]);
+  },
+
+  provide() {
+    return { [CountInjectionKey]: computed(() => this.count2) };
   },
 });
 

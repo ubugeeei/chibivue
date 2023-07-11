@@ -1,10 +1,13 @@
 import {
   ComputedGetter,
+  Ref,
   WritableComputedOptions,
   computed,
+  isRef,
   reactive,
 } from "../reactivity";
 import { isArray, isFunction, isObject, isString } from "../shared";
+import { inject, provide } from "./apiInject";
 import {
   onBeforeMount,
   onBeforeUnmount,
@@ -27,17 +30,24 @@ export type ComponentOptions<
   B = {},
   D = {},
   C extends ComputedOptions = ComputedOptions,
-  M extends MethodOptions = MethodOptions
+  M extends MethodOptions = MethodOptions,
+  I extends ComponentInjectOptions = ComponentInjectOptions,
+  II extends string = string
 > = {
   props?: P;
   data?: (this: ComponentPublicInstance<ResolveProps<P>, B>) => D;
   computed?: C;
   methods?: M;
   watch?: ComponentWatchOptions;
+  provide?: ComponentProvideOptions;
+  inject?: I | II[];
+
   setup?: (props: ResolveProps<P>, ctx: SetupContext) => (() => VNode) | B;
+
   render?: (
-    ctx: CreateComponentPublicInstance<ResolveProps<P>, B, D, C, M>
+    ctx: CreateComponentPublicInstance<ResolveProps<P>, B, D, C, M, I>
   ) => VNode;
+
   template?: string;
 
   beforeCreate?(): void;
@@ -80,6 +90,28 @@ type ComponentWatchOptionItem = WatchOptionItem | WatchOptionItem[];
 
 type ComponentWatchOptions = Record<string, ComponentWatchOptionItem>;
 
+export type ComponentProvideOptions = ObjectProvideOptions | Function;
+
+type ObjectProvideOptions = Record<string | symbol, unknown>;
+
+type ObjectInjectOptions = Record<
+  string | symbol,
+  string | symbol | { from?: string | symbol; default?: unknown }
+>;
+
+export type ComponentInjectOptions = string[] | ObjectInjectOptions;
+
+export type InjectToObject<T extends ComponentInjectOptions> =
+  T extends string[]
+    ? {
+        [K in T[number]]?: unknown;
+      }
+    : T extends ObjectInjectOptions
+    ? {
+        [K in keyof T]?: unknown;
+      }
+    : never;
+
 export function applyOptions(instance: ComponentInternalInstance) {
   const { type: options } = instance;
   const publicThis = instance.proxy! as any;
@@ -90,6 +122,8 @@ export function applyOptions(instance: ComponentInternalInstance) {
     computed: computedOptions,
     methods,
     watch: watchOptions,
+    provide: provideOptions,
+    inject: injectOptions,
     // lifecycle
     created,
     beforeMount,
@@ -99,6 +133,10 @@ export function applyOptions(instance: ComponentInternalInstance) {
     beforeUnmount,
     unmounted,
   } = options;
+
+  if (injectOptions) {
+    resolveInjections(injectOptions, ctx);
+  }
 
   if (methods) {
     for (const key in methods) {
@@ -145,6 +183,15 @@ export function applyOptions(instance: ComponentInternalInstance) {
     }
   }
 
+  if (provideOptions) {
+    const provides = isFunction(provideOptions)
+      ? provideOptions.call(publicThis)
+      : provideOptions;
+    Reflect.ownKeys(provides).forEach((key) => {
+      provide(key, provides[key]);
+    });
+  }
+
   created?.();
 
   function registerLifecycleHook(
@@ -164,6 +211,52 @@ export function applyOptions(instance: ComponentInternalInstance) {
   registerLifecycleHook(onUpdated, updated);
   registerLifecycleHook(onBeforeUnmount, beforeUnmount);
   registerLifecycleHook(onUnmounted, unmounted);
+}
+
+export function resolveInjections(
+  injectOptions: ComponentInjectOptions,
+  ctx: any
+) {
+  if (isArray(injectOptions)) {
+    injectOptions = normalizeInject(injectOptions)!;
+  }
+  for (const key in injectOptions) {
+    const opt = injectOptions[key];
+    let injected: unknown;
+    if (isObject(opt)) {
+      if ("default" in opt) {
+        injected = inject(opt.from || key, opt.default);
+      } else {
+        injected = inject(opt.from || key);
+      }
+    } else {
+      injected = inject(opt);
+    }
+    if (isRef(injected)) {
+      // unwrap injected refs
+      Object.defineProperty(ctx, key, {
+        enumerable: true,
+        configurable: true,
+        get: () => (injected as Ref).value,
+        set: (v) => ((injected as Ref).value = v),
+      });
+    } else {
+      ctx[key] = injected;
+    }
+  }
+}
+
+function normalizeInject(
+  raw: ComponentInjectOptions | undefined
+): ObjectInjectOptions | undefined {
+  if (isArray(raw)) {
+    const res: ObjectInjectOptions = {};
+    for (let i = 0; i < raw.length; i++) {
+      res[raw[i]] = raw[i];
+    }
+    return res;
+  }
+  return raw;
 }
 
 export function createWatcher(

@@ -1,4 +1,5 @@
 import {
+  ComponentInjectOptions,
   ComponentOptions,
   ComputedOptions,
   MethodOptions,
@@ -15,9 +16,10 @@ type DefineComponent<
   D = {},
   C extends ComputedOptions = {},
   M extends MethodOptions = {},
+  I extends ComponentInjectOptions = {},
   Props = ResolveProps<PropOptions>
 > = ComponentPublicInstanceConstructor<
-  CreateComponentPublicInstance<Props, RawBindings, D, C, M>,
+  CreateComponentPublicInstance<Props, RawBindings, D, C, M, I>,
   Props,
   RawBindings,
   D,
@@ -29,9 +31,10 @@ export function defineComponent<
   RawBindings = {},
   D = {},
   C extends ComputedOptions = {},
-  M extends MethodOptions = {}
+  M extends MethodOptions = {},
+  I extends ComponentInjectOptions = {}
 >(
-  options: ComponentOptions<PropsOptions, RawBindings, D, C, M>
-): DefineComponent<PropsOptions, RawBindings, D, C, M> {
+  options: ComponentOptions<PropsOptions, RawBindings, D, C, M, I>
+): DefineComponent<PropsOptions, RawBindings, D, C, M, I> {
   return options as any;
 }

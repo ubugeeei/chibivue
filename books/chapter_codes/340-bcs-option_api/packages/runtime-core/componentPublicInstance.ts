@@ -1,8 +1,10 @@
 import { hasOwn } from "../shared";
 import { ComponentInternalInstance, Data } from "./component";
 import {
+  ComponentInjectOptions,
   ComputedOptions,
   ExtractComputedReturns,
+  InjectToObject,
   MethodOptions,
 } from "./componentOptions";
 
@@ -26,22 +28,25 @@ export type ComponentPublicInstance<
   B = {},
   D = {},
   C extends ComputedOptions = {},
-  M extends MethodOptions = MethodOptions
+  M extends MethodOptions = MethodOptions,
+  I extends ComponentInjectOptions = {}
 > = {
   $: ComponentInternalInstance;
 } & P &
   B &
   D &
   M &
-  ExtractComputedReturns<C>;
+  ExtractComputedReturns<C> &
+  InjectToObject<I>;
 
 export type CreateComponentPublicInstance<
   P = {},
   B = {},
   D = {},
   C extends ComputedOptions = ComputedOptions,
-  M extends MethodOptions = MethodOptions
-> = ComponentPublicInstance<P, B, D, C, M>;
+  M extends MethodOptions = MethodOptions,
+  I extends ComponentInjectOptions = {}
+> = ComponentPublicInstance<P, B, D, C, M, I>;
 
 export interface ComponentRenderContext {
   [key: string]: any;
