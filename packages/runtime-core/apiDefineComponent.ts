@@ -1,20 +1,62 @@
 import { isFunction } from "../shared";
-import { ComponentOptions } from "./componentOptions";
-import { ComponentPublicInstanceConstructor } from "./componentPublicInstance";
+
+import {
+  ComponentInjectOptions,
+  ComponentOptions,
+  ComputedOptions,
+  MethodOptions,
+  ResolveProps,
+} from "./componentOptions";
+import {
+  ComponentPublicInstanceConstructor,
+  CreateComponentPublicInstance,
+} from "./componentPublicInstance";
+import { SlotsType } from "./componentSlots";
 
 type DefineComponent<
-  PropsOrPropOptions = {},
-  RawBindings = {}
-> = ComponentPublicInstanceConstructor<PropsOrPropOptions, RawBindings>;
+  PropOptions = {},
+  RawBindings = {},
+  D = {},
+  C extends ComputedOptions = {},
+  M extends MethodOptions = {},
+  I extends ComponentInjectOptions = {},
+  S extends SlotsType = {},
+  E extends (event: string, ...args: any[]) => void = (
+    event: string,
+    ...args: any[]
+  ) => void,
+  EE extends string = string,
+  Props = ResolveProps<PropOptions>
+> = ComponentPublicInstanceConstructor<
+  CreateComponentPublicInstance<Props, RawBindings, D, C, M, I, S, E, EE>,
+  Props,
+  RawBindings,
+  D,
+  C,
+  M,
+  I,
+  S,
+  E,
+  EE
+>;
 
-export function defineComponent<PropsOptions, RawBindings>(
-  options: ComponentOptions<PropsOptions, RawBindings>
-): DefineComponent<PropsOptions, RawBindings>;
-
-export function defineComponent<PropsOptions, RawBindings>(
-  setup: ComponentOptions<PropsOptions, RawBindings>["setup"]
-): DefineComponent<PropsOptions, RawBindings>;
-
-export function defineComponent(options: unknown) {
-  return isFunction(options) ? { setup: options } : options;
+export function defineComponent<
+  PropsOptions = {},
+  RawBindings = {},
+  D = {},
+  C extends ComputedOptions = {},
+  M extends MethodOptions = {},
+  I extends ComponentInjectOptions = {},
+  S extends SlotsType = {},
+  E extends (event: string, ...args: any[]) => void = (
+    event: string,
+    ...args: any[]
+  ) => void,
+  EE extends string = string
+>(
+  options:
+    | ComponentOptions<PropsOptions, RawBindings, D, C, M, I, S, E, EE>
+    | ComponentOptions<PropsOptions, RawBindings, D, C, M, I, S, E, EE>["setup"]
+): DefineComponent<PropsOptions, RawBindings, D, C, M, I, S, E, EE> {
+  return isFunction(options) ? { setup: options } : (options as any);
 }

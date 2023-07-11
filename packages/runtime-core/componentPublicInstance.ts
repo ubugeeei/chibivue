@@ -1,27 +1,88 @@
 import { hasOwn } from "../shared";
 import { Data, type ComponentInternalInstance } from "./component";
-import { type ComponentOptions } from "./componentOptions";
+import {
+  ComponentInjectOptions,
+  ComputedOptions,
+  MethodOptions,
+  ExtractComputedReturns,
+  InjectToObject,
+  ResolveProps,
+} from "./componentOptions";
+import { SlotsType, UnwrapSlotsType } from "./componentSlots";
+import { nextTick } from "./scheduler";
 
 export type ComponentPublicInstanceConstructor<
   T extends ComponentPublicInstance<
     Props,
-    RawBindings
+    RawBindings,
+    D,
+    C,
+    M,
+    I,
+    S,
+    E,
+    EE
   > = ComponentPublicInstance<any>,
   Props = any,
-  RawBindings = any
+  RawBindings = any,
+  D = any,
+  C extends ComputedOptions = any,
+  M extends MethodOptions = MethodOptions,
+  I extends ComponentInjectOptions = {},
+  S extends SlotsType = {},
+  E extends (event: string, ...args: any[]) => void = (
+    event: string,
+    ...args: any[]
+  ) => void,
+  EE extends string = string
 > = {
   new (...args: any[]): T;
 };
 
-export type ComponentPublicInstance<P = {}, B = {}> = {
+export type CreateComponentPublicInstance<
+  P = {},
+  B = {},
+  D = {},
+  C extends ComputedOptions = ComputedOptions,
+  M extends MethodOptions = MethodOptions,
+  I extends ComponentInjectOptions = {},
+  S extends SlotsType = {},
+  E extends (event: string, ...args: any[]) => void = (
+    event: string,
+    ...args: any[]
+  ) => void,
+  EE extends string = string
+> = ComponentPublicInstance<P, B, D, C, M, I, S, E, EE>;
+
+export type ComponentPublicInstance<
+  P = {},
+  B = {},
+  D = {},
+  C extends ComputedOptions = {},
+  M extends MethodOptions = MethodOptions,
+  I extends ComponentInjectOptions = {},
+  S extends SlotsType = {},
+  _E extends (event: string, ...args: any[]) => void = (
+    event: string,
+    ...args: any[]
+  ) => void,
+  _EE extends string = string
+> = {
   $: ComponentInternalInstance;
-  $data: Record<string, unknown>;
-  $prop: Data; // TODO: type as generic
-  $options: ComponentOptions;
-  $el: Element;
-  $mount: (el?: Element | string) => ComponentPublicInstance;
+  $data: D;
+  $props: ResolveProps<P>;
+  $slots: UnwrapSlotsType<S>;
+  $parent: ComponentPublicInstance | null;
+  $emit: (event: string, ...args: any[]) => void;
+  $el: any;
+  $forceUpdate: () => void;
+  $nextTick: typeof nextTick;
 } & P &
-  B;
+  B &
+  D &
+  M &
+  ExtractComputedReturns<C> &
+  InjectToObject<I>;
 
 export interface ComponentRenderContext {
   [key: string]: any;
