@@ -63,7 +63,7 @@ Currently, I am still in the process of implementation, but after implementation
 
 | feature                      | impl | book |
 | ---------------------------- | ---- | ---- |
-| Options API                  | ✅   |      |
+| Options API (typed)          | ✅   | ✅   |
 | Composition API              | ✅   | ✅   |
 | lifecycle hooks              | ✅   | ✅   |
 | props / emit                 | ✅   | ✅   |
