@@ -1,5 +1,6 @@
 import { hasOwn } from "../shared";
 import { Data, type ComponentInternalInstance } from "./component";
+import { EmitFn, EmitsOptions } from "./componentEmits";
 import {
   ComponentInjectOptions,
   ComputedOptions,
@@ -30,10 +31,7 @@ export type ComponentPublicInstanceConstructor<
   M extends MethodOptions = MethodOptions,
   I extends ComponentInjectOptions = {},
   S extends SlotsType = {},
-  E extends (event: string, ...args: any[]) => void = (
-    event: string,
-    ...args: any[]
-  ) => void,
+  E extends EmitsOptions = {},
   EE extends string = string
 > = {
   new (...args: any[]): T;
@@ -47,10 +45,7 @@ export type CreateComponentPublicInstance<
   M extends MethodOptions = MethodOptions,
   I extends ComponentInjectOptions = {},
   S extends SlotsType = {},
-  E extends (event: string, ...args: any[]) => void = (
-    event: string,
-    ...args: any[]
-  ) => void,
+  E extends EmitsOptions = {},
   EE extends string = string
 > = ComponentPublicInstance<P, B, D, C, M, I, S, E, EE>;
 
@@ -62,10 +57,7 @@ export type ComponentPublicInstance<
   M extends MethodOptions = MethodOptions,
   I extends ComponentInjectOptions = {},
   S extends SlotsType = {},
-  _E extends (event: string, ...args: any[]) => void = (
-    event: string,
-    ...args: any[]
-  ) => void,
+  E extends EmitsOptions = {},
   _EE extends string = string
 > = {
   $: ComponentInternalInstance;
@@ -73,7 +65,7 @@ export type ComponentPublicInstance<
   $props: ResolveProps<P>;
   $slots: UnwrapSlotsType<S>;
   $parent: ComponentPublicInstance | null;
-  $emit: (event: string, ...args: any[]) => void;
+  $emit: EmitFn<E>;
   $el: any;
   $forceUpdate: () => void;
   $nextTick: typeof nextTick;

@@ -1,3 +1,4 @@
+import { EmitsOptions } from "./componentEmits";
 import {
   ComponentInjectOptions,
   ComponentOptions,
@@ -19,10 +20,7 @@ type DefineComponent<
   M extends MethodOptions = {},
   I extends ComponentInjectOptions = {},
   S extends SlotsType = {},
-  E extends (event: string, ...args: any[]) => void = (
-    event: string,
-    ...args: any[]
-  ) => void,
+  E extends EmitsOptions = {},
   EE extends string = string,
   Props = ResolveProps<PropOptions>
 > = ComponentPublicInstanceConstructor<
@@ -46,10 +44,7 @@ export function defineComponent<
   M extends MethodOptions = {},
   I extends ComponentInjectOptions = {},
   S extends SlotsType = {},
-  E extends (event: string, ...args: any[]) => void = (
-    event: string,
-    ...args: any[]
-  ) => void,
+  E extends EmitsOptions = {},
   EE extends string = string
 >(
   options: ComponentOptions<PropsOptions, RawBindings, D, C, M, I, S, E, EE>

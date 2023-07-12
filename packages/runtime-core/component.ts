@@ -3,7 +3,12 @@ import { ReactiveEffect } from "../reactivity/effect";
 import { EffectScope } from "../reactivity/effectScope";
 import { isFunction, isObject } from "../shared";
 import { AppContext, createAppContext } from "./apiCreateApp";
-import { ObjectEmitsOptions, emit } from "./componentEmits";
+import {
+  EmitFn,
+  EmitsOptions,
+  ObjectEmitsOptions,
+  emit,
+} from "./componentEmits";
 import { ComponentOptions, applyOptions } from "./componentOptions";
 import { NormalizedProps, initProps } from "./componentProps";
 import {
@@ -70,13 +75,9 @@ export interface ComponentInternalInstance {
   [LifecycleHooks.UNMOUNTED]: LifecycleHook;
 }
 
-// TODO: type as generic
-export type EmitFn = (event: string, ...args: any[]) => void;
-
-// TODO: type as generic
-export type SetupContext<S extends SlotsType = {}> = {
+export type SetupContext<E = EmitsOptions, S extends SlotsType = {}> = {
   slots: UnwrapSlotsType<S>;
-  emit: EmitFn;
+  emit: EmitFn<E>;
   expose: (exposed?: Record<string, any>) => void;
 };
 

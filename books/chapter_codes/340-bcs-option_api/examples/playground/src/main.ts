@@ -7,6 +7,8 @@ const Child = defineComponent({
     injectedCount: { from: CountInjectionKey },
   },
 
+  emits: { "update:count": null },
+
   render(ctx) {
     return h("div", {}, [
       h("button", { onClick: () => ctx.$emit("update:count") }, [

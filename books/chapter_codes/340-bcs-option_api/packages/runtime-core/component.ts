@@ -1,7 +1,7 @@
 import { EffectScope, ReactiveEffect } from "../reactivity";
 import { proxyRefs } from "../reactivity/ref";
 import { AppContext, createAppContext } from "./apiCreateApp";
-import { emit } from "./componentEmits";
+import { EmitFn, EmitsOptions, emit } from "./componentEmits";
 import { ComponentOptions, applyOptions } from "./componentOptions";
 import { Props, initProps } from "./componentProps";
 import {
@@ -32,9 +32,9 @@ export type Data = Record<string, unknown>;
 
 type LifecycleHook<TFn = Function> = TFn[] | null;
 
-export type SetupContext<S extends SlotsType = {}> = {
+export type SetupContext<E = EmitsOptions, S extends SlotsType = {}> = {
   slots: UnwrapSlotsType<S>;
-  emit: (e: string, ...args: any[]) => void;
+  emit: EmitFn<E>;
   expose: (exposed?: Record<string, any>) => void;
 };
 

@@ -18,6 +18,7 @@ import {
 } from "./apiLifecycle";
 import { WatchCallback, WatchOptions, watch } from "./apiWatch";
 import { ComponentInternalInstance, Data, SetupContext } from "./component";
+import { EmitsOptions } from "./componentEmits";
 import { PropType } from "./componentProps";
 import {
   ComponentPublicInstance,
@@ -34,10 +35,7 @@ export type ComponentOptions<
   M extends MethodOptions = MethodOptions,
   I extends ComponentInjectOptions = ComponentInjectOptions,
   S extends SlotsType = {},
-  E extends (event: string, ...args: any[]) => void = (
-    event: string,
-    ...args: any[]
-  ) => void,
+  E extends EmitsOptions = {},
   EE extends string = string,
   II extends string = string
 > = {
@@ -51,10 +49,13 @@ export type ComponentOptions<
   emits?: (E | EE[]) & ThisType<void>;
   slots?: S;
 
-  setup?: (props: ResolveProps<P>, ctx: SetupContext) => (() => VNode) | B;
+  setup?: (
+    props: ResolveProps<P>,
+    ctx: SetupContext<E, S>
+  ) => (() => VNode) | B;
 
   render?: (
-    ctx: CreateComponentPublicInstance<ResolveProps<P>, B, D, C, M, I>
+    ctx: CreateComponentPublicInstance<ResolveProps<P>, B, D, C, M, I, S, E>
   ) => VNode;
 
   template?: string;

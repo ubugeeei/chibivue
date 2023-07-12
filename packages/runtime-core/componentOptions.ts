@@ -32,7 +32,7 @@ import {
 } from "./componentPublicInstance";
 import { SlotsType } from "./componentSlots";
 import { PropType } from "./componentProps";
-import { ObjectEmitsOptions } from "./componentEmits";
+import { EmitsOptions, ObjectEmitsOptions } from "./componentEmits";
 
 import { VNodeChild, type VNode } from "./vnode";
 
@@ -46,10 +46,7 @@ export type ComponentOptions<
   M extends MethodOptions = MethodOptions,
   I extends ComponentInjectOptions = ComponentInjectOptions,
   S extends SlotsType = {},
-  _E extends (event: string, ...args: any[]) => void = (
-    event: string,
-    ...args: any[]
-  ) => void,
+  E extends EmitsOptions = {},
   _EE extends string = string,
   II extends string = string
 > = {
@@ -63,9 +60,12 @@ export type ComponentOptions<
   inject?: I | II[];
   emits?: ObjectEmitsOptions;
   slots?: S;
-  setup?: (props: ResolveProps<P>, ctx: SetupContext) => (() => VNode) | B;
+  setup?: (
+    props: ResolveProps<P>,
+    ctx: SetupContext<E, S>
+  ) => (() => VNode) | B;
   render?: (
-    ctx: CreateComponentPublicInstance<ResolveProps<P>, B, D, C, M, I>
+    ctx: CreateComponentPublicInstance<ResolveProps<P>, B, D, C, M, I, S, E>
   ) => VNode;
   template?: string;
   components?: Record<string, ConcreteComponent>;
