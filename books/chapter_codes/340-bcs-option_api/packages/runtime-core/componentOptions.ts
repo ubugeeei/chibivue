@@ -55,7 +55,7 @@ export type ComponentOptions<
   ) => (() => VNode) | B;
 
   render?: (
-    ctx: CreateComponentPublicInstance<ResolveProps<P>, B, D, C, M, I, S, E>
+    ctx: CreateComponentPublicInstance<ResolveProps<P>, B, D, C, M, I, S, E, EE>
   ) => VNode;
 
   template?: string;
@@ -68,7 +68,9 @@ export type ComponentOptions<
   updated?(): void;
   beforeUnmount?(): void;
   unmounted?(): void;
-} & ThisType<CreateComponentPublicInstance<ResolveProps<P>, B, D, C, M>>;
+} & ThisType<
+  CreateComponentPublicInstance<ResolveProps<P>, B, D, C, M, I, S, E, EE>
+>;
 
 export type ResolveProps<T> = { [K in keyof T]: InferPropType<T[K]> };
 type InferPropType<T> = T extends { type: PropType<infer U> } ? U : never;
