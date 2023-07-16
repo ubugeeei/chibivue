@@ -4,16 +4,16 @@
 title: "小さいリアクティブシステム"
 ---
 
-# 今回目指す開発者インターフェース
+# 今回目指す開発者インタフェース
 
 ここからは Vue.js の醍醐味であるリアクティブシステムというものについてやっていきます。  
 これ以前の実装は、見た目が Vue.js に似ていれど、それは見た目だけで機能的には全く Vue.js ではりません。  
-たんに最初の開発者インターフェースを実装し、いろんな HTML を表示できるようにしてみました。
+たんに最初の開発者インタフェースを実装し、いろんな HTML を表示できるようにしてみました。
 
 しかし、このままでは一度画面を描画するとその後はそのままで、Web アプリケーションとしてはただの静的なサイトになってしまっています。  
 これから、もっちリッチな UI を構築するために状態を持たせたり、その状態が変わったら描画を更新したりと言ったことをやっていきます。
 
-まずは例の如くどういった開発者インターフェースになるか考えてみましょう。  
+まずは例の如くどういった開発者インタフェースになるか考えてみましょう。  
 以下のようなのはどうでしょうか?
 
 ```ts
@@ -39,7 +39,7 @@ app.mount("#app");
 ```
 
 普段 SFC を利用した開発を行っている方は少々見慣れないかもしれません。  
-これは、setup というオプションでステートをもち、render 関数を return する開発者インターフェースです。  
+これは、setup というオプションでステートをもち、render 関数を return する開発者インタフェースです。  
 実際、Vue.js にはこういった記法があります。
 
 https://vuejs.org/api/composition-api-setup.html#usage-with-render-functions
@@ -52,7 +52,7 @@ reactive 関数でステートを定義し、それを書き換える increment 
 - ボタンをクリックするたと、ステートが更新される
 - ステートの更新を追跡して render 関数を再実行し、画面を再描画する
 
-# リアクティブシステムとはどういうもの?
+# リアクティブシステムとはどのようなもの?
 
 さてここで、そもそもリアクティブとは何だったかのおさらいです。
 公式ドキュメントを参照してみます。
@@ -66,7 +66,7 @@ reactive 関数でステートを定義し、それを書き換える increment 
 [引用元](https://ja.vuejs.org/guide/extras/reactivity-in-depth.html)
 
 要約してみると、「リアクティブなオブジェクトは変更があった時に画面が更新される」です。  
-これの実現方法について考えるのは少し置いておいて、とりあえず先ほどあげた開発者インターフェースを実装してみます。
+これの実現方法について考えるのは少し置いておいて、とりあえず先ほどあげた開発者インタフェースを実装してみます。
 
 # setup 関数の実装
 
@@ -213,7 +213,7 @@ https://ja.wikipedia.org/wiki/Observer_%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3
 オブザーバパターンはあるオブジェクトのイベントを他のオブジェクトに通知するために用いられるデザインパターンで、 Observer と Subject というものが登場します。  
 言葉で説明するよりもコードベースで説明した方がわかりやすいと思うので以下でコードベースの説明をします。
 
-Observer というのはイベントを通知される側のインターフェースです。
+Observer というのはイベントを通知される側のインタフェースです。
 この interface は`update`というというメソッドを持っています。
 
 ```ts
@@ -222,8 +222,8 @@ interface Observer {
 }
 ```
 
-Subject というのはイベントを通知する側のインターフェースです。
-このインターフェースは`observe`, `forget`, `notify`というメソッドを持っています。
+Subject というのはイベントを通知する側のインタフェースです。
+このインタフェースは`observe`, `forget`, `notify`というメソッドを持っています。
 
 ```ts
 interface Subject {
@@ -438,7 +438,7 @@ class ReactiveEffect {
 }
 ```
 
-どういう原理かというと、このようなコンポーネントを想像してください。
+どのような原理かというと、このようなコンポーネントを想像してください。
 
 ```ts
 {
@@ -748,7 +748,7 @@ app.mount("#app");
 
 ![reactive_example_mistake](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/books/images/reactive_example_mistake.png)
 
-あっ・・・・
+あっ………
 
 ちゃんとレンダリングはされるようになりましたが何やら様子がおかしいです。
 まぁ、無理もなくて、`updateComponent`では毎回要素を作っています。
@@ -771,7 +771,7 @@ const render: RootRenderFunction = (vnode, container) => {
 
 今度は大丈夫そうです!
 
-これで reactive に画面を更新できるようになりました！！
+これで reactive に画面を更新できるようになりました!!
 
 
 [Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/006_simple_h_function.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/008_minimum_virtual_dom.md)

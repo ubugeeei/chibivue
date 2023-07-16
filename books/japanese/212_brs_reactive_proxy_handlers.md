@@ -110,7 +110,7 @@ app.mount("#app");
 
 ![element_to_string](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/books/images/element_to_string.png)
 
-このようにしてどういうオブジェクトなのかというのを知ることができます。ややハードコードですが、この判定関数を一般化します。
+このようにしてどのようなオブジェクトなのかというのを知ることができます。ややハードコードですが、この判定関数を一般化します。
 
 ```ts
 // shared/general.ts

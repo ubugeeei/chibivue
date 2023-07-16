@@ -10,7 +10,7 @@ Vue.js には Reactivity に関する様々な api がありますが、中で�
 公式ドキュメントの方でも Reactivity Core という名目で、しかも一番最初に紹介されています。  
 https://vuejs.org/api/reactivity-core.html#ref
 
-ところで、ref とはどういう API でしょうか？
+ところで、ref とはどのような API でしょうか？
 公式ドキュメントによると、
 
 > The ref object is mutable - i.e. you can assign new values to .value. It is also reactive - i.e. any read operations to .value are tracked, and write operations will trigger associated effects.
@@ -40,7 +40,7 @@ state.value.count++; // effect (性質 2 )
 ということです。
 
 ref と reactive の区別がつかないうちは、`ref(0)`と`reactive({ value: 0 })` の区別をごちゃごちゃにしてしまいがちですが、上記の 2 つの性質から考えると全く意味が別だということがわかります。
-ref は `{ value: x }` という reactive オブジェクトを生成するわけではありません。value に対する get/value の track/trigger は ref の実装が行い、x に当たる部分がオブジェクト の場合は reactive オブジェクトにするということです。
+ref は `{ value: x }` という reactive オブジェクトを生成するわけではありません。value に対する get/value の track/trigger は ref の実装が行い、x に当たる部分がオブジェクトの場合は reactive オブジェクトにするということです。
 
 実装のイメージ的にはこういう感じです。
 

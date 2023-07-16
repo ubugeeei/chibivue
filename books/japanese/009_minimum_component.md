@@ -7,7 +7,7 @@ title: "コンポーネント指向で開発したい"
 # 既存実装の整理ベースで考える
 
 これまで、createAppAPI やリアクティブシステム、仮想 DOM システムを小さく実装してきました。  
-今現時点での実装ではリアクティブシステムによって UI を動的に変更することもできますし、仮想 DOM によって効率的なレンダリングを行うことができているのですが、開発者インターフェースとしては全ての内容を createAppAPI に書く感じになってしまっています。  
+今現時点での実装ではリアクティブシステムによって UI を動的に変更することもできますし、仮想 DOM によって効率的なレンダリングを行うことができているのですが、開発者インタフェースとしては全ての内容を createAppAPI に書く感じになってしまっています。  
 実際にはもっとファイルを分割したり、再利用のために汎用的なコンポーネントを実装したいです。  
 まずは既存実装の散らかってしまっている部分を見直してみます。renderer.ts の render 関数をみてください。
 
@@ -333,7 +333,7 @@ https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/006-1_mininum
 ## Props
 
 まずは props から実装していきます。  
-最終的な開発者インターフェースから考えてみましょう。  
+最終的な開発者インタフェースから考えてみましょう。  
 props は setup 関数の第一引数として渡ってくるようなものを考えてみます。
 
 ```ts
@@ -571,7 +571,7 @@ const setupRenderEffect = (
 ```
 
 これで画面が更新されるようになれば OK です。
-これで props を利用することによってコンポーネントにデータを受け渡せるようになりました！やったね！
+これで props を利用することによってコンポーネントにデータを受け渡せるようになりました！　やったね！
 
 ![props](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/books/images/props.png)
 
@@ -666,7 +666,7 @@ const app = createApp({
 props に引き続き emit の実装をしていきます。
 emit の実装は比較的ライトなのですぐに終わります。
 
-開発者インターフェース的には emit は setup 関数の第 2 引数から受け取れるような形にします。
+開発者インタフェース的には emit は setup 関数の第 2 引数から受け取れるような形にします。
 
 ```ts
 const MyComponent: Component = {
@@ -796,9 +796,10 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
     }
 ```
 
-先ほど想定していた開発者インターフェースの例で動作を確認してみましょう！  
+先ほど想定していた開発者インタフェースの例で動作を確認してみましょう！  
 ちゃんと動いていればこれで props/emit によるコンポーネント間のやりとりが行えるようになりました！
 
 <!-- TODO: veiについての説明を書く -->
+
 
 [Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/008_minimum_virtual_dom.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/010_minimum_template_compiler.md)

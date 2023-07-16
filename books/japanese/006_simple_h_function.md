@@ -21,7 +21,7 @@ app.mount("#app");
 ```
 
 これはシンプルは`Hello World.`と画面に描画するための関数でした。  
-メッセージだけでは何とも寂しいので、HTML 要素も描画できるような開発者インターフェースを考えてみましょう。  
+メッセージだけでは何とも寂しいので、HTML 要素も描画できるような開発者インタフェースを考えてみましょう。  
 そこで登場するのが`h function`です。この`h`というのは`hyperscript`の略で、HTML (Hyper Text Markup Language)を JS で記述する関数として提供されます。
 
 > h() is short for hyperscript - which means "JavaScript that produces HTML (hypertext markup language)". This name is inherited from conventions shared by many virtual DOM implementations. A more descriptive name could be createVnode(), but a shorter name helps when you have to call this function many times in a render function.
@@ -51,7 +51,7 @@ h function の基本的な使い方として、第 1 引数にタグ名、第 2 
 
 # どうやって実装しよう 🤔
 
-開発者インターフェースについてはよくわかったので、どういうふうに実装するか方針を決めましょう。  
+開発者インタフェースについてはよくわかったので、どのような実装にするか方針を決めましょう。  
 注目するべき点は、render 関数の戻り値として扱っているところです。  
 これはつまり、h 関数というものが何かしらのオブジェクトを返して内部でその結果を利用しているということです。
 複雑な子要素を含むとわかりづらいので、以下のシンプルな h 関数を実装した結果について考えてみましょう。
@@ -60,7 +60,7 @@ h function の基本的な使い方として、第 1 引数にタグ名、第 2 
 const result = h("div", { class: "container" }, ["hello"]);
 ```
 
-result にはどういう結果を格納するのが良いでしょうか?(結果をどういう形にして、どうレンダリングしましょうか?)
+result にはどのような結果を格納するのが良いでしょうか?(結果をどのような形にして、どうレンダリングしましょうか?)
 
 result には以下のようなオブジェクトが格納されることにしてみましょう。
 

@@ -46,7 +46,7 @@ Vue のスケジューラの役割の一つとして、リアクティブな作�
 
 ## キュー管理によるスケジューリング
 
-具体的には キュー をもち、ジョブを管理します。ジョブは id を持っており、キューに新しくジョブがエンキューされる際に、既に同一の id を持ったジョブが存在していた場合に上書きしてしまいます。
+具体的にはキュー をもち、ジョブを管理します。ジョブは id を持っており、キューに新しくジョブがエンキューされる際に、既に同一の id を持ったジョブが存在していた場合に上書きしてしまいます。
 
 ```ts
 export interface SchedulerJob extends Function {
@@ -76,7 +76,7 @@ uid といっても単にインクリメントによって得られる識別子�
 
 ## ReactiveEffect とスケジューラ
 
-現在、ReactiveEffect は以下のようなインターフェースになっています。(一部省略)
+現在、ReactiveEffect は以下のようなインタフェースになっています。(一部省略)
 
 ```ts
 class ReactiveEffect {
@@ -102,10 +102,10 @@ update();
 
 ここで生成した effect という reactiveEffect はのちに setup の実行によって getter が走った reactive なオブジェクトに track されるわけですが、これは明らかにスケジューリングの実装が必要です。(バラバラにいろんなところから trigger されるため)  
 しかし、ここで`update()`を呼び出していることに関してはそのまま作用を実行するだけでいいはずなので、スケジューリングの実装は必要ありません。  
-「え？じゃあ componentUpdateFn を直接呼び出せばいいんじゃないの？」と思うかも知れませんが、run の実装をよく思い出してください。componentUpdateFn を呼び出すだけでは activeEffect が設定されません。  
+「え？　じゃあ componentUpdateFn を直接呼び出せばいいんじゃないの？」と思うかも知れませんが、run の実装をよく思い出してください。componentUpdateFn を呼び出すだけでは activeEffect が設定されません。  
 そこで、「能動的に実行する作用」と「受動的に実行される作用(スケジューラが必要な作用)」を分けてもつように変えてみましょう。
 
-このチャプターでの最終的なインターフェースとしては、以下のようになります。
+このチャプターでの最終的なインタフェースとしては、以下のようになります。
 
 ```ts
 // ReactiveEffectの第 1 引数が能動的な作用, 第 2 引数が受動的な作用
@@ -207,7 +207,7 @@ export function nextTick<T = void>(
 ```
 
 そのジョブが完了した(promise が resolve された)際に nextTick に渡されたコールバックを実行するということです。(キューにジョブがなければ resolvedPromise の then に繋ぎます)  
-当然、この nextTick 自体も Promise を返すため、開発者インターフェースとしては、コールバックに渡すのもよし、nextTick を await するのもよし、といった感じになっているわけです。
+当然、この nextTick 自体も Promise を返すため、開発者インタフェースとしては、コールバックに渡すのもよし、nextTick を await するのもよし、といった感じになっているわけです。
 
 ```ts
 import { createApp, h, reactive, nextTick } from "chibivue";

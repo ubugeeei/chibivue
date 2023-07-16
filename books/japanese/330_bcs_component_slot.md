@@ -10,7 +10,7 @@ Vue にはスロットと呼ばれる機能があります。そしてこのス�
 https://vuejs.org/guide/components/slots.html#slots
 
 今回はこれのうち、デフォルトスロットを実装していきます。
-目指す開発者インターフェースは以下のようなものです。
+目指す開発者インタフェースは以下のようなものです。
 
 https://vuejs.org/guide/extras/render-function.html#passing-slots
 

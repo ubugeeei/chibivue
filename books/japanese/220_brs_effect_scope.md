@@ -145,7 +145,7 @@ disposables = [];
 そこで、Vue には EffectScope という機構があります。
 https://github.com/vuejs/rfcs/blob/master/active-rfcs/0041-reactivity-effect-scope.md
 
-イメージ的には 1 インスタンス 1 EffectScope を持つ感じで、具体的には以下のようなインターフェースになっています。
+イメージ的には 1 インスタンス 1 EffectScope を持つ感じで、具体的には以下のようなインタフェースになっています。
 
 ```ts
 const scope = effectScope();
@@ -169,7 +169,7 @@ https://ja.vuejs.org/api/reactivity-advanced.html#effectscope
 
 # EffectScope の実装
 
-先ほども言ったように、1 インスタンス に 1 EffectScope を持つような形をとります。
+先ほども言ったように、1 インスタンスに 1 EffectScope を持つような形をとります。
 
 ```ts
 export interface ComponentInternalInstance {

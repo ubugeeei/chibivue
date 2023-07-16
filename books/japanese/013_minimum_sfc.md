@@ -342,7 +342,7 @@ export default defineConfig({
 
 ![vite_error](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/books/images/vite_error.png)
 
-もちろんエラーになります。やったね(？)
+もちろんエラーになります。やったね( ？　)
 
 ## エラーの解消
 
@@ -458,7 +458,7 @@ export declare interface SFCStyleBlock extends SFCBlock {
 まあ、特に難しいことはないです。SFC の情報をオブジェクトで表現しただけです。
 
 `packages/compiler-sfc/parse.ts`では SFC ファイル(文字列)を `SFCDescriptor` にパースします。  
-「ええ。あんだけテンプレートのパースを頑張ったのにまたパーサつくるのかよ。。面倒臭い。。」と思った方もいるかも知れませんが、安心してください。  
+「ええ。あんだけテンプレートのパースを頑張ったのにまたパーサつくるのかよ。。面倒臭い」と思った方もいるかも知れませんが、安心してください。  
 ここで実装するパーサは大したものではないです。というのも、これまで作ってきたものを組み合わせて template、script、style を分離するだけなので楽ちんです。
 
 まず、下準備として以前作った template のパーサを export してあげます。
@@ -787,14 +787,14 @@ https://babeljs.io
 [What is Babel](https://babeljs.io/docs)
 
 こちらは普段 JavaScript を使っている方はよく聞くかも知れません。  
-Babel は JavaScript の後方互換バージョンに変換するために使用されるツールチェーンです。  
+Babel は JavaScript の後方互換バージョンに変換するために使用されるツールチェインです。  
 簡単に言うと、JS から JS へのコンパイラ(トランスパイラ)です。  
 今回は Babel をコンパイラとしてだけではなく、パーサとして利用します。  
 Babel はコンパイラとしての役割を持つので、もちろん内部では AST に変換するためのパーサを実装しています。  
 そのパーサをライブラリとして利用ます。  
 さらっと AST という言葉を出しましたが、JavaScript ももちろん AST としての表現を持っています。  
 こちらに AST の仕様があります。(https://github.com/estree/estree)  
-上記の github の md ファイルを見てもらっても良いのですが、簡単に JavaScript の AST について説明しておくと、  
+上記の GitHub の md ファイルを見てもらっても良いのですが、簡単に JavaScript の AST について説明しておくと、  
 まずプログラム全体は Program という AST ノードで表現されていて、Statement を配列で持ちます。(わかりやすいように TS の interface で表現しています。)
 
 ```ts
@@ -803,7 +803,7 @@ interface Program {
 }
 ```
 
-Statement というのは日本で言うと「文」です。JavaScript は文の集まりです。具体的には「変数宣言文」や「if 文」、「for 文」、「ブロック」などが挙げられます。
+Statement というのは日本で言うと「文」です。JavaScript は文の集まりです。具体的には「変数宣言文」や「if 文」「for 文」「ブロック」などが挙げられます。
 
 ```ts
 interface Statement {}
@@ -826,7 +826,7 @@ interface BlockStatement extends Statement {
 // 他にもたくさんある
 ```
 
-そして、文というのは多くの場合「Expression(式)」を持ちます。式というのは変数に代入できる物だと考えてもらえらば良いです。具体的には「オブジェクト」や「2 項演算」、「関数呼び出し」などが挙げられます。
+そして、文というのは多くの場合「Expression(式)」を持ちます。式というのは変数に代入できる物だと考えてもらえらば良いです。具体的には「オブジェクト」や「2 項演算」「関数呼び出し」などが挙げられます。
 
 ```ts
 interface Expression {}
@@ -1146,7 +1146,7 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
 };
 ```
 
-これでレンダリングができるようになっているはずです！！！
+これでレンダリングができるようになっているはずです!!！
 
 ![render_sfc](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/books/images/render_sfc.png)
 
@@ -1262,5 +1262,6 @@ export default function vitePluginChibivue(): Plugin {
 
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/008-4_mininum_sfc_compiler
+
 
 [Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/012_template_binding.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/014_break.md)
