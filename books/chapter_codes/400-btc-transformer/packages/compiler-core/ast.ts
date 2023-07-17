@@ -17,7 +17,6 @@ export const enum NodeTypes {
   JS_OBJECT_EXPRESSION,
   JS_PROPERTY,
   JS_ARRAY_EXPRESSION,
-  JS_FUNCTION_EXPRESSION,
 }
 
 export interface Node {
@@ -52,6 +51,12 @@ export type JSChildNode =
   | ObjectExpression
   | ArrayExpression
   | ExpressionNode;
+
+export interface CallExpression extends Node {
+  type: NodeTypes.JS_CALL_EXPRESSION;
+  callee: string | symbol;
+  arguments: (string | JSChildNode | TemplateChildNode | TemplateChildNode[])[];
+}
 
 export interface ObjectExpression extends Node {
   type: NodeTypes.JS_OBJECT_EXPRESSION;
