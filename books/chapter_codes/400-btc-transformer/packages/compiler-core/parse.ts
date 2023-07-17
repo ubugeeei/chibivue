@@ -5,9 +5,11 @@ import {
   InterpolationNode,
   NodeTypes,
   Position,
+  RootNode,
   SourceLocation,
   TemplateChildNode,
   TextNode,
+  createRoot,
 } from "./ast";
 
 export interface ParserContext {
@@ -30,12 +32,10 @@ function createParserContext(content: string): ParserContext {
   };
 }
 
-export const baseParse = (
-  content: string
-): { children: TemplateChildNode[] } => {
+export const baseParse = (content: string): RootNode => {
   const context = createParserContext(content);
   const children = parseChildren(context, []);
-  return { children: children };
+  return createRoot(children);
 };
 
 function parseChildren(
@@ -244,6 +244,7 @@ function parseTag(context: ParserContext, type: TagType): ElementNode {
     props,
     children: [],
     isSelfClosing,
+    codegenNode: undefined, // to be created during transform phase
     loc: getSelection(context, start),
   };
 }
