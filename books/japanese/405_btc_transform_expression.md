@@ -1,7 +1,7 @@
 [Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/400_btc_transform.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/410_btc_render_component.md)
 
 ---
-title: "transformExpression と toDisplayString"
+title: "transformExpression"
 ---
 
 # 現状のマスタッシュ構文の課題
