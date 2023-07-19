@@ -45,7 +45,7 @@ function genInterpolation(node: InterpolationNode, context: CodegenContext) {
 
 少し噛み砕いて説明します。  
 おさらいになりますが、プログラムというのはパースされることによって AST として表現されます。  
-そして、プログラムを表す AST の Node には大きく分けて Expression と Statement のに種類がありました。
+そして、プログラムを表す AST の Node には大きく分けて Expression と Statement の 2 種類がありました。
 いわゆる式と文です。
 
 ```ts
@@ -60,7 +60,7 @@ for (let i = 0; i < 10; i++) a++; // これは Statement
 ```
 
 マスタッシュ構文で想定されるのは Expression (式)です。  
-Expression にはさまざまな種類があります。Identifier というのはそのうちの一つで、識別で表現された Expression です。  
+Expression にはさまざまな種類があります。Identifier というのはそのうちの一つで、識別子で表現された Expression です。  
 (概ね変数名だと思ってもらえれば問題ないです)
 
 ExpressionNode 上のあらゆる Identifier というのは、
@@ -322,8 +322,8 @@ export function processExpression(node: SimpleExpressionNode): ExpressionNode {
 }
 ```
 
-Babel にとってパースされた Node は start と end (もと文字列のどこに当たるかのロケーション情報)を持っているのでそれをもとに rawExp から該当箇所を抜き出し、頑張って分割します。  
-詳しくはソースコードをじっくり眺めてみてください。ここまでの方針が理解できれば読めるはずです。  (advancePositionWithClone などの実装も新規で行なっているのでその辺りも見てみてください。)
+Babel によってパースされた Node は start と end (もと文字列のどこに当たるかのロケーション情報)を持っているのでそれをもとに rawExp から該当箇所を抜き出し、頑張って分割します。  
+詳しくはソースコードをじっくり眺めてみてください。ここまでの方針が理解できれば読めるはずです。 (advancePositionWithClone などの実装も新規で行なっているのでその辺りも見てみてください。)
 
 CompoundExpressionNode を生成することができるようになったので、Codegen の方でも対応します。
 
@@ -384,5 +384,6 @@ app.mount("#app");
 
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/405-btc-transform_expression
+
 
 [Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/400_btc_transform.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/410_btc_render_component.md)
