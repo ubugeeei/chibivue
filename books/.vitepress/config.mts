@@ -79,19 +79,19 @@ export default defineConfig({
         items: [
           {
             text: "key属性とパッチレンダリング",
-            link: "/ja/20-basic-virtual-dom/010-bvd-patch-keyed-children",
+            link: "/ja/20-basic-virtual-dom/010-patch-keyed-children",
           },
           {
             text: "ビットによるVNodeの表現",
-            link: "/ja/20-basic-virtual-dom/020-bvd-bit-flags",
+            link: "/ja/20-basic-virtual-dom/020-bit-flags",
           },
           {
             text: "スケジューラ",
-            link: "/ja/20-basic-virtual-dom/030-bvd-scheduler",
+            link: "/ja/20-basic-virtual-dom/030-scheduler",
           },
           {
             text: "対応できていない Props のパッチ",
-            link: "/ja/20-basic-virtual-dom/040-bvd-patch-other-attrs",
+            link: "/ja/20-basic-virtual-dom/040-patch-other-attrs",
           },
         ],
       },
@@ -101,23 +101,23 @@ export default defineConfig({
         items: [
           {
             text: "ref api",
-            link: "/ja/30-basic-reactivity-system/010-brs-ref-api",
+            link: "/ja/30-basic-reactivity-system/010-ref-api",
           },
           {
             text: "computed / watch api",
-            link: "/ja/30-basic-reactivity-system/020-brs-computed-watch",
+            link: "/ja/30-basic-reactivity-system/020-computed-watch",
           },
           {
             text: "様々な Reactive Proxy Handler",
-            link: "/ja/30-basic-reactivity-system/030-brs-reactive-proxy-handlers",
+            link: "/ja/30-basic-reactivity-system/030-reactive-proxy-handlers",
           },
           {
             text: "Effect のクリーンアップと Effect Scope",
-            link: "/ja/30-basic-reactivity-system/040-brs-effect-scope",
+            link: "/ja/30-basic-reactivity-system/040-effect-scope",
           },
           {
             text: "その他の reactivity api",
-            link: "/ja/30-basic-reactivity-system/050-brs-other-apis",
+            link: "/ja/30-basic-reactivity-system/050-other-apis",
           },
         ],
       },
@@ -127,23 +127,23 @@ export default defineConfig({
         items: [
           {
             text: "ライフサイクルフック",
-            link: "/ja/40-basic-component-system/010-bcs-lifecycle-hooks",
+            link: "/ja/40-basic-component-system/010-lifecycle-hooks",
           },
           {
             text: "Provide/Inject",
-            link: "/ja/40-basic-component-system/020-bcs-provide-inject",
+            link: "/ja/40-basic-component-system/020-provide-inject",
           },
           {
             text: "コンポーネントの Proxy と setupContext",
-            link: "/ja/40-basic-component-system/030-bcs-component-proxy-setup-context",
+            link: "/ja/40-basic-component-system/030-component-proxy-setup-context",
           },
           {
             text: "スロット",
-            link: "/ja/40-basic-component-system/040-bcs-component-slot",
+            link: "/ja/40-basic-component-system/040-component-slot",
           },
           {
             text: "Options APIに対応する",
-            link: "/ja/40-basic-component-system/050-bcs-options-api",
+            link: "/ja/40-basic-component-system/050-options-api",
           },
         ],
       },
@@ -153,27 +153,27 @@ export default defineConfig({
         items: [
           {
             text: "Transformer の実装 の Codegen のリファクタ",
-            link: "/ja/50-basic-template-compiler/010-btc-transform",
+            link: "/ja/50-basic-template-compiler/010-transform",
           },
           {
             text: "transformExpression",
-            link: "/ja/50-basic-template-compiler/020-btc-transform-expression",
+            link: "/ja/50-basic-template-compiler/020-transform-expression",
           },
           {
             text: "v-for に対応する",
-            link: "/ja/50-basic-template-compiler/030-btc-v-for",
+            link: "/ja/50-basic-template-compiler/030-v-for",
           },
           {
             text: "v-if に対応する",
-            link: "/ja/50-basic-template-compiler/040-btc-v-if",
+            link: "/ja/50-basic-template-compiler/040-v-if",
           },
           {
             text: "v-model に対応する",
-            link: "/ja/50-basic-template-compiler/050-btc-v-model",
+            link: "/ja/50-basic-template-compiler/050-v-model",
           },
           {
             text: "スロットに対応する",
-            link: "/ja/50-basic-template-compiler/060-btc-slot",
+            link: "/ja/50-basic-template-compiler/060-slot",
           },
         ],
       },
@@ -183,15 +183,15 @@ export default defineConfig({
         items: [
           {
             text: "script setup に対応する",
-            link: "/ja/60-basic-sfc-compiler/010-bsc-script-setup",
+            link: "/ja/60-basic-sfc-compiler/010-script-setup",
           },
           {
             text: "defineProps に対応する",
-            link: "/ja/60-basic-sfc-compiler/020-bsc-define-props",
+            link: "/ja/60-basic-sfc-compiler/020-define-props",
           },
           {
             text: "defineEmits に対応する",
-            link: "/ja/60-basic-sfc-compiler/030-bsc-define-emits",
+            link: "/ja/60-basic-sfc-compiler/030-define-emits",
           },
           {
             text: "Scoped CSS に対応する",
