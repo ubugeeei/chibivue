@@ -2,7 +2,7 @@
 title: "transformExpression"
 ---
 
-# 現状のマスタッシュ構文の課題
+## 現状のマスタッシュ構文の課題
 
 マスタッシュ構文、つまりは InterpolationNode についてですが、  
 現時点では content を string でもち、codegen する際は先頭に`_ctx.`を付与するという簡易的な実装になっています。
@@ -37,7 +37,7 @@ function genInterpolation(node: InterpolationNode, context: CodegenContext) {
 
 などのコードをうまくコンパイルすることができていません。
 
-# 実装方針
+## 実装方針
 
 やりたいことを一言で言うなら、「ExpressionNode 上のあらゆる Identifier(の name の先頭)に対して`_ctx.`を付与したい」です。
 
@@ -117,7 +117,7 @@ export function walkIdentifiers(
 
 あと式の AST を生成し、この関すに渡して node を書き換えながら transform を行なっていけばいいです。
 
-# transformExpression の実装
+## transformExpression の実装
 
 変換処理の本体である transformExpression を実装していきます。  
 とりあえず transformExpression 自体は InterpolationNode を対象とするように実装してみます。

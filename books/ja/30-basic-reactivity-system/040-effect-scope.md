@@ -2,7 +2,7 @@
 title: "Effect のクリーンアップと Effect Scope"
 ---
 
-# ReactiveEffect のクリーンアップ
+## ReactiveEffect のクリーンアップ
 
 私たちは今まで登録した effect のクリーンアップを行っていません。ReactiveEffect にクリーンアップの処理を追加してみましょう。
 
@@ -114,7 +114,7 @@ app.mount("#app");
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-4-1_cleanup_effects
 
-# Effect Scope とは
+## Effect Scope とは
 
 さて、effect をクリーンアップできるようになったわけなので、コンポーネントがアンマウントされた際にも不要な effect はクリーンアップしたいものです。
 しかし、watch にしろ computed にしろ、たくさんの effect を収集するのは少々めんどくさいです。
@@ -165,7 +165,7 @@ scope.stop();
 そして、この EffectScope というのはユーザー向けの API としても公開されています。  
 https://ja.vuejs.org/api/reactivity-advanced.html#effectscope
 
-# EffectScope の実装
+## EffectScope の実装
 
 先ほども言ったように、1 インスタンスに 1 EffectScope を持つような形をとります。
 

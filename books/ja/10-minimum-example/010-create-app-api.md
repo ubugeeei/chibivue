@@ -2,7 +2,7 @@
 title: "初めてのレンダリングとcreateApp API"
 ---
 
-# Vue.js の開発者インタフェース
+## Vue.js の開発者インタフェース
 
 ## 何から始めよう? 🤔
 
@@ -77,7 +77,7 @@ app.mount("#app");
 
 ということで、まずは 3 のような開発者インタフェースを目指して実装していきましょう!
 
-# createApp API とレンダリング
+## createApp API とレンダリング
 
 ## 方針
 
@@ -180,14 +180,14 @@ pwd # ~
 mkdir packages/runtime-core
 mkdir packages/runtime-dom
 
-# core
+## core
 touch packages/runtime-core/index.ts
 touch packages/runtime-core/apiCreateApp.ts
 touch packages/runtime-core/component.ts
 touch packages/runtime-core/componentOptions.ts
 touch packages/runtime-core/renderer.ts
 
-# dom
+## dom
 touch packages/runtime-dom/index.ts
 touch packages/runtime-dom/nodeOps.ts
 ```

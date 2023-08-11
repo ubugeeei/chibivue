@@ -2,7 +2,7 @@
 title: "Transformer の実装 と Codegen のリファクタ(Basic Template Compiler 部門スタート)"
 ---
 
-# 既存実装のおさらい
+## 既存実装のおさらい
 
 さて、ここからはテンプレートのコンパイラをより本格的に実装していきます。  
 Minimum Example 部門でやったところから少し時間が空いてしまったので、今の実装がどうなっていたか少しおさらいをしておきましょう。  
@@ -44,7 +44,7 @@ export function baseCompile(
 
 今回はこの transform という関数を実装していきます。
 
-# transform とは?
+## transform とは?
 
 上記のコードでもなんとなく想像がつく通り、パースによって得られた AST を transform によってなんらかしらの形の変換しています。
 
@@ -117,7 +117,7 @@ type TemplateChildNode = ElementNode | InterpolationNode | TextNode;
 今はこれをわざわざ分けるほどの利点が感じられないかもしれませんが、これからディレクティブを実装したりしていくにあたっては便利なのです。
 input にちゃくもした AST と output に着目した AST に分ける感じで、`input の AST -> output の AST` の変換を行う関数こそが `transform` です。
 
-# Codegen Node
+## Codegen Node
 
 流れは掴めたと思うので、改めてどのような Node を扱うのか(どのような Node に変換したいのか)を確認してみます。
 
@@ -173,7 +173,7 @@ export interface ArrayExpression extends Node {
 }
 ```
 
-# Transformer の設計
+## Transformer の設計
 
 transformer の実装をしていく前に設計についてです。
 まず、初めに押さえておくべきことは transformer は 2 種類あるということで、NodeTransform と DirectiveTransform というものが存在します。
@@ -239,7 +239,7 @@ export interface TransformContext extends Required<TransformOptions> {
 }
 ```
 
-# Transformer の実装
+## Transformer の実装
 
 それでは、実際に transform 関数を見ていきます。まずはそれぞれの変換処理の内容に寄らない大枠の説明からです。
 
@@ -423,7 +423,7 @@ export function buildProps(node: ElementNode): {
 }
 ```
 
-# Transform した AST をもとに Codegen する
+## Transform した AST をもとに Codegen する
 
 AST を Codegen 用に Transform したわけですから、Codegen の方ももちろん対応する必要があります。
 Codegen に入ってくる AST としては主に VNodeClass (とそれらが持つ Node)を想定したコードを書けば OK です。

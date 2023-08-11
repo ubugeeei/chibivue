@@ -2,7 +2,7 @@
 title: "Options APIに対応する"
 ---
 
-# Options API
+## Options API
 
 ここまででかなりのことを Composition API で実装することができるようになりましたが、Options API も対応してみましょう。
 
@@ -97,7 +97,7 @@ applyOptions が実行される前には setCurrentInstance によってイン�
 
 `$`から始まるプロパティについては componentPublicInstance の方の実装で、PublicInstanceProxyHandlers の getter で制御しています。
 
-# Options API の型付
+## Options API の型付
 
 機能的には上記のように実装していけばいいのですが、Options API は型付が少々複雑です。
 

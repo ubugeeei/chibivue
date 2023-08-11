@@ -2,7 +2,7 @@
 title: "ref api (Basic Reactive System 部門スタート)"
 ---
 
-# ref api のおさらい (と実装)
+## ref api のおさらい (と実装)
 
 Vue.js には Reactivity に関する様々な api がありますが、中でも ref はあまりに有名です。  
 公式ドキュメントの方でも Reactivity Core という名目で、しかも一番最初に紹介されています。  
@@ -88,7 +88,7 @@ app.mount("#app");
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/200-brs-1-1_ref_api
 
-# shallowRef
+## shallowRef
 
 さて、続けてどんどん ref 周りの aip を実装していきます。  
 先ほど、ref の性質として「value プロパティにオブジェクトが割り当てられた際は value プロパティの値は reactive オブジェクトになる」というものを紹介しましたが、この性質を持たないのが shallowRef です。
@@ -196,7 +196,7 @@ app.mount("#app");
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/200-brs-1-2_shallow-ref_api
 
-# toRef
+## toRef
 
 toRef は reactive オブジェクトのプロパティへの ref を生成する api です。
 
@@ -241,7 +241,7 @@ app.mount("#app");
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/200-brs-1-3_to_ref
 
-# toRefs
+## toRefs
 
 reactive オブジェクトの全てのプロパティの ref を生成します。
 

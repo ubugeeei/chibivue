@@ -2,7 +2,7 @@
 title: "Provide/Inject の実装"
 ---
 
-# Provide/Inject を実装しよう
+## Provide/Inject を実装しよう
 
 Provide と Inject の実装です。こちらも実装は至ってシンプルです。  
 基本的なコンセプトとしては、 ComponentInternalInstance に provides (provide されたデータを格納する場所)と、親コンポーネントのインスタンスを保持しておいて、データを受け継ぐだけです。

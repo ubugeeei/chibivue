@@ -2,7 +2,7 @@
 title: "コンポーネントの Proxy と setupContext"
 ---
 
-# コンポーネントの Proxy
+## コンポーネントの Proxy
 
 コンポーネントが持つ重要な概念として Proxy というものがあります。  
 これは、簡単にいうと、コンポーネントのインスタンスが持つデータ(public なプロパティ)にアクセスするための Proxy で、
@@ -109,7 +109,7 @@ https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/320-bcs-compo
 
 ![infer_component_types](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/books/images/infer_component_types.png)
 
-# setupContext
+## setupContext
 
 https://ja.vuejs.org/api/composition-api-setup.html#setup-context
 
@@ -207,7 +207,7 @@ export interface ComponentInternalInstance {
 
 そしてここにオブジェクトを登録できるように expose 関数を実装していきましょう。
 
-# ProxyRefs
+## ProxyRefs
 
 このチャプターで proxy や exposedProxy を実装してきましたが、実は少々本家の Vue とは違う部分があります。  
 それは、「ref は unwrap される」という点です。(proxy の場合は proxy というより setupState がこの性質を持っています。)

@@ -2,7 +2,7 @@
 title: "スロット"
 ---
 
-# デフォルトスロットの実装
+## デフォルトスロットの実装
 
 Vue にはスロットと呼ばれる機能があります。そしてこのスロットには、default slot, named slot, scoped slot の 3 種類があります。  
 https://vuejs.org/guide/components/slots.html#slots
@@ -38,7 +38,7 @@ h 関数も第 3 引数として配列だけではなく、レンダー関数を
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/330-bcs-component_slot
 
-# 名前付きスロット/スコープ付きスロットの実装
+## 名前付きスロット/スコープ付きスロットの実装
 
 デフォルトスロットの拡張です。  
 今度は関数ではなく、オブジェクトとで渡せるようにしてみましょう。

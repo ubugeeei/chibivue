@@ -2,7 +2,7 @@
 title: "computed / watch api"
 ---
 
-# computed のおさらい (と実装)
+## computed のおさらい (と実装)
 
 前のチャプターで ref 系の api を実装しました。続いては computed です。  
 https://vuejs.org/api/reactivity-core.html#computed
@@ -140,7 +140,7 @@ https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-2-1_c
 (setter 込みはこちら):  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-2-2_computed_setter
 
-# Watch の実装
+## Watch の実装
 
 https://vuejs.org/api/reactivity-core.html#watch
 
@@ -254,7 +254,7 @@ https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-2-3_w
 ここまでのソースコード:
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-2-4_watch_api_extends
 
-# watchEffect
+## watchEffect
 
 https://vuejs.org/api/reactivity-core.html#watcheffect
 

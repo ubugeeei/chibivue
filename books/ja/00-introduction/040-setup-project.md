@@ -2,7 +2,7 @@
 title: "本書の進め方と環境構築"
 ---
 
-# 本書の進め方
+## 本書の進め方
 
 これから早速 Vue.js の実装を小さく行なっていきます。  
 それに伴う心構えや注意点、その他知っておくべき情報を以下に列挙します。
@@ -18,7 +18,7 @@ title: "本書の進め方と環境構築"
   今回は Vue.js 本家のコードが使っているようなパッケージは積極的に使っていきます。例えば、Babel がその一つです。  
   しかし安心してもらいたいのは、今回の本では前程知識を必要としないことを目指しているので必要になったパッケージについて必要最低限説明を加えます。
 
-# 環境構築
+## 環境構築
 
 さて、早速ですが環境構築からやっていきましょう!
 一応先に今回構築する環境の内容を列挙しておきます
@@ -66,7 +66,7 @@ packages に chibivue 本体の TypeScript ファイル群を実装して、exam
 ### プロジェクト本体の構築
 
 ```sh
-# 実際はchibivue用のディレクトリを作って移動してください (以下、同様の注釈は省略します。)
+## 実際はchibivue用のディレクトリを作って移動してください (以下、同様の注釈は省略します。)
 pwd # ~/
 pnpm init
 pnpm i --D @types/node
@@ -112,10 +112,10 @@ mkdir examples
 cd examples
 pnpm create vite
 
-# --------- create vite cliの設定
-# Project name: playground
-# Select a framework: Vanilla
-# Select a variant: TypeScript
+## --------- create vite cliの設定
+## Project name: playground
+## Select a framework: Vanilla
+## Select a variant: TypeScript
 ```
 
 vite で作成したプロジェクトのうち、不要なものを削除します。

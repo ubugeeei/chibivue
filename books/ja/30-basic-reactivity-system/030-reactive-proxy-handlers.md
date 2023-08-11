@@ -2,7 +2,7 @@
 title: "様々な Reactive Proxy Handler"
 ---
 
-# reactive にしたくないオブジェクト
+## reactive にしたくないオブジェクト
 
 さて、ここでは現状のリアクティブシステムのある問題について解決していきます。  
 まずは以下のコードを動かしてみてください。
@@ -73,7 +73,7 @@ app.mount("#app");
 
 Proxy を生成してしまうと値は当然元のオブジェクトではなく Proxy になってしまいますから、HTML 要素としての機能が失われてしまっているのです。
 
-# reactive Proxy を生成する前にオブジェクトを判定する。
+## reactive Proxy を生成する前にオブジェクトを判定する。
 
 判定方法はとてもシンプルです。`Object.prototype.toString`を利用します。
 先ほどのコードで、Object.prototype.toString を使うと HTMLInputElement はどのように判定されるかみてみましょう。
@@ -168,7 +168,7 @@ export function reactive<T extends object>(target: T): T {
 
 ![focus_in_element](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/books/images/focus_in_element.png)
 
-# TemplateRefs を実装してみる
+## TemplateRefs を実装してみる
 
 せっかく Ref に HTML 要素を入れられるようになったので、TemplateRef を実装してみましょう。
 
@@ -254,7 +254,7 @@ app.mount("#app");
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-3-2_template_refs
 
-# Collection 系の組み込みオブジェクトに対応する
+## Collection 系の組み込みオブジェクトに対応する
 
 今、reactive.ts の実装を見てみると、Object と Array のみを対象としています。
 

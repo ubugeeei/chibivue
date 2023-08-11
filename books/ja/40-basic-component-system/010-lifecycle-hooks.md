@@ -2,7 +2,7 @@
 title: "ライフサイクルフック (Basic Component System 部門スタート)"
 ---
 
-# ライフサイクルフックを実装しよう
+## ライフサイクルフックを実装しよう
 
 ライフサイクルフックの実装はとても簡単です。  
 ComponentInternalInstance に関数を登録して、render 時に所定のタイミングで実行してあげるだけです。  

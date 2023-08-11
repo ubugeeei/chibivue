@@ -2,7 +2,7 @@
 title: "Single File Component で開発したい"
 ---
 
-# SFC、どうやって実現している？
+## SFC、どうやって実現している？
 
 ## 目標物
 
@@ -99,9 +99,9 @@ vite のプラグインを書いたことのない方も少ないと思うので
 ```sh
 pwd # ~
 pnpx create-vite
-# ✔ Project name: … plugin-sample
-# ✔ Select a framework: › Vue
-# ✔ Select a variant: › TypeScript
+## ✔ Project name: … plugin-sample
+## ✔ Select a framework: › Vue
+## ✔ Select a variant: › TypeScript
 
 cd plugin-sample
 pnpm i
@@ -216,7 +216,7 @@ pnpm run dev
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/008-1_mininum_sfc_compiler
 
-# SFC コンパイラを実装していく
+## SFC コンパイラを実装していく
 
 ## 準備
 
@@ -371,7 +371,7 @@ export default function vitePluginChibivue(): Plugin {
 フィルターを作り、vue ファイルだった場合はファイル内容 `export default {}` に transform してみました。  
 おそらくエラーは消え、画面は何も表示されない感じになっているかと思います。
 
-# パーサの実装 on compiler-sfc
+## パーサの実装 on compiler-sfc
 
 さて、これではただのその場しのぎなのでちゃんとした実装をしていきます。  
 vite-plugin での役割はあくまで vite を利用する際に vite で transform できるようにするためのものなので、パースやコンパイラは vue の本体にあります。  
@@ -618,7 +618,7 @@ export default function vitePluginChibivue(): Plugin {
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/008-2_mininum_sfc_compiler
 
-# template 部分のコンパイル
+## template 部分のコンパイル
 
 `descriptor.script.content` と `descriptor.template.content`にはそれぞれのソースコードが入っています。  
 これらを使って上手くコンパイルしたいです。template の方からやっていきましょう。  
@@ -740,7 +740,7 @@ export default function vitePluginChibivue(): Plugin {
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/008-3_mininum_sfc_compiler
 
-# script 部分のコンパイル
+## script 部分のコンパイル
 
 さて、元々の SFC の script 部分は以下のようになっています。
 

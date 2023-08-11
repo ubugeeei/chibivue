@@ -4,7 +4,7 @@
 title: "ディレクティブの実装 (v-on/v-bind)"
 ---
 
-# DirectiveTransform
+## DirectiveTransform
 
 ここからは Vue.js の醍醐味であるディレクティブを実装していきます。  
 DirectiveTransform は DirectiveNode,ElementNode を受け取り、Transform 後の Property を返すようなインタフェースになっています。
@@ -21,7 +21,7 @@ export interface DirectiveTransformResult {
 }
 ```
 
-# v-on
+## v-on
 
 ## AST と Parser の変更
 

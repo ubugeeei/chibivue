@@ -2,7 +2,7 @@
 title: "スケジューラ"
 ---
 
-# effect のスケジューリング
+## effect のスケジューリング
 
 まずはこのコードをご覧ください。
 
@@ -146,7 +146,7 @@ function triggerEffect(effect: ReactiveEffect) {
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/120-bvd-3_scheduler
 
-# nextTick が欲しい
+## nextTick が欲しい
 
 スケジューラの実装をする際にソースコードを読んだかたは「nextTick ってここで出てくるのか」というのに気づいた方もいるかもしれません。
 まずは今回実現したい課題についてです。こちらのコードをご覧ください。
