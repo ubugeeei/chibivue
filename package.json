@@ -7,7 +7,7 @@
     "test": "vitest",
     "prepare": "husky install",
     "book:dev": "vitepress dev book/online-book",
-    "book:build": "vitepress build book/online-book",
+    "book:build": "vitepress build book/online-book --base /chibivue/",
     "book:preview": "vitepress preview book/online-book"
   },
   "config": {

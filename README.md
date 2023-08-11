@@ -14,9 +14,9 @@ Currently, I am still in the process of implementation, but after implementation
 
 # Online Book
 
-## view on github
+## book url (GitHub Pages)
 
-[English](https://github.com/Ubugeeei/chibivue/tree/main/book/online-book/en) | [Japanese](https://github.com/Ubugeeei/chibivue/tree/main/book/online-book/ja)
+https://ubugeeei.github.io/chibivue
 
 ## open book on localhost
 
@@ -25,10 +25,9 @@ $ pnpm i
 $ pnpm run book:dev
 ```
 
-## deployed book
+## view on github
 
-coming soon...
-
+[English](https://github.com/Ubugeeei/chibivue/tree/main/book/online-book/en) | [Japanese](https://github.com/Ubugeeei/chibivue/tree/main/book/online-book/ja)
 <br/>
 <br/>
 

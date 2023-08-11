@@ -10,6 +10,7 @@
     "RCDATA",
     "unref",
     "vdom",
+    "vitepress",
     "vnode",
     "Vnodes"
   ]
