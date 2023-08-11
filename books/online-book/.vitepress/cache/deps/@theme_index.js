@@ -7,7 +7,7 @@ import {
   ref,
   unref,
   watchEffect
-} from "./chunk-67UUJLDS.js";
+} from "./chunk-VFITVHR7.js";
 
 // node_modules/.pnpm/vitepress@1.0.0-rc.4_@algolia+client-search@4.19.1_@types+node@17.0.45_search-insights@2.7.0/node_modules/vitepress/dist/client/theme-default/index.js
 import "/Users/ubugeeei/projects/personal/typescript/chibi-vue/node_modules/.pnpm/vitepress@1.0.0-rc.4_@algolia+client-search@4.19.1_@types+node@17.0.45_search-insights@2.7.0/node_modules/vitepress/dist/client/theme-default/styles/fonts.css";

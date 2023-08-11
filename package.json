@@ -6,9 +6,9 @@
     "dev:app": "cd example/app && pnpm i && pnpm run dev",
     "test": "vitest",
     "prepare": "husky install",
-    "docs:dev": "vitepress dev books",
-    "docs:build": "vitepress build books",
-    "docs:preview": "vitepress preview books"
+    "books:dev": "vitepress dev books/online-book",
+    "books:build": "vitepress build books/online-book",
+    "books:preview": "vitepress preview books/online-book"
   },
   "config": {
     "commitizen": {
