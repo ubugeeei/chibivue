@@ -2,8 +2,6 @@
 
 ## テンプレートにバインドしたい
 
-## 方針
-
 今の状態だと、直接 DOM 操作をしているので、リアクティブシステムや仮想 DOM の恩恵を得ることができていません。  
 実際にはイベントハンドラであったり、テキストの内容はテンプレート部分に書きたいわけです。それでこそ宣言的 UI の嬉しさと言った感じですよね。  
 以下のような開発者インタフェースを目指します。
@@ -26,7 +24,7 @@ const app = createApp({
       <h2>message: {{ state.message }}</h2>
       <img
         width="150px"
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px.js_Logo_2.svg.png"
       />
       <p><b>chibivue</b> is the minimal Vue.js</p>
 
@@ -228,10 +226,11 @@ export interface InterpolationNode extends Node {
 ```
 
 AST が実装できたので、パースの実装をやっていきます。
-`{{`という文字列を見つけたら Interpolation としてパースします。
+<span v-pre>`{{`</span> という文字列を見つけたら Interpolation としてパースします。
 
 ```ts
-context: ParserContext,
+function parseChildren(
+  context: ParserContext,
   ancestors: ElementNode[]
 ): TemplateChildNode[] {
   const nodes: TemplateChildNode[] = [];
@@ -249,7 +248,8 @@ context: ParserContext,
     }
     // .
     // .
-    // .
+    //
+    }
 ```
 
 ```ts
@@ -289,7 +289,7 @@ function parseInterpolation(
 }
 ```
 
-Text 中に `{{`が出現することもあるので parseText も少しだけいじります。
+Text 中に <span v-pre>`{{`</span> が出現することもあるので parseText も少しだけいじります。
 
 ```ts
 function parseText(context: ParserContext): TextNode {
@@ -315,8 +315,8 @@ function parseText(context: ParserContext): TextNode {
 }
 ```
 
-これまでパーサを実装してきた方にとっては特に難しいことはないはずです。`{{`を探し、`}}`が来るまで読み進めて AST を生成しているだけです。  
-`}}`が見つからなかった場合は undefined を返し、parseText への分岐でテキストとしてパースさせています。
+これまでパーサを実装してきた方にとっては特に難しいことはないはずです。 <span v-pre>`{{`</span> を探し、 <span v-pre>`}}`</span> が来るまで読み進めて AST を生成しているだけです。  
+<span v-pre>`}}`</span> が見つからなかった場合は undefined を返し、parseText への分岐でテキストとしてパースさせています。
 
 ここらでちゃんとパースができているか、コンソール等に出力して確認してみましょう。
 
@@ -335,7 +335,7 @@ const app = createApp({
       <h2>{{ state.message }}</h2>
       <img
         width="150px"
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px.js_Logo_2.svg.png"
       />
       <p><b>chibivue</b> is the minimal Vue.js</p>
 
@@ -476,7 +476,7 @@ const app = createApp({
       <h2>{{ state.message }}</h2>
       <img
         width="150px"
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px.js_Logo_2.svg.png"
       />
       <p><b>chibivue</b> is the minimal Vue.js</p>
 
@@ -633,7 +633,7 @@ const app = createApp({
       <h2>{{ state.message }}</h2>
       <img
         width="150px"
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px.js_Logo_2.svg.png"
       />
       <p><b>chibivue</b> is the minimal Vue.js</p>
 
