@@ -189,4 +189,4 @@ type ComponentOptions<D = {}, M extends MethodOptions = MethodOptions> = {
 本書のコードでは本家の Vue をインスパイアして、`CreateComponentPublicInstance`という抽象化を一段階挟んでいたり、`ComponentPublicInstanceConstructor`と言う型を実装していますが、あまり気にしないでください。(興味があればそこも読んでみてください！　)
 
 ここまでのソースコード:  
-https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/340-bcs-option_api
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/340-bcs-option_api)

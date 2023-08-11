@@ -13,4 +13,4 @@
 ここまでやってきた方なら説明がなくてもソースコードを読みながら実装できるはずです！
 
 ここまでのソースコード:  
-https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-5_other_apis
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-5_other_apis)

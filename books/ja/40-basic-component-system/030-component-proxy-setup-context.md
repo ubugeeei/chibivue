@@ -101,7 +101,7 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
 実装できたら render 関数や ref にはこの proxy を渡すように書き換えてみましょう。
 
 ここまでのソースコード:  
-https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/320-bcs-component_proxy
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/320-bcs-component_proxy)
 
 ※ ついでに defineComponent の実装とそれに関連する型付も実装しています (そうすると proxy のデータの型を推論できるようになります。)
 
@@ -284,4 +284,4 @@ app.mount("#app");
 ```
 
 ここまでのソースコード:  
-https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/325-bcs-setup_context
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/325-bcs-setup_context)

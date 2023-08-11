@@ -589,4 +589,4 @@ app.mount("#app");
 ちゃんと実装できているようです！
 
 ここまでのソースコード:  
-https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/007-1_mininum_template_compiler
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/007-1_mininum_template_compiler)

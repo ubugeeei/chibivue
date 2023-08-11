@@ -77,4 +77,4 @@ app.provide(LoggerKey, window.console.log);
 ```
 
 ここまでのソースコード:  
-https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/310-bcs-provide_inject
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/310-bcs-provide_inject)

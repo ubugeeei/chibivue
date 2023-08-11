@@ -134,9 +134,9 @@ app.mount("#app");
 ```
 
 ここまでのソースコード:  
-https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-2-1_computed  
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-2-1_computed  )
 (setter 込みはこちら):  
-https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-2-2_computed_setter
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-2-2_computed_setter)
 
 ## Watch の実装
 
@@ -189,7 +189,7 @@ export function watch<T>(
 ```
 
 ここまでのソースコード:  
-https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-2-3_watch
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-2-3_watch)
 
 ## watch の その他の api
 
@@ -250,7 +250,7 @@ https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-2-3_w
   ```
 
 ここまでのソースコード:
-https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-2-4_watch_api_extends
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-2-4_watch_api_extends)
 
 ## watchEffect
 
@@ -271,7 +271,7 @@ count.value++;
 イメージてには immediate のような実装をすれば OK です。
 
 ここまでのソースコード:  
-https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-2-4_watch_effect
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-2-4_watch_effect)
 
 ---
 

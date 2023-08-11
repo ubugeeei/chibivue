@@ -102,4 +102,4 @@ app.mount("#app");
 ```
 
 ここまでのソースコード:  
-https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/300-bcs-lifecycle_hooks
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/300-bcs-lifecycle_hooks)

@@ -663,6 +663,6 @@ const app = createApp({
 ここまでで小さなテンプレートの実装は完了です。お疲れ様でした。
 
 ここまでのソースコード:  
-https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/007-3_mininum_template_compiler
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/007-3_mininum_template_compiler)
 
 <!-- ちゃんと動いているようなのでコンパイラ実装を始める際に分割した 3 つのタスクを実装し終えました。やったね！ -->

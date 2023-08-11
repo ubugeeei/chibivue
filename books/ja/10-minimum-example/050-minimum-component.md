@@ -319,7 +319,7 @@ app.mount("#app");
 ```
 
 ここまでのソースコード:  
-https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/006-1_mininum_component_system
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/006-1_mininum_component_system)
 
 ## コンポーネント間のやりとり
 
@@ -572,7 +572,7 @@ const setupRenderEffect = (
 ![props](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/books/images/props.png)
 
 ここまでのソースコード：  
-https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/006-2_mininum_component_system
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/006-2_mininum_component_system)
 
 ついでと言ってはなんなのですが、本家 Vue は props をケバブケースで受け取ることができるのでこれも実装してみましょう。  
 ここで、新たに `~/packages/shared` というディレクトリを作成し、 `general.ts` を作成します。  
