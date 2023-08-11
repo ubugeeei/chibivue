@@ -2,7 +2,7 @@ name: Deploy chibivue Book to Pages
 
 on:
   push:
-    branches: [81-deploy-github-pages]
+    branches: [main]
 
   workflow_dispatch:
 
