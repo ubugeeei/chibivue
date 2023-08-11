@@ -3,23 +3,28 @@
 layout: home
 
 hero:
-  name: "The chibivue Book"
-  text: "online book for implementing chibivue."
-  tagline: My great project tagline
+  name: "chibivue"
+  text: "Writing Vue.js with your own hands"
+  tagline: powered by VitePress
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: Dive into book ->
+      link: /ja/00-introduction/010-about
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: Vue.js Official
+      link: https://v3.vuejs.org/
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: Reactivity System
+    details: 基本的なリアクティビティシステムの原理から、EffectScope や CustomRef などの応用的な API の実装まで幅広く行います。
+    icon: 🔆
+  - title: Virtual DOM
+    details: 仮想 DOM の基本的な実装から、パッチレンダリング、スケジューラの実装まで幅広く行います。
+    icon: ⛅
+  - title: Template Compiler
+    details: テンプレートコンパイラの基本的な実装から、データバインディングやディレクティブの実装まで幅広く行います。
+    icon: 🔁
+  - title: Single File Component
+    details: SFC の基本的な実装から、script setup やコンパイラマクロ、scoped css の実装まで幅広く行います。
+    icon: 🎁
 ---
-
