@@ -1,7 +1,7 @@
 [Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/012_template_binding.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/014_break.md)
 
 ---
-title: "Single File Component で開発したい！"
+title: "Single File Component で開発したい"
 ---
 
 # SFC、どうやって実現している？

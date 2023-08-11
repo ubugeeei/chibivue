@@ -1,7 +1,7 @@
 [Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/340_bcs_options_api.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/405_btc_transform_expression.md)
 
 ---
-title: "Transformer の実装 の Codegen のリファクタ(Basic Template Compiler 部門スタート)"
+title: "Transformer の実装 と Codegen のリファクタ(Basic Template Compiler 部門スタート)"
 ---
 
 # 既存実装のおさらい
