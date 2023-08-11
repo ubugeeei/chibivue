@@ -1,6 +1,4 @@
----
-title: "Effect のクリーンアップと Effect Scope"
----
+# Effect のクリーンアップと Effect Scope
 
 ## ReactiveEffect のクリーンアップ
 

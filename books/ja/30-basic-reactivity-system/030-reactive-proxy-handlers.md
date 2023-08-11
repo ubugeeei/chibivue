@@ -1,6 +1,4 @@
----
-title: "様々な Reactive Proxy Handler"
----
+# 様々な Reactive Proxy Handler
 
 ## reactive にしたくないオブジェクト
 

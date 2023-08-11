@@ -1,6 +1,4 @@
----
-title: "コンポーネントの Proxy と setupContext"
----
+# コンポーネントの Proxy と setupContext
 
 ## コンポーネントの Proxy
 

@@ -1,6 +1,4 @@
----
-title: "Provide/Inject の実装"
----
+# Provide/Inject の実装
 
 ## Provide/Inject を実装しよう
 

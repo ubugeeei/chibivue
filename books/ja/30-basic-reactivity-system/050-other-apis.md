@@ -1,6 +1,4 @@
----
-title: "その他の reactivity api"
----
+# その他の reactivity api
 
 ## その他の reactivity api を実装してみましょう !
 

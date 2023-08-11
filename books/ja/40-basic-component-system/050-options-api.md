@@ -1,6 +1,4 @@
----
-title: "Options APIに対応する"
----
+# Options APIに対応する
 
 ## Options API
 

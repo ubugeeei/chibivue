@@ -1,6 +1,4 @@
----
-title: "Single File Component で開発したい"
----
+# Single File Component で開発したい
 
 ## SFC、どうやって実現している？
 

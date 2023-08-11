@@ -1,8 +1,6 @@
 
 
----
-title: "ディレクティブの実装 (v-on/v-bind)"
----
+# ディレクティブの実装 (v-on/v-bind)
 
 ## DirectiveTransform
 

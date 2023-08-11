@@ -1,6 +1,4 @@
----
-title: "key属性とパッチレンダリング(Basic Virtual DOM部門スタート)"
----
+# key属性とパッチレンダリング(Basic Virtual DOM部門スタート)
 
 ## 重大なバグ
 

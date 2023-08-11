@@ -1,6 +1,4 @@
----
-title: "computed / watch api"
----
+# computed / watch api
 
 ## computed のおさらい (と実装)
 

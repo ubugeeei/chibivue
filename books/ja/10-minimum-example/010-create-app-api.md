@@ -1,6 +1,4 @@
----
-title: "初めてのレンダリングとcreateApp API"
----
+# 初めてのレンダリングとcreateApp API
 
 ## Vue.js の開発者インタフェース
 

@@ -1,6 +1,4 @@
----
-title: "Vue.jsとは"
----
+# Vue.jsとは
 
 ## Vue.js についてのおさらい
 

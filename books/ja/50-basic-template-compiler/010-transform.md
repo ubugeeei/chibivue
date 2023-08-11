@@ -1,6 +1,4 @@
----
-title: "Transformer の実装 と Codegen のリファクタ(Basic Template Compiler 部門スタート)"
----
+# Transformer の実装 と Codegen のリファクタ(Basic Template Compiler 部門スタート)
 
 ## 既存実装のおさらい
 
