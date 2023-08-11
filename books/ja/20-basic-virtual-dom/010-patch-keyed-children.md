@@ -1,5 +1,3 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/014_break.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/110_bvd_bit_flags.md)
-
 ---
 title: "key属性とパッチレンダリング(Basic Virtual DOM部門スタート)"
 ---
@@ -372,6 +370,3 @@ Todo だけまとめておきます。
 
 ここからは本家 Vue の実装を見てもらってもいいですし、もちろん chibivue を参考にしてもらっても良いです。
 (おすすめなは本家 Vue を実際に読みながらです。)
-
-
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/014_break.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/110_bvd_bit_flags.md)

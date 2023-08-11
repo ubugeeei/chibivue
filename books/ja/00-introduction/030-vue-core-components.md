@@ -1,5 +1,3 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/002_what_is_vue.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/004_setup_project.md)
-
 ---
 title: "Vue.jsを構成する主要な要素"
 ---
@@ -137,6 +135,3 @@ https://github.com/vuejs/core/blob/main/.github/contributing.md#package-dependen
 
 <br/>
 この本では一通りこれらについての実装と解説を行います。
-
-
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/002_what_is_vue.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/004_setup_project.md)

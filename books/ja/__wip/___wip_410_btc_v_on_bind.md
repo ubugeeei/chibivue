@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/530_scoped_css.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/milestones.md)
+
 
 ---
 title: "ディレクティブの実装 (v-on/v-bind)"
@@ -195,4 +195,3 @@ const App = defineComponent({
 ## transformOn の実装方針
 
 
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/530_scoped_css.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/milestones.md)

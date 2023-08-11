@@ -1,5 +1,3 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/212_brs_reactive_proxy_handlers.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/230_brs_other_apis.md)
-
 ---
 title: "Effect のクリーンアップと Effect Scope"
 ---
@@ -212,5 +210,3 @@ instance.scope.off();
 
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-4-2_effect_scope
-
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/212_brs_reactive_proxy_handlers.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/230_brs_other_apis.md)

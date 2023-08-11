@@ -1,5 +1,3 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/006_simple_h_function.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/008_minimum_virtual_dom.md)
-
 ---
 title: "小さいリアクティブシステム"
 ---
@@ -772,6 +770,3 @@ const render: RootRenderFunction = (vnode, container) => {
 今度は大丈夫そうです!
 
 これで reactive に画面を更新できるようになりました!!
-
-
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/006_simple_h_function.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/008_minimum_virtual_dom.md)

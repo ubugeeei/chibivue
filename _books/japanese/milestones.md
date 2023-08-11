@@ -1,4 +1,4 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/___wip_410_btc_v_on_bind.md) | Next
+
 
 # ★ Basic Virtual DOM 部門
 
@@ -71,4 +71,3 @@
 - typescript
 
 
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/___wip_410_btc_v_on_bind.md) | Next

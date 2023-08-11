@@ -1,5 +1,3 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/005_create_app_api.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/007_minimum_reactive.md)
-
 ---
 title: "HTML要素をレンダリングできるようにしよう"
 ---
@@ -509,6 +507,3 @@ app.mount("#app");
 
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/003_simple_h_function
-
-
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/005_create_app_api.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/007_minimum_reactive.md)

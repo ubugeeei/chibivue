@@ -1,5 +1,3 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/230_brs_other_apis.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/310_bcs_provide_inject.md)
-
 ---
 title: "ライフサイクルフック (Basic Component System 部門スタート)"
 ---
@@ -107,6 +105,3 @@ app.mount("#app");
 
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/300-bcs-lifecycle_hooks
-
-
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/230_brs_other_apis.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/310_bcs_provide_inject.md)

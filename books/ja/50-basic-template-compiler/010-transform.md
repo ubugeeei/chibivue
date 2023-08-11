@@ -1,5 +1,3 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/340_bcs_options_api.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/405_btc_transform_expression.md)
-
 ---
 title: "Transformer の実装 と Codegen のリファクタ(Basic Template Compiler 部門スタート)"
 ---
@@ -478,6 +476,3 @@ app.mount("#app");
 
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/400-btc-transformer
-
-
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/340_bcs_options_api.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/405_btc_transform_expression.md)

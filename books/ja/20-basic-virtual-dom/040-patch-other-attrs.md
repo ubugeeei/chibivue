@@ -1,5 +1,3 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/120_bvd_scheduler.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/200_brs_ref_api.md)
-
 ---
 title: "対応できていない Props のパッチ"
 ---
@@ -97,6 +95,3 @@ removeAttribute / setAttribute で更新されるべきものと `el[key] = valu
 また、DOM Props の値として使用できる型に制限がある場合はそれに合わせてキャストしておく必要があります。  
 `const type = typeof el[key]`により型を取得し、patch 関数に入ってきた value をそれに合わせてキャストします。  
 また、キャストだけではなく、そもそも削除としてみなすような値の場合は removeAttribute します。例えば、patch の key が id で value が空文字だった場合です。
-
-
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/120_bvd_scheduler.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/200_brs_ref_api.md)

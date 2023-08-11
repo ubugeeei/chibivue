@@ -1,5 +1,3 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/010_minimum_template_compiler.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/012_template_binding.md)
-
 ---
 title: "もっと複雑な HTML を書きたい"
 ---
@@ -752,6 +750,3 @@ app.mount("#app");
 
 これで正常に動作していることを確認します。  
 どうでしょう。機能は少ないにしろ、だんだんと普段の Vue の開発者インタフェースに近づいてきたのではないでしょうか
-
-
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/010_minimum_template_compiler.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/012_template_binding.md)

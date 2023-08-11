@@ -1,5 +1,3 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/004_setup_project.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/006_simple_h_function.md)
-
 ---
 title: "初めてのレンダリングとcreateApp API"
 ---
@@ -387,6 +385,3 @@ export const createApp = ((...args) => {
 
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/002-2_create_app
-
-
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/004_setup_project.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/006_simple_h_function.md)

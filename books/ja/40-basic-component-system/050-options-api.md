@@ -1,5 +1,3 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/330_bcs_component_slot.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/400_btc_transform.md)
-
 ---
 title: "Options APIに対応する"
 ---
@@ -132,7 +130,7 @@ const App = defineComponent({
 
 これを実現するには少々複雑な型パズルを実装する必要があります。(たくさんジェネリクスでバケツリレーします。)
 
-defineComponent に対する型付を起点に、ComponentOptions, ComponentPublicInstance にリレーするためにいくつかの型を実装します。  
+defineComponent に対する型付を起点に、ComponentOptions, ComponentPublicInstance にリレーするためにいくつかの型を実装します。
 
 ここでは一旦、data オプションと methods に絞って説明します。
 
@@ -194,6 +192,3 @@ type ComponentOptions<D = {}, M extends MethodOptions = MethodOptions> = {
 
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/340-bcs-option_api
-
-
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/330_bcs_component_slot.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/400_btc_transform.md)

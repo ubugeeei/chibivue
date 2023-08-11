@@ -1,5 +1,3 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/400_btc_transform.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/425_btc_v_for.md)
-
 ---
 title: "transformExpression"
 ---
@@ -384,6 +382,3 @@ app.mount("#app");
 
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/405-btc-transform_expression
-
-
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/400_btc_transform.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/425_btc_v_for.md)

@@ -1,5 +1,3 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/210_brs_computed_watch.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/220_brs_effect_scope.md)
-
 ---
 title: "様々な Reactive Proxy Handler"
 ---
@@ -344,6 +342,3 @@ https://ja.vuejs.org/api/reactivity-advanced.html#toraw
 
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-3-3_proxy_handler_improvement
-
-
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/210_brs_computed_watch.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/220_brs_effect_scope.md)

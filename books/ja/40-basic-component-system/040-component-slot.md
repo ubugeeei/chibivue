@@ -1,5 +1,3 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/320_bcs_component_proxy_setup_context.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/340_bcs_options_api.md)
-
 ---
 title: "スロット"
 ---
@@ -85,6 +83,3 @@ const app = createApp({
 
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/330.5-bcs-slot_extend
-
-
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/320_bcs_component_proxy_setup_context.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/340_bcs_options_api.md)

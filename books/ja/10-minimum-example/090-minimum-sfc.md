@@ -1,5 +1,3 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/012_template_binding.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/014_break.md)
-
 ---
 title: "Single File Component で開発したい"
 ---
@@ -1262,6 +1260,3 @@ export default function vitePluginChibivue(): Plugin {
 
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/008-4_mininum_sfc_compiler
-
-
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/012_template_binding.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/014_break.md)

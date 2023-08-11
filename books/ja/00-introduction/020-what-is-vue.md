@@ -1,5 +1,3 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/001_about.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/003_vue_core_components.md)
-
 ---
 title: "Vue.jsとは"
 ---
@@ -57,6 +55,3 @@ https://ja.vuejs.org/guide/introduction.html#the-progressive-framework
 しかし、この本では少し切り口を変えて「Vue.js はどうやって実装されているか」という点についてフォーカスし、実際にコードを書きながら小さな Vue.js を作っていきます。
 
 また、この本は公式のものではなく完全なものではありません。もしかするとおかしな点がいくつか残っていることもあるとおもうので、随時ご指摘いただければと思います。
-
-
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/001_about.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/003_vue_core_components.md)

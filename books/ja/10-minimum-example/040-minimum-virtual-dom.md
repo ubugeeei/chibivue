@@ -1,5 +1,3 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/007_minimum_reactive.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/009_minimum_component.md)
-
 ---
 title: "小さい仮想DOMシステム"
 ---
@@ -425,6 +423,3 @@ const processText = (
 ![patch_rendering](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/books/images/patch_rendering.png)
 
 これで仮想 DOM を利用したパッチが実装できました!!!!! 祝
-
-
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/007_minimum_reactive.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/009_minimum_component.md)

@@ -1,5 +1,3 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/200_brs_ref_api.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/212_brs_reactive_proxy_handlers.md)
-
 ---
 title: "computed / watch api"
 ---
@@ -280,6 +278,3 @@ https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/210-brs-2-4_w
 ---
 
 ※ クリーンアップについては別のチャプターで行います。
-
-
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/200_brs_ref_api.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/212_brs_reactive_proxy_handlers.md)

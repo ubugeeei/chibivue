@@ -1,5 +1,3 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/011_more_complex_parser.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/013_minimum_sfc.md)
-
 ---
 title: "データバインディング"
 ---
@@ -670,6 +668,3 @@ const app = createApp({
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/007-3_mininum_template_compiler
 
 <!-- ちゃんと動いているようなのでコンパイラ実装を始める際に分割した 3 つのタスクを実装し終えました。やったね！ -->
-
-
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/011_more_complex_parser.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/013_minimum_sfc.md)

@@ -1,5 +1,3 @@
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/110_bvd_bit_flags.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/130_bvd_patch_other_attrs.md)
-
 ---
 title: "スケジューラ"
 ---
@@ -245,5 +243,3 @@ app.mount("#app");
 
 ここまでのソースコード:  
 https://github.com/Ubugeeei/chibivue/tree/main/books/chapter_codes/130-bvd-4_next_tick
-
-[Prev](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/110_bvd_bit_flags.md) | [Next](https://github.com/Ubugeeei/chibivue/blob/main/books/japanese/130_bvd_patch_other_attrs.md)
