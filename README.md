@@ -16,13 +16,13 @@ Currently, I am still in the process of implementation, but after implementation
 
 ## view on github
 
-[English](https://github.com/Ubugeeei/chibivue/tree/main/books/online-book/en) | [Japanese](https://github.com/Ubugeeei/chibivue/tree/main/books/online-book/ja)
+[English](https://github.com/Ubugeeei/chibivue/tree/main/book/online-book/en) | [Japanese](https://github.com/Ubugeeei/chibivue/tree/main/book/online-book/ja)
 
 ## open book on localhost
 
 ```sh
 $ pnpm i
-$ pnpm run books:dev
+$ pnpm run book:dev
 ```
 
 ## deployed book
