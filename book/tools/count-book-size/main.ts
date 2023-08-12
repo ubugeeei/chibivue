@@ -20,9 +20,12 @@ const countBookSize = (files: string[]): number =>
   }, 0);
 
 (function main() {
-  const ROOT = "book/online-book/ja";
+  const ROOT = "book/online-book/src";
+  const IGNORES = ["en", "__wip"];
   const OUT = "book/tools/count-book-size/book-size.json";
-  const files = listFiles(ROOT);
+  const files = listFiles(ROOT).filter(
+    (file) => !IGNORES.some((ignore) => file.split("/").includes(ignore))
+  );
   const bookSize = countBookSize(files);
   const json = JSON.stringify({ length: bookSize });
   fs.writeFileSync(OUT, json);
