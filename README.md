@@ -1,19 +1,23 @@
-<div align="center">
-
-<h1>chibivue</h1>
-
-[**Writing Vue.js with your own hands**](https://ubugeeei.github.io/chibivue)  
-https://ubugeeei.github.io/chibivue
-
-</div>
-
 <p align="center">
   <img src="./book/logo/logo.png" width="126">
 </p>
 
-chibivue is minimal [Vue.js v3](https://github.com/vuejs/core) core implementations (reactivity, vnode, component, compiler).
+<div align="center">
 
-"chibi" means "small" in Japanese.
+<h1>chibivue</h1>
+
+### [**Writing Vue.js with your own hands**](https://ubugeeei.github.io/chibivue)
+
+https://ubugeeei.github.io/chibivue
+
+</div>
+
+---
+
+chibivue is minimal [Vue.js v3](https://github.com/vuejs/core) core implementations.  
+(reactivity system, vnode and patch rendering, component, compiler)
+
+"`chibi`" means "`small`" in Japanese.
 
 This project began in February 2023 with the goal of simplifying the understanding of Vue's core implementation.
 
@@ -24,6 +28,10 @@ Currently, I am still in the process of implementation, but after implementation
 [example](https://github.com/Ubugeeei/chibivue/tree/main/example/app)
 
 # 📔 Online Book
+
+[![Pages Deploy](https://github.com/Ubugeeei/chibivue/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/Ubugeeei/chibivue/actions/workflows/deploy.yml)
+
+> total: 250,000 chars ↑ (japanese)
 
 ### book url (GitHub Pages)
 
