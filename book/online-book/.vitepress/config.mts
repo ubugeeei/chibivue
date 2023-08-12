@@ -2,9 +2,10 @@ import { defineConfig } from "vitepress";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "The chibivue Books",
+  title: "The chibivue Book",
   description: "This is an online book for implementing chibivue.",
   themeConfig: {
+    logo: "https://github.com/Ubugeeei/chibivue/blob/main/book/logo/logo.png?raw=true",
     nav: [
       { text: "Home", link: "/" },
       { text: "Start Learning", link: "/ja/00-introduction/010-about" },
