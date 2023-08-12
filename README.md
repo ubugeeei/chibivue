@@ -35,7 +35,7 @@ $ pnpm run book:dev
 
 ## view on github
 
-[English](https://github.com/Ubugeeei/chibivue/tree/main/book/online-book/en) | [Japanese](https://github.com/Ubugeeei/chibivue/tree/main/book/online-book/ja)
+[English](https://github.com/Ubugeeei/chibivue/tree/main/book/online-book/src/en) | [Japanese](https://github.com/Ubugeeei/chibivue/tree/main/book/online-book/src/ja)
 <br/>
 <br/>
 

@@ -10,7 +10,7 @@ hero:
   actions:
     - theme: brand
       text: Dive into book ->
-      link: /ja/00-introduction/010-about
+      link: /00-introduction/010-about
     - theme: alt
       text: Vue.js Official
       link: https://v3.vuejs.org/
