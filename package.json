@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "setup": "pnpm i && ts-node --esm tools/create-chibivue/main.ts",
     "dev": "cd example/playground && pnpm i && pnpm run dev",
     "dev:app": "cd example/app && pnpm i && pnpm run dev",
     "test": "vitest",
@@ -10,7 +11,7 @@
     "book:dev": "vitepress dev book/online-book",
     "book:build": "vitepress build book/online-book --base /chibivue/",
     "book:preview": "vitepress preview book/online-book",
-    "count": "ts-node --esm book/tools/count-book-size/main.ts"
+    "count": "ts-node --esm tools/count-book-size/main.ts"
   },
   "config": {
     "commitizen": {
@@ -20,7 +21,9 @@
   "author": "Ubugeeei <ubuge1122@gmail.com>",
   "devDependencies": {
     "@babel/types": "^7.21.2",
+    "@types/fs-extra": "^11.0.1",
     "@types/node": "^17.0.21",
+    "fs-extra": "^11.1.1",
     "husky": "^8.0.3",
     "ts-node": "^10.9.1",
     "vitepress": "1.0.0-rc.4",
