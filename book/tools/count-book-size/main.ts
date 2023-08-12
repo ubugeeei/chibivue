@@ -20,7 +20,7 @@ const countBookSize = (files: string[]): number =>
   }, 0);
 
 (function main() {
-  const ROOT = "book/online-book";
+  const ROOT = "book/online-book/ja";
   const OUT = "book/tools/count-book-size/book-size.json";
   const files = listFiles(ROOT);
   const bookSize = countBookSize(files);
