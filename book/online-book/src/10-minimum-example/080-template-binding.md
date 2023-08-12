@@ -141,8 +141,12 @@ const app = createApp({
 });
 ```
 
-当然、render 関数内では`state`という変数は定義されていません。  
-そこで、render 関数の引数として setupState を受け取るようにしてみましょう。
+当然、render 関数内では `state` という変数は定義されていません。  
+さて、どのようにして state を参照できるようにすれば良いでしょうか。
+
+## with 文
+
+結論から言うと、with 文を使って以下のようにすれば良いです。
 
 ```ts
 const app = createApp({
@@ -151,16 +155,54 @@ const app = createApp({
     return { state };
   },
 
-  render(_ctx) {
-    return h("div", {}, [_ctx.state.message]);
+  render(ctx) {
+    with (ctx) {
+      return h("div", {}, [state.message]);
+    }
   },
 });
 ```
 
+with 文についてあまりよく知らない方も少なくないんじゃないかと思います。
+
+それもそのはず、この機能は非推奨の機能です。
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/with
+
+MDN によると、
+
+> まだ対応しているブラウザーがあるかもしれませんが、すでに関連するウェブ標準から削除されているか、削除の手続き中であるか、互換性のためだけに残されている可能性があります。使用を避け、できれば既存のコードは更新してください。
+
+とのことで、使用を避けるようにとのことです。
+
+今後の Vue.js の実装がどうなるかはわかりませんが、Vue.js 3 では with 文を使っているので、今回は with 文を使って実装していきます。
+
+ここで少し補足なのですが、Vue.js でも、全てが全て with 文で実装されているわけではありません。  
+SFC で template を扱う際は with 文を使わずに実装されています。  
+これについては後のチャプターで触れる予定ですが、minimum example 部門では template オプションを使う際でも、SFC を使う際でも with 文を使って実装していきます。
+
+---
+
+さて、ここで少し with 文の挙動についておさらいです。
+with 文は、文に対するスコープチェーンを拡張します。
+
+以下のような挙動をとります。
+
+```ts
+const obj = { a: 1, b: 2 };
+
+with (obj) {
+  console.log(a, b); // 1, 2
+}
+```
+
+with の引数として、state を持つ親オブジェクトを渡してあげれば、state を参照できるようになります。
+
+今回は、この親オブジェクトとして setupStat を扱います。  
 実際には、setupState だけではなく、props のデータや OptionsApi で定義されたデータにもアクセスできるようになる必要があるのですが、今回は一旦 setupState のデータのみ使える形で良しとします。  
 (この辺りの実装は最小構成部門では取り上げず、後の部門で取り上げます。)
 
-つまり以下のようなテンプレートは
+今回やりたいことをまとめると、以下のようなテンプレートを
 
 ```html
 <div>
@@ -169,20 +211,30 @@ const app = createApp({
 </div>
 ```
 
-以下のような関数にコンパイルするようにすれば良いわけです。
+以下のような関数にコンパイルして、
 
 ```ts
-(_ctx) =>
-  h("div", {}, [
-    h("p", {}, [_ctx.state.message]),
-    h("button", { onClick: _ctx.changeMessage }, ["click me"]),
-  ]);
+(_ctx) => {
+  with (_ctx) {
+    return h("div", {}, [
+      h("p", {}, [state.message]),
+      h("button", { onClick: changeMessage }, ["click me"]),
+    ]);
+  }
+};
+```
+
+この関数に setupState を渡してあげることです。
+
+```ts
+const setupState = setup();
+render(setupState);
 ```
 
 ## マスタッシュ構文の実装
 
-まずはマスタッシュ構文の実装をしていきます。例によって、AST を考え、パーサの実装してコードジェネレータの実装をしていきます。  
-今現時点で AST の Node として定義されているのは Element と Text と Attribute 程度です。  
+まずはマスタッシュ構文の実装をしていきます。例によって、AST を考え、パーサの実装してコードジェネレータの実装をしていきます。
+今現時点で AST の Node として定義されているのは Element と Text と Attribute 程度です。
 新たにマスタッシュ構文を定義したいので、直感的には `Mustache`のような AST にすることが考えられます。
 それにあたるのが`Interpolation`という Node です。
 Interpolation には「内挿」であったり、「挿入」と言った意味合いがあります。
@@ -203,26 +255,6 @@ export interface InterpolationNode extends Node {
   type: NodeTypes.INTERPOLATION;
   content: string; // マスタッシュの中に記述された内容 (今回は　setup で定義された単一の変数名がここに入る)
 }
-```
-
-ここで一つ注意点と言っては何ですが、マスタッシュは JavaScript の式をテンプレートに埋め込むためのものです。
-なので、実際には
-
-```html
-{{ 999 }} {{ 1 + 2}} {{ message + "!" }} {{ getMessage() }}
-```
-
-などのようなコードにも対応する必要があります。  
-が、今回は、**setup で定義された単一の変数**または**setup で定義された単一のオブジェクトのメンバーアクセス**のみバインドすることを考えます。  
-(この辺りの実装は最小構成部門では取り上げず、後の部門で取り上げます。)  
-具体的には以下のようなものです。
-
-```html
-{{ message }}
-```
-
-```html
-{{ state.message }}
 ```
 
 AST が実装できたので、パースの実装をやっていきます。
@@ -358,10 +390,23 @@ const app = createApp({
 
 問題なさそうです！
 
-さてそれではこの AST を元にバインディングを実装していきましょう。
-codegen する際に content に対して`_ctx.`という prefix を付与してあげます。
+さてそれではこの AST を元にバインディングを実装していきましょう。  
+render 関数の中身を with 文で囲ってあげます。
 
 ```ts
+export const generate = ({
+  children,
+}: {
+  children: TemplateChildNode[];
+}): string => {
+  return `return function render(_ctx) {
+  with (_ctx) {
+    const { h } = ChibiVue;
+    return ${genNode(children[0])};
+  }
+}`;
+};
+
 const genNode = (node: TemplateChildNode): string => {
   switch (node.type) {
     // .
@@ -374,23 +419,7 @@ const genNode = (node: TemplateChildNode): string => {
 };
 
 const genInterpolation = (node: InterpolationNode): string => {
-  return `_ctx.${node.content}`;
-};
-```
-
-そして、render 関数の引数として\_ctx を受け取れるようにします。
-
-```ts
-export const generate = ({
-  children,
-}: {
-  children: TemplateChildNode[];
-}): string => {
-  // ここの引数に `_ctx` を追加
-  return `return function render(_ctx) {
-  const { h } = ChibiVue;
-  return ${genNode(children[0])};
-}`;
+  return `${node.content}`;
 };
 ```
 
@@ -444,7 +473,6 @@ const setupRenderEffect = (
 ## 初めてのディレクティブ
 
 さて、マスタッシュの次はインベントハンドラです。
-やることはマスタッシュの時にやったバインディングと基本的には同じで、何ともお行儀の悪いコードですが、以下のようなもので簡単に動くかと思います。
 
 ```ts
 const genElement = (el: ElementNode): string => {
@@ -452,7 +480,7 @@ const genElement = (el: ElementNode): string => {
     .map(({ name, value }) =>
       // props 名が @click だった場合にonClickに変換する
       name === "@click"
-        ? `onClick: _ctx.${value?.content}`
+        ? `onClick: ${value?.content}`
         : `${name}: "${value?.content}"`
     )
     .join(", ")}}, [${el.children.map((it) => genNode(it)).join(", ")}])`;
@@ -597,7 +625,7 @@ const genProp = (prop: AttributeNode | DirectiveNode): string => {
     case NodeTypes.DIRECTIVE: {
       switch (prop.name) {
         case "on":
-          return `${toHandlerKey(prop.arg)}: _ctx.${prop.exp}`;
+          return `${toHandlerKey(prop.arg)}: ${prop.exp}`;
         default:
           // TODO: other directives
           throw new Error(`unexpected directive name. got "${prop.name}"`);
