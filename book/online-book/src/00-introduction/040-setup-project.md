@@ -40,20 +40,42 @@ https://pnpm.io/installation
 
 ## プロジェクトの作成
 
-任意のディレクトリでプロジェクトを作成します。  
+::: details 手っ取り早くスタートしたい ...
+これから、手動でプロジェクトを作成する手順を説明するのですが、実は構築用のツールも用意しています。  
+面倒くさい方は是非こちらを使ってください！
+
+1. chibivue をクローンする
+
+   ```sh
+   $ git clone https://github.com/Ubugeeei/chibivue
+   ```
+
+2. script を実行.  
+   セットアップしたいディレクトリのパスを入力してください.
+
+   ```sh
+   $ cd chibivue
+   $ pnpm run setup ../my-chibivue-project
+   ```
+
+:::
+
+任意のディレクトリでプロジェクトを作成します。
 ここからは便宜上プロジェクトのルートパスを`~`と表現します。(例: `~/src/main.ts`など)
 
-今回は、chibivue の本体と動作を確認するためのプレイグラウンドを分けて実装してみます。  
-といってもプレイグラウンド側で chibivue を呼び出して vite でバンドルするだけです。  
+今回は、chibivue の本体と動作を確認するためのプレイグラウンドを分けて実装してみます。
+といってもプレイグラウンド側で chibivue を呼び出して vite でバンドルするだけです。
 このような構成にする想定です。
 
 ```
+
 ~
 |- examples
-|    |- playground
+| |- playground
 |
 |- packages
 |- tsconfig.js
+
 ```
 
 examples というディレクトリにプレウグラウンドを実装します。

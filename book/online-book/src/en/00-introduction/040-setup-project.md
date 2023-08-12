@@ -27,7 +27,28 @@ Most of you are probably familiar with this step. Please set it up on your own. 
 Many of you might typically use npm or yarn. For this book, we will be using pnpm, so please install it as well. The commands are mostly similar to npm.
 https://pnpm.io/installation
 
-## プロジェクトの作成
+## Creating the Project
+
+::: details Quick Start for those in a hurry ...
+
+Although I'll be explaining the steps to create a project manually, there's actually a tool prepared for the setup.  
+If you find the manual process tedious, please feel free to use this tool!
+
+1. Clone chibivue.
+
+   ```sh
+   $ git clone https://github.com/Ubugeeei/chibivue
+   ```
+
+2. Execute the script.  
+    Enter the path of the directory you want to set up.
+
+   ```sh
+   $ cd chibivue
+   $ pnpm run setup ../my-chibivue-project
+   ```
+
+:::
 
 Create the project in any directory of your choice. For convenience, we'll denote the project's root path as `~` (e.g., `~/src/main.ts`).
 
