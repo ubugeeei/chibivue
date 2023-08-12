@@ -10,7 +10,7 @@
     "book:dev": "vitepress dev book/online-book",
     "book:build": "vitepress build book/online-book --base /chibivue/",
     "book:preview": "vitepress preview book/online-book",
-    "count": "ts-node --esm book/tools/count-book-size/main.ts"
+    "count": "ts-node --esm tools/count-book-size/main.ts"
   },
   "config": {
     "commitizen": {
