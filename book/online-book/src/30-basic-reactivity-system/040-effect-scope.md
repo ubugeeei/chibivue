@@ -110,7 +110,7 @@ app.mount("#app");
 ```
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/chapter_codes/210-brs-4-1_cleanup_effects)
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/130_cleanup_effects)
 
 ## Effect Scope とは
 
@@ -207,4 +207,4 @@ instance.scope.off();
 基本的な原理については理解できたはずなので、実際にソースコードを読みながら実装してみましょう！
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/chapter_codes/210-brs-4-2_effect_scope)
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/140_effect_scope)

@@ -473,4 +473,4 @@ app.mount("#app");
 ```
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/chapter_codes/400-btc-transformer)
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/010_transformer)

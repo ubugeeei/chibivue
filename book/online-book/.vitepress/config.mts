@@ -12,7 +12,7 @@ export default defineConfig({
       "link",
       {
         rel: "icon",
-        href: "https://github.com/Ubugeeei/chibivue/blob/main/book/logo/logo.png?raw=true",
+        href: "https://github.com/Ubugeeei/chibivue/blob/main/book/images/logo/logo.png?raw=true",
       },
     ],
   ],
@@ -29,7 +29,7 @@ export default defineConfig({
     },
   },
   themeConfig: {
-    logo: "https://github.com/Ubugeeei/chibivue/blob/main/book/logo/logo.png?raw=true",
+    logo: "https://github.com/Ubugeeei/chibivue/blob/main/book/images/logo/logo.png?raw=true",
     nav: [
       { text: "Home", link: "/" },
       { text: "Start Learning", link: "/00-introduction/010-about" },

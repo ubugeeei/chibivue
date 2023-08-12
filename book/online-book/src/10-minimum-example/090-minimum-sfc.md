@@ -212,7 +212,7 @@ pnpm run dev
 ちゃんとソースコードが改変されていることがわかります。
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/chapter_codes/008-1_mininum_sfc_compiler)
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/10-minimum-example/070_sfc_compiler)
 
 ## SFC コンパイラを実装していく
 
@@ -614,7 +614,7 @@ export default function vitePluginChibivue(): Plugin {
 無事にパースできているようです。やったね！
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/chapter_codes/008-2_mininum_sfc_compiler)
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/10-minimum-example/070_sfc_compiler2)
 
 ## template 部分のコンパイル
 
@@ -736,7 +736,7 @@ export default function vitePluginChibivue(): Plugin {
 上手くコンパイルできているようです。あとは同じ要領で、どうにかして script を引っこ抜いて default exports に突っ込めば OK です。
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/chapter_codes/008-3_mininum_sfc_compiler)
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/10-minimum-example/070_sfc_compiler3)
 
 ## script 部分のコンパイル
 
@@ -1257,4 +1257,4 @@ export default function vitePluginChibivue(): Plugin {
 これで SFC が使えるようになりました！
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/chapter_codes/008-4_mininum_sfc_compiler)
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/10-minimum-example/070_sfc_compiler4)
