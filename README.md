@@ -2,6 +2,9 @@
 
 <h1>chibivue</h1>
 
+[**Writing Vue.js with your own hands**](https://ubugeeei.github.io/chibivue)  
+https://ubugeeei.github.io/chibivue
+
 </div>
 
 <p align="center">
@@ -20,28 +23,32 @@ Currently, I am still in the process of implementation, but after implementation
 
 [example](https://github.com/Ubugeeei/chibivue/tree/main/example/app)
 
-# Online Book
+# 📔 Online Book
 
-## book url (GitHub Pages)
+### book url (GitHub Pages)
 
 https://ubugeeei.github.io/chibivue
 
-## open book on localhost
+### open book on localhost
 
 ```sh
 $ pnpm i
 $ pnpm run book:dev
 ```
 
-## view on github
+### view on github
 
 [English](https://github.com/Ubugeeei/chibivue/tree/main/book/online-book/src/en) | [Japanese](https://github.com/Ubugeeei/chibivue/tree/main/book/online-book/src/ja)
 <br/>
 <br/>
 
-# status
+# ⚠️ status
 
-## Reactive System
+This online book is currently a work in progress.
+
+Please refer to the information below for the progress status.
+
+### Reactive System
 
 | feature         | impl | book |
 | --------------- | ---- | ---- |
@@ -68,7 +75,7 @@ $ pnpm run book:dev
 | onScopeDispose  | ✅   | ✅   |
 | template refs   | ✅   | ✅   |
 
-## Virtual Dom & Renderer
+### Virtual Dom & Renderer
 
 | feature         | impl | book |
 | --------------- | ---- | ---- |
@@ -79,7 +86,7 @@ $ pnpm run book:dev
 | nextTick        | ✅   | ✅   |
 | ssr             |      |      |
 
-## Component System
+### Component System
 
 | feature                      | impl | book |
 | ---------------------------- | ---- | ---- |
@@ -93,7 +100,7 @@ $ pnpm run book:dev
 | slot (named/scoped)          | ✅   | ✅   |
 | async component and suspense |      |      |
 
-## Template Compiler
+### Template Compiler
 
 | feature           | impl | book |
 | ----------------- | ---- | ---- |
@@ -109,7 +116,7 @@ $ pnpm run book:dev
 | slot (scoped)     |      |      |
 | dynamic component |      |      |
 
-## SFC Compiler
+### SFC Compiler
 
 | feature                          | impl | book |
 | -------------------------------- | ---- | ---- |
@@ -118,7 +125,7 @@ $ pnpm run book:dev
 | script setup                     | ✅   |      |
 | compiler macro                   | ✅   |      |
 
-## Extensions and Other Builtin
+### Extensions and Other Builtin
 
 | feature    | impl | book |
 | ---------- | ---- | ---- |
