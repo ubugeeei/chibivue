@@ -379,4 +379,4 @@ app.mount("#app");
 ```
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/chapter_codes/405-btc-transform_expression)
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/020_transform_expression)

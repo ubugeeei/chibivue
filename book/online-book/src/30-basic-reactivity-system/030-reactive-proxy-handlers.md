@@ -250,7 +250,7 @@ app.mount("#app");
 ```
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/chapter_codes/210-brs-3-2_template_refs)
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/110_template_refs)
 
 ## Collection 系の組み込みオブジェクトに対応する
 
@@ -339,4 +339,4 @@ export function toRaw<T>(observed: T): T {
 https://ja.vuejs.org/api/reactivity-advanced.html#toraw
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/chapter_codes/210-brs-3-3_proxy_handler_improvement)
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/120_proxy_handler_improvement)

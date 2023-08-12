@@ -183,4 +183,4 @@ Access the developer server that started with this command. If a message display
 ![hello chibivue](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/hello_chibivue.png)
 
 Source code up to this point:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/chapter_codes/001_project_setup)
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls//00_introduction/010_project_setup)
