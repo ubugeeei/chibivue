@@ -5,6 +5,7 @@ export default defineConfig({
   title: "The chibivue Books",
   description: "This is an online book for implementing chibivue.",
   themeConfig: {
+    logo: "https://github.com/Ubugeeei/chibivue/blob/86-create-project-logo/book/logo/logo.png?raw=true",
     nav: [
       { text: "Home", link: "/" },
       { text: "Start Learning", link: "/ja/00-introduction/010-about" },

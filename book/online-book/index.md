@@ -6,6 +6,7 @@ hero:
   name: "chibivue"
   text: "Writing Vue.js with your own hands"
   tagline: powered by VitePress
+  image: https://github.com/Ubugeeei/chibivue/blob/86-create-project-logo/book/logo/logo.png?raw=true
   actions:
     - theme: brand
       text: Dive into book ->

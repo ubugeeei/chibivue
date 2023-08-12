@@ -1,4 +1,12 @@
-# chibivue
+<div align="center">
+
+<h1>chibivue</h1>
+
+</div>
+
+<p align="center">
+  <img src="./book/logo/logo.png" width="126">
+</p>
 
 chibivue is minimal [Vue.js v3](https://github.com/vuejs/core) core implementations (reactivity, vnode, component, compiler).
 
