@@ -4,6 +4,7 @@ import { defineConfig } from "vitepress";
 export default defineConfig({
   title: "The chibivue Book",
   description: "This is an online book for implementing chibivue.",
+  head: [["link", { rel: "icon", href: "https://github.com/Ubugeeei/chibivue/blob/main/book/logo/logo.png?raw=true" }]],
   themeConfig: {
     logo: "https://github.com/Ubugeeei/chibivue/blob/main/book/logo/logo.png?raw=true",
     nav: [
