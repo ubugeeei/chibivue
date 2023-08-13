@@ -15,8 +15,10 @@ export const generate = ({
   children: TemplateChildNode[];
 }): string => {
   return `return function render(_ctx) {
-  const { h } = ChibiVue;
-  return ${genNode(children[0])};
+  with (_ctx) {
+    const { h } = ChibiVue;
+    return ${genNode(children[0])};
+  }
 }`;
 };
 
@@ -46,7 +48,7 @@ const genProp = (prop: AttributeNode | DirectiveNode): string => {
     case NodeTypes.DIRECTIVE: {
       switch (prop.name) {
         case "on":
-          return `${toHandlerKey(prop.arg)}: _ctx.${prop.exp}`;
+          return `${toHandlerKey(prop.arg)}: ${prop.exp}`;
         default:
           // TODO: other directives
           throw new Error(`unexpected directive name. got "${prop.name}"`);
@@ -62,5 +64,5 @@ const genText = (text: TextNode): string => {
 };
 
 const genInterpolation = (node: InterpolationNode): string => {
-  return `_ctx.${node.content}`;
+  return `${node.content}`;
 };
