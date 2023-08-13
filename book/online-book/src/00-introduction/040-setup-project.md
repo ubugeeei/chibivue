@@ -18,7 +18,7 @@
 
 ## 環境構築
 
-さて、早速ですが環境構築からやっていきましょう!
+さて、早速ですが環境構築からやっていきましょう！
 一応先に今回構築する環境の内容を列挙しておきます
 
 - ランタイム: Node.js 18.x
@@ -175,7 +175,7 @@ index.html を以下のように書き換えます。
 </html>
 ```
 
-vite で作成したプロジェクトで chibivue で実装したものを import できるようにエイリアスの設定をします。
+Vite で作成したプロジェクトで chibivue で実装したものを import できるようにエイリアスの設定をします。
 
 ```sh
 pwd # ~/examples/playground
@@ -196,7 +196,7 @@ export default defineConfig({
 });
 ```
 
-最後に、chibivue プロジェクトの package.json に playground を起動するコマンドを記述して実際に起動してみましよう!
+最後に、chibivue プロジェクトの package.json に playground を起動するコマンドを記述して実際に起動してみましよう！
 
 ~/package.json に以下を追記
 
@@ -213,7 +213,7 @@ pwd # ~
 pnpm run dev
 ```
 
-このコマンドで立ち上がった開発者サーバーにアクセスし、メッセージが表示されていれば完了です!
+このコマンドで立ち上がった開発者サーバーにアクセスし、メッセージが表示されていれば完了です！
 
 ![hello chibivue](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/hello_chibivue.png)
 

@@ -16,9 +16,9 @@ const app = createApp({
 app.mount("#app");
 ```
 
-これはシンプルは`Hello World.`と画面に描画するための関数でした。  
+これはシンプルは `Hello World.` と画面に描画するための関数でした。  
 メッセージだけでは何とも寂しいので、HTML 要素も描画できるような開発者インタフェースを考えてみましょう。  
-そこで登場するのが`h function`です。この`h`というのは`hyperscript`の略で、HTML (Hyper Text Markup Language)を JS で記述する関数として提供されます。
+そこで登場するのが `h function` です。この `h` というのは `hyperscript` の略で、HTML (Hyper Text Markup Language)を JS で記述する関数として提供されます。
 
 > h() is short for hyperscript - which means "JavaScript that produces HTML (hypertext markup language)". This name is inherited from conventions shared by many virtual DOM implementations. A more descriptive name could be createVnode(), but a shorter name helps when you have to call this function many times in a render function.
 
@@ -83,8 +83,8 @@ const app: App = {
 まあ、変わったところというと、message という文字列ではなく node というオブジェクトに変えただけです。  
 あとは render 関数でオブジェクトを元に DOM 操作をすれば OK です。
 
-実は、このオブジェクトには名前がついていて、「仮想 DOM」と言います。  
-仮想 DOM については仮想 DOM のチャプターで詳しく解説するので、とりあえず名前だけ覚えてもらえれば大丈夫です。
+実は、このオブジェクトには名前がついていて、「 virtual DOM 」と言います。  
+ virtual DOM  については virtual DOM  のチャプターで詳しく解説するので、とりあえず名前だけ覚えてもらえれば大丈夫です。
 
 ## h function を実装する
 
@@ -122,7 +122,7 @@ export function h(
 }
 ```
 
-とりあえずここまでで playground 似て h 関数を使ってみましょう。
+とりあえずここまでで playground にて h 関数を使ってみましょう。
 
 ```ts
 import { createApp, h } from "chibivue";
@@ -147,7 +147,7 @@ mount(rootContainer: HostElement) {
 ```
 
 それでは、render 関数を実装してみましょう。
-RendererOptions に`createElement`と`createText`と`insert`を実装します。
+RendererOptions に  createElement` と `createText` と `insert` を実装します。
 
 ```ts
 export interface RendererOptions<HostNode = RendererNode> {
@@ -235,7 +235,7 @@ const app = createApp({
 app.mount("#app");
 ```
 
-やった! h 関数でいろんなタグを描画できるようになった!
+やった！ h 関数でいろんなタグを描画できるようになった！
 
 ![](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/simple_h_function.png)
 
@@ -249,7 +249,7 @@ app.mount("#app");
 
 https://github.com/vuejs/core/tree/main/packages/runtime-dom/src
 
-特に注目して欲しいのは modules というディレクトリと patchProp.ts というファイルです。
+特に注目して欲しいのは `modules` というディレクトリと `patchProp.ts` というファイルです。
 
 modules の中には class や style, その他 props の操作をするためのファイルが実装されています。
 https://github.com/vuejs/core/tree/main/packages/runtime-dom/src/modules
@@ -284,7 +284,7 @@ export const patchProp: DOMRendererOptions["patchProp"] = (el, key, value) => {
 };
 ```
 
-`RendererOptions`に patchProp の型がないので定義します。
+`RendererOptions` に patchProp の型がないので定義します。
 
 ```ts
 export interface RendererOptions<
@@ -397,8 +397,8 @@ addEventListener は名前の通り、ただイベントのリスナーを登録
 本当は然るべきタイミング remove する必要があるのですが、ここでは一旦気にしないことにします。
 
 patchEvent では invoker という関数でラップしてリスナーを登録しています。  
-parseName に関しては、単純に props のキー名は`onClick`や`onInput`のようになっているので、それらを on を除いた小文字に変換しているだけです。(eg. click, input)  
-一点注意点としては、同じ要素に対して重複して addEventListener しないように、要素に`_vei` (vue event invokers)という名前で invoker を生やしてあげます。  
+parseName に関しては、単純に props のキー名は `onClick` や `onInput` のようになっているので、それらを on を除いた小文字に変換しているだけです。(eg. click, input)  
+一点注意点としては、同じ要素に対して重複して addEventListener しないように、要素に `_vei` (vue event invokers)という名前で invoker を生やしてあげます。  
 これによって patch 時に existingInvoker.value を更新することで重複して addEventListener せずにハンドラを更新することができます。
 
 あとは patchProps に組み込んで renderVNode で使ってみましょう。
@@ -472,7 +472,7 @@ h 関数でイベントハンドラを登録できるようになりました!
 ## 他の Props にも対応してみる。
 
 あとは同じようなことを setAttribute でやるだけです。  
-これは modules/attrs.ts に実装します。  
+これは `modules/attrs.ts` に実装します。  
 ここはぜひみなさんでやってみてください。答えは最後にこのチャプターのソースコードを添付するのでそこで確認してみてください。  
 これくらいのコードが動くようになればゴールです。
 

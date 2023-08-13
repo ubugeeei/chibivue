@@ -88,11 +88,11 @@ export default defineConfig({
             link: "/10-minimum-example/020-simple-h-function",
           },
           {
-            text: "小さいリアクティブシステム",
+            text: "小さい reactivity system ",
             link: "/10-minimum-example/030-minimum-reactive",
           },
           {
-            text: "小さい仮想DOMシステム",
+            text: "小さい virtual DOM",
             link: "/10-minimum-example/040-minimum-virtual-dom",
           },
           {

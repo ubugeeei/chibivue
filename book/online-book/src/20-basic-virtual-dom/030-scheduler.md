@@ -32,7 +32,7 @@ app.mount("#app");
 ```
 
 ボタンをクリックすると、state.message に対して 2 回 set が起こるので、当然 2 回 trigger が実行されることになります。
-つまりは、2 回仮想 DOM が算出され、2 回 patch が行われます。
+つまりは、2 回 virtual DOM  が算出され、2 回 patch が行われます。
 
 ![non_scheduled_effect](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/non_scheduled_effect.png)
 

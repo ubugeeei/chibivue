@@ -6,6 +6,7 @@
     "deduped",
     "deindent",
     "estree",
+    "hyperscript",
     "nocheck",
     "RAWTEXT",
     "RCDATA",
@@ -13,6 +14,7 @@
     "vdom",
     "vitepress",
     "vnode",
-    "Vnodes"
+    "Vnodes",
+    "vuejs"
   ]
 }

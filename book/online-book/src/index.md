@@ -17,10 +17,10 @@ hero:
 
 features:
   - title: Reactivity System
-    details: 基本的なリアクティビティシステムの原理から、EffectScope や CustomRef などの応用的な API の実装まで幅広く行います。
+    details: 基本的な reactivity system の原理から、EffectScope や CustomRef などの応用的な API の実装まで幅広く行います。
     icon: 🔆
   - title: Virtual DOM
-    details: 仮想 DOM の基本的な実装から、パッチレンダリング、スケジューラの実装まで幅広く行います。
+    details:  virtual DOM  の基本的な実装から、パッチレンダリング、スケジューラの実装まで幅広く行います。
     icon: ⛅
   - title: Template Compiler
     details: テンプレートコンパイラの基本的な実装から、データバインディングやディレクティブの実装まで幅広く行います。

@@ -1,9 +1,9 @@
-# 小さいリアクティブシステム
+# 小さい reactivity system
 
 ## 今回目指す開発者インタフェース
 
-ここからは Vue.js の醍醐味であるリアクティブシステムというものについてやっていきます。  
-これ以前の実装は、見た目が Vue.js に似ていれど、それは見た目だけで機能的には全く Vue.js ではりません。  
+ここからは Vue.js の醍醐味である reactivity system というものについてやっていきます。  
+これ以前の実装は、見た目が Vue.js に似ていれど、それは見た目だけで機能的には全く Vue.js ではありません。  
 たんに最初の開発者インタフェースを実装し、いろんな HTML を表示できるようにしてみました。
 
 しかし、このままでは一度画面を描画するとその後はそのままで、Web アプリケーションとしてはただの静的なサイトになってしまっています。  
@@ -48,7 +48,7 @@ reactive 関数でステートを定義し、それを書き換える increment 
 - ボタンをクリックするたと、ステートが更新される
 - ステートの更新を追跡して render 関数を再実行し、画面を再描画する
 
-## リアクティブシステムとはどのようなもの?
+## reactivity system とはどのようなもの?
 
 さてここで、そもそもリアクティブとは何だったかのおさらいです。
 公式ドキュメントを参照してみます。
@@ -57,7 +57,7 @@ reactive 関数でステートを定義し、それを書き換える increment 
 
 [引用元](https://ja.vuejs.org/guide/essentials/reactivity-fundamentals.html)
 
-> Vue の最も特徴的な機能の 1 つは、控えめなリアクティビティーシステムです。コンポーネントの状態はリアクティブな JavaScript オブジェクトで構成されています。状態を変更すると、ビュー (View) が更新されます。
+> Vue の最も特徴的な機能の 1 つは、控えめな reactivity system です。コンポーネントの状態はリアクティブな JavaScript オブジェクトで構成されています。状態を変更すると、ビュー (View) が更新されます。
 
 [引用元](https://ja.vuejs.org/guide/extras/reactivity-in-depth.html)
 
@@ -128,19 +128,19 @@ app.mount("#app");
 ```
 
 まあ、これだけです。
-実際にはステートが変更された時にこの `updateComponent`を実行したいわけです。
+実際にはステートが変更された時にこの `updateComponent` を実行したいわけです。
 
-## 小さいリアクティブシステムの実装
+## 小さい reactivity system の実装
 
-今回のメインテーマです。どうにかして、ステートが変更された時に`updateComponent`を実行したいです。
+今回のメインテーマです。どうにかして、ステートが変更された時に updateComponent を実行したいです。
 これの肝は以下の二つです。
 
 - Proxy オブジェクト
 - オブザーバ パターン
 
-リアクティブシステムはこれらを組み合わせて実装されています。
+reactivity system はこれらを組み合わせて実装されています。
 
-まず、リアクティブシステムの実装方法についてではなく、それぞれについての説明をしてみます。
+まず、 reactivity system の実装方法についてではなく、それぞれについての説明をしてみます。
 
 ## Proxy オブジェクト
 
@@ -174,7 +174,7 @@ const o = new Proxy(
 ```
 
 この例では生成するオブジェクトに対する設定を書き込んでいます。  
-具体的には、このオブジェクトのプロパティにアクセス(get)した際、`\`target:${target}, key: ${key}\``をコンソールに出力します。  
+具体的には、このオブジェクトのプロパティにアクセス(get)した際に元のオブジェクト(target)とアクセスされた key 名がコンソールに出力されるようになっています。
 実際にブラウザ等で動作を確認してみましょう。
 
 ![proxy_get](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/proxy_get.png)
@@ -273,12 +273,12 @@ sub.notify(); // 通知
 
 わざわざこんなもの何に使うの? という感じがするかもしれませんが、とりあえずこれがオブザーバパターンだと思ってください。
 
-## Proxy とオブザーバパターンでリアクティブシステムを実現してみる
+## Proxy とオブザーバパターンで reactivity system を実現してみる
 
-改めて目的を明確にしておくと、今回の目的は「ステートが変更された時に`updateComponent`を実行したい」です。  
+改めて目的を明確にしておくと、今回の目的は「ステートが変更された時に `updateComponent` を実行したい」です。  
 Proxy とオブザーバパターンを用いた実装の流れについて説明してみます。
 
-まず、Vue.js のリアクティブシステムには `target`, `Proxy`, `ReactiveEffect`, `Dep`, `track`, `trigger`, `targetMap`, `activeEffect`というものが登場します。
+まず、Vue.js の reactivity system には `target`, `Proxy`, `ReactiveEffect`, `Dep`, `track`, `trigger`, `targetMap`, `activeEffect`というものが登場します。
 
 まず、targetMap の構造についてです。  
 targetMap はある target の key と dep のマッピングです。  
@@ -768,3 +768,15 @@ const render: RootRenderFunction = (vnode, container) => {
 今度は大丈夫そうです!
 
 これで reactive に画面を更新できるようになりました!!
+
+::: tip
+このチャプターで登場したオブザーバパターンですが、実装してわかるとおり、vuejs/core(3.x のリポジトリ)では直接的な表現は登場しませんでした。
+
+しかし、v2 のリポジトリを見てみると、実際に `Observer` と言う class が存在しており、notify,observe などの用語も存在します。  
+
+そして、依存関係は現在と同じく、dep と言うものが存在していたり、と今の実装の前進となるような実装が存在しています。
+
+https://github.com/vuejs/vue/blob/49b6bd4264c25ea41408f066a1835f38bf6fe9f1/src/core/observer/index.ts#L48
+
+chibivue では 3.x の Vue.js をベースとして説明しますが、たまに 2.x のリポジトリを除いてみることで Vue.js が辿ってきた歴史の形跡が所々で観測できてとても楽しいです。皆さんもぜひ見てみてください！！
+:::
