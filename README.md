@@ -40,6 +40,8 @@ https://ubugeeei.github.io/chibivue
 ### open book on localhost
 
 ```sh
+$ git clone https://github.com/Ubugeeei/chibivue
+$ cd chibivue
 $ pnpm i
 $ pnpm run book:dev
 ```
@@ -49,6 +51,20 @@ $ pnpm run book:dev
 [English](https://github.com/Ubugeeei/chibivue/tree/main/book/online-book/src/en) | [Japanese](https://github.com/Ubugeeei/chibivue/tree/main/book/online-book/src)
 <br/>
 <br/>
+
+# 🎥 playground
+
+```sh
+$ git clone https://github.com/Ubugeeei/chibivue
+$ cd chibivue
+$ pnpm i
+
+# generate playground files to ~/example/playground (git ignored)
+$ pnpm run dev:setup
+
+# listen localhost
+$ pnpm run dev
+```
 
 # ⚠️ status
 

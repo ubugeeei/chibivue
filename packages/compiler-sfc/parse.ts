@@ -103,11 +103,23 @@ export function parse(
 
 function createBlock(node: ElementNode, source: string): SFCBlock {
   const type = node.tag;
-
   let { start, end } = node.loc;
-  start = node.children[0].loc.start;
-  end = node.children[node.children.length - 1].loc.end;
-  const content = source.slice(start.offset, end.offset);
+  let content = "";
+  if (node.children.length) {
+    start = node.children[0].loc.start;
+    end = node.children[node.children.length - 1].loc.end;
+    content = source.slice(start.offset, end.offset);
+  } else {
+    const offset = node.loc.source.indexOf(`</`);
+    if (offset > -1) {
+      start = {
+        line: start.line,
+        column: start.column + offset,
+        offset: start.offset + offset,
+      };
+    }
+    end = { ...start };
+  }
 
   const attrs: Record<string, string | true> = {};
 
