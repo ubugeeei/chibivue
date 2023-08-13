@@ -39,6 +39,18 @@ const Child = defineComponent({
   },
 });
 
+const Child2 = {
+  setup() {
+    const state = reactive({ count: 0 });
+    return { state };
+  },
+  template: `
+    <div>
+      <p>child2 count: {{ state.count }}</p>
+    </div>
+    `,
+};
+
 const app = createApp({
   setup() {
     const state = reactive({ count: 0 });
@@ -48,6 +60,7 @@ const app = createApp({
         h("p", {}, [
           h(Child, { parentCount: state.count }, []),
           h("button", { onClick: () => state.count++ }, [`increment (parent)`]),
+          h(Child2, {}, []),
         ]),
       ]);
   },

@@ -121,6 +121,19 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
     }
     return true;
   },
+
+  has(
+    { _: { setupState, ctx, propsOptions, data } }: ComponentRenderContext,
+    key: string
+  ) {
+    let normalizedProps;
+    return (
+      hasOwn(setupState, key) ||
+      ((normalizedProps = propsOptions[0]) && hasOwn(normalizedProps, key)) ||
+      hasOwn(data, key) ||
+      hasOwn(ctx, key)
+    );
+  },
 };
 
 export type PublicPropertiesMap = Record<
