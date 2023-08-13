@@ -89,9 +89,9 @@ instance.proxy = instance.proxy = new Proxy(
 
 export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
   get(instance: ComponentRenderContext, key: string) {
-    const { setupState, data, props } = instance;
+    const { setupState, ctx, props } = instance;
 
-    // keyを元にsetupState -> data -> propsの順にチェックして存在していれば値を返す
+    // keyを元にsetupState -> props -> ctx の順にチェックして存在していれば値を返す
   },
 };
 ```
@@ -282,6 +282,54 @@ const app = createApp({
 
 app.mount("#app");
 ```
+
+## Template へのバインディングと with 文
+
+実は、このチャプターの変更により問題が発生しています。  
+以下のようなコードを動かしてみましょう。
+
+```ts
+const Child2 = {
+  setup() {
+    const state = reactive({ count: 0 });
+    return { state };
+  },
+  template: `<p>child2 count: {{ state.count }}</p>`,
+};
+```
+
+なんの変哲もないコードですが、実はこれは動きません。  
+state が定義さていないと怒られてしまいます。
+
+![state_is_not_defined](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/state_is_not_defined.png)
+
+これがなぜかというと、with 文の引数として Proxy を渡す場合、has を定義しないといけないためです。
+
+[Creating dynamic namespaces using the with statement and a proxy (MDN)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/with#creating_dynamic_namespaces_using_the_with_statement_and_a_proxy)
+
+と言うわけで、PublicInstanceProxyHandlers 　に has を実装してみましょう。  
+setupState, props, ctx のいずれかに key が存在していれば true を返すようにします。
+
+```ts
+export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
+  // .
+  // .
+  // .
+  has(
+    { _: { setupState, ctx, propsOptions } }: ComponentRenderContext,
+    key: string
+  ) {
+    let normalizedProps;
+    return (
+      hasOwn(setupState, key) ||
+      ((normalizedProps = propsOptions[0]) && hasOwn(normalizedProps, key)) ||
+      hasOwn(ctx, key)
+    );
+  },
+};
+```
+
+これで正常に動くようになれば OK です！
 
 ここまでのソースコード:  
 [chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/40_basic_component_system/040_setup_context)

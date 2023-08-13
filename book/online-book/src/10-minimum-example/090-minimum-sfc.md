@@ -630,8 +630,10 @@ export const generate = ({
   children: TemplateChildNode[];
 }): string => {
   return `return function render(_ctx) {
-  const { h } = ChibiVue;
-  return ${genNode(children[0])};
+  with (_ctx) {
+    const { h } = ChibiVue;
+    return ${genNode(children[0])};
+  }
 }`;
 };
 ```
@@ -695,7 +697,6 @@ export const generate = (
 };
 ```
 
-これで render 関数をコンパイルできるようになっていると思います。ブラウザの source で確認してみましょう。  
 ついでに import 文を足しておきました。output という配列にソースコードを詰めていく感じにも変更してます。
 
 ```ts
@@ -729,6 +730,84 @@ export default function vitePluginChibivue(): Plugin {
     },
   };
 }
+```
+
+これで render 関数をコンパイルできるようになっていると思います。ブラウザの source で確認してみましょう。
+
+と、言いたいところなのですが、実は少し問題があります。
+
+データをテンプレートにバインドする際に、with 文を使用していると思うのですが、Vite は ESM を扱う都合上、非厳格モード (sloppy モード) でのみ動作するコードを処理できず、  
+with 文を扱うことができません。  
+これまでは vite 上ではなく、単に with 文を含むコード(文字列)を Function コンストラクタに渡してブラウザ上で関数化していたので特に問題にはなっていませんでしたが、
+今回はエラーになってしいます。以下のようなエラーが出るはずです。
+
+> Strict mode code may not include a with statement
+
+これについては Vite の公式ドキュメントの方にもトラブルシューティングとして記載されています。
+
+[Syntax Error / Type Error が発生する (Vite)](https://ja.vitejs.dev/guide/troubleshooting.html#syntax-error-type-error-%E3%81%8B%E3%82%99%E7%99%BA%E7%94%9F%E3%81%99%E3%82%8B)
+
+今回は、一時的な対応策として、ブラウザモードでない場合には with 文を含まないコードを生成するようにしてみます。
+
+具体的には、バインド対象のデータに関しては with 文を使用せずに prefix として `_cxt.`　を付与する形で制御してみます。  
+一時的な対応なのであまり厳格ではないのですが、概ね動作するようになると思います。  
+(ちゃんとした対応は後のチャプターで行います。)
+
+```ts
+export const generate = (
+  {
+    children,
+  }: {
+    children: TemplateChildNode[];
+  },
+  option: Required<CompilerOptions>
+): string => {
+  // isBrowser が false の場合は with 文を含まないコードを生成する
+  return `${option.isBrowser ? "return " : ""}function render(_ctx) {
+    ${option.isBrowser ? "with (_ctx) {" : ""}
+      const { h } = ChibiVue;
+      return ${genNode(children[0], option)};
+    ${option.isBrowser ? "}" : ""}
+}`;
+};
+
+// .
+// .
+// .
+
+const genProp = (
+  prop: AttributeNode | DirectiveNode,
+  option: Required<CompilerOptions>
+): string => {
+  switch (prop.type) {
+    case NodeTypes.ATTRIBUTE:
+      return `${prop.name}: "${prop.value?.content}"`;
+    case NodeTypes.DIRECTIVE: {
+      switch (prop.name) {
+        case "on":
+          return `${toHandlerKey(prop.arg)}: ${
+            option.isBrowser ? "" : "_ctx." // -------------------- ここ
+          }${prop.exp}`;
+        default:
+          // TODO: other directives
+          throw new Error(`unexpected directive name. got "${prop.name}"`);
+      }
+    }
+    default:
+      throw new Error(`unexpected prop type.`);
+  }
+};
+
+// .
+// .
+// .
+
+const genInterpolation = (
+  node: InterpolationNode,
+  option: Required<CompilerOptions>
+): string => {
+  return `${option.isBrowser ? "" : "_ctx."}${node.content}`; // ------------ ここ
+};
 ```
 
 ![compile_sfc_render](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/compile_sfc_render.png)
