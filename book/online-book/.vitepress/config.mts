@@ -15,7 +15,30 @@ export default defineConfig({
         href: "https://github.com/Ubugeeei/chibivue/blob/main/book/images/logo/logo.png?raw=true",
       },
     ],
+
+    // og
+    [
+      "meta",
+      { property: "og:url", content: "https://ubugeeei.github.io/chibivue" },
+    ],
+    ["meta", { property: "og:title", content: "chibivue" }],
+    [
+      "meta",
+      {
+        property: "og:description",
+        content: "Writing Vue.js with your own hands.",
+      },
+    ],
+    [
+      "meta",
+      {
+        property: "og:image",
+        content:
+          "https://github.com/Ubugeeei/chibivue/blob/main/book/images/logo/logo.png?raw=true",
+      },
+    ],
   ],
+
   locales: {
     root: {
       label: "Japanese",
