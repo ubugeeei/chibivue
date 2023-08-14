@@ -6,6 +6,8 @@
     "setup": "pnpm i && ts-node --esm tools/create-chibivue/main.ts",
     "dev": "cd example/playground && pnpm i && pnpm run dev",
     "dev:setup": "ts-node --esm tools/chibivue-playground/main.ts",
+    "vue": "cd example/vue && pnpm i && pnpm run dev",
+    "vue:setup": "ts-node --esm tools/vue-playground/main.ts",
     "dev:app": "cd example/app && pnpm i && pnpm run dev",
     "test": "vitest",
     "prepare": "husky install",

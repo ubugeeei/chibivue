@@ -66,6 +66,13 @@ $ pnpm run dev:setup
 $ pnpm run dev
 ```
 
+original vue.js 3.3 playground
+
+```sh
+$ pnpm run vue:setup
+$ pnpm run vue
+```
+
 # ⚠️ status
 
 This online book is currently a work in progress.
@@ -157,3 +164,7 @@ Please refer to the information below for the progress status.
 | router     | ✅   |      |
 | keep-alive |      |      |
 | suspense   |      |      |
+
+```
+
+```
