@@ -11,8 +11,6 @@ export const enum NodeTypes {
   ATTRIBUTE,
   DIRECTIVE,
 
-  COMPOUND_EXPRESSION,
-
   // codegen
   VNODE_CALL,
   JS_CALL_EXPRESSION,
@@ -28,23 +26,12 @@ export interface Node {
 
 export type ParentNode = RootNode | ElementNode;
 
-export type ExpressionNode = SimpleExpressionNode | CompoundExpressionNode;
+export type ExpressionNode = SimpleExpressionNode;
 
 export interface SimpleExpressionNode extends Node {
   type: NodeTypes.SIMPLE_EXPRESSION;
   content: string;
   isStatic: boolean;
-}
-
-export interface CompoundExpressionNode extends Node {
-  type: NodeTypes.COMPOUND_EXPRESSION;
-  children: (
-    | SimpleExpressionNode
-    | CompoundExpressionNode
-    | InterpolationNode
-    | TextNode
-    | string
-  )[];
 }
 
 export type TemplateTextChildNode = TextNode | InterpolationNode;
@@ -136,7 +123,7 @@ export interface Position {
 
 export interface InterpolationNode extends Node {
   type: NodeTypes.INTERPOLATION;
-  content: ExpressionNode;
+  content: string;
 }
 
 export const locStub: SourceLocation = {
@@ -216,17 +203,6 @@ export function createSimpleExpression(
     type: NodeTypes.SIMPLE_EXPRESSION,
     isStatic,
     content,
-    loc,
-  };
-}
-
-export function createCompoundExpression(
-  children: CompoundExpressionNode["children"],
-  loc: SourceLocation = locStub
-): CompoundExpressionNode {
-  return {
-    type: NodeTypes.COMPOUND_EXPRESSION,
-    children,
     loc,
   };
 }

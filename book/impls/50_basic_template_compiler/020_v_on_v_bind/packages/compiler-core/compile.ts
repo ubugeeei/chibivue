@@ -3,7 +3,6 @@ import { CompilerOptions } from "./options";
 import { baseParse } from "./parse";
 import { DirectiveTransform, NodeTransform, transform } from "./transform";
 import { transformElement } from "./transform/transformElement";
-import { transformExpression } from "./transform/transformExpression";
 
 export type TransformPreset = [
   NodeTransform[],
@@ -11,7 +10,7 @@ export type TransformPreset = [
 ];
 
 export function getBaseTransformPreset(): TransformPreset {
-  return [[transformExpression, transformElement], {}];
+  return [[transformElement], {}];
 }
 
 export function baseCompile(
@@ -29,6 +28,5 @@ export function baseCompile(
   });
 
   const code = generate(ast, option);
-
   return code;
 }
