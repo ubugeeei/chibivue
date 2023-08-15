@@ -2,6 +2,7 @@ import {
   AttributeNode,
   DirectiveNode,
   ElementNode,
+  ExpressionNode,
   InterpolationNode,
   NodeTypes,
   Position,
@@ -11,6 +12,7 @@ import {
   TextNode,
   createRoot,
 } from "./ast";
+import { advancePositionWithClone } from "./utils";
 
 export interface ParserContext {
   readonly originalSource: string;
@@ -161,12 +163,7 @@ function parseInterpolation(
 
   return {
     type: NodeTypes.INTERPOLATION,
-    content: {
-      type: NodeTypes.SIMPLE_EXPRESSION,
-      isStatic: false,
-      content,
-      loc: getSelection(context, innerStart, innerEnd),
-    },
+    content,
     loc: getSelection(context, start),
   };
 }
@@ -308,22 +305,56 @@ function parseAttribute(
 
   // directive
   const loc = getSelection(context, start);
-  if (/^(v-[A-Za-z0-9-]|@)/.test(name)) {
+  if (/^(v-[A-Za-z0-9-]|:|\.|@|#)/.test(name)) {
     const match =
       /(?:^v-([a-z0-9-]+))?(?:(?::|^\.|^@|^#)(\[[^\]]+\]|[^\.]+))?(.+)?$/i.exec(
         name
       )!;
 
-    let dirName = match[1] || (startsWith(name, "@") ? "on" : "");
+    let dirName =
+      match[1] ||
+      (startsWith(name, ":") ? "bind" : startsWith(name, "@") ? "on" : "");
 
-    let arg = "";
+    let arg: ExpressionNode | undefined;
 
-    if (match[2]) arg = match[2];
+    if (match[2]) {
+      const startOffset = name.lastIndexOf(match[2]);
+      const loc = getSelection(
+        context,
+        getNewPosition(context, start, startOffset),
+        getNewPosition(context, start, startOffset + match[2].length)
+      );
+
+      let content = match[2];
+      let isStatic = true;
+
+      if (content.startsWith("[")) {
+        isStatic = false;
+        if (!content.endsWith("]")) {
+          console.error(`Invalid dynamic argument expression: ${content}`);
+          content = content.slice(1);
+        } else {
+          content = content.slice(1, content.length - 1);
+        }
+      }
+
+      arg = {
+        type: NodeTypes.SIMPLE_EXPRESSION,
+        content,
+        isStatic,
+        loc,
+      };
+    }
 
     return {
       type: NodeTypes.DIRECTIVE,
       name: dirName,
-      exp: value?.content ?? "",
+      exp: value && {
+        type: NodeTypes.SIMPLE_EXPRESSION,
+        content: value.content,
+        isStatic: false,
+        loc: value.loc,
+      },
       loc,
       arg,
     };
@@ -392,6 +423,18 @@ function getSelection(
     end,
     source: context.originalSource.slice(start.offset, end.offset),
   };
+}
+
+function getNewPosition(
+  context: ParserContext,
+  start: Position,
+  numberOfCharacters: number
+): Position {
+  return advancePositionWithClone(
+    start,
+    context.originalSource.slice(start.offset, numberOfCharacters),
+    numberOfCharacters
+  );
 }
 
 function last<T>(xs: T[]): T | undefined {

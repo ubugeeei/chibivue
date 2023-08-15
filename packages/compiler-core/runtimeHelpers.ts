@@ -5,6 +5,11 @@ export const RESOLVE_COMPONENT = Symbol(``);
 export const WITH_DIRECTIVES = Symbol();
 export const RENDER_LIST = Symbol();
 export const TO_DISPLAY_STRING = Symbol();
+export const MERGE_PROPS = Symbol();
+export const NORMALIZE_CLASS = Symbol();
+export const NORMALIZE_STYLE = Symbol();
+export const NORMALIZE_PROPS = Symbol();
+
 export const TO_HANDLER_KEY = Symbol();
 export const UNREF = Symbol();
 
@@ -14,6 +19,10 @@ export const helperNameMap: Record<symbol, string> = {
   [CREATE_ELEMENT_VNODE]: `createElementVNode`,
   [RESOLVE_COMPONENT]: `resolveComponent`,
   [TO_DISPLAY_STRING]: `toDisplayString`,
+  [MERGE_PROPS]: `mergeProps`,
+  [NORMALIZE_CLASS]: `normalizeClass`,
+  [NORMALIZE_STYLE]: `normalizeStyle`,
+  [NORMALIZE_PROPS]: `normalizeProps`,
   [TO_HANDLER_KEY]: `toHandlerKey`,
   [WITH_DIRECTIVES]: `withDirectives`,
   [RENDER_LIST]: `renderList`,

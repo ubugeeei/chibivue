@@ -203,9 +203,13 @@ export default defineConfig({
             text: "Transformer の実装 の Codegen のリファクタ",
             link: "/50-basic-template-compiler/010-transform",
           },
+          {
+            text: "ディレクティブを実装しよう (v-bind)",
+            link: "/50-basic-template-compiler/020-v-bind",
+          },
           // {
-          //   text: "transformExpression",
-          //   link: "/50-basic-template-compiler/020-transform-expression",
+          //   text: "v-onに対応する",
+          //   link: "/50-basic-template-compiler/025-v-on",
           // },
           {
             text: "v-for に対応する",

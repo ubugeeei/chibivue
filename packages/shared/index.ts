@@ -2,6 +2,7 @@ import { makeMap } from "./makeMap";
 
 export * from "./toDisplayString";
 export * from "./typeUtils";
+export * from "./normalizeProp";
 
 const onRE = /^on[^a-z]/;
 export const isOn = (key: string) => onRE.test(key);

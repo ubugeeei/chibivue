@@ -30,6 +30,7 @@ export {
   createTextVNode,
   createVNode,
   createElementVNode,
+  mergeProps,
   Fragment,
 } from "./vnode";
 
@@ -53,4 +54,11 @@ export {
 export { type ComponentOptions, type RenderFunction } from "./componentOptions";
 export { type ComponentPublicInstance } from "./componentPublicInstance";
 
-export { capitalize, toHandlerKey, toDisplayString } from "../shared";
+export {
+  capitalize,
+  toHandlerKey,
+  toDisplayString,
+  normalizeClass,
+  normalizeStyle,
+  normalizeProps,
+} from "../shared";

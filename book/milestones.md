@@ -39,10 +39,17 @@
   - slot
 - directive
   - v-on
-  - v-bind
+  - v-bind ✅
+  - v-show
   - v-for
-  - v-if
+  - v-if / v-else / v-else-if
   - v-model
+  - v-html
+  - v-slot
+  - v-pre
+  - v-once
+  - v-memo
+  - v-cloak
 
 # ★ Basic SFC Compiler 部門
 

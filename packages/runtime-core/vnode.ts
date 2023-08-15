@@ -1,7 +1,14 @@
 import { ShapeFlags } from "../shared/shapeFlags";
-import { isArray, isFunction, isObject, isString } from "../shared";
+import {
+  isArray,
+  isFunction,
+  isObject,
+  isString,
+  normalizeClass,
+  normalizeStyle,
+} from "../shared";
 import { currentRenderingInstance } from "./componentRenderContext";
-import { type ComponentInternalInstance } from "./component";
+import { Data, type ComponentInternalInstance } from "./component";
 import { type ComponentPublicInstance } from "./componentPublicInstance";
 import { AppContext } from "./apiCreateApp";
 import { DirectiveBinding } from "./directives";
@@ -176,6 +183,27 @@ export function cloneVNode<T>(vnode: VNode<T>): VNode<T> {
     appContext: vnode.appContext,
   };
   return cloned;
+}
+
+export function mergeProps(...args: (Data & VNodeProps)[]) {
+  const ret: Data = {};
+  for (let i = 0; i < args.length; i++) {
+    const toMerge = args[i];
+    for (const key in toMerge) {
+      if (key === "class") {
+        if (ret.class !== toMerge.class) {
+          ret.class = normalizeClass([ret.class, toMerge.class]);
+        }
+      } else if (key === "style") {
+        ret.style = normalizeStyle([ret.style, toMerge.style]);
+      } else if (key !== "") {
+        ret[key] = toMerge[key];
+      } /*if (isOn(key))*/ else {
+        // TODO: v-on="object"
+      }
+    }
+  }
+  return ret;
 }
 
 /**

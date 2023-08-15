@@ -1,3 +1,12 @@
+export {
+  camelize,
+  capitalize,
+  toHandlerKey,
+  normalizeProps,
+  normalizeClass,
+  normalizeStyle,
+} from "../shared";
+
 export type { App, CreateAppFunction } from "./apiCreateApp";
 export { createAppAPI } from "./apiCreateApp";
 

@@ -10,7 +10,7 @@ function compileToFunction(
   template: string,
   options?: CompilerOptions
 ): RenderFunction {
-  const opts = { ...options } as CompilerOptions;
+  const opts = { ...options, __BROWSER__: true } as CompilerOptions;
   const { code } = compile(template, opts);
   return new Function("ChibiVue", code)(runtimeDom);
 }

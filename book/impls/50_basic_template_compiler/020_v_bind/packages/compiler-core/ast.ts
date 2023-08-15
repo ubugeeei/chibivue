@@ -11,8 +11,6 @@ export const enum NodeTypes {
   ATTRIBUTE,
   DIRECTIVE,
 
-  COMPOUND_EXPRESSION,
-
   // codegen
   VNODE_CALL,
   JS_CALL_EXPRESSION,
@@ -28,23 +26,12 @@ export interface Node {
 
 export type ParentNode = RootNode | ElementNode;
 
-export type ExpressionNode = SimpleExpressionNode | CompoundExpressionNode;
+export type ExpressionNode = SimpleExpressionNode;
 
 export interface SimpleExpressionNode extends Node {
   type: NodeTypes.SIMPLE_EXPRESSION;
   content: string;
   isStatic: boolean;
-}
-
-export interface CompoundExpressionNode extends Node {
-  type: NodeTypes.COMPOUND_EXPRESSION;
-  children: (
-    | SimpleExpressionNode
-    | CompoundExpressionNode
-    | InterpolationNode
-    | TextNode
-    | string
-  )[];
 }
 
 export type TemplateTextChildNode = TextNode | InterpolationNode;
@@ -61,13 +48,14 @@ export interface VNodeCall extends Node {
 
 export type JSChildNode =
   | VNodeCall
+  | CallExpression
   | ObjectExpression
   | ArrayExpression
   | ExpressionNode;
 
 export interface CallExpression extends Node {
   type: NodeTypes.JS_CALL_EXPRESSION;
-  callee: string | symbol;
+  callee: string;
   arguments: (string | JSChildNode | TemplateChildNode | TemplateChildNode[])[];
 }
 
@@ -118,8 +106,8 @@ export interface AttributeNode extends Node {
 export interface DirectiveNode extends Node {
   type: NodeTypes.DIRECTIVE;
   name: string;
-  exp: string;
-  arg: string;
+  exp: ExpressionNode | undefined;
+  arg: ExpressionNode | undefined;
 }
 
 export interface SourceLocation {
@@ -136,7 +124,7 @@ export interface Position {
 
 export interface InterpolationNode extends Node {
   type: NodeTypes.INTERPOLATION;
-  content: ExpressionNode;
+  content: string;
 }
 
 export const locStub: SourceLocation = {
@@ -220,13 +208,15 @@ export function createSimpleExpression(
   };
 }
 
-export function createCompoundExpression(
-  children: CompoundExpressionNode["children"],
+export function createCallExpression<T extends CallExpression["callee"]>(
+  callee: T,
+  args: CallExpression["arguments"] = [],
   loc: SourceLocation = locStub
-): CompoundExpressionNode {
+): CallExpression {
   return {
-    type: NodeTypes.COMPOUND_EXPRESSION,
-    children,
+    type: NodeTypes.JS_CALL_EXPRESSION,
     loc,
-  };
+    callee,
+    arguments: args,
+  } as CallExpression;
 }
