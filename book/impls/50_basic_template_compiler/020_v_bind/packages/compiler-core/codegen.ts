@@ -155,6 +155,9 @@ const genNode = (
     case NodeTypes.VNODE_CALL:
       genVNodeCall(node, context, option);
       break;
+    case NodeTypes.JS_CALL_EXPRESSION:
+      genCallExpression(node, context, option);
+      break;
     case NodeTypes.JS_OBJECT_EXPRESSION:
       genObjectExpression(node, context, option);
       break;
@@ -220,6 +223,18 @@ function genNullableArgs(args: any[]): CallExpression["arguments"] {
     if (args[i] != null) break;
   }
   return args.slice(0, i + 1).map((arg) => arg || `null`);
+}
+
+function genCallExpression(
+  node: CallExpression,
+  context: CodegenContext,
+  option: Required<CompilerOptions>
+) {
+  const { push } = context;
+  const callee = node.callee;
+  push(callee + `(`, node);
+  genNodeList(node.arguments, context, option);
+  push(`)`);
 }
 
 function genObjectExpression(
