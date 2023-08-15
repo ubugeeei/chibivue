@@ -159,25 +159,8 @@ function genFunctionPreamble(ast: RootNode, context: CodegenContext) {
     push(`import * as _ChibiVue from '${runtimeModuleName}'\n`);
   }
 
-  const helpers = [
-    CREATE_VNODE,
-    CREATE_ELEMENT_VNODE,
-    RESOLVE_COMPONENT,
-    TO_HANDLER_KEY,
-    TO_DISPLAY_STRING,
-    MERGE_PROPS,
-    NORMALIZE_CLASS,
-    NORMALIZE_STYLE,
-    NORMALIZE_PROPS,
-    FRAGMENT,
-    V_MODEL_TEXT,
-    WITH_DIRECTIVES,
-    RENDER_LIST,
-    UNREF,
-  ]
-    .map(aliasHelper)
-    .join(", ");
-  push(`const { ${helpers} } = _ChibiVue\n`);
+  const helpers = Array.from(ast.helpers);
+  push(`const { ${helpers.map(aliasHelper).join(", ")} } = _ChibiVue\n`);
   newline();
   if (__BROWSER__) push(`return `);
 }
