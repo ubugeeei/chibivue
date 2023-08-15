@@ -126,6 +126,7 @@ export function transform(root: RootNode, options: TransformOptions) {
   const context = createTransformContext(root, options);
   traverseNode(root, context);
   root.components = [...context.components];
+  root.helpers = new Set([...context.helpers.keys()]);
 }
 
 export function traverseNode(
