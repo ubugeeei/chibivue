@@ -1,5 +1,15 @@
-import { ElementNode, NodeTypes, Position, SourceLocation } from "./ast";
+import {
+  ElementNode,
+  JSChildNode,
+  NodeTypes,
+  Position,
+  SimpleExpressionNode,
+  SourceLocation,
+} from "./ast";
 import { CREATE_ELEMENT_VNODE, CREATE_VNODE } from "./runtimeHelpers";
+
+export const isStaticExp = (p: JSChildNode): p is SimpleExpressionNode =>
+  p.type === NodeTypes.SIMPLE_EXPRESSION && p.isStatic;
 
 const nonIdentifierRE = /^\d|[^\$\w]/;
 export const isSimpleIdentifier = (name: string): boolean =>
