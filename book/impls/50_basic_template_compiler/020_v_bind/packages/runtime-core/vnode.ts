@@ -1,8 +1,9 @@
 import { Ref } from "../reactivity";
 import { isArray, isFunction, isObject, isString } from "../shared";
+import { normalizeClass, normalizeStyle } from "../shared/normalizeProp";
 import { ShapeFlags } from "../shared/shapeFlags";
 import { AppContext } from "./apiCreateApp";
-import { ComponentInternalInstance, currentInstance } from "./component";
+import { ComponentInternalInstance, Data, currentInstance } from "./component";
 import { RawSlots } from "./componentSlots";
 
 export type VNodeTypes = string | typeof Text | object;
@@ -98,4 +99,25 @@ export function normalizeVNode(child: VNodeChild): VNode {
 
 export function isSameVNodeType(n1: VNode, n2: VNode): boolean {
   return n1.type === n2.type && n1.key === n2.key;
+}
+
+export function mergeProps(...args: (Data & VNodeProps)[]) {
+  const ret: Data = {};
+  for (let i = 0; i < args.length; i++) {
+    const toMerge = args[i];
+    for (const key in toMerge) {
+      if (key === "class") {
+        if (ret.class !== toMerge.class) {
+          ret.class = normalizeClass([ret.class, toMerge.class]);
+        }
+      } else if (key === "style") {
+        ret.style = normalizeStyle([ret.style, toMerge.style]);
+      } else if (key !== "") {
+        ret[key] = toMerge[key];
+      } /*if (isOn(key))*/ else {
+        // TODO: v-on="object"
+      }
+    }
+  }
+  return ret;
 }
