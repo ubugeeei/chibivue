@@ -72,13 +72,13 @@ export interface DirectiveNode extends Node {
 ```
 
 改めて `name` と `arg` と `exp` について説明しておくと、
-name は v-bind や v-on などのディレクティブ名です。`on` や `bind` が入ります。
-今回は v-bind を実装していくので、`bind` が入ります。
+name は v-bind や v-on などのディレクティブ名です。on や bind が入ります。
+今回は v-bind を実装していくので、bind が入ります。
 
-arg は `:` で指定する引数です。v-bind で言うと、 `id` や `style` などが入ります。  
+arg は `:` で指定する引数です。v-bind で言うと、 id や style などが入ります。  
 (v-on の場合は click や input などがここに入ってきます。)
 
-exp は右辺です。`v-bind:id="count"` で言うと `count` が入ります。  
+exp は右辺です。`v-bind:id="count"` で言うと count が入ります。  
 exp も arg も、動的に変数を埋め込むことができるので、型は `ExpressionNode` になります。  
 ( `v-bind:[key]="count"` のように arg も動的にできるので)
 
@@ -88,7 +88,7 @@ exp も arg も、動的に変数を埋め込むことができるので、型�
 
 parser の実装をこの AST の変更に追従します。exp, arg を `SimpleExpressionNode` としてパースします。
 
-ついでに v-on などで使う `@` やスロットで使う `s` などもパースします。  
+ついでに v-on などで使う `@` やスロットで使う `#` などもパースします。  
 (正規表現を考えるのが面倒くさい(説明しながら徐々に追加するのが面倒臭い)のでとりあえず本家のものをそのまま拝借します)  
 参考: https://github.com/vuejs/core/blob/623ba514ec0f5adc897db90c0f986b1b6905e014/packages/compiler-core/src/parse.ts#L802
 
@@ -173,7 +173,7 @@ function parseAttribute(
 続いて、この AST を Codegen 用の AST に transform する実装を書いていきます。  
 少々複雑なので、以下の図に軽く流れをまとめました。まずはそちらをご覧ください。  
 大まかに、必要な項目を挙げると、v-bind に引数が存在するかどうか、class かどうか、style かどうかです。  
-※ 今回関係してくる処理以外の部分は省略しています。
+※ 今回関係してくる処理以外の部分は省略しています。(あまり厳格な図ではありませんがご了承ください。)
 
 ![dir_ast](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/transform_vbind.drawio.png)
 
