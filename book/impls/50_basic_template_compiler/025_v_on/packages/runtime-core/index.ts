@@ -38,3 +38,5 @@ export {
 export { watch, watchEffect } from "./apiWatch";
 
 export { provide, inject, type InjectionKey } from "./apiInject";
+
+export { createVNode } from "./vnode";
