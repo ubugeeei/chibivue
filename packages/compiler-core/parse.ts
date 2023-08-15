@@ -365,10 +365,22 @@ function parseAttribute(
         getNewPosition(context, start, startOffset + match[2].length)
       );
       let content = match[2];
+      let isStatic = true;
+
+      if (content.startsWith("[")) {
+        isStatic = false;
+        if (!content.endsWith("]")) {
+          console.error(`Invalid dynamic argument expression: ${content}`);
+          content = content.slice(1);
+        } else {
+          content = content.slice(1, content.length - 1);
+        }
+      }
+
       arg = {
         type: NodeTypes.SIMPLE_EXPRESSION,
         content,
-        isStatic: true,
+        isStatic,
         loc,
       };
     }
