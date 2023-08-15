@@ -48,13 +48,14 @@ export interface VNodeCall extends Node {
 
 export type JSChildNode =
   | VNodeCall
+  | CallExpression
   | ObjectExpression
   | ArrayExpression
   | ExpressionNode;
 
 export interface CallExpression extends Node {
   type: NodeTypes.JS_CALL_EXPRESSION;
-  callee: string | symbol;
+  callee: string;
   arguments: (string | JSChildNode | TemplateChildNode | TemplateChildNode[])[];
 }
 
@@ -105,8 +106,8 @@ export interface AttributeNode extends Node {
 export interface DirectiveNode extends Node {
   type: NodeTypes.DIRECTIVE;
   name: string;
-  exp: string;
-  arg: string;
+  exp: ExpressionNode | undefined;
+  arg: ExpressionNode | undefined;
 }
 
 export interface SourceLocation {
@@ -205,4 +206,17 @@ export function createSimpleExpression(
     content,
     loc,
   };
+}
+
+export function createCallExpression<T extends CallExpression["callee"]>(
+  callee: T,
+  args: CallExpression["arguments"] = [],
+  loc: SourceLocation = locStub
+): CallExpression {
+  return {
+    type: NodeTypes.JS_CALL_EXPRESSION,
+    loc,
+    callee,
+    arguments: args,
+  } as CallExpression;
 }
