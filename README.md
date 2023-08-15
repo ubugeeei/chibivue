@@ -135,8 +135,8 @@ Please refer to the information below for the progress status.
 
 | feature           | impl | book |
 | ----------------- | ---- | ---- |
+| v-bind            | ✅   | ✅   |
 | v-on              | ✅   |      |
-| v-bind            | ✅   |      |
 | v-for             | ✅   |      |
 | v-model           | ✅   |      |
 | v-if              |      |      |
