@@ -17,6 +17,10 @@ import { CompilerOptions } from "./options";
 
 const CONSTANT = {
   vNodeFuncName: "h",
+  mergeProps: "mergeProps",
+  normalizeClass: "normalizeClass",
+  normalizeStyle: "normalizeStyle",
+  normalizeProps: "normalizeProps",
   ctxIdent: "_ctx",
 };
 
@@ -114,7 +118,13 @@ export const generate = (
 
 function genFunctionPreamble(_ast: RootNode, context: CodegenContext) {
   const { push, newline, runtimeGlobalName } = context;
-  const helpers = [CONSTANT.vNodeFuncName].join(", ");
+  const helpers = [
+    CONSTANT.vNodeFuncName,
+    CONSTANT.mergeProps,
+    CONSTANT.normalizeProps,
+    CONSTANT.normalizeClass,
+    CONSTANT.normalizeStyle,
+  ].join(", ");
   push(`const { ${helpers} } = ${runtimeGlobalName}\n`);
   newline();
 }
