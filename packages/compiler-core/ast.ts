@@ -1,9 +1,14 @@
 import { isString } from "../shared";
-import { FRAGMENT, RENDER_LIST } from "./runtimeHelpers";
+import {
+  CREATE_ELEMENT_VNODE,
+  CREATE_VNODE,
+  FRAGMENT,
+  RENDER_LIST,
+  WITH_DIRECTIVES,
+} from "./runtimeHelpers";
 import { TransformContext } from "./transform";
 import { PropsExpression } from "./transforms/transformElement";
 import { ForParseResult } from "./transforms/vFor";
-import { getVNodeHelper } from "./utils";
 
 export const enum NodeTypes {
   ROOT,
@@ -287,6 +292,9 @@ export function createVNodeCall(
 ): VNodeCall {
   if (context) {
     context.helper(getVNodeHelper(isComponent));
+    if (directives) {
+      context.helper(WITH_DIRECTIVES);
+    }
   }
 
   return {
@@ -387,4 +395,8 @@ export function createFunctionExpression(
     isSlot,
     loc,
   };
+}
+
+export function getVNodeHelper(isComponent: boolean) {
+  return isComponent ? CREATE_VNODE : CREATE_ELEMENT_VNODE;
 }

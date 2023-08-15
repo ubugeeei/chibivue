@@ -149,10 +149,6 @@ export function advancePositionWithClone(
   return advancePositionWithMutation({ ...pos }, source, numberOfCharacters);
 }
 
-export function getVNodeHelper(isComponent: boolean) {
-  return isComponent ? CREATE_VNODE : CREATE_ELEMENT_VNODE;
-}
-
 export function findProp(
   node: ElementNode,
   name: string,
