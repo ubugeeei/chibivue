@@ -13,6 +13,12 @@ import {
   createSimpleExpression,
   createVNodeCall,
 } from "../ast";
+import {
+  MERGE_PROPS,
+  NORMALIZE_CLASS,
+  NORMALIZE_PROPS,
+  NORMALIZE_STYLE,
+} from "../runtimeHelpers";
 import { NodeTransform, TransformContext } from "../transform";
 import { isStaticExp } from "../utils";
 
@@ -56,7 +62,12 @@ export const transformElement: NodeTransform = (node, context) => {
       }
     }
 
-    node.codegenNode = createVNodeCall(vnodeTag, vnodeProps, vnodeChildren);
+    node.codegenNode = createVNodeCall(
+      context,
+      vnodeTag,
+      vnodeProps,
+      vnodeChildren
+    );
   };
 };
 
@@ -129,7 +140,7 @@ export function buildProps(
     pushMergeArg();
     if (mergeArgs.length > 1) {
       propsExpression = createCallExpression(
-        "mergeProps",
+        context.helper(MERGE_PROPS),
         mergeArgs,
         elementLoc
       );
@@ -162,9 +173,10 @@ export function buildProps(
         const styleProp = propsExpression.properties[styleKeyIndex];
 
         if (classProp && !isStaticExp(classProp.value)) {
-          classProp.value = createCallExpression("normalizeClass", [
-            classProp.value,
-          ]);
+          classProp.value = createCallExpression(
+            context.helper(NORMALIZE_CLASS),
+            [classProp.value]
+          );
         }
 
         if (
@@ -173,14 +185,16 @@ export function buildProps(
             styleProp.value.content.trim()[0] === `[`) ||
             styleProp.value.type === NodeTypes.JS_ARRAY_EXPRESSION)
         ) {
-          styleProp.value = createCallExpression("normalizeStyle", [
-            styleProp.value,
-          ]);
+          styleProp.value = createCallExpression(
+            context.helper(NORMALIZE_STYLE),
+            [styleProp.value]
+          );
         } else {
           // dynamic key binding, wrap with `normalizeProps`
-          propsExpression = createCallExpression("normalizeProps", [
-            propsExpression,
-          ]);
+          propsExpression = createCallExpression(
+            context.helper(NORMALIZE_PROPS),
+            [propsExpression]
+          );
         }
         break;
 
@@ -190,9 +204,10 @@ export function buildProps(
 
       default:
         // single v-bind
-        propsExpression = createCallExpression("normalizeProps", [
-          propsExpression,
-        ]);
+        propsExpression = createCallExpression(
+          context.helper(NORMALIZE_PROPS),
+          [propsExpression]
+        );
         break;
     }
   }

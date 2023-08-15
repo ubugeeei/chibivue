@@ -30,6 +30,8 @@ export interface TransformContext extends Required<TransformOptions> {
   currentNode: RootNode | TemplateChildNode | null;
   parent: ParentNode | null;
   childIndex: number;
+  helpers: Map<symbol, number>;
+  helper<T extends symbol>(name: T): T;
 }
 
 export function createTransformContext(
@@ -42,6 +44,12 @@ export function createTransformContext(
     currentNode: root,
     parent: null,
     childIndex: 0,
+    helpers: new Map(),
+    helper(name) {
+      const count = context.helpers.get(name) || 0;
+      context.helpers.set(name, count + 1);
+      return name;
+    },
   };
 
   return context;
@@ -50,6 +58,7 @@ export function createTransformContext(
 export function transform(root: RootNode, options: TransformOptions) {
   const context = createTransformContext(root, options);
   traverseNode(root, context);
+  root.helpers = new Set([...context.helpers.keys()]);
 }
 
 export function traverseNode(
