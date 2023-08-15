@@ -14,6 +14,7 @@ import {
   VNodeCall,
 } from "./ast";
 import { CompilerOptions } from "./options";
+import { CREATE_VNODE, helperNameMap } from "./runtimeHelpers";
 
 const CONSTANT = {
   vNodeFuncName: "h",
@@ -23,6 +24,8 @@ const CONSTANT = {
   normalizeProps: "normalizeProps",
   ctxIdent: "_ctx",
 };
+
+const aliasHelper = (s: symbol) => `${helperNameMap[s]}: _${helperNameMap[s]}`;
 
 type CodegenNode = TemplateChildNode | JSChildNode;
 
@@ -34,6 +37,7 @@ export interface CodegenContext {
   column: 1;
   offset: 0;
   runtimeGlobalName: string;
+  helper(key: symbol): string;
   push(code: string, node?: CodegenNode): void;
   indent(): void;
   deindent(withoutNewLine?: boolean): void;
@@ -49,6 +53,9 @@ function createCodegenContext(ast: RootNode): CodegenContext {
     offset: 0,
     indentLevel: 0,
     runtimeGlobalName: "ChibiVue",
+    helper(key) {
+      return `_${helperNameMap[key]}`;
+    },
     push(code) {
       context.code += code;
     },
@@ -116,16 +123,12 @@ export const generate = (
   return context.code;
 };
 
-function genFunctionPreamble(_ast: RootNode, context: CodegenContext) {
+function genFunctionPreamble(ast: RootNode, context: CodegenContext) {
   const { push, newline, runtimeGlobalName } = context;
-  const helpers = [
-    CONSTANT.vNodeFuncName,
-    CONSTANT.mergeProps,
-    CONSTANT.normalizeProps,
-    CONSTANT.normalizeClass,
-    CONSTANT.normalizeStyle,
-  ].join(", ");
-  push(`const { ${helpers} } = ${runtimeGlobalName}\n`);
+  const helpers = Array.from(ast.helpers);
+  push(
+    `const { ${helpers.map(aliasHelper).join(", ")} } = ${runtimeGlobalName}\n`
+  );
   newline();
 }
 
@@ -209,10 +212,10 @@ function genVNodeCall(
   context: CodegenContext,
   option: Required<CompilerOptions>
 ) {
-  const { push } = context;
+  const { push, helper } = context;
   const { tag, props, children } = node;
 
-  push(CONSTANT.vNodeFuncName + `(`, node);
+  push(helper(CREATE_VNODE) + `(`, node);
   genNodeList(genNullableArgs([tag, props, children]), context, option);
   push(`)`);
 }
@@ -230,8 +233,8 @@ function genCallExpression(
   context: CodegenContext,
   option: Required<CompilerOptions>
 ) {
-  const { push } = context;
-  const callee = node.callee;
+  const { push, helper } = context;
+  const callee = isString(node.callee) ? node.callee : helper(node.callee);
   push(callee + `(`, node);
   genNodeList(node.arguments, context, option);
   push(`)`);
