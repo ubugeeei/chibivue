@@ -1,5 +1,13 @@
 import { isArray, isString } from "../shared";
-import { NodeTypes, RootNode, TemplateChildNode, ParentNode } from "./ast";
+import {
+  NodeTypes,
+  RootNode,
+  TemplateChildNode,
+  ParentNode,
+  Property,
+  ElementNode,
+  DirectiveNode,
+} from "./ast";
 import { TransformOptions } from "./options";
 
 export type NodeTransform = (
@@ -7,8 +15,16 @@ export type NodeTransform = (
   context: TransformContext
 ) => void | (() => void) | (() => void)[];
 
-// TODO:
-export type DirectiveTransform = Function;
+export type DirectiveTransform = (
+  dir: DirectiveNode,
+  node: ElementNode,
+  context: TransformContext,
+  augmentor?: (ret: DirectiveTransformResult) => DirectiveTransformResult
+) => DirectiveTransformResult;
+
+export interface DirectiveTransformResult {
+  props: Property[];
+}
 
 export interface TransformContext extends Required<TransformOptions> {
   currentNode: RootNode | TemplateChildNode | null;
