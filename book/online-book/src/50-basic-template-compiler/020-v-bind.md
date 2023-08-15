@@ -82,7 +82,7 @@ exp は右辺です。`v-bind:id="count"` で言うと `count` が入ります�
 exp も arg も、動的に変数を埋め込むことができるので、型は `ExpressionNode` になります。  
 ( `v-bind:[key]="count"` のように arg も動的にできるので)
 
-![dir_ast](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/dir_ast.png)
+![dir_ast](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/dir_ast.drawio.png)
 
 ## Parser の変更
 
