@@ -1,4 +1,6 @@
 import { isString } from "../shared";
+import { CREATE_VNODE } from "./runtimeHelpers";
+import { TransformContext } from "./transform";
 import { PropsExpression } from "./transform/transformElement";
 
 export const enum NodeTypes {
@@ -55,7 +57,7 @@ export type JSChildNode =
 
 export interface CallExpression extends Node {
   type: NodeTypes.JS_CALL_EXPRESSION;
-  callee: string;
+  callee: string | symbol;
   arguments: (string | JSChildNode | TemplateChildNode | TemplateChildNode[])[];
 }
 
@@ -79,6 +81,7 @@ export interface RootNode extends Node {
   type: NodeTypes.ROOT;
   children: TemplateChildNode[];
   codegenNode: (TemplateChildNode | VNodeCall)[] | undefined;
+  helpers: Set<symbol>;
 }
 
 export interface ElementNode extends Node {
@@ -140,17 +143,22 @@ export function createRoot(
   return {
     type: NodeTypes.ROOT,
     children,
+    helpers: new Set(),
     codegenNode: undefined,
     loc,
   };
 }
 
 export function createVNodeCall(
+  context: TransformContext | null,
   tag: VNodeCall["tag"],
   props?: VNodeCall["props"],
   children?: VNodeCall["children"],
   loc: SourceLocation = locStub
 ): VNodeCall {
+  if (context) {
+    context.helper(CREATE_VNODE);
+  }
   return {
     type: NodeTypes.VNODE_CALL,
     tag,
