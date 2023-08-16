@@ -1,26 +1,27 @@
-import { createApp, defineComponent } from "chibivue";
+import { createApp, defineComponent, ref } from "chibivue";
 
 const App = defineComponent({
   setup() {
-    const bind = { id: "some-id", class: "some-class", style: "color: red" };
-    return { count: 1, bind };
+    const count = ref(0);
+    const increment = (e: Event) => {
+      console.log(e);
+      count.value++;
+    };
+    return { count, increment };
   },
 
   template: `<div>
-  <p v-bind:id="count"> v-bind:id="count" </p>
-  <p :id="count * 2"> :id="count * 2" </p>
+    <p>count: {{ count }}</p>
 
-  <p v-bind:["style"]="bind.style"> v-bind:["style"]="bind.style" </p>
-  <p :["style"]="bind.style"> :["style"]="bind.style" </p>
-
-  <p v-bind="bind"> v-bind="bind" </p>
-
-  <p :style="{ 'font-weight': 'bold' }"> :style="{ font-weight: 'bold' }" </p>
-  <p :style="'font-weight: bold;'"> :style="'font-weight: bold;'" </p>
-  <p :class="'my-class my-class2'"> :class="'my-class my-class2'" </p>
-  <p :class="['my-class']"> :class="['my-class']" </p>
-  <p :class="{ 'my-class': true }"> :class="{ 'my-class': true }" </p>
-  <p :class="{ 'my-class': false }"> :class="{ 'my-class': false }" </p>
+    <button v-on:click="increment">v-on:click="increment"</button>
+    <button @click="increment">@click="increment"</button>
+    <button v-on="{ click: increment }">v-on="{ click: increment }"</button>
+    <button v-on:['click']="increment">v-on:['click']="increment"</button>
+    
+    <button @click="count++">@click="count++"</button>
+    <button @click="() => count++">@click="() => count++"</button>
+    <button @click="increment($event)">@click="increment($event)"</button>
+    <button @click="e => increment(e)">@click="e => increment(e)"</button>
 </div>`,
 });
 
