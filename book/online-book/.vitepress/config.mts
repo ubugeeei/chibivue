@@ -209,7 +209,7 @@ export default defineConfig({
             link: "/50-basic-template-compiler/020-v-bind",
           },
           {
-            text: "v-onに対応する",
+            text: "v-on に対応する",
             link: "/50-basic-template-compiler/025-v-on",
           },
           {
