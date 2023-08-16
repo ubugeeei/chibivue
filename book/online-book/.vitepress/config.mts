@@ -58,6 +58,7 @@ export default defineConfig({
       { text: "Start Learning", link: "/00-introduction/010-about" },
     ],
 
+    outline: "deep",
     sidebar: [
       {
         text: "Getting Started",
@@ -207,10 +208,10 @@ export default defineConfig({
             text: "ディレクティブを実装しよう (v-bind)",
             link: "/50-basic-template-compiler/020-v-bind",
           },
-          // {
-          //   text: "v-onに対応する",
-          //   link: "/50-basic-template-compiler/025-v-on",
-          // },
+          {
+            text: "v-onに対応する",
+            link: "/50-basic-template-compiler/025-v-on",
+          },
           {
             text: "v-for に対応する",
             link: "/50-basic-template-compiler/030-v-for",

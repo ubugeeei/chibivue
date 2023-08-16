@@ -31,7 +31,7 @@ Currently, I am still in the process of implementation, but after implementation
 
 [![Pages Deploy](https://github.com/Ubugeeei/chibivue/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/Ubugeeei/chibivue/actions/workflows/deploy.yml)
 
-> total: 250,000 chars ↑ (japanese)
+> total: 260,000 chars ↑ (japanese)
 
 ### book url (GitHub Pages)
 
@@ -136,7 +136,7 @@ Please refer to the information below for the progress status.
 | feature           | impl | book |
 | ----------------- | ---- | ---- |
 | v-bind            | ✅   | ✅   |
-| v-on              | ✅   |      |
+| v-on              | ✅   | ✅   |
 | v-for             | ✅   |      |
 | v-model           | ✅   |      |
 | v-if              |      |      |

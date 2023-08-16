@@ -1,18 +1,12 @@
-import { isSymbol } from "../../shared";
 import {
-  ArrayExpression,
   CallExpression,
-  ComponentNode,
-  DirectiveArguments,
   DirectiveNode,
   ElementNode,
-  ElementTypes,
   ExpressionNode,
   NodeTypes,
   ObjectExpression,
   TemplateTextChildNode,
   VNodeCall,
-  createArrayExpression,
   createCallExpression,
   createObjectExpression,
   createObjectProperty,
@@ -29,8 +23,6 @@ import {
 import { NodeTransform, TransformContext } from "../transform";
 import { isStaticExp } from "../utils";
 
-const directiveImportMap = new WeakMap<DirectiveNode, symbol>();
-
 export type PropsExpression =
   | ObjectExpression
   | CallExpression
@@ -40,37 +32,18 @@ export const transformElement: NodeTransform = (node, context) => {
   return function postTransformElement() {
     node = context.currentNode!;
 
-    if (
-      !(
-        node.type === NodeTypes.ELEMENT &&
-        (node.tagType === ElementTypes.ELEMENT ||
-          node.tagType === ElementTypes.COMPONENT)
-      )
-    ) {
-      return;
-    }
+    if (node.type !== NodeTypes.ELEMENT) return;
 
     const { tag, props } = node;
-    const isComponent = node.tagType === ElementTypes.COMPONENT;
 
-    const vnodeTag = isComponent
-      ? resolveComponentType(node as ComponentNode, context)
-      : `"${tag}"`;
+    const vnodeTag = `"${tag}"`;
     let vnodeProps: VNodeCall["props"];
-    let vnodeDirectives: VNodeCall["directives"];
     let vnodeChildren: VNodeCall["children"];
 
     // props
     if (props.length > 0) {
       const propsBuildResult = buildProps(node, context);
       vnodeProps = propsBuildResult.props;
-
-      const directives = propsBuildResult.directives;
-      vnodeDirectives = directives.length
-        ? (createArrayExpression(
-            directives.map((dir) => buildDirectiveArgs(dir, context))
-          ) as DirectiveArguments)
-        : undefined;
     }
 
     // children
@@ -78,11 +51,8 @@ export const transformElement: NodeTransform = (node, context) => {
       if (node.children.length === 1) {
         const child = node.children[0];
         const type = child.type;
-        // check for dynamic text children
         const hasDynamicTextChild = type === NodeTypes.INTERPOLATION;
 
-        // pass directly if the only child is a text node
-        // (plain / interpolation / expression)
         if (hasDynamicTextChild || type === NodeTypes.TEXT) {
           vnodeChildren = child as TemplateTextChildNode;
         } else {
@@ -97,9 +67,7 @@ export const transformElement: NodeTransform = (node, context) => {
       context,
       vnodeTag,
       vnodeProps,
-      vnodeChildren,
-      vnodeDirectives,
-      isComponent
+      vnodeChildren
     );
   };
 };
@@ -107,7 +75,10 @@ export const transformElement: NodeTransform = (node, context) => {
 export function buildProps(
   node: ElementNode,
   context: TransformContext
-): { props: PropsExpression | undefined; directives: DirectiveNode[] } {
+): {
+  props: PropsExpression | undefined;
+  directives: DirectiveNode[];
+} {
   const { props, loc: elementLoc } = node;
   let properties: ObjectExpression["properties"] = [];
   const runtimeDirectives: DirectiveNode[] = [];
@@ -158,19 +129,14 @@ export function buildProps(
 
       const directiveTransform = context.directiveTransforms[name];
       if (directiveTransform) {
-        // has built-in directive transform.
-        const { props, needRuntime } = directiveTransform(prop, node, context);
+        const { props } = directiveTransform(prop, node, context);
         if (isVOn && arg && !isStaticExp(arg)) {
           pushMergeArg(createObjectExpression(props, elementLoc));
         } else {
           properties.push(...props);
         }
-        if (needRuntime) {
-          runtimeDirectives.push(prop);
-          if (isSymbol(needRuntime)) {
-            directiveImportMap.set(prop, needRuntime);
-          }
-        }
+      } else {
+        // TODO: custom directive.
       }
     }
   }
@@ -259,53 +225,4 @@ export function buildProps(
     props: propsExpression,
     directives: runtimeDirectives,
   };
-}
-
-export function buildDirectiveArgs(
-  dir: DirectiveNode,
-  context: TransformContext
-): ArrayExpression {
-  const dirArgs: ArrayExpression["elements"] = [];
-  const runtime = directiveImportMap.get(dir);
-  if (runtime) {
-    dirArgs.push(context.helperString(runtime));
-  }
-  if (dir.exp) dirArgs.push(dir.exp);
-  if (dir.arg) {
-    if (!dir.exp) {
-      dirArgs.push(`void 0`);
-    }
-    dirArgs.push(dir.arg);
-  }
-  return createArrayExpression(dirArgs, dir.loc);
-}
-
-export function resolveComponentType(
-  node: ComponentNode,
-  context: TransformContext
-) {
-  let { tag } = node;
-
-  // TODO: 1. dynamic component
-
-  // TODO: 1.5 v-is (TODO: Deprecate)
-
-  // TODO: 2. built-in components (Teleport, Transition, KeepAlive, Suspense...)
-
-  // TODO: 3. user component (from setup bindings)
-
-  // TODO: 4. Self referencing component (inferred from filename)
-
-  // 5. user component (resolve)
-  context.components.add(tag);
-  return toValidAssetId(tag, `component`);
-}
-
-export function toValidAssetId(
-  name: string,
-  type: "component" | "directive" | "filter"
-): string {
-  return `_${type}_${name.replace(/[^\w]/g, (searchValue, replaceValue) => {
-    return searchValue === "-" ? "_" : name.charCodeAt(replaceValue).toString();
-  })}`;
 }

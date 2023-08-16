@@ -62,3 +62,5 @@ export {
   normalizeStyle,
   normalizeProps,
 } from "../shared";
+
+export { toHandlers } from "./helpers/toHandlers";

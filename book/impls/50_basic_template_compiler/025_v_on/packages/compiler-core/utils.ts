@@ -1,19 +1,7 @@
-import {
-  ElementNode,
-  JSChildNode,
-  NodeTypes,
-  Position,
-  SimpleExpressionNode,
-  SourceLocation,
-} from "./ast";
-import { CREATE_ELEMENT_VNODE, CREATE_VNODE } from "./runtimeHelpers";
+import { JSChildNode, NodeTypes, Position, SimpleExpressionNode } from "./ast";
 
 export const isStaticExp = (p: JSChildNode): p is SimpleExpressionNode =>
   p.type === NodeTypes.SIMPLE_EXPRESSION && p.isStatic;
-
-const nonIdentifierRE = /^\d|[^\$\w]/;
-export const isSimpleIdentifier = (name: string): boolean =>
-  !nonIdentifierRE.test(name);
 
 const enum MemberExpLexState {
   inMemberExp,
@@ -26,7 +14,6 @@ const whitespaceRE = /\s+[.[]\s*|\s*[.[]\s+/g;
 const validFirstIdentCharRE = /[A-Za-z_$\xA0-\uFFFF]/;
 const validIdentCharRE = /[\.\?\w$\xA0-\uFFFF]/;
 
-// FIXME: to more slim
 export const isMemberExpression = (path: string): boolean => {
   path = path.trim().replace(whitespaceRE, (s) => s.trim());
   let state = MemberExpLexState.inMemberExp;
@@ -94,6 +81,14 @@ export const isMemberExpression = (path: string): boolean => {
   return !currentOpenBracketCount && !currentOpenParensCount;
 };
 
+export function advancePositionWithClone(
+  pos: Position,
+  source: string,
+  numberOfCharacters: number = source.length
+): Position {
+  return advancePositionWithMutation({ ...pos }, source, numberOfCharacters);
+}
+
 export function advancePositionWithMutation(
   pos: Position,
   source: string,
@@ -116,54 +111,4 @@ export function advancePositionWithMutation(
       : numberOfCharacters - lastNewLinePos;
 
   return pos;
-}
-
-export function getInnerRange(
-  loc: SourceLocation,
-  offset: number,
-  length: number
-): SourceLocation {
-  const source = loc.source.slice(offset, offset + length);
-  const newLoc: SourceLocation = {
-    source,
-    start: advancePositionWithClone(loc.start, loc.source, offset),
-    end: loc.end,
-  };
-
-  if (length != null) {
-    newLoc.end = advancePositionWithClone(
-      loc.start,
-      loc.source,
-      offset + length
-    );
-  }
-
-  return newLoc;
-}
-
-export function advancePositionWithClone(
-  pos: Position,
-  source: string,
-  numberOfCharacters: number = source.length
-): Position {
-  return advancePositionWithMutation({ ...pos }, source, numberOfCharacters);
-}
-
-export function findProp(
-  node: ElementNode,
-  name: string,
-  dynamicOnly: boolean = false,
-  allowEmpty: boolean = false
-): ElementNode["props"][0] | undefined {
-  for (let i = 0; i < node.props.length; i++) {
-    const p = node.props[i];
-    if (p.type === NodeTypes.ATTRIBUTE) {
-      if (dynamicOnly) continue;
-      if (p.name === name && (p.value || allowEmpty)) {
-        return p;
-      }
-    } else if (p.name === "bind" && (p.exp || allowEmpty)) {
-      return p;
-    }
-  }
 }
