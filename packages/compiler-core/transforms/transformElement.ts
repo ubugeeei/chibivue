@@ -24,6 +24,7 @@ import {
   NORMALIZE_CLASS,
   NORMALIZE_PROPS,
   NORMALIZE_STYLE,
+  TO_HANDLERS,
 } from "../runtimeHelpers";
 import { NodeTransform, TransformContext } from "../transform";
 import { isStaticExp } from "../utils";
@@ -134,16 +135,22 @@ export function buildProps(
       // directives
       const { name, arg, exp, loc } = prop;
       const isVBind = name === "bind";
-      // const isVOn = name === "on"; // TODO:
+      const isVOn = name === "on";
 
       // special case for v-bind and v-on with no argument
-      if (!arg && /*(*/ isVBind /* || isVOn) */) {
+      if (!arg && (isVBind || isVOn)) {
         if (exp) {
-          if (isVBind /* || isVOn */) {
+          if (isVBind) {
             pushMergeArg();
             mergeArgs.push(exp);
           } else {
-            // TODO: v-on
+            // v-on="obj" -> toHandlers(obj)
+            pushMergeArg({
+              type: NodeTypes.JS_CALL_EXPRESSION,
+              loc,
+              callee: context.helper(TO_HANDLERS),
+              arguments: [exp],
+            });
           }
         }
         continue;
@@ -153,7 +160,11 @@ export function buildProps(
       if (directiveTransform) {
         // has built-in directive transform.
         const { props, needRuntime } = directiveTransform(prop, node, context);
-        properties.push(...props);
+        if (isVOn && arg && !isStaticExp(arg)) {
+          pushMergeArg(createObjectExpression(props, elementLoc));
+        } else {
+          properties.push(...props);
+        }
         if (needRuntime) {
           runtimeDirectives.push(prop);
           if (isSymbol(needRuntime)) {
@@ -236,9 +247,10 @@ export function buildProps(
 
       default:
         // single v-bind
-        propsExpression = createCallExpression(context.helper(NORMALIZE_PROPS), [
-          propsExpression,
-        ]);
+        propsExpression = createCallExpression(
+          context.helper(NORMALIZE_PROPS),
+          [propsExpression]
+        );
         break;
     }
   }
