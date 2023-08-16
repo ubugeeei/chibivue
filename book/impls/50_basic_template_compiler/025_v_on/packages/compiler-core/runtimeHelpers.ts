@@ -3,6 +3,8 @@ export const MERGE_PROPS = Symbol();
 export const NORMALIZE_CLASS = Symbol();
 export const NORMALIZE_STYLE = Symbol();
 export const NORMALIZE_PROPS = Symbol();
+export const TO_HANDLERS = Symbol();
+export const TO_HANDLER_KEY = Symbol()
 
 export const helperNameMap: Record<symbol, string> = {
   [CREATE_VNODE]: "createVNode",
@@ -10,4 +12,6 @@ export const helperNameMap: Record<symbol, string> = {
   [NORMALIZE_CLASS]: "normalizeClass",
   [NORMALIZE_STYLE]: "normalizeStyle",
   [NORMALIZE_PROPS]: "normalizeProps",
+  [TO_HANDLERS]: "toHandlers",
+  [TO_HANDLER_KEY]: "toHandlerKey",
 };
