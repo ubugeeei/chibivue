@@ -58,6 +58,7 @@ export default defineConfig({
       { text: "Start Learning", link: "/00-introduction/010-about" },
     ],
 
+    outline: "deep",
     sidebar: [
       {
         text: "Getting Started",
