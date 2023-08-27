@@ -14,7 +14,8 @@
     "book:dev": "vitepress dev book/online-book",
     "book:build": "vitepress build book/online-book --base /chibivue/",
     "book:preview": "vitepress preview book/online-book",
-    "count": "jiti tools/count-book-size/main.ts"
+    "book:count-chars": "jiti tools/book-size/book/count-chars.ts",
+    "pkg:size": "tokei -f packages > tools/book-size/pkg/files.txt"
   },
   "config": {
     "commitizen": {

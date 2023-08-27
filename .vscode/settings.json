@@ -13,6 +13,7 @@
     "paren",
     "RAWTEXT",
     "RCDATA",
+    "tokei",
     "unref",
     "vdom",
     "vitepress",
