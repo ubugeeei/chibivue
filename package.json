@@ -3,18 +3,18 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "setup": "pnpm i && ts-node --esm tools/create-chibivue/main.ts",
+    "setup": "pnpm i && jiti tools/create-chibivue/main.ts",
     "dev": "cd example/playground && pnpm i && pnpm run dev",
-    "dev:setup": "ts-node --esm tools/chibivue-playground/main.ts",
+    "dev:setup": "jiti tools/chibivue-playground/main.ts",
     "vue": "cd example/vue && pnpm i && pnpm run dev",
-    "vue:setup": "ts-node --esm tools/vue-playground/main.ts",
+    "vue:setup": "jiti tools/vue-playground/main.ts",
     "dev:app": "cd example/app && pnpm i && pnpm run dev",
     "test": "vitest",
     "prepare": "husky install",
     "book:dev": "vitepress dev book/online-book",
     "book:build": "vitepress build book/online-book --base /chibivue/",
     "book:preview": "vitepress preview book/online-book",
-    "count": "ts-node --esm tools/count-book-size/main.ts"
+    "count": "jiti tools/count-book-size/main.ts"
   },
   "config": {
     "commitizen": {
@@ -28,6 +28,7 @@
     "@types/node": "^17.0.21",
     "fs-extra": "^11.1.1",
     "husky": "^8.0.3",
+    "jiti": "^1.19.3",
     "vitepress": "1.0.0-rc.4",
     "vitest": "^0.29.2"
   },
