@@ -22,7 +22,7 @@ const countBookSize = (files: string[]): number =>
 (function main() {
   const ROOT = "book/online-book/src";
   const IGNORES = ["en", "__wip"];
-  const OUT = "tools/count-book-size/book-size.json";
+  const OUT = "tools/book-size/book/char-counts.json";
   const files = listFiles(ROOT).filter(
     (file) => !IGNORES.some((ignore) => file.split("/").includes(ignore))
   );
