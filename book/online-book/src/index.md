@@ -4,7 +4,7 @@ layout: home
 
 hero:
   name: "chibivue"
-  text: "Writing Vue.js with your own hands"
+  text: "Step by Step, from just one line of \"Hello, World\"."
   tagline: powered by VitePress
   image: https://github.com/Ubugeeei/chibivue/blob/main/book/images/logo/logo.png?raw=true
   actions:

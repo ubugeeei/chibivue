@@ -3,7 +3,7 @@ import { defineConfig } from "vitepress";
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "The chibivue Book",
-  description: "This is an online book for implementing chibivue.",
+  description: "Writing Vue.js: Step by Step, from just one line of \"Hello, World\".",
   lang: "ja",
   srcDir: "src",
   srcExclude: ["__wip"],
@@ -26,7 +26,7 @@ export default defineConfig({
       "meta",
       {
         property: "og:description",
-        content: "Writing Vue.js with your own hands.",
+        content: "Writing Vue.js: Step by Step, from just one line of \"Hello, World\".",
       },
     ],
     [

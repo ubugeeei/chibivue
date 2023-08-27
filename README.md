@@ -6,7 +6,7 @@
 
 <h1>chibivue</h1>
 
-### [**Writing Vue.js with your own hands**](https://ubugeeei.github.io/chibivue)
+### [**Writing Vue.js: Step by Step, from just one line of "Hello, World".**](https://ubugeeei.github.io/chibivue)
 
 https://ubugeeei.github.io/chibivue
 
