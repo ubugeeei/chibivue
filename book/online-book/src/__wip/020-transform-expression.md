@@ -89,9 +89,9 @@ babel で parse することによって得られた AST をこのライブラ�
 とりあえず estree-walker はインストールします。
 
 ```sh
-pnpm i estree-walker
+ni estree-walker
 
-pnpm i -D @babel/types # これも
+ni -D @babel/types # これも
 ```
 
 ```ts

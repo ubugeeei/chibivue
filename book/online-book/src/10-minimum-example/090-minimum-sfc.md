@@ -102,7 +102,7 @@ pnpx create-vite
 ## ✔ Select a variant: › TypeScript
 
 cd plugin-sample
-pnpm i
+ni
 ```
 
 作った PJ の vite.config.ts を見てみましょう。
@@ -202,7 +202,7 @@ createApp(App).mount("#app");
 
 ```sh
 pwd # ~/plugin-sample
-pnpm run dev
+nr dev
 ```
 
 ![sample_vite_plugin_console](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/sample_vite_plugin_console.png)
@@ -994,7 +994,7 @@ export default { ..._sfc_main, render };
 
 ```sh
 pwd # ~
-pnpm i @babel/parser magic-string
+ni @babel/parser magic-string
 ```
 
 rewriteDefault.ts というファイルを作成します。
