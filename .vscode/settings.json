@@ -21,5 +21,12 @@
     "vnode",
     "Vnodes",
     "vuejs"
-  ]
+  ],
+  "material-icon-theme.folders.associations": {
+    "book": "resource",
+    "impls": "vue",
+    "online-book": "vuepress",
+    "@extensions": "lib"
+  },
+  "material-icon-theme.files.associations": {}
 }
