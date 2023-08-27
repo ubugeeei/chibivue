@@ -27,6 +27,17 @@ Currently, I am still in the process of implementation, but after implementation
 
 [example](https://github.com/Ubugeeei/chibivue/tree/main/example/app)
 
+# 👜 Package Manager
+
+This project uses [pnpm](https://pnpm.io/) as a package manager.
+
+And use [ni](https://github.com/antfu/ni) .
+
+```sh
+# if you don't have ni yet
+npm i -g @antfu/ni
+```
+
 # 📔 Online Book
 
 [![Pages Deploy](https://github.com/Ubugeeei/chibivue/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/Ubugeeei/chibivue/actions/workflows/deploy.yml)
@@ -42,8 +53,8 @@ https://ubugeeei.github.io/chibivue
 ```sh
 $ git clone https://github.com/Ubugeeei/chibivue
 $ cd chibivue
-$ pnpm i
-$ pnpm run book:dev
+$ ni
+$ nr book:dev
 ```
 
 ### view on github
@@ -57,20 +68,20 @@ $ pnpm run book:dev
 ```sh
 $ git clone https://github.com/Ubugeeei/chibivue
 $ cd chibivue
-$ pnpm i
+$ ni
 
 # generate playground files to ~/example/playground (git ignored)
-$ pnpm run dev:setup
+$ nr dev:setup
 
 # listen localhost
-$ pnpm run dev
+$ nr dev
 ```
 
 original vue.js 3.3 playground
 
 ```sh
-$ pnpm run vue:setup
-$ pnpm run vue
+$ nr vue:setup
+$ nr vue
 ```
 
 # ⚠️ status
@@ -164,7 +175,3 @@ Please refer to the information below for the progress status.
 | router     | ✅   |      |
 | keep-alive |      |      |
 | suspense   |      |      |
-
-```
-
-```
