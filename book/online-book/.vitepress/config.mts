@@ -3,7 +3,8 @@ import { defineConfig } from "vitepress";
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "The chibivue Book",
-  description: "Writing Vue.js: Step by Step, from just one line of \"Hello, World\".",
+  description:
+    'Writing Vue.js: Step by Step, from just one line of "Hello, World".',
   lang: "ja",
   srcDir: "src",
   srcExclude: ["__wip"],
@@ -17,6 +18,7 @@ export default defineConfig({
     ],
 
     // og
+    ["meta", { property: "og:site_name", content: "chibivue" }],
     [
       "meta",
       { property: "og:url", content: "https://ubugeeei.github.io/chibivue" },
@@ -26,7 +28,8 @@ export default defineConfig({
       "meta",
       {
         property: "og:description",
-        content: "Writing Vue.js: Step by Step, from just one line of \"Hello, World\".",
+        content:
+          'Writing Vue.js: Step by Step, from just one line of "Hello, World".',
       },
     ],
     [
@@ -34,9 +37,30 @@ export default defineConfig({
       {
         property: "og:image",
         content:
-          "https://github.com/Ubugeeei/chibivue/blob/main/book/images/logo/logo.png?raw=true",
+          "https://github.com/Ubugeeei/chibivue/blob/main/book/images/logo/chibivue.png?raw=true",
       },
     ],
+    ["meta", { property: "og:image:alt", content: "chibivue" }],
+    ["meta", { name: "twitter:site", content: "chibivue" }],
+    ["meta", { name: "twitter:card", content: "summary_large_image" }],
+    ["meta", { name: "twitter:title", content: "chibivue" }],
+    [
+      "meta",
+      {
+        name: "twitter:description",
+        content:
+          'Writing Vue.js: Step by Step, from just one line of "Hello, World".',
+      },
+    ],
+    [
+      "meta",
+      {
+        name: "twitter:image",
+        content:
+          "https://github.com/Ubugeeei/chibivue/blob/main/book/images/logo/chibivue.png?raw=true",
+      },
+    ],
+    ["meta", { name: "twitter:image:alt", content: "chibivue" }],
   ],
 
   locales: {
