@@ -1,10 +1,8 @@
 <p align="center">
-  <img src="./book/images/logo/logo.png" width="126">
+  <img src="./book/images/logo/chibivue-img.png" width="600">
 </p>
 
 <div align="center">
-
-<h1>chibivue</h1>
 
 ### [**Writing Vue.js: Step by Step, from just one line of "Hello, World".**](https://ubugeeei.github.io/chibivue)
 
