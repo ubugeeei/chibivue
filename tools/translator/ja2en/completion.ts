@@ -16,7 +16,7 @@ export const completion = async () => {
   }
 
   const createPrompt = (content: string) =>
-    `以下をなるべく直訳しない形で英語に翻訳してください。\n\n${content}`;
+    `以下の日本語の文章を英語に翻訳してください。\n\n${content}`;
 
   // check input.md content
   const input = fs.readFileSync(INPUT, "utf-8");
@@ -39,6 +39,7 @@ export const completion = async () => {
   }
 
   fs.writeFileSync(OUT, res);
+  consola.log("");
   consola.success(`Translation completed! See ${OUT}`);
 };
 
