@@ -3,6 +3,7 @@ import { defineConfig } from "vitepress";
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "The chibivue Book",
+  appearance: "dark",
   description:
     'Writing Vue.js: Step by Step, from just one line of "Hello, World".',
   lang: "ja",
@@ -81,6 +82,7 @@ export default defineConfig({
       { text: "Home", link: "/" },
       { text: "Start Learning", link: "/00-introduction/010-about" },
     ],
+    search: { provider: "local" },
 
     outline: "deep",
     sidebar: [
@@ -294,6 +296,7 @@ export default defineConfig({
       //   link: "https://opensource.org/licenses/MIT",
       // },
       copyright: `Copyright © 2023-${new Date().getFullYear()} ubugeeei`,
+      message: 'Released under the MIT License.',
     },
   },
 });
