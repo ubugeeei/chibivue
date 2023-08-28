@@ -1,90 +1,11 @@
-import { defineConfig } from "vitepress";
+import { DefaultTheme, LocaleSpecificConfig } from "vitepress";
 
-// https://vitepress.dev/reference/site-config
-export default defineConfig({
-  title: "The chibivue Book",
-  appearance: "dark",
-  description:
-    'Writing Vue.js: Step by Step, from just one line of "Hello, World".',
-  lang: "ja",
-  srcDir: "src",
-  srcExclude: ["__wip"],
-  head: [
-    [
-      "link",
-      {
-        rel: "icon",
-        href: "https://github.com/Ubugeeei/chibivue/blob/main/book/images/logo/logo.png?raw=true",
-      },
-    ],
-
-    // og
-    ["meta", { property: "og:site_name", content: "chibivue" }],
-    [
-      "meta",
-      { property: "og:url", content: "https://ubugeeei.github.io/chibivue" },
-    ],
-    ["meta", { property: "og:title", content: "chibivue" }],
-    [
-      "meta",
-      {
-        property: "og:description",
-        content:
-          'Writing Vue.js: Step by Step, from just one line of "Hello, World".',
-      },
-    ],
-    [
-      "meta",
-      {
-        property: "og:image",
-        content:
-          "https://github.com/Ubugeeei/chibivue/blob/main/book/images/logo/chibivue-img.png?raw=true",
-      },
-    ],
-    ["meta", { property: "og:image:alt", content: "chibivue" }],
-    ["meta", { name: "twitter:site", content: "chibivue" }],
-    ["meta", { name: "twitter:card", content: "summary_large_image" }],
-    ["meta", { name: "twitter:title", content: "chibivue" }],
-    [
-      "meta",
-      {
-        name: "twitter:description",
-        content:
-          'Writing Vue.js: Step by Step, from just one line of "Hello, World".',
-      },
-    ],
-    [
-      "meta",
-      {
-        name: "twitter:image",
-        content:
-          "https://github.com/Ubugeeei/chibivue/blob/main/book/images/logo/chibivue-img.png?raw=true",
-      },
-    ],
-    ["meta", { name: "twitter:image:alt", content: "chibivue" }],
-  ],
-
-  locales: {
-    root: {
-      label: "Japanese",
-      lang: "ja",
-      // link: "/ja/",
-    },
-    en: {
-      label: "English",
-      lang: "en",
-      link: "/en/",
-    },
-  },
+export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
   themeConfig: {
-    logo: "https://github.com/Ubugeeei/chibivue/blob/main/book/images/logo/logo.png?raw=true",
     nav: [
       { text: "Home", link: "/" },
       { text: "Start Learning", link: "/00-introduction/010-about" },
     ],
-    search: { provider: "local" },
-
-    outline: "deep",
     sidebar: [
       {
         text: "Getting Started",
@@ -279,29 +200,5 @@ export default defineConfig({
         ],
       },
     ],
-
-    socialLinks: [
-      { icon: "github", link: "https://github.com/Ubugeeei/chibivue" },
-      { icon: "twitter", link: "https://twitter.com/ubugeeei" },
-    ],
-
-    // editLink: {
-    //   repo: "ubugeeei/chibivue",
-    //   text: "Edit this page on GitHub",
-    // },
-
-    footer: {
-      // license: {
-      //   text: "MIT License",
-      //   link: "https://opensource.org/licenses/MIT",
-      // },
-      copyright: `Copyright © 2023-${new Date().getFullYear()} ubugeeei`,
-      message: "Released under the MIT License.",
-    },
-    editLink: {
-      pattern:
-        "https://github.com/Ubugeeei/chibivue/blob/main/book/online-book/src/:path",
-      text: "Suggest changes to this page",
-    },
   },
-});
+};
