@@ -296,7 +296,12 @@ export default defineConfig({
       //   link: "https://opensource.org/licenses/MIT",
       // },
       copyright: `Copyright © 2023-${new Date().getFullYear()} ubugeeei`,
-      message: 'Released under the MIT License.',
+      message: "Released under the MIT License.",
+    },
+    editLink: {
+      pattern:
+        "https://github.com/Ubugeeei/chibivue/blob/main/book/online-book/src/:path",
+      text: "Suggest changes to this page",
     },
   },
 });
