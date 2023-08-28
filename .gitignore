@@ -3,3 +3,5 @@ dist
 example/playground
 example/vue
 .env
+tools/translator/ja2en/input.md
+tools/translator/ja2en/output.md
