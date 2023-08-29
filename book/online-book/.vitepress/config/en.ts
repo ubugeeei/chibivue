@@ -17,7 +17,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/en/00-introduction/020-what-is-vue",
           },
           {
-            text: "Key Elements of Vue.jsÏ",
+            text: "Key Elements of Vue.js",
             link: "/en/00-introduction/030-vue-core-components",
           },
           {
