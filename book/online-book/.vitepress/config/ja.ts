@@ -144,7 +144,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         ],
       },
       {
-        text: "Basic Template Compiler",
+        text: "[WIP] Basic Template Compiler",
         collapsed: true,
         items: [
           {
@@ -178,7 +178,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         ],
       },
       {
-        text: "Basic SFC Compiler",
+        text: "[WIP] Basic SFC Compiler",
         collapsed: true,
         items: [
           {
