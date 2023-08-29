@@ -148,5 +148,3 @@ Since this book has turned out quite voluminous, I've set achievement milestones
 I intend to respond to questions and feedback about this book to the best of my ability. Feel free to reach out on Twitter (either through DMs or directly on the timeline). Since I've made the repository public, you can also post issues there. I'm aware that my own understanding isn't perfect, so I appreciate any feedback. If you find any explanations unclear or challenging, please don't hesitate to ask. My goal is to spread clear and correct explanations to as many people as possible, and I hope we can build this together 👍.
 
 https://twitter.com/ubugeeei
-
-https://github.com/Ubugeeei/zenn
