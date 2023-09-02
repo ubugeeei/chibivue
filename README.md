@@ -44,7 +44,9 @@ npm i -g @antfu/ni
 
 ### book url (GitHub Pages)
 
-https://ubugeeei.github.io/chibivue
+English: https://ubugeeei.github.io/chibivue/en/
+
+Japaneses: https://ubugeeei.github.io/chibivue
 
 ### open book on localhost
 
