@@ -202,6 +202,20 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
           },
         ],
       },
+      {
+        text: "Appendix",
+        collapsed: true,
+        items: [
+          {
+            text: "chibivue, isn't it small...?",
+            link: "/en/bonus/hyper-ultimate-super-extreme-minimal-vue/",
+          },
+          {
+            text: "Writing Vue.js in 15 minutes.",
+            link: "/en/bonus/hyper-ultimate-super-extreme-minimal-vue/15-min-impl.md",
+          },
+        ],
+      },
     ],
   },
 };
