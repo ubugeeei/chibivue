@@ -199,6 +199,20 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
           },
         ],
       },
+      {
+        text: "付録",
+        collapsed: true,
+        items: [
+          {
+            text: 'chibivue、デカくないですか...?',
+            link: '/bonus/hyper-ultimate-super-extreme-minimal-vue/'
+          },
+          {
+            text: '15 分で Vue を作る',
+            link: '/bonus/hyper-ultimate-super-extreme-minimal-vue/15-min-impl'
+          },
+        ]
+      }
     ],
   },
 };
