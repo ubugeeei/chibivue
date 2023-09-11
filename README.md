@@ -175,3 +175,15 @@ Please refer to the information below for the progress status.
 | router     | ✅   |      |
 | keep-alive |      |      |
 | suspense   |      |      |
+
+## 🎉 Bonus Track
+
+This is bonus track on writing Vue.js in 15 minutes because chibivue has gotten so big.
+
+This chapter implements createApp / virtual dom / patch / reactivity / template compiler / sfc compiler in just 110 lines of source code.
+
+The title is "**Hyper Ultimate Super Extreme Minimal Vue - writing Vue.js on 15 minutes**"
+
+[Online Book](https://ubugeeei.github.io/chibivue/en/bonus/hyper-ultimate-super-extreme-minimal-vue) | [Actual Source](https://github.com/Ubugeeei/chibivue/blob/main/book/impls/bonus/hyper-ultimate-super-extreme-minimal-vue/packages/index.ts)
+
+<img src="./book/images/hyper-ultimate-super-extreme-minimal-vue.png">

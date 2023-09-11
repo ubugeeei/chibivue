@@ -97,12 +97,13 @@ export const render = (n1: VNode | null, n2: VNode, container: Element) => {
 n1 が古い VNode, n2 が新しい VNode, container というのは実 DOM の root です。  
 今回の例で言うと `#app` が container になります。(createApp で mount した要素)
 
-中身の実装について、考慮するべきはに種類の処理です。
+中身の実装について、考慮するべきは 2 種類の処理です。
 
-- mount
+- mount  
   初回です。 n1 が null の場合に初回レンダリングという判断を行ってマウント処理を書きます。
-- patch
-  VNode 同士で比較して差分を実 DOM に反映します。
+- patch  
+  VNode 同士で比較して差分を実 DOM に反映します。  
+  とはいっても、今回は children を更新するだけで、差分の検知は行いません。
 
 それでは実装してみます。
 
@@ -146,7 +147,7 @@ const app = createApp({
 このようなイメージです。
 実際に、この reactive 関数で定義されたステートが変更された際に patch 処理を実行したいです。
 
-俺は Proxy というオブジェクトを用いて実現されます。
+これは Proxy というオブジェクトを用いて実現されます。
 Proxy は get / set に対して機能を実装することができます。今回はこの set に対する拡張を利用して、 set 時に patch 処理を実行するように実装してみます。
 
 ```ts

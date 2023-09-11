@@ -92,8 +92,11 @@ n1 represents the old VNode, n2 represents the new VNode, and container is the r
 
 We need to consider two types of operations:
 
-- Mount: This is the initial rendering. If n1 is null, it means it's the first rendering, so we need to implement the mount process.
-- Patch: This compares the VNodes and applies the differences to the actual DOM.
+- Mount  
+  This is the initial rendering. If n1 is null, it means it's the first rendering, so we need to implement the mount process.
+- Patch  
+  This compares the VNodes and applies the differences to the actual DOM.  
+  This time, however, we only update children and do not detect differences.
 
 Let's implement it:
 
@@ -134,7 +137,7 @@ const app = createApp({
 
 In this case, when a state defined with the `reactive` function is modified, we want to trigger the patch process.
 
-We can achieve this using a Proxy object. Proxies allow us to implement functionality for get/set operations. In this case, we can use the set operation to execute the patch process when a set operation occurs.
+It can achieve this using a Proxy object. Proxies allow us to implement functionality for get/set operations. In this case, we can use the set operation to execute the patch process when a set operation occurs.
 
 ```ts
 export const reactive = <T extends Record<string, unknown>>(obj: T): T =>
