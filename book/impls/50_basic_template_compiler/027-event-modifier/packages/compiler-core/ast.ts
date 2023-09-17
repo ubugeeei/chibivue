@@ -1,7 +1,7 @@
 import { isString } from "../shared";
 import { CREATE_VNODE } from "./runtimeHelpers";
 import { TransformContext } from "./transform";
-import { PropsExpression } from "./transform/transformElement";
+import { PropsExpression } from "./transforms/transformElement";
 
 export const enum NodeTypes {
   ROOT,
@@ -124,6 +124,7 @@ export interface DirectiveNode extends Node {
   name: string;
   exp: ExpressionNode | undefined;
   arg: ExpressionNode | undefined;
+  modifiers: string[];
 }
 
 export interface SourceLocation {
