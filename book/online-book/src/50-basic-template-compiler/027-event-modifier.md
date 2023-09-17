@@ -50,9 +50,9 @@ app.mount("#app");
 <form @submit.prevent="submit"></form>
 ```
 
-`@submit.prevent` という記述があります。これは `@submit` に対して `preventDefault` を実行するという意味です。
+`@submit.prevent` という記述があります。これは submit イベントのハンドラを呼び出す際に、`preventDefault` を実行するという意味です。
 
-この `.prevent` を記述すない場合、submit 時にページがリロードされてしまいます。
+この `.prevent` を記述しない場合、submit 時にページがリロードされてしまいます。
 
 ## AST と Parser の実装
 
@@ -275,3 +275,8 @@ export const withModifiers = (fn: Function, modifiers: string[]) => {
 ```
 
 これで実装はおしまいです。
+
+動作を確認してみましょう！  
+ボタンを押した際に、ページがリロードされずに input の内容が画面に反映されていれば OK です！
+
+ここまでのソースコード: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/027_event_modifier)
