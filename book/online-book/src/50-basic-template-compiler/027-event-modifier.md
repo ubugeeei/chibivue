@@ -158,7 +158,10 @@ export const transformOn: DirectiveTransform = (dir, node, context) => {
 ```
 
 そして、この runtime-dom 側で実装した `transformOn` を compiler のオプションとして渡してあげれば OK です。  
-※ これに関しては compiler-dom からバケツリレーするだけだけなので解説では触れません。
+以下のような関係図です。  
+全ての transformer を runtime-dom から渡すのではなく、デフォルトの実装は runtime-core に実装しておき、オプションとしてあと乗せ出来るような構成にするイメージです。
+
+![50-027-new-compiler-architecture](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/50-027-new-compiler-architecture.drawio.png)
 
 これで runtime-core が DOM に依存せず、runtime-dom 側で DOM に依存した処理を実装しつつ runtime-core の transformer を実行できるようになります。
 
