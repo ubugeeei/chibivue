@@ -19,7 +19,12 @@ export interface VOnDirectiveNode extends DirectiveNode {
   exp: SimpleExpressionNode | undefined;
 }
 
-export const transformOn: DirectiveTransform = (dir, _node, context) => {
+export const transformOn: DirectiveTransform = (
+  dir,
+  _node,
+  context,
+  augmentor
+) => {
   const { arg } = dir as VOnDirectiveNode;
 
   let eventName: ExpressionNode;
@@ -51,9 +56,7 @@ export const transformOn: DirectiveTransform = (dir, _node, context) => {
     if (isInlineStatement) {
       // wrap inline statement in a function expression
       exp = createCompoundExpression([
-        `$event => ${
-          hasMultipleStatements ? `{` : `(`
-        }`,
+        `$event => ${hasMultipleStatements ? `{` : `(`}`,
         exp,
         hasMultipleStatements ? `}` : `)`,
       ]);
@@ -68,6 +71,10 @@ export const transformOn: DirectiveTransform = (dir, _node, context) => {
       ),
     ],
   };
+
+  if (augmentor) {
+    ret = augmentor(ret);
+  }
 
   return ret;
 };

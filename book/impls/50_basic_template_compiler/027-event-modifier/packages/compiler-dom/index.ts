@@ -1,9 +1,20 @@
 import { CompilerOptions, baseCompile, baseParse } from "../compiler-core";
+import { DirectiveTransform } from "../compiler-core/transform";
+import { transformOn } from "./transforms/vOn";
+
+const DOMDirectiveTransforms: Record<string, DirectiveTransform> = {
+  on: transformOn, // override compiler-core
+};
 
 export function compile(template: string, option?: CompilerOptions) {
-  const defaultOption: Required<CompilerOptions> = { isBrowser: true };
+  const defaultOption = { isBrowser: true };
   if (option) Object.assign(defaultOption, option);
-  return baseCompile(template, defaultOption);
+  return baseCompile(
+    template,
+    Object.assign({}, defaultOption, {
+      directiveTransforms: DOMDirectiveTransforms,
+    })
+  );
 }
 
 export function parse(template: string) {

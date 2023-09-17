@@ -22,3 +22,4 @@ export const createApp = ((...args) => {
 }) as CreateAppFunction<Element>;
 
 export * from "../runtime-core";
+export * from "./directives/vOn";

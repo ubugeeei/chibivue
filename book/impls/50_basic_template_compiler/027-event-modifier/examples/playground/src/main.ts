@@ -2,26 +2,27 @@ import { createApp, defineComponent, ref } from "chibivue";
 
 const App = defineComponent({
   setup() {
-    const count = ref(0);
-    const increment = (e: Event) => {
-      console.log(e);
-      count.value++;
+    const inputText = ref("");
+
+    const buffer = ref("");
+    const handleInput = (e: Event) => {
+      const target = e.target as HTMLInputElement;
+      buffer.value = target.value;
     };
-    return { count, increment };
+    const submit = () => {
+      inputText.value = buffer.value;
+      buffer.value = "";
+    };
+
+    return { inputText, buffer, handleInput, submit };
   },
 
   template: `<div>
-    <p>count: {{ count }}</p>
-
-    <button v-on:click="increment">v-on:click="increment"</button>
-    <button @click="increment">@click="increment"</button>
-    <button v-on="{ click: increment }">v-on="{ click: increment }"</button>
-    <button v-on:['click']="increment">v-on:['click']="increment"</button>
-    
-    <button @click="count++">@click="count++"</button>
-    <button @click="() => count++">@click="() => count++"</button>
-    <button @click="increment($event)">@click="increment($event)"</button>
-    <button @click="e => increment(e)">@click="e => increment(e)"</button>
+    <form @submit.prevent="submit">
+      <input :value="buffer" @input="handleInput" />
+      <button>submit</button>
+    </form>
+    <p>inputText: {{ inputText }}</p>
 </div>`,
 });
 

@@ -1,0 +1,277 @@
+# イベント修飾子
+
+## 今回やること
+
+前回、v-on ディレクティブを実装したので続いてはイベント修飾子を実装します。
+
+Vue.js には preventDefault や stopPropagation に対応する修飾子があります。
+
+https://ja.vuejs.org/guide/essentials/event-handling.html#event-modifiers
+
+今回は以下のような開発者インターフェースを目指してみましょう。
+
+```ts
+import { createApp, defineComponent, ref } from "chibivue";
+
+const App = defineComponent({
+  setup() {
+    const inputText = ref("");
+
+    const buffer = ref("");
+    const handleInput = (e: Event) => {
+      const target = e.target as HTMLInputElement;
+      buffer.value = target.value;
+    };
+    const submit = () => {
+      inputText.value = buffer.value;
+      buffer.value = "";
+    };
+
+    return { inputText, buffer, handleInput, submit };
+  },
+
+  template: `<div>
+    <form @submit.prevent="submit">
+      <input :value="buffer" @input="handleInput" />
+      <button>submit</button>
+    </form>
+    <p>inputText: {{ inputText }}</p>
+</div>`,
+});
+
+const app = createApp(App);
+
+app.mount("#app");
+```
+
+特に、以下の部分に注目してください。
+
+```html
+<form @submit.prevent="submit"></form>
+```
+
+`@submit.prevent` という記述があります。これは `@submit` に対して `preventDefault` を実行するという意味です。
+
+この `.prevent` を記述すない場合、submit 時にページがリロードされてしまいます。
+
+## AST と Parser の実装
+
+テンプレートの新しいシンタックスを追加するわけなので、Parser と AST の変更が必要になります。
+
+ますは AST を見てみましょう。これはとっても簡単で、`DirectiveNode` に `modifiers` というプロパティ(string の配列)を追加するだけです。
+
+```ts
+export interface DirectiveNode extends Node {
+  type: NodeTypes.DIRECTIVE;
+  name: string;
+  exp: ExpressionNode | undefined;
+  arg: ExpressionNode | undefined;
+  modifiers: string[]; // ここを追加
+}
+```
+
+これに合わせて Parser も実装します。
+
+実は本家から拝借した正規表現にもう含まれているので、こちらの実装もとても簡単です。
+
+```ts
+function parseAttribute(
+  context: ParserContext,
+  nameSet: Set<string>
+): AttributeNode | DirectiveNode {
+  // .
+  // .
+  // .
+  const modifiers = match[3] ? match[3].slice(1).split(".") : []; // match 結果から修飾子を取り出す
+  return {
+    type: NodeTypes.DIRECTIVE,
+    name: dirName,
+    exp: value && {
+      type: NodeTypes.SIMPLE_EXPRESSION,
+      content: value.content,
+      isStatic: false,
+      loc: value.loc,
+    },
+    loc,
+    arg,
+    modifiers, // return に含める
+  };
+}
+```
+
+はい。これで AST と Parser の実装は完了です。
+
+## runtime-dom/transform
+
+ここで少し今のコンパイラの構成をおさらいしてみます。
+
+現状は以下のような構成になっています。
+
+![50-027-compiler-architecture](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/50-027-compiler-architecture.drawio.png)
+
+compiler-core と compiler-dom のそれぞれの役悪を改めて理解してみると、  
+compiler-core は DOM に依存しないコンパイラの機能を提供するもので、AST の生成や、その変換を行います。
+
+これまでに、v-on ディレクティブなどを compiler-core に実装しましたが、これは`@click="handle"` という記述を `{ onClick: handle }` というオブジェクトに変換しているだけで、  
+DOM に依存するような処理は行っていません。
+
+ここで、今回実装したいものを見てみましょう。  
+今回は実際に `e.preventDefault()` や `e.stopPropagation()` を実行するコードを生成したいです。  
+これらは大きく DOM に依存してしまいます。
+
+そこで、runtime-dom 側にも transformer を実装していきます。 DOM に関連する transform はここに実装して行くことにしましょう。
+
+runtime-dom の方に `transformOn` を実装していきたいのですが、runtime-core の `transformOn` との兼ね合いを考える必要があります。  
+兼ね合いというのは、「runtime-core の transform も実行しつつ、runtime-dom で実装した transform を実装するにはどうすればいいのか?」 ということです。
+
+そこでまず、 runtime-core の方に実装してある `DirectiveTransform` という interface に手を加えていきます。
+
+```ts
+export type DirectiveTransform = (
+  dir: DirectiveNode,
+  node: ElementNode,
+  context: TransformContext,
+  augmentor?: (ret: DirectiveTransformResult) => DirectiveTransformResult // 追加
+) => DirectiveTransformResult;
+```
+
+augmentor というものを追加してみました。  
+まぁ、これはただのコールバック関数です。 `DirectiveTransform` の interface としてコールバックを受け取れようにして、transform 関数を拡張可能にしています。
+
+runtime-dom の方では、runtime-core で実装した transformer をラップした transformer の実装をして行くようにします。
+
+```ts
+// 実装イメージ
+
+// runtime-dom側の実装
+
+import { transformOn as baseTransformOn } from "runtime-core";
+
+export const transformOn: DirectiveTransform = (dir, node, context) => {
+  return baseTransformOn(dir, node, context, () => {
+    /** ここに runtime-dom の独自の実装 */
+    return {
+      /** */
+    };
+  });
+};
+```
+
+そして、この runtime-dom 側で実装した `transformOn` を compiler のオプションとして渡してあげれば OK です。  
+※ これに関しては compiler-dom からバケツリレーするだけだけなので解説では触れません。
+
+これで runtime-core が DOM に依存せず、runtime-dom 側で DOM に依存した処理を実装しつつ runtime-core の transformer を実行できるようになります。
+
+## transformer の実装
+
+それでは、runtime-dom 側の transformer を実装していきます。
+
+どういう風に transform していきましょうか。とりあえず、一概に '修飾子' といってもいろんな種類のものがあるので、  
+今後のことも考えて分類わけできるようにしておきましょう。
+
+今回実装するのは 'イベント修飾子' です。
+とりあえず、この eventModifiers として取り出してみましょう。
+
+```ts
+const isEventModifier = makeMap(
+  // event propagation management
+  `stop,prevent,self`
+);
+
+const resolveModifiers = (modifiers: string[]) => {
+  const eventModifiers = [];
+
+  for (let i = 0; i < modifiers.length; i++) {
+    const modifier = modifiers[i];
+    if (isEventModifier(modifier)) {
+      eventModifiers.push(modifier);
+    }
+  }
+
+  return { eventModifiers };
+};
+```
+
+makeMap とは vuejs/core で実装されている存在チェック用のヘルパー関数で、カンマ区切りで定義した文字列に一致しているかどうかを boolean で返してくれます。
+
+```ts
+export function makeMap(
+  str: string,
+  expectsLowerCase?: boolean
+): (key: string) => boolean {
+  const map: Record<string, boolean> = Object.create(null);
+  const list: Array<string> = str.split(",");
+  for (let i = 0; i < list.length; i++) {
+    map[list[i]] = true;
+  }
+  return expectsLowerCase
+    ? (val) => !!map[val.toLowerCase()]
+    : (val) => !!map[val];
+}
+```
+
+普通に includes でみてもいいんですが、ここでは makeMap を使ってみました。
+
+eventModifiers を抽出できたところでこれをどう使いましょうか。
+結論から言うと、これは runtime-dom 側に withModifiers というヘルパー関数を実装し、その関数を呼び出す式に transform していきます。
+
+```ts
+// runtime-dom/runtimeHelpers.ts
+
+export const V_ON_WITH_MODIFIERS = Symbol();
+```
+
+```ts
+export const transformOn: DirectiveTransform = (dir, node, context) => {
+  return baseTransform(dir, node, context, (baseResult) => {
+    const { modifiers } = dir;
+    if (!modifiers.length) return baseResult;
+
+    let { key, value: handlerExp } = baseResult.props[0];
+    const { eventModifiers } = resolveModifiers(modifiers);
+
+    if (eventModifiers.length) {
+      handlerExp = createCallExpression(context.helper(V_ON_WITH_MODIFIERS), [
+        handlerExp,
+        JSON.stringify(eventModifiers),
+      ]);
+    }
+
+    return {
+      props: [createObjectProperty(key, handlerExp)],
+    };
+  });
+};
+```
+
+これで transform 側の実装は概ね終わりです。
+
+あとはこの withModifiers を runtime-dom 側で実装していきます。
+
+## withModifiers の実装
+
+runtime-dom/directives/vOn.ts に実装を進めていきます。
+
+実装はとてもシンプルです。
+
+イベント修飾子のガード関数を実装して、配列で受け取った修飾子の分だけ実行するような実装をするだけです。
+
+```ts
+const modifierGuards: Record<string, (e: Event) => void | boolean> = {
+  stop: (e) => e.stopPropagation(),
+  prevent: (e) => e.preventDefault(),
+  self: (e) => e.target !== e.currentTarget,
+};
+
+export const withModifiers = (fn: Function, modifiers: string[]) => {
+  return (event: Event, ...args: unknown[]) => {
+    for (let i = 0; i < modifiers.length; i++) {
+      const guard = modifierGuards[modifiers[i]];
+      if (guard && guard(event)) return;
+    }
+    return fn(event, ...args);
+  };
+};
+```
+
+これで実装はおしまいです。

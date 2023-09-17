@@ -190,7 +190,6 @@ export type NodeTransform = (
 //   dir: DirectiveNode,
 //   node: ElementNode,
 //   context: TransformContext,
-//   augmentor?: (ret: DirectiveTransformResult) => DirectiveTransformResult
 // ) => DirectiveTransformResult;
 export type DirectiveTransform = Function;
 ```

@@ -82,10 +82,7 @@ function createCodegenContext(ast: RootNode): CodegenContext {
   return context;
 }
 
-export const generate = (
-  ast: RootNode,
-  option: Required<CompilerOptions>
-): string => {
+export const generate = (ast: RootNode, option: CompilerOptions): string => {
   const context = createCodegenContext(ast);
 
   const { push } = context;
@@ -136,7 +133,7 @@ function genFunctionPreamble(ast: RootNode, context: CodegenContext) {
 const genNode = (
   node: CodegenNode,
   context: CodegenContext,
-  option: Required<CompilerOptions>
+  option: CompilerOptions
 ) => {
   if (isString(node)) {
     context.push(node);
@@ -190,7 +187,7 @@ function genExpression(node: SimpleExpressionNode, context: CodegenContext) {
 function genInterpolation(
   node: InterpolationNode,
   context: CodegenContext,
-  option: Required<CompilerOptions>
+  option: CompilerOptions
 ) {
   const { push } = context;
   if (!option.isBrowser) {
@@ -202,7 +199,7 @@ function genInterpolation(
 function genCompoundExpression(
   node: CompoundExpressionNode,
   context: CodegenContext,
-  option: Required<CompilerOptions>
+  option: CompilerOptions
 ) {
   for (let i = 0; i < node.children!.length; i++) {
     const child = node.children![i];
@@ -217,7 +214,7 @@ function genCompoundExpression(
 function genExpressionAsPropertyKey(
   node: ExpressionNode,
   context: CodegenContext,
-  option: Required<CompilerOptions>
+  option: CompilerOptions
 ) {
   const { push } = context;
   if (node.type === NodeTypes.COMPOUND_EXPRESSION) {
@@ -234,7 +231,7 @@ function genExpressionAsPropertyKey(
 function genVNodeCall(
   node: VNodeCall,
   context: CodegenContext,
-  option: Required<CompilerOptions>
+  option: CompilerOptions
 ) {
   const { push, helper } = context;
   const { tag, props, children } = node;
@@ -255,7 +252,7 @@ function genNullableArgs(args: any[]): CallExpression["arguments"] {
 function genCallExpression(
   node: CallExpression,
   context: CodegenContext,
-  option: Required<CompilerOptions>
+  option: CompilerOptions
 ) {
   const { push, helper } = context;
   const callee = isString(node.callee) ? node.callee : helper(node.callee);
@@ -267,7 +264,7 @@ function genCallExpression(
 function genObjectExpression(
   node: ObjectExpression,
   context: CodegenContext,
-  option: Required<CompilerOptions>
+  option: CompilerOptions
 ) {
   const { push } = context;
   const { properties } = node;
@@ -295,7 +292,7 @@ function genObjectExpression(
 function genArrayExpression(
   node: ArrayExpression,
   context: CodegenContext,
-  option: Required<CompilerOptions>
+  option: CompilerOptions
 ) {
   genNodeListAsArray(node.elements as CodegenNode[], context, option);
 }
@@ -303,7 +300,7 @@ function genArrayExpression(
 function genNodeListAsArray(
   nodes: (string | CodegenNode | TemplateChildNode[])[],
   context: CodegenContext,
-  option: Required<CompilerOptions>
+  option: CompilerOptions
 ) {
   context.push(`[`);
   genNodeList(nodes, context, option);
@@ -313,7 +310,7 @@ function genNodeListAsArray(
 function genNodeList(
   nodes: (string | CodegenNode | TemplateChildNode[])[],
   context: CodegenContext,
-  option: Required<CompilerOptions>,
+  option: CompilerOptions,
   comma: boolean = true
 ) {
   const { push } = context;
