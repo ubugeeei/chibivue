@@ -1,13 +1,13 @@
-# Small reactivity system
+# Minimal reactivity system
 
 ## Developer interface we aim for this time
 
-Now let's talk about the essence of Vue.js, which is the reactivity system.  
+From here, we will talk about the essence of Vue.js, which is the reactivity system.  
 The previous implementation, although it looks similar to Vue.js, is not actually Vue.js in terms of functionality.  
 I simply implemented the initial developer interface and made it possible to display various HTML.
 
-However, as it is now, once the screen is rendered, it remains the same, and it becomes just a static site as a web application.  
-From now on, we will add state to build a richer UI, and update the rendering when the state changes.
+However, as it is, once the screen is rendered, it remains the same, and as a web application, it becomes just a static site.  
+From now on, we will add state to create a richer UI, and update the rendering when the state changes.
 
 First, let's think about what kind of developer interface it will be, as usual.  
 How about something like this?
@@ -35,25 +35,25 @@ app.mount("#app");
 ```
 
 If you are used to developing with Single File Components (SFC), this may look a little unfamiliar.  
-This is a developer interface that defines state in the setup option and returns a render function.  
+This is a developer interface that uses the `setup` option to hold state and return a render function.  
 In fact, Vue.js has such notation.
 
 https://vuejs.org/api/composition-api-setup.html#usage-with-render-functions
 
-We define the state using the reactive function and implement the increment function that modifies it, and bind it to the click event of the button.  
+We define the state with the `reactive` function, implement a function called `increment` that modifies it, and bind it to the click event of the button.  
 To summarize what we want to do:
 
-- Execute the setup function to obtain the function for getting the vnode from the return value
-- Make the object passed to the reactive function reactive
+- Execute the `setup` function to obtain a function for obtaining the vnode from the return value
+- Make the object passed to the `reactive` function reactive
 - When the button is clicked, the state is updated
-- Track the state update, re-execute the render function, and redraw the screen
+- Track the state updates, re-execute the render function, and redraw the screen
 
 ## What is the reactivity system?
 
 Now, let's review what reactivity is.  
 Let's refer to the official documentation.
 
-> A reactive object is a JavaScript Proxy that behaves like a normal object, with the difference that Vue can track property access and changes on reactive objects.
+> Reactive objects are JavaScript proxies that behave like normal objects. The difference is that Vue can track property access and changes on reactive objects.
 
 [Source](https://v3.vuejs.org/guide/reactivity-fundamentals.html)
 
@@ -61,24 +61,24 @@ Let's refer to the official documentation.
 
 [Source](https://v3.vuejs.org/guide/reactivity-in-depth.html)
 
-In summary, "a reactive object is one that updates the screen when changes occur".  
-Let's put aside how to implement this for now and try to implement the developer interface mentioned earlier.
+In summary, "reactive objects update the screen when there are changes".  
+Let's put aside how to achieve this for now and implement the developer interface mentioned earlier.
 
 ## Implementation of the setup function
 
-It's very easy to do.  
-We receive the setup option as an argument and execute it, and then we can use it just like the render option we have used so far.
+What we need to do is very simple.  
+We receive the `setup` option and execute it, and then we can use it just like the previous `render` option.
 
-Edit ~/packages/runtime-core/componentOptions.ts.
+Edit `~/packages/runtime-core/componentOptions.ts`:
 
 ```ts
 export type ComponentOptions = {
   render?: Function;
-  setup?: () => Function; // Add this
+  setup?: () => Function; // Added
 };
 ```
 
-Then use it.
+Then use it:
 
 ```ts
 // createAppAPI
@@ -128,27 +128,21 @@ app.mount("#app");
 ```
 
 Well, that's it.  
-In practice, we want to execute this `updateComponent` when the state is changed.
+Actually, we want to execute this `updateComponent` when the state is changed.
 
-## Implementation of a small reactivity system
+## Proxy Objects
 
-This is the main theme of this time. Somehow, we want to execute `updateComponent` when the state is changed.  
-The key to this is the following two:
+This is the main theme for this time. I want to execute `updateComponent` when the state is changed somehow.
 
-- Proxy object
-- Observer pattern
+The key to this is an object called Proxy.
 
-The reactivity system is implemented by combining these two.
+First, let me explain about each of them, not about the implementation method of the reactivity system.
 
-First, let's explain each of them, not how to implement the reactivity system.
+https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Proxy
 
-## Proxy object
+Proxy is a very interesting object.
 
-https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Proxy
-
-The Proxy object is a very interesting object.
-
-You can use it by passing an object as an argument and using `new`.
+You can use it by passing an object as an argument and using `new` like this:
 
 ```ts
 const o = new Proxy({ value: 1 });
@@ -157,8 +151,8 @@ console.log(o.value); // 1
 
 In this example, `o` behaves almost the same as a normal object.
 
-What's interesting is that the Proxy object can take a second argument and register a handler.  
-This handler is a handler for object operations. Take a look at the following example.
+Now, what's interesting is that Proxy can take a second argument and register a handler.
+This handler is a handler for object operations. Please take a look at the following example:
 
 ```ts
 const o = new Proxy(
@@ -173,13 +167,13 @@ const o = new Proxy(
 );
 ```
 
-In this example, we write settings for the object to be generated.  
-Specifically, when accessing (get) the properties of this object, the original object (target) and the accessed key name will be output to the console.  
-Let's check the behavior in a browser or something.
+In this example, we are writing settings for the generated object.
+Specifically, when accessing (get) the properties of this object, the original object (target) and the accessed key name will be output to the console.
+Let's check the operation in a browser or something.
 
 ![proxy_get](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/proxy_get.png)
 
-You can see that the set processing is executed when reading the value from the property of the object generated by this Proxy.
+You can see that the set processing set for reading the value from the property of the object generated by this Proxy is being executed.
 
 Similarly, you can also set it for set.
 
@@ -198,116 +192,53 @@ const o = new Proxy(
 
 ![proxy_set](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/proxy_set.png)
 
-This is enough to understand the Proxy.
+This is the extent of understanding Proxy.
 
-## Observer Pattern
+## Trying to achieve reactivity system with Proxy
 
-The Observer Pattern is a type of design pattern.
+To clarify the purpose again, the purpose this time is to "execute `updateComponent` when the state is changed". Let me explain the implementation process using Proxy.
 
-https://en.wikipedia.org/wiki/Observer_pattern
+First, Vue.js's reactivity system involves `target`, `Proxy`, `ReactiveEffect`, `Dep`, `track`, `trigger`, `targetMap`, and `activeEffect`.
 
-The Observer Pattern is a design pattern used to notify other objects of events in a certain object. It involves the use of the Observer and Subject. Instead of explaining it in words, I will provide a code-based explanation below.
-
-Observer is an interface for the objects that receive notifications. This interface has a method called `update`.
-
-```ts
-interface Observer {
-  update(): void;
-}
-```
-
-Subject is an interface for the objects that send notifications. This interface has methods called `observe`, `forget`, and `notify`.
+First, let's talk about the structure of targetMap.
+targetMap is a mapping of keys and deps for a certain target.
+Target refers to the object you want to make reactive, and dep refers to the effect (function) you want to execute. You can think of it that way.
+In code, it looks like this:
 
 ```ts
-interface Subject {
-  observe(obs: Observer): void;
-  forget(obs: Observer): void;
-  notify(): void;
-}
-```
+type Target = any; // any target
+type TargetKey = any; // any key that the target has
 
-And they are implemented like this:
+const targetMap = new WeakMap<Target, KeyToDepMap>(); // defined as a global variable in this module
 
-```ts
-class O implements Observer {
-  update() {
-    console.log("event received!");
-  }
-}
+type KeyToDepMap = Map<TargetKey, Dep>; // a map of target's key and effect
 
-class S implements Subject {
-  private observers: Observer[] = [];
-
-  observe(obs: Observer) {
-    this.observers.push(obs);
-  }
-
-  forget() {
-    this.observers = this.observers.filter((it) => it !== obs);
-  }
-
-  notify() {
-    this.observers.forEach((it) => it.update());
-  }
-}
-```
-
-You can use them like this:
-
-```ts
-const obs1 = new O();
-const obs2 = new O();
-const obs3 = new O();
-
-const sub = new S();
-
-sub.observe(obs1);
-sub.observe(obs2);
-sub.observe(obs3);
-
-sub.notify(); // notify
-```
-
-You might wonder why you would use something like this, but for now, just think of this as the Observer Pattern.
-
-## Implementing a Reactivity System with Proxy and Observer Pattern
-
-To clarify the purpose again, the goal is to "execute `updateComponent` when the state changes". Let's explain the implementation process using Proxy and the Observer Pattern.
-
-In Vue.js's reactivity system, there are `target`, `Proxy`, `ReactiveEffect`, `Dep`, `track`, `trigger`, `targetMap`, and `activeEffect`.
-
-First, let's talk about the structure of `targetMap`. `targetMap` is a mapping of keys and dependencies for a specific target. `target` represents the object you want to make reactive, and `dep` represents the effect (function) you want to execute. Here's how it looks in code:
-
-```ts
-type Target = any;
-type TargetKey = any;
-
-const targetMap = new WeakMap<Target, KeyToDepMap>();
-
-type KeyToDepMap = Map<TargetKey, Dep>;
-
-type Dep = Set<ReactiveEffect>;
+type Dep = Set<ReactiveEffect>; // dep has multiple ReactiveEffects
 
 class ReactiveEffect {
-  constructor(public fn: () => T) {}
+  constructor(
+    // here, you give the function you want to actually apply as an effect (in this case, updateComponent)
+    public fn: () => T
+  ) {}
 }
 ```
 
-This structure forms the basis, and then we need to think about how to create and execute effects (functions) by registering them in `targetMap`.
+This basic structure is responsible for the rest, and then we think about how to create (register) targetMap and how to execute the effect.
 
-This is where `track` and `trigger` come in. `track` is a function that registers dependencies in `targetMap`, and `trigger` is a function that retrieves and executes effects from `targetMap`.
+That's where the concepts of `track` and `trigger` come in.
+As the names suggest, `track` is a function that registers in `targetMap`, and `trigger` is a function that retrieves the effect from `targetMap` and executes it.
 
 ```ts
 export function track(target: object, key: unknown) {
-  // ...
+  // ..
 }
 
 export function trigger(target: object, key?: unknown) {
-  // ...
+  // ..
 }
 ```
 
-These `track` and `trigger` functions are implemented in the `get` and `set` handlers of Proxy.
+And these `track` and `trigger` are implemented in the get and set handlers of Proxy.
 
 ```ts
 const state = new Proxy(
@@ -326,7 +257,7 @@ const state = new Proxy(
 );
 ```
 
-The API for generating this Proxy is the `reactive` function.
+The API for generating this Proxy is the reactive function.
 
 ```ts
 function reactive<T>(target: T) {
@@ -344,68 +275,81 @@ function reactive<T>(target: T) {
 }
 ```
 
-![reactive](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/reactive.png)
+![reactive](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/reactive.drawio.png)
 
-These are the applications of the Observer Pattern we discussed earlier. Remember this class:
+Here, you may notice one missing element. That is, "which function to register in track?".
+The answer is the concept of `activeEffect`.
+This is also defined as a global variable in this module, just like targetMap, and is set in the `run` method of ReactiveEffect.
 
 ```ts
-class S implements Subject {
-  private observers: Observer[] = [];
+let activeEffect: ReactiveEffect | undefined;
 
-  observe(obs: Observer) {
-    this.observers.push(obs);
-  }
+class ReactiveEffect {
+  constructor(
+    // here, you give the function you want to actually apply as an effect (in this case, updateComponent)
+    public fn: () => T
+  ) {}
 
-  forget() {
-    this.observers = this.observers.filter((it) => it !== obs);
-  }
-
-  notify() {
-    this.observers.forEach((it) => it.update());
+  run() {
+    activeEffect = this;
+    return this.fn();
   }
 }
 ```
 
-Let's replace it with something similar. In this class, `observers` corresponds to `Dep`. However, the structure of `Dep` is a bit more complex, as it separates dependencies for each key of an object. In other words, `observers` corresponds to `targetMap`.
+To understand how it works, imagine a component like this.
 
 ```ts
-class S implements Subject {
-  private targetMap = new WeakMap<Target, KeyToDepMap>();
+{
+  setup() {
+    const state = reactive({ count: 0 });
+    const increment = () => state.count++;
 
-  observe(obs: Observer) {
-    //
-  }
-
-  forget() {
-    //
-  }
-
-  notify() {
-    //
-  }
+    return function render() {
+      return h("div", { id: "my-app" }, [
+        h("p", {}, [`count: ${state.count}`]),
+        h(
+          "button",
+          {
+            onClick: increment,
+          },
+          ["increment"]
+        ),
+      ]);
+    };
+  },
 }
 ```
 
-![reactive_observer](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/reactive_observer.png)
-
-`observe` and `notify` correspond to `track` and `trigger`, respectively. There is no `forget` in this case.
+Internally, this is how reactivity is formed.
 
 ```ts
-class S implements Subject {
-  private targetMap = new WeakMap<Target, KeyToDepMap>();
+// Implementation inside chibivue
+const app: App = {
+  mount(rootContainer: HostElement) {
+    const componentRender = rootComponent.setup!();
 
-  track(target, key, effect: ???) {}
-  trigger(target, key) {}
-}
+    const updateComponent = () => {
+      const vnode = componentRender();
+      render(vnode, rootContainer);
+    };
+
+    const effect = new ReactiveEffect(updateComponent);
+    effect.run();
+  },
+};
 ```
 
-## Let's implement based on these.
+To explain step by step, first, the `setup` function is executed.
+At this point,
 
-The most difficult part is understanding up to the above, so once you understand it, you just need to write the source code.
-However, some people may not be able to understand it just by the above explanation without actually knowing what it is.
-For those people, let's try implementing it here first. Then, please refer to the previous section while reading the actual code!
+## Based on these, let's implement it.
 
-First, let's create the necessary files. Create them in `packages/reactivity`.
+The most difficult part is understanding everything up to this point, so once you understand it, all you have to do is write the source code.
+However, even if you understand only the above, there may be some people who cannot understand it without knowing what is actually happening.
+For those people, let's try implementing it here first. Then, while reading the actual code, please refer back to the previous section!
+
+First, let's create the necessary files. We will create them in `packages/reactivity`.
 Here, we will try to be conscious of the configuration of the original Vue as much as possible.
 
 ```sh
@@ -453,7 +397,7 @@ export class ReactiveEffect<T = any> {
 
   run() {
     // ※ Save the activeEffect before executing fn and restore it after execution.
-    // If you don't do this, it will be overwritten and behave unexpectedly. (Let's restore it to the original after use)
+    // If you don't do this, it will be overwritten one after another and behave unexpectedly. (Let's restore it to its original state when you're done)
     let parent: ReactiveEffect | undefined = activeEffect;
     activeEffect = this;
     const res = this.fn();
@@ -494,11 +438,11 @@ export function trigger(target: object, key?: unknown) {
 }
 ```
 
-I haven't explained the contents of `track` and `trigger` so far, but they simply register and retrieve from `targetMap` and execute them, so please try to read them.
+I haven't explained the contents of `track` and `trigger` so far, but they simply register and retrieve from `targetMap` and execute them, so please try to read them carefully.
 
-Next is `baseHandler.ts`. Define the handler for the reactive proxy here.
+Next is `baseHandler.ts`. Here, we define the handler for the reactive proxy.
 Well, you can implement it directly in `reactive`, but I followed the original Vue because it is like this.
-In reality, there are various proxies such as `readonly` and `shallow`, so the idea is to implement those handlers here (but we won't do it this time).
+In reality, there are various proxies such as `readonly` and `shallow`, so the idea is to implement the handlers for those proxies here. (We won't do it this time, though)
 
 ```ts
 import { track, trigger } from "./effect";
@@ -509,7 +453,7 @@ export const mutableHandlers: ProxyHandler<object> = {
     track(target, key);
 
     const res = Reflect.get(target, key, receiver);
-    // If it's an object, make it reactive (this allows nested objects to be reactive as well).
+    // If it is an object, make it reactive (this allows nested objects to be reactive as well).
     if (res !== null && typeof res === "object") {
       return reactive(res);
     }
@@ -525,24 +469,10 @@ export const mutableHandlers: ProxyHandler<object> = {
 };
 ```
 
-Here, `Reflect` appears, which is similar to `Proxy`, but while `Proxy` is a meta setting for objects created at the creation stage, `Reflect` is used to perform operations on existing objects. Both `Proxy` and `Reflect` are APIs for processing objects in the JS engine, and they allow you to perform metaprogramming compared to using objects normally.
-To be precise, it is not a processing function, but the concept of reflection is used, which is often used to obtain meta information about a specific object.
-You can perform various meta operations such as executing functions that change the object, executing functions that read the object, and checking if a key exists.
-
-Actually,
-
-```ts
-Reflect.get(target, key, receiver);
-```
-
-can be written as
-
-```ts
-target[key];
-```
-
-and it will work, but since `Proxy` and `Reflect` have similar API structures and their methods are paired, they are often used together.
-Well, don't worry about the details, the original Vue also uses `Reflect`, so let's use `Reflect` here.
+Here, `Reflect` appears, which is similar to `Proxy`, but while `Proxy` is for writing meta settings for objects, `Reflect` is for performing operations on existing objects.
+Both `Proxy` and `Reflect` are APIs for meta programming related to objects in the JS engine, and they allow you to perform meta operations compared to using objects normally.
+You can execute functions that change the object, execute functions that read the object, and check if a key exists, and perform various meta operations.
+For now, it's okay to understand that `Proxy` is for meta settings at the stage of creating an object, and `Reflect` is for meta operations on existing objects.
 
 Next is `reactive.ts`.
 
@@ -555,7 +485,7 @@ export function reactive<T extends object>(target: T): T {
 }
 ```
 
-Now that the implementation of the reactive part is complete, let's use them when mounting.
+Now that the implementation of `reactive` is complete, let's try using them when mounting.
 `~/packages/runtime-core/apiCreateApp.ts`.
 
 ```ts
@@ -586,7 +516,7 @@ export function createAppAPI<HostElement>(
 }
 ```
 
-Now, let's try it out on the playground.
+Now, let's try it in the playground.
 
 ```ts
 import { createApp, h, reactive } from "chibivue";
@@ -610,16 +540,13 @@ const app = createApp({
 app.mount("#app");
 ```
 
-![reactive_example_mistake](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/reactive_example_mistake.png)
+Oops...
 
-Oh...
+The rendering is working fine now, but something seems off.
+Well, it's not surprising because in `updateComponent`, we create elements every time.
+So, let's remove all the elements before each rendering.
 
-The rendering is working correctly now, but something seems off.
-Well, it's understandable because in `updateComponent`, we are creating new elements every time.
-So, when rendering for the second time and onwards, the old elements remain as they are, and new elements are created.
-Therefore, let's remove all the elements before rendering each time.
-
-Modify the `render` function in `~/packages/runtime-core/renderer.ts`.
+Modify the `render` function in `~/packages/runtime-core/renderer.ts` like this:
 
 ```ts
 const render: RootRenderFunction = (vnode, container) => {
@@ -629,22 +556,10 @@ const render: RootRenderFunction = (vnode, container) => {
 };
 ```
 
-Now, how does it look?
+Now, how about this?
 
-![reactive_example](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/reactive_example.png)
+Now it seems to be working fine!
 
-It seems to be working fine now!
+Now we can update the screen with `reactive`!
 
-We can now update the screen reactively!!
-
-::: tip
-As you can see from the implementation, the Observer pattern introduced in this chapter does not have a direct representation in the vuejs/core (3.x repository).
-
-However, if you take a look at the v2 repository, you will find an actual `Observer` class, as well as terms like `notify` and `observe`.
-
-Moreover, the dependency relationship is the same as the current implementation, with the existence of `dep` and other implementations that serve as a step forward in the current implementation.
-
-https://github.com/vuejs/vue/blob/49b6bd4264c25ea41408f066a1835f38bf6fe9f1/src/core/observer/index.ts#L48
-
-While chibivue is based on Vue.js 3.x for explanation purposes, it's really fun to observe traces of Vue.js's history by occasionally looking at the v2 repository. I highly recommend you to take a look as well!!
-:::
+Source code up to this point: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/030_reactive_system)

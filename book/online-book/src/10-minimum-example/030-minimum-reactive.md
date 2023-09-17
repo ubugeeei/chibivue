@@ -130,19 +130,13 @@ app.mount("#app");
 まあ、これだけです。
 実際にはステートが変更された時にこの `updateComponent` を実行したいわけです。
 
-## 小さい reactivity system の実装
+## Proxy オブジェクト
 
-今回のメインテーマです。どうにかして、ステートが変更された時に updateComponent を実行したいです。
-これの肝は以下の二つです。
+今回のメインテーマです。どうにかしてステートが変更された時に updateComponent を実行したいです。
 
-- Proxy オブジェクト
-- オブザーバ パターン
-
-reactivity system はこれらを組み合わせて実装されています。
+Proxy と呼ばれるオブジェクトが肝になっています。
 
 まず、 reactivity system の実装方法についてではなく、それぞれについての説明をしてみます。
-
-## Proxy オブジェクト
 
 https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Proxy
 
@@ -155,7 +149,7 @@ const o = new Proxy({ value: 1 });
 console.log(o.value); // 1
 ```
 
-この例だと、o は通常のオブジェクトとほぼ同じ動作をします。
+この例だと、`o` は通常のオブジェクトとほぼ同じ動作をします。
 
 ここで、面白いのが、Proxy は第 2 引数を取ることができ、ハンドラを登録することができます。  
 このハンドラは何のハンドラかというと、オブジェクトの操作に対するハンドラです。以下の例をみてください。
@@ -200,83 +194,10 @@ const o = new Proxy(
 
 Proxy の理解はこの程度で OK です。
 
-## オブザーバ パターン
-
-オブザーバ パターンはデザインパターンの一種です。
-
-https://ja.wikipedia.org/wiki/Observer_%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3
-
-オブザーバパターンはあるオブジェクトのイベントを他のオブジェクトに通知するために用いられるデザインパターンで、 Observer と Subject というものが登場します。  
-言葉で説明するよりもコードベースで説明した方がわかりやすいと思うので以下でコードベースの説明をします。
-
-Observer というのはイベントを通知される側のインタフェースです。
-この interface は`update`というというメソッドを持っています。
-
-```ts
-interface Observer {
-  update(): void;
-}
-```
-
-Subject というのはイベントを通知する側のインタフェースです。
-このインタフェースは`observe`, `forget`, `notify`というメソッドを持っています。
-
-```ts
-interface Subject {
-  observe(obs: Observer): void;
-  forget(obs: Observer): void;
-  notify(): void;
-}
-```
-
-そしてこれらはこのように実装されます。
-
-```ts
-class O implements Observer {
-  update() {
-    console.log("event received!");
-  }
-}
-
-class S implements Subject {
-  private observers: Observer[] = [];
-
-  observe(obs: Observer) {
-    this.observers.push(obs);
-  }
-
-  forget() {
-    this.observers = this.observers.filter((it) => it !== obs);
-  }
-
-  notify() {
-    this.observers.forEach((it) => it.update());
-  }
-}
-```
-
-以下のように使います。
-
-```ts
-const obs1 = new O();
-const obs2 = new O();
-const obs3 = new O();
-
-const sub = new S();
-
-sub.observe(obs1);
-sub.observe(obs2);
-sub.observe(obs3);
-
-sub.notify(); // 通知
-```
-
-わざわざこんなもの何に使うの? という感じがするかもしれませんが、とりあえずこれがオブザーバパターンだと思ってください。
-
-## Proxy とオブザーバパターンで reactivity system を実現してみる
+## Proxy で reactivity system を実現してみる
 
 改めて目的を明確にしておくと、今回の目的は「ステートが変更された時に `updateComponent` を実行したい」です。  
-Proxy とオブザーバパターンを用いた実装の流れについて説明してみます。
+Proxy を用いた実装の流れについて説明してみます。
 
 まず、Vue.js の reactivity system には `target`, `Proxy`, `ReactiveEffect`, `Dep`, `track`, `trigger`, `targetMap`, `activeEffect`というものが登場します。
 
@@ -305,8 +226,8 @@ class ReactiveEffect {
 
 基本的な構造はこれが担っていて、あとはこの TargetMap をどう作っていくか(どう登録していくか)と実際に作用を実行するにはどうするかということを考えます。
 
-そこで登場する概念が track と trigger です。
-それぞれ名前の通り、track は TargetMap に登録する関数、trigger は TargetMap から作用を取り出して実行する関数です。
+そこで登場する概念が `track` と `trigger` です。
+それぞれ名前の通り、`track` は `TargetMap` に登録する関数、`trigger` は `TargetMap` から作用を取り出して実行する関数です。
 
 ```ts
 export function track(target: object, key: unknown) {
@@ -355,68 +276,11 @@ function reactive<T>(target: T) {
 }
 ```
 
-![reactive](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/reactive.png)
-
-これらは先ほど説明したオブザーバパターンの応用です。このクラスを思い出してください。
-
-```ts
-class S implements Subject {
-  private observers: Observer[] = [];
-
-  observe(obs: Observer) {
-    this.observers.push(obs);
-  }
-
-  forget() {
-    this.observers = this.observers.filter((it) => it !== obs);
-  }
-
-  notify() {
-    this.observers.forEach((it) => it.update());
-  }
-}
-```
-
-少しこのクラスを元に置き換えてみましょう。
-この class でいうところの observers が Dep に当たります。
-ですが、この Dep の構造は少し複雑で、あるオブジェクトに対して、key ごとに Dep を分けています。
-つまり、observers は targetMap です。
-
-```ts
-class S implements Subject {
-  private targetMap = new WeekMap<Target, KeyToDepMap>();
-
-  observe(obs: Observer) {
-    //
-  }
-
-  forget() {
-    //
-  }
-
-  notify() {
-    //
-  }
-}
-```
-
-![reactive_observer](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/reactive_observer.png)
-
-observe と notify が track と trigger にあたります。forget はありません。
-
-```ts
-class S implements Subject {
-  private targetMap = new WeekMap<Target, KeyToDepMap>();
-
-  track(target, key, effect: ???) {}
-
-  trigger(target, key) {}
-}
-```
+![reactive](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/reactive.drawio.png)
 
 ここで、一つ足りない要素について気づくかもしれません。それは「track ではどの関数を登録するの?」という点です。
 答えを言ってしまうと、これが `activeEffect` という概念です。
-これは、targetMap と同様、このモジュール内のグローバル変数として定義されていて、ReactiveEffect の`run`というメソッドで随時設定されます。
+これは、targetMap と同様、このモジュール内のグローバル変数として定義されていて、ReactiveEffect の `run` というメソッドで随時設定されます。
 
 ```ts
 let activeEffect: ReactiveEffect | undefined;
@@ -527,7 +391,7 @@ increment では `state.count` を書き換えているので `setter` が実行
 
 ちょっとややこしいので図でまとめます。
 
-![reactivity_create](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/reactivity_create.png)
+![reactivity_create](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/reactivity_create.drawio.png)
 
 ## これらを踏まえて実装しよう
 
@@ -655,25 +519,9 @@ export const mutableHandlers: ProxyHandler<object> = {
 };
 ```
 
-ここで、Reflect というものが登場していますが、Proxy と似た雰囲気のものなんですが、Proxy があるオブジェクトに対する設定を書き込む処理だったのに対し、Reflect はあるオブジェクトに対する処理を行うものです。Proxy も Reflect も JS エンジン内のオブジェクトにまつわる処理の API で、普通にオブジェクトを使うのと比べてメタなプログラミングを行うことができます。  
-正確には処理を行うものというより、リフレクションという概念があってこれはある対象に対するメタ情報を取得するのによく使われます。  
-そのオブジェクトを変化させる関数を実行したり、読み取る関数を実行しり、key が存在するのかをチェクしたりさまざまなメタ操作ができます。
-
-別に、
-
-```ts
-Reflect.get(target, key, receiver);
-```
-
-は
-
-```ts
-target[key];
-```
-
-と書いても動くのですが、Proxy とよく似た API の構造を持っていて、メソッドが対になっていることからよく組合せて使われます。  
-まあ、細かいことは気にせず本家も Reflect を利用してるのでここは Reflect を使ってみます。
-
+ここで、Reflect というものが登場していますが、Proxy と似た雰囲気のものなんですが、Proxy があるオブジェクトに対する設定を書き込む処理だったのに対し、Reflect はあるオブジェクトに対する処理を行うものです。  
+Proxy も Reflect も JS エンジン内のオブジェクトにまつわる処理の API で、普通にオブジェクトを使うのと比べてメタなプログラミングを行うことができます。  
+そのオブジェクトを変化させる関数を実行したり、読み取る関数を実行したり、key が存在するのかをチェクしたりさまざまなメタ操作ができます。  
 とりあえず、Proxy = オブジェクトを作る段階でのメタ設定, Reflect = 既に存在しているオブジェクトに対するメタ操作くらいの理解があれば OK です。
 
 続いて reactive.ts です。
@@ -769,14 +617,4 @@ const render: RootRenderFunction = (vnode, container) => {
 
 これで reactive に画面を更新できるようになりました!!
 
-::: tip
-このチャプターで登場したオブザーバパターンですが、実装してわかるとおり、vuejs/core(3.x のリポジトリ)では直接的な表現は登場しませんでした。
-
-しかし、v2 のリポジトリを見てみると、実際に `Observer` と言う class が存在しており、notify,observe などの用語も存在します。  
-
-そして、依存関係は現在と同じく、dep と言うものが存在していたり、と今の実装の前進となるような実装が存在しています。
-
-https://github.com/vuejs/vue/blob/49b6bd4264c25ea41408f066a1835f38bf6fe9f1/src/core/observer/index.ts#L48
-
-chibivue では 3.x の Vue.js をベースとして説明しますが、たまに 2.x のリポジトリを除いてみることで Vue.js が辿ってきた歴史の形跡が所々で観測できてとても楽しいです。皆さんもぜひ見てみてください！！
-:::
+ここまでのソースコード: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/030_reactive_system)
