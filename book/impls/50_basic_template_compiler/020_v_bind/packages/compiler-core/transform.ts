@@ -18,8 +18,7 @@ export type NodeTransform = (
 export type DirectiveTransform = (
   dir: DirectiveNode,
   node: ElementNode,
-  context: TransformContext,
-  augmentor?: (ret: DirectiveTransformResult) => DirectiveTransformResult
+  context: TransformContext
 ) => DirectiveTransformResult;
 
 export interface DirectiveTransformResult {

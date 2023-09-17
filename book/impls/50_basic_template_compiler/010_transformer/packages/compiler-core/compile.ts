@@ -2,7 +2,7 @@ import { generate } from "./codegen";
 import { CompilerOptions } from "./options";
 import { baseParse } from "./parse";
 import { DirectiveTransform, NodeTransform, transform } from "./transform";
-import { transformElement } from "./transform/transformElement";
+import { transformElement } from "./transforms/transformElement";
 
 export type TransformPreset = [
   NodeTransform[],
