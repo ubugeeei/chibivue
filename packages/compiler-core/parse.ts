@@ -385,6 +385,8 @@ function parseAttribute(
       };
     }
 
+    const modifiers = match[3] ? match[3].slice(1).split(".") : [];
+
     return {
       type: NodeTypes.DIRECTIVE,
       name: dirName,
@@ -394,6 +396,7 @@ function parseAttribute(
         isStatic: false,
         loc: value.loc,
       },
+      modifiers,
       loc,
       arg,
     };

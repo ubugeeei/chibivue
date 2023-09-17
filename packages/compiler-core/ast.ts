@@ -225,6 +225,7 @@ export interface DirectiveNode extends Node {
   name: string;
   exp: ExpressionNode | undefined;
   arg: ExpressionNode | undefined;
+  modifiers: string[];
 }
 
 // Codegen Node Types ----------------------------------------------------------

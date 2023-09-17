@@ -6,7 +6,7 @@
 Minimum Example 部門でやったところから少し時間が空いてしまったので、今の実装がどうなっていたか少しおさらいをしておきましょう。  
 主ななキーワードは Parse, AST, Codegen でした。
 
-![me_template_compiler_design](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/me_template_compiler_design.png)
+![me_template_compiler_design](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/me_template_compiler_design.drawio.png)
 
 ```ts
 export function baseCompile(
@@ -41,6 +41,8 @@ export function baseCompile(
 のようになっていることが。
 
 今回はこの transform という関数を実装していきます。
+
+![design_with_transformer](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/design_with_transformer.drawio.png)
 
 ## transform とは?
 
@@ -188,7 +190,6 @@ export type NodeTransform = (
 //   dir: DirectiveNode,
 //   node: ElementNode,
 //   context: TransformContext,
-//   augmentor?: (ret: DirectiveTransformResult) => DirectiveTransformResult
 // ) => DirectiveTransformResult;
 export type DirectiveTransform = Function;
 ```

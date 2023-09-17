@@ -1,5 +1,5 @@
 import { isString } from "../shared";
-import { PropsExpression } from "./transform/transformElement";
+import { PropsExpression } from "./transforms/transformElement";
 
 export const enum NodeTypes {
   ROOT,

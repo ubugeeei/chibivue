@@ -2,8 +2,8 @@ import { generate } from "./codegen";
 import { CompilerOptions } from "./options";
 import { baseParse } from "./parse";
 import { DirectiveTransform, NodeTransform, transform } from "./transform";
-import { transformElement } from "./transform/transformElement";
-import { transformBind } from "./transform/vBind";
+import { transformElement } from "./transforms/transformElement";
+import { transformBind } from "./transforms/vBind";
 
 export type TransformPreset = [
   NodeTransform[],

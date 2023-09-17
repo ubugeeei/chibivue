@@ -9,8 +9,10 @@ import { baseParse } from "../compiler-core/parse";
 import { CodegenResult } from "./codegen";
 import { parserOptions } from "./parserOptions";
 import { transformModel } from "./transforms/vModel";
+import { transformOn } from "./transforms/vOn";
 
 export const DOMDirectiveTransforms: Record<string, DirectiveTransform> = {
+  on: transformOn,
   model: transformModel, // override compiler-core
 };
 

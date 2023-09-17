@@ -160,6 +160,10 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/50-basic-template-compiler/025-v-on",
           },
           {
+            text: "compiler-dom とイベント修飾子",
+            link: "/50-basic-template-compiler/027-event-modifier",
+          },
+          {
             text: "v-for に対応する",
             link: "/50-basic-template-compiler/030-v-for",
           },
@@ -204,15 +208,15 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         collapsed: true,
         items: [
           {
-            text: 'chibivue、デカくないですか...?',
-            link: '/bonus/hyper-ultimate-super-extreme-minimal-vue/'
+            text: "chibivue、デカくないですか...?",
+            link: "/bonus/hyper-ultimate-super-extreme-minimal-vue/",
           },
           {
-            text: '15 分で Vue を作る',
-            link: '/bonus/hyper-ultimate-super-extreme-minimal-vue/15-min-impl'
+            text: "15 分で Vue を作る",
+            link: "/bonus/hyper-ultimate-super-extreme-minimal-vue/15-min-impl",
           },
-        ]
-      }
+        ],
+      },
     ],
   },
 };
