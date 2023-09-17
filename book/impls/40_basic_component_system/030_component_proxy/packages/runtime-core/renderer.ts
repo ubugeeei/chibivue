@@ -61,6 +61,7 @@ export function createRenderer(options: RendererOptions) {
     createElement: hostCreateElement,
     createText: hostCreateText,
     setText: hostSetText,
+    setElementText: hostSetElementText,
     insert: hostInsert,
     remove: hostRemove,
     parentNode: hostParentNode,
@@ -177,9 +178,40 @@ export function createRenderer(options: RendererOptions) {
     anchor: RendererElement | null,
     parentComponent: ComponentInternalInstance | null
   ) => {
-    const c1 = n1.children as VNode[];
-    const c2 = n2.children as VNode[];
-    patchKeyedChildren(c1, c2, container, anchor, parentComponent);
+    const c1 = n1 && n1.children;
+    const prevShapeFlag = n1 ? n1.shapeFlag : 0;
+    const c2 = n2.children;
+    const { shapeFlag } = n2;
+
+    if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
+      if (prevShapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+        unmountChildren(c1 as VNode[]);
+      }
+      if (c2 !== c1) {
+        hostSetElementText(container, c2 as string);
+      }
+    } else {
+      if (prevShapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+        if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+          patchKeyedChildren(
+            c1 as VNode[],
+            c2 as VNode[],
+            container,
+            anchor,
+            parentComponent
+          );
+        } else {
+          unmountChildren(c1 as VNode[]);
+        }
+      } else {
+        if (prevShapeFlag & ShapeFlags.TEXT_CHILDREN) {
+          hostSetElementText(container, "");
+        }
+        if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+          mountChildren(c2 as VNode[], container, anchor, parentComponent);
+        }
+      }
+    }
   };
 
   const patchKeyedChildren = (
