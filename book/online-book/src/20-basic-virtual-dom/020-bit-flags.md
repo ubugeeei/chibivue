@@ -13,10 +13,10 @@ VNode にはいろんな種類のものがあります。例えば、今実装�
 そして、これから先はさらにいろんな種類の Vnode が追加実装されることでしょう。  
 例えば、slot, keep-alive, suspense, teleport などがそうです。
 
-今のところ、`type === Text`,や`typeof type === "string"`, `typeof type === "object"`などで分岐をおこなっています。
+今のところ、`type === Text` や `typeof type === "string"`, `typeof type === "object"` などで分岐をおこなっています。
 
 これらをいちいち判定するのは非効率ですし、本家の実装に倣ってビットで表現することにしてみましょう。  
-Vue ではこれらのビットは`ShapeFlags`と呼ばれています。その名の通り、VNode の Shape を表すものです。  
+Vue ではこれらのビットは `ShapeFlags` と呼ばれています。その名の通り、VNode の Shape を表すものです。  
 (厳密には Vue ではこの ShapeFlags と Text や Fragment などの Symbol を使って VNode の種類を判別しています)  
 https://github.com/vuejs/core/blob/main/packages/shared/src/shapeFlags.ts
 
@@ -37,7 +37,7 @@ const vnode = {
 まず、フラグの初期値は 0 です。(簡略化のため 8bit で説明しています。)
 
 ```ts
-let shape = 0b00000000;
+let shape = 0b0000_0000;
 ```
 
 ここで、この VNode は element であり、子要素を配列で持っているので ELEMENT というフラグと ARRAY_CHILDREN というフラグが立ちます。
