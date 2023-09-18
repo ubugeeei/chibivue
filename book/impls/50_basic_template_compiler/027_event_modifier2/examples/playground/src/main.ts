@@ -18,9 +18,12 @@ const App = defineComponent({
   },
 
   template: `<div>
-    <form @submit.prevent="submit">
-      <input :value="buffer" @input="handleInput" />
-      <button>submit</button>
+    <form>
+      <input 
+        :value="buffer" 
+        @input="handleInput" 
+        @keydown.prevent.meta.enter="submit" 
+      />
     </form>
     <p>inputText: {{ inputText }}</p>
 </div>`,
