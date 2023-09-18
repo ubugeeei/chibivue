@@ -1,5 +1,3 @@
-
-
 # ★ Basic Virtual DOM 部門
 
 - patch keyed children ✅
@@ -38,7 +36,8 @@
 - render component
   - slot
 - directive
-  - v-on
+  - v-on ✅
+  - event modifiers ✅
   - v-bind ✅
   - v-show
   - v-for
@@ -57,6 +56,9 @@
 - compiler macro
   - define props
   - define emits
+  - defineExpose
+  - defineSlots
+  - defineOptions
 
 # ★ Web Application Essentials 部門 (付録)
 
@@ -68,7 +70,10 @@
 - async component
 - dynamic component
 - SSR
-- compiler optimization (Static Hoisting & Patch Flags & Tree Flattening)
+- compiler optimization
+  - static hoisting
+  - patch flags
+  - tree flattening
 
 ---
 
@@ -76,5 +81,3 @@
 - store
 - testing
 - typescript
-
-

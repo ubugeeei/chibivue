@@ -144,7 +144,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         ],
       },
       {
-        text: "[WIP] Basic Template Compiler",
+        text: "Basic Template Compiler",
         collapsed: true,
         items: [
           {
@@ -164,19 +164,19 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/50-basic-template-compiler/027-event-modifier",
           },
           {
-            text: "v-for に対応する",
+            text: "[WIP] v-for に対応する",
             link: "/50-basic-template-compiler/030-v-for",
           },
           {
-            text: "v-if に対応する",
+            text: "[WIP] v-if に対応する",
             link: "/50-basic-template-compiler/040-v-if",
           },
           {
-            text: "v-model に対応する",
+            text: "[WIP] v-model に対応する",
             link: "/50-basic-template-compiler/050-v-model",
           },
           {
-            text: "スロットに対応する",
+            text: "[WIP] スロットに対応する",
             link: "/50-basic-template-compiler/060-slot",
           },
         ],
@@ -186,19 +186,19 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         collapsed: true,
         items: [
           {
-            text: "script setup に対応する",
+            text: "[WIP] script setup に対応する",
             link: "/60-basic-sfc-compiler/010-script-setup",
           },
           {
-            text: "defineProps に対応する",
+            text: "[WIP] defineProps に対応する",
             link: "/60-basic-sfc-compiler/020-define-props",
           },
           {
-            text: "defineEmits に対応する",
+            text: "[WIP] defineEmits に対応する",
             link: "/60-basic-sfc-compiler/030-define-emits",
           },
           {
-            text: "Scoped CSS に対応する",
+            text: "[WIP] Scoped CSS に対応する",
             link: "/60-basic-sfc-compiler/040-scoped-css",
           },
         ],

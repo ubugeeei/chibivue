@@ -152,7 +152,7 @@ Please refer to the information below for the progress status.
 | v-model           | ✅   |      |
 | v-if              |      |      |
 | v-show            |      |      |
-| mustache          | ✅   |      |
+| mustache          | ✅   | ✅   |
 | slot (default)    |      |      |
 | slot (named)      |      |      |
 | slot (scoped)     |      |      |

@@ -163,6 +163,10 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/en/50-basic-template-compiler/025-v-on",
           },
           {
+            text: "compiler-dom and Event Modifiers",
+            link: "/en/50-basic-template-compiler/027-event-modifier",
+          },
+          {
             text: "Supporting v-for",
             link: "/en/50-basic-template-compiler/030-v-for",
           },
