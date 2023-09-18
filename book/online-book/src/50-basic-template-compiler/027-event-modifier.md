@@ -283,3 +283,31 @@ export const withModifiers = (fn: Function, modifiers: string[]) => {
 ボタンを押した際に、ページがリロードされずに input の内容が画面に反映されていれば OK です！
 
 ここまでのソースコード: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/027_event_modifier)
+
+# その他の修飾子
+
+さて、ここまできたら他の修飾子も実装してみましょう。
+
+基本的な実装方針は同じです。
+
+修飾子を以下のように分類してみましょう。
+
+```ts
+const keyModifiers = [];
+const nonKeyModifiers = [];
+const eventOptionModifiers = [];
+```
+
+あとはこれに必要な map を生成して、resolveModifiers でこれらに分類できれば OK です。
+
+残り、気をつけるべき点は 2 点で、
+
+- 修飾子名と実際の DOM API の名前の際
+- 特定の key コードで実行する helper 関数を新たに実装
+
+です。
+
+この辺りは実際にコードを読みながら実装してみてください！  
+ここまできた皆さんなら出来るはずです。
+
+ここまでのソースコード: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/027_event_modifier2)
