@@ -27,7 +27,7 @@ const App = defineComponent({
       buffer.value = "";
     };
 
-    return { inputText, buffer, handleInput, submit };
+    return { inputText, buffer, handleInput,fun submit };
   },
 
   template: `<div>
@@ -101,7 +101,7 @@ function parseAttribute(
 
 はい。これで AST と Parser の実装は完了です。
 
-## runtime-dom/transform
+## compiler-dom/transform
 
 ここで少し今のコンパイラの構成をおさらいしてみます。
 
@@ -119,12 +119,12 @@ DOM に依存するような処理は行っていません。
 今回は実際に `e.preventDefault()` や `e.stopPropagation()` を実行するコードを生成したいです。  
 これらは大きく DOM に依存してしまいます。
 
-そこで、runtime-dom 側にも transformer を実装していきます。 DOM に関連する transform はここに実装して行くことにしましょう。
+そこで、compiler-dom 側にも transformer を実装していきます。 DOM に関連する transform はここに実装して行くことにしましょう。
 
-runtime-dom の方に `transformOn` を実装していきたいのですが、runtime-core の `transformOn` との兼ね合いを考える必要があります。  
-兼ね合いというのは、「runtime-core の transform も実行しつつ、runtime-dom で実装した transform を実装するにはどうすればいいのか?」 ということです。
+compiler-dom の方に `transformOn` を実装していきたいのですが、runtime-core の `transformOn` との兼ね合いを考える必要があります。  
+兼ね合いというのは、「compiler-core の transform も実行しつつ、compiler-dom で実装した transform を実装するにはどうすればいいのか?」 ということです。
 
-そこでまず、 runtime-core の方に実装してある `DirectiveTransform` という interface に手を加えていきます。
+そこでまず、 compiler-core の方に実装してある `DirectiveTransform` という interface に手を加えていきます。
 
 ```ts
 export type DirectiveTransform = (
@@ -138,18 +138,18 @@ export type DirectiveTransform = (
 augmentor というものを追加してみました。  
 まぁ、これはただのコールバック関数です。 `DirectiveTransform` の interface としてコールバックを受け取れようにして、transform 関数を拡張可能にしています。
 
-runtime-dom の方では、runtime-core で実装した transformer をラップした transformer の実装をして行くようにします。
+compiler-dom の方では、compiler-core で実装した transformer をラップした transformer の実装をして行くようにします。
 
 ```ts
 // 実装イメージ
 
-// runtime-dom側の実装
+// compiler-dom側の実装
 
-import { transformOn as baseTransformOn } from "runtime-core";
+import { transformOn as baseTransformOn } from "compiler-core";
 
 export const transformOn: DirectiveTransform = (dir, node, context) => {
   return baseTransformOn(dir, node, context, () => {
-    /** ここに runtime-dom の独自の実装 */
+    /** ここに compiler-dom の独自の実装 */
     return {
       /** */
     };
@@ -157,17 +157,17 @@ export const transformOn: DirectiveTransform = (dir, node, context) => {
 };
 ```
 
-そして、この runtime-dom 側で実装した `transformOn` を compiler のオプションとして渡してあげれば OK です。  
+そして、この compiler-dom 側で実装した `transformOn` を compiler のオプションとして渡してあげれば OK です。  
 以下のような関係図です。  
-全ての transformer を runtime-dom から渡すのではなく、デフォルトの実装は runtime-core に実装しておき、オプションとしてあと乗せ出来るような構成にするイメージです。
+全ての transformer を compiler-dom から渡すのではなく、デフォルトの実装は compiler-core に実装しておき、オプションとしてあと乗せ出来るような構成にするイメージです。
 
 ![50-027-new-compiler-architecture](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/50-027-new-compiler-architecture.drawio.png)
 
-これで runtime-core が DOM に依存せず、runtime-dom 側で DOM に依存した処理を実装しつつ runtime-core の transformer を実行できるようになります。
+これで compiler-core が DOM に依存せず、compiler-dom 側で DOM に依存した処理を実装しつつ compiler-core の transformer を実行できるようになります。
 
 ## transformer の実装
 
-それでは、runtime-dom 側の transformer を実装していきます。
+それでは、compiler-dom 側の transformer を実装していきます。
 
 どういう風に transform していきましょうか。とりあえず、一概に '修飾子' といってもいろんな種類のものがあるので、  
 今後のことも考えて分類わけできるようにしておきましょう。
@@ -249,7 +249,7 @@ export const transformOn: DirectiveTransform = (dir, node, context) => {
 
 これで transform 側の実装は概ね終わりです。
 
-あとはこの withModifiers を runtime-dom 側で実装していきます。
+あとはこの withModifiers を compiler-dom 側で実装していきます。
 
 ## withModifiers の実装
 

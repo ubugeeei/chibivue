@@ -12,7 +12,7 @@ cd chibivue
 nr setup ../my-chibivue-project
 ```
 
-これでプロジェクトの設定は推し増しです。
+これでプロジェクトの設定はおしまいです。
 
 ここからは packages/index.ts を実装していきましょう。
 
@@ -56,7 +56,7 @@ export const createApp = (option: CreateAppOption) => ({
 });
 ```
 
-はい。これでお終いです。
+はい。これでおしまいです。
 
 ## h 関数と仮想 DOM (0.5 min)
 
