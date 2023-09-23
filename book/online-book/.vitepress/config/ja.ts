@@ -168,6 +168,10 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/50-basic-template-compiler/030-fragment",
           },
           {
+            text: "コメントアウトに対応する",
+            link: "/50-basic-template-compiler/035-comment",
+          },
+          {
             text: "🚧 v-if と構造的ディレクティブ",
             link: "/50-basic-template-compiler/030-v-if-and-structural-directive",
           },
