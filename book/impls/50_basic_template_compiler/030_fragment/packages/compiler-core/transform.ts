@@ -1,17 +1,16 @@
 import { isArray, isString } from "../shared";
 import {
-  ParentNode,
   NodeTypes,
   RootNode,
   TemplateChildNode,
-  DirectiveNode,
-  ElementNode,
+  ParentNode,
   Property,
-  ExpressionNode,
+  ElementNode,
+  DirectiveNode,
   createVNodeCall,
 } from "./ast";
 import { TransformOptions } from "./options";
-import { FRAGMENT, TO_DISPLAY_STRING, helperNameMap } from "./runtimeHelpers";
+import { FRAGMENT, helperNameMap } from "./runtimeHelpers";
 
 export type NodeTransform = (
   node: RootNode | TemplateChildNode,
@@ -27,56 +26,28 @@ export type DirectiveTransform = (
 
 export interface DirectiveTransformResult {
   props: Property[];
-  needRuntime?: boolean | symbol;
 }
 
-export type StructuralDirectiveTransform = (
-  node: ElementNode,
-  dir: DirectiveNode,
-  context: TransformContext
-) => void | (() => void);
-
 export interface TransformContext extends Required<TransformOptions> {
-  helpers: Map<symbol, number>;
-  components: Set<string>;
   currentNode: RootNode | TemplateChildNode | null;
-  identifiers: { [name: string]: number | undefined };
-  scopes: {
-    vFor: number;
-  };
   parent: ParentNode | null;
   childIndex: number;
-  inline: boolean;
+  helpers: Map<symbol, number>;
   helper<T extends symbol>(name: T): T;
   helperString(name: symbol): string;
-  replaceNode(node: TemplateChildNode): void;
-  addIdentifiers(exp: ExpressionNode | string): void;
-  removeIdentifiers(exp: ExpressionNode | string): void;
 }
 
 export function createTransformContext(
   root: RootNode,
-  {
-    nodeTransforms = [],
-    directiveTransforms = {},
-    inline = false,
-    bindingMetadata = Object.create(null),
-  }: TransformOptions
+  { nodeTransforms = [], directiveTransforms = {} }: TransformOptions
 ): TransformContext {
   const context: TransformContext = {
     nodeTransforms,
     directiveTransforms,
-    helpers: new Map(),
-    components: new Set(),
     currentNode: root,
-    identifiers: Object.create(null),
-    scopes: {
-      vFor: 0,
-    },
     parent: null,
     childIndex: 0,
-    bindingMetadata,
-    inline,
+    helpers: new Map(),
     helper(name) {
       const count = context.helpers.get(name) || 0;
       context.helpers.set(name, count + 1);
@@ -85,40 +56,7 @@ export function createTransformContext(
     helperString(name) {
       return `_${helperNameMap[context.helper(name)]}`;
     },
-    replaceNode(node) {
-      context.parent!.children[context.childIndex] = context.currentNode = node;
-    },
-    addIdentifiers(exp) {
-      if (isString(exp)) {
-        addId(exp);
-      } else if (exp.identifiers) {
-        exp.identifiers.forEach(addId);
-      } else if (exp.type === NodeTypes.SIMPLE_EXPRESSION) {
-        addId(exp.content);
-      }
-    },
-    removeIdentifiers(exp) {
-      if (isString(exp)) {
-        removeId(exp);
-      } else if (exp.identifiers) {
-        exp.identifiers.forEach(removeId);
-      } else if (exp.type === NodeTypes.SIMPLE_EXPRESSION) {
-        removeId(exp.content);
-      }
-    },
   };
-
-  function addId(id: string) {
-    const { identifiers } = context;
-    if (identifiers[id] === undefined) {
-      identifiers[id] = 0;
-    }
-    identifiers[id]!++;
-  }
-
-  function removeId(id: string) {
-    context.identifiers[id]!--;
-  }
 
   return context;
 }
@@ -127,7 +65,6 @@ export function transform(root: RootNode, options: TransformOptions) {
   const context = createTransformContext(root, options);
   traverseNode(root, context);
   createRootCodegen(root, context);
-  root.components = [...context.components];
   root.helpers = new Set([...context.helpers.keys()]);
 }
 
@@ -146,7 +83,7 @@ export function traverseNode(
   context: TransformContext
 ) {
   context.currentNode = node;
-  // apply transform plugins
+
   const { nodeTransforms } = context;
   const exitFns = [];
   for (let i = 0; i < nodeTransforms.length; i++) {
@@ -159,27 +96,21 @@ export function traverseNode(
       }
     }
     if (!context.currentNode) {
-      // node was removed
       return;
     } else {
-      // node may have been replaced
       node = context.currentNode;
     }
   }
 
   switch (node.type) {
-    case NodeTypes.INTERPOLATION: // no need to traverse, but we need to inject toString helper
-      context.helper(TO_DISPLAY_STRING);
+    case NodeTypes.INTERPOLATION:
       break;
-
     case NodeTypes.ELEMENT:
     case NodeTypes.ROOT:
-    case NodeTypes.FOR:
       traverseChildren(node, context);
       break;
   }
 
-  // exit transforms
   context.currentNode = node;
   let i = exitFns.length;
   while (i--) {
@@ -198,30 +129,4 @@ export function traverseChildren(
     context.childIndex = i;
     traverseNode(child, context);
   }
-}
-
-export function createStructuralDirectiveTransform(
-  name: string | RegExp,
-  fn: StructuralDirectiveTransform
-): NodeTransform {
-  const matches = isString(name)
-    ? (n: string) => n === name
-    : (n: string) => name.test(n);
-
-  return (node, context) => {
-    if (node.type === NodeTypes.ELEMENT) {
-      const { props } = node;
-      const exitFns = [];
-      for (let i = 0; i < props.length; i++) {
-        const prop = props[i];
-        if (prop.type === NodeTypes.DIRECTIVE && matches(prop.name)) {
-          props.splice(i, 1);
-          i--;
-          const onExit = fn(node, prop, context);
-          if (onExit) exitFns.push(onExit);
-        }
-      }
-      return exitFns;
-    }
-  };
 }

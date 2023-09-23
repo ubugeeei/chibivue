@@ -28,7 +28,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       },
       {
         text: "Minimum Example",
-        collapsed: true,
+        collapsed: false,
         items: [
           {
             text: "First Rendering and the createApp API",
@@ -73,8 +73,8 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         ],
       },
       {
-        text: "[WIP] Basic Virtual DOM",
-        collapsed: true,
+        text: "🚧 Basic Virtual DOM",
+        collapsed: false,
         items: [
           {
             text: "key Attribute and Patch Rendering",
@@ -95,8 +95,8 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         ],
       },
       {
-        text: "[WIP] Basic Reactivity System",
-        collapsed: true,
+        text: "🚧 Basic Reactivity System",
+        collapsed: false,
         items: [
           {
             text: "ref API",
@@ -121,8 +121,8 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         ],
       },
       {
-        text: "[WIP] Basic Component System",
-        collapsed: true,
+        text: "🚧 Basic Component System",
+        collapsed: false,
         items: [
           {
             text: "Lifecycle Hooks",
@@ -147,8 +147,8 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         ],
       },
       {
-        text: "[WIP] Basic Template Compiler",
-        collapsed: true,
+        text: "🚧 Basic Template Compiler",
+        collapsed: false,
         items: [
           {
             text: "Refactoring Implementation of Transformer for Codegen",
@@ -167,26 +167,38 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/en/50-basic-template-compiler/027-event-modifier",
           },
           {
-            text: "Supporting v-for",
-            link: "/en/50-basic-template-compiler/030-v-for",
+            text: "Support for Fragment",
+            link: "/en/50-basic-template-compiler/030-fragment",
           },
           {
-            text: "Supporting v-if",
-            link: "/en/50-basic-template-compiler/040-v-if",
+            text: "v-if and Structural Directives",
+            link: "/en/50-basic-template-compiler/030-v-if-and-structural-directive",
           },
           {
-            text: "Supporting v-model",
+            text: "Support for v-for",
+            link: "/en/50-basic-template-compiler/040-v-for",
+          },
+          {
+            text: "Support for v-model",
             link: "/en/50-basic-template-compiler/050-v-model",
           },
           {
-            text: "Supporting Slots",
-            link: "/en/50-basic-template-compiler/060-slot",
+            text: "Resolving Components",
+            link: "/en/50-basic-template-compiler/060-v-model",
+          },
+          {
+            text: "Support for Slot",
+            link: "/en/50-basic-template-compiler/070-slot",
+          },
+          {
+            text: "Custom Directives",
+            link: "/en/50-basic-template-compiler/080-custom-directive",
           },
         ],
       },
       {
-        text: "[WIP] Basic SFC Compiler",
-        collapsed: true,
+        text: "🚧 Basic SFC Compiler",
+        collapsed: false,
         items: [
           {
             text: "Supporting script setup",
@@ -207,8 +219,79 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         ],
       },
       {
+        text: "🚧 Web Application Essentials",
+        collapsed: false,
+        items: [
+          {
+            text: "Plugin",
+            collapsed: false,
+            items: [
+              {
+                text: "Router",
+                link: "en//90-web-application-essentials/010-plugins/010-router",
+              },
+              {
+                text: "Preprocessors",
+                link: "en//90-web-application-essentials/010-plugins/020-preprocessors",
+              },
+            ],
+          },
+
+          {
+            text: "Server Side Rendering",
+            collapsed: false,
+            items: [
+              {
+                text: "createSSRApp",
+                link: "en//90-web-application-essentials/020-ssr/010-create-ssr-app",
+              },
+              {
+                text: "hydration",
+                link: "en//90-web-application-essentials/020-ssr/020-hydration",
+              },
+            ],
+          },
+          {
+            text: "🚧 Builtins",
+            collapsed: false,
+            items: [
+              {
+                text: "KeepAlive",
+                link: "en//90-web-application-essentials/030-builtins/010-keep-alive",
+              },
+              {
+                text: "Suspense",
+                link: "en//90-web-application-essentials/030-builtins/020-suspense",
+              },
+              {
+                text: "Transition",
+                link: "en//90-web-application-essentials/030-builtins/030-transition",
+              },
+            ],
+          },
+          {
+            text: "🚧 Optimizations",
+            collapsed: false,
+            items: [
+              {
+                text: "Static Hoisting",
+                link: "en//90-web-application-essentials/040-optimizations/010-static-hoisting",
+              },
+              {
+                text: "Patch Flags",
+                link: "en//90-web-application-essentials/040-optimizations/020-patch-flags",
+              },
+              {
+                text: "Tree Flattening",
+                link: "en//90-web-application-essentials/040-optimizations/030-tree-flattening",
+              },
+            ],
+          },
+        ],
+      },
+      {
         text: "Appendix",
-        collapsed: true,
+        collapsed: false,
         items: [
           {
             text: "chibivue, isn't it small...?",

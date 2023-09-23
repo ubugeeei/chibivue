@@ -649,11 +649,21 @@ export function createRenderer(options: RendererOptions) {
   };
 
   const move: MoveFn = (vnode, container, anchor) => {
-    const { el, shapeFlag } = vnode;
+    const { type, children, el, shapeFlag } = vnode;
     if (shapeFlag & ShapeFlags.COMPONENT) {
       move(vnode.component!.subTree, container, anchor);
       return;
     }
+
+    if (type === Fragment) {
+      hostInsert(el!, container, anchor);
+      for (let i = 0; i < (children as VNode[]).length; i++) {
+        move((children as VNode[])[i], container, anchor);
+      }
+      hostInsert(vnode.anchor!, container, anchor);
+      return;
+    }
+
     hostInsert(el!, container, anchor!);
   };
 
@@ -668,8 +678,22 @@ export function createRenderer(options: RendererOptions) {
   };
 
   const remove: RemoveFn = (vnode) => {
-    const { el } = vnode;
+    const { el, type, anchor } = vnode;
+    if (type === Fragment) {
+      removeFragment(el!, anchor!);
+    }
+
     hostRemove(el!);
+  };
+
+  const removeFragment = (cur: RendererNode, end: RendererNode) => {
+    let next;
+    while (cur !== end) {
+      next = hostNextSibling(cur)!;
+      hostRemove(cur);
+      cur = next;
+    }
+    hostRemove(end);
   };
 
   const unmountComponent = (instance: ComponentInternalInstance) => {

@@ -136,7 +136,7 @@ export interface FunctionExpression extends Node {
 export interface RootNode extends Node {
   type: NodeTypes.ROOT;
   children: TemplateChildNode[];
-  codegenNode: (TemplateChildNode | VNodeCall)[] | undefined;
+  codegenNode?: TemplateChildNode | VNodeCall;
   helpers: Set<symbol>;
   components: string[];
 }

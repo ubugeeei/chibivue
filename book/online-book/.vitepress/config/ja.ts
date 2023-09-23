@@ -25,7 +25,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       },
       {
         text: "Minimum Example",
-        collapsed: true,
+        collapsed: false,
         items: [
           {
             text: "初めてのレンダリングとcreateApp API",
@@ -71,7 +71,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       },
       {
         text: "Basic Virtual DOM",
-        collapsed: true,
+        collapsed: false,
         items: [
           {
             text: "key属性とパッチレンダリング",
@@ -93,7 +93,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       },
       {
         text: "Basic Reactivity System",
-        collapsed: true,
+        collapsed: false,
         items: [
           {
             text: "ref api",
@@ -119,7 +119,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       },
       {
         text: "Basic Component System",
-        collapsed: true,
+        collapsed: false,
         items: [
           {
             text: "ライフサイクルフック",
@@ -145,7 +145,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       },
       {
         text: "Basic Template Compiler",
-        collapsed: true,
+        collapsed: false,
         items: [
           {
             text: "Transformer の実装 の Codegen のリファクタ",
@@ -164,48 +164,130 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/50-basic-template-compiler/027-event-modifier",
           },
           {
-            text: "[WIP] v-for に対応する",
-            link: "/50-basic-template-compiler/030-v-for",
+            text: "Fragment に対応する",
+            link: "/50-basic-template-compiler/030-fragment",
           },
           {
-            text: "[WIP] v-if に対応する",
-            link: "/50-basic-template-compiler/040-v-if",
+            text: "🚧 v-if と構造的ディレクティブ",
+            link: "/50-basic-template-compiler/030-v-if-and-structural-directive",
           },
           {
-            text: "[WIP] v-model に対応する",
+            text: "🚧 v-for に対応する",
+            link: "/50-basic-template-compiler/040-v-for",
+          },
+          {
+            text: "🚧 v-model に対応する",
             link: "/50-basic-template-compiler/050-v-model",
           },
           {
-            text: "[WIP] スロットに対応する",
-            link: "/50-basic-template-compiler/060-slot",
+            text: "🚧 コンポーネントを解決する",
+            link: "/50-basic-template-compiler/060-v-model",
+          },
+          {
+            text: "🚧 スロットに対応する",
+            link: "/50-basic-template-compiler/070-slot",
+          },
+          {
+            text: "🚧 カスタムディレクティブ",
+            link: "/50-basic-template-compiler/080-custom-directive",
           },
         ],
       },
       {
-        text: "[WIP] Basic SFC Compiler",
-        collapsed: true,
+        text: "🚧 Basic SFC Compiler",
+        collapsed: false,
         items: [
           {
-            text: "[WIP] script setup に対応する",
+            text: "🚧 script setup に対応する",
             link: "/60-basic-sfc-compiler/010-script-setup",
           },
           {
-            text: "[WIP] defineProps に対応する",
+            text: "🚧 defineProps に対応する",
             link: "/60-basic-sfc-compiler/020-define-props",
           },
           {
-            text: "[WIP] defineEmits に対応する",
+            text: "🚧 defineEmits に対応する",
             link: "/60-basic-sfc-compiler/030-define-emits",
           },
           {
-            text: "[WIP] Scoped CSS に対応する",
+            text: "🚧 Scoped CSS に対応する",
             link: "/60-basic-sfc-compiler/040-scoped-css",
           },
         ],
       },
       {
+        text: "🚧 Web Application Essentials",
+        collapsed: false,
+        items: [
+          {
+            text: "🚧 Plugin",
+            collapsed: false,
+            items: [
+              {
+                text: "🚧 Router",
+                link: "/90-web-application-essentials/010-plugins/010-router",
+              },
+              {
+                text: "🚧 Preprocessors",
+                link: "/90-web-application-essentials/010-plugins/020-preprocessors",
+              },
+            ],
+          },
+          {
+            text: "🚧 Server Side Rendering",
+            collapsed: false,
+            items: [
+              {
+                text: "🚧 createSSRApp",
+                link: "/90-web-application-essentials/020-ssr/010-create-ssr-app",
+              },
+              {
+                text: "🚧 hydration",
+                link: "/90-web-application-essentials/020-ssr/020-hydration",
+              },
+            ],
+          },
+          {
+            text: "🚧 Builtins",
+            collapsed: false,
+            items: [
+              {
+                text: "🚧 KeepAlive",
+                link: "/90-web-application-essentials/030-builtins/010-keep-alive",
+              },
+              {
+                text: "🚧 Suspense",
+                link: "/90-web-application-essentials/030-builtins/020-suspense",
+              },
+              {
+                text: "🚧 Transition",
+                link: "/90-web-application-essentials/030-builtins/030-transition",
+              },
+            ],
+          },
+          {
+            text: "🚧 Optimizations",
+            collapsed: false,
+            items: [
+              {
+                text: "🚧 Static Hoisting",
+                link: "/90-web-application-essentials/040-optimizations/010-static-hoisting",
+              },
+              {
+                text: "🚧 Patch Flags",
+                link: "/90-web-application-essentials/040-optimizations/020-patch-flags",
+              },
+              {
+                text: "🚧 Tree Flattening",
+                link: "/90-web-application-essentials/040-optimizations/030-tree-flattening",
+              },
+            ],
+          },
+        ],
+      },
+      {
         text: "付録",
-        collapsed: true,
+        collapsed: false,
         items: [
           {
             text: "chibivue、デカくないですか...?",
