@@ -19,17 +19,8 @@ import {
 import { CodegenOptions } from "./options";
 import {
   CREATE_ELEMENT_VNODE,
-  CREATE_VNODE,
-  FRAGMENT,
-  MERGE_PROPS,
-  NORMALIZE_CLASS,
-  NORMALIZE_PROPS,
-  NORMALIZE_STYLE,
-  RENDER_LIST,
   RESOLVE_COMPONENT,
   TO_DISPLAY_STRING,
-  TO_HANDLER_KEY,
-  UNREF,
   WITH_DIRECTIVES,
   helperNameMap,
 } from "./runtimeHelpers";
@@ -134,11 +125,12 @@ export function generate(
   }
 
   push(`return `);
-  if (ast.children) {
-    ast.children.forEach((codegenNode) => {
-      genNode(codegenNode, context);
-    });
+  if (ast.codegenNode) {
+    genNode(ast.codegenNode, context);
+  } else {
+    push(`null`);
   }
+
   context.deindent();
   push(` }`);
 

@@ -8,9 +8,10 @@ import {
   ElementNode,
   Property,
   ExpressionNode,
+  createVNodeCall,
 } from "./ast";
 import { TransformOptions } from "./options";
-import { TO_DISPLAY_STRING, helperNameMap } from "./runtimeHelpers";
+import { FRAGMENT, TO_DISPLAY_STRING, helperNameMap } from "./runtimeHelpers";
 
 export type NodeTransform = (
   node: RootNode | TemplateChildNode,
@@ -125,8 +126,19 @@ export function createTransformContext(
 export function transform(root: RootNode, options: TransformOptions) {
   const context = createTransformContext(root, options);
   traverseNode(root, context);
+  createRootCodegen(root, context);
   root.components = [...context.components];
   root.helpers = new Set([...context.helpers.keys()]);
+}
+
+function createRootCodegen(root: RootNode, context: TransformContext) {
+  const { helper } = context;
+  root.codegenNode = createVNodeCall(
+    context,
+    helper(FRAGMENT),
+    undefined,
+    root.children
+  );
 }
 
 export function traverseNode(
