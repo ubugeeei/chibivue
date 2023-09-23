@@ -31,4 +31,6 @@ export const nodeOps: Omit<RendererOptions<Node, Element>, "patchProp"> = {
   parentNode: (node) => {
     return node.parentNode;
   },
+
+  nextSibling: (node) => node.nextSibling,
 };

@@ -1,5 +1,10 @@
-import { VNodeProps, createVNode } from "./vnode";
+import { ComponentPublicInstance } from "./componentPublicInstance";
+import { Fragment, VNodeProps, createVNode } from "./vnode";
 
-export function h(type: string | object, props: VNodeProps, children: any) {
+export function h(
+  type: string | ComponentPublicInstance | typeof Fragment,
+  props: VNodeProps,
+  children: any
+) {
   return createVNode(type, props, children);
 }

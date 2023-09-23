@@ -4,9 +4,16 @@ import { normalizeClass, normalizeStyle } from "../shared/normalizeProp";
 import { ShapeFlags } from "../shared/shapeFlags";
 import { AppContext } from "./apiCreateApp";
 import { ComponentInternalInstance, Data, currentInstance } from "./component";
+import { ComponentPublicInstance } from "./componentPublicInstance";
 import { RawSlots } from "./componentSlots";
 
-export type VNodeTypes = string | typeof Text | object;
+export type VNodeTypes =
+  | string // html element name
+  | typeof Text // html text node
+  | typeof Fragment // fragment
+  | ComponentPublicInstance; // Vue Component
+
+export const Fragment = Symbol(); // これを追加
 
 export const Text = Symbol();
 
@@ -16,6 +23,7 @@ export interface VNode<HostNode = any> {
   children: VNodeNormalizedChildren;
 
   el: HostNode | undefined;
+  anchor: HostNode | null; // fragment anchor
   key: string | number | symbol | null;
   ref: Ref | null;
 
@@ -52,6 +60,7 @@ export function createVNode(
     props,
     children: children,
     el: undefined,
+    anchor: null,
     key: props?.key ?? null,
     ref: props?.ref ?? null,
     component: null,

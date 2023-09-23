@@ -14,7 +14,13 @@ import {
   queueJob,
   queuePostFlushCb,
 } from "./scheduler";
-import { VNode, Text, normalizeVNode, isSameVNodeType } from "./vnode";
+import {
+  VNode,
+  Text,
+  normalizeVNode,
+  isSameVNodeType,
+  Fragment,
+} from "./vnode";
 
 export type RootRenderFunction<HostElement = RendererElement> = (
   vnode: VNode | null,
@@ -47,6 +53,8 @@ export interface RendererOptions<
   remove(child: HostNode): void;
 
   parentNode(node: HostNode): HostNode | null;
+
+  nextSibling(node: HostNode): HostNode | null;
 }
 
 export interface RendererNode {
@@ -65,6 +73,7 @@ export function createRenderer(options: RendererOptions) {
     insert: hostInsert,
     remove: hostRemove,
     parentNode: hostParentNode,
+    nextSibling: hostNextSibling,
   } = options;
 
   const patch = (
@@ -79,6 +88,8 @@ export function createRenderer(options: RendererOptions) {
       processText(n1, n2, container, anchor);
     } else if (shapeFlag & ShapeFlags.ELEMENT) {
       processElement(n1, n2, container, anchor, parentComponent);
+    } else if (type === Fragment) {
+      processFragment(n1, n2, container, anchor, parentComponent);
     } else if (shapeFlag & ShapeFlags.COMPONENT) {
       processComponent(n1, n2, container, anchor, parentComponent);
     } else {
@@ -319,11 +330,21 @@ export function createRenderer(options: RendererOptions) {
     container: RendererElement,
     anchor: RendererElement | null
   ) => {
-    const { el, shapeFlag } = vnode;
+    const { type, children, el, shapeFlag } = vnode;
     if (shapeFlag & ShapeFlags.COMPONENT) {
       move(vnode.component!.subTree, container, anchor);
       return;
     }
+
+    if (type === Fragment) {
+      hostInsert(el!, container, anchor);
+      for (let i = 0; i < (children as VNode[]).length; i++) {
+        move((children as VNode[])[i], container, anchor);
+      }
+      hostInsert(vnode.anchor!, container, anchor);
+      return;
+    }
+
     hostInsert(el!, container, anchor);
   };
 
@@ -338,8 +359,22 @@ export function createRenderer(options: RendererOptions) {
   };
 
   const remove = (vnode: VNode) => {
-    const { el } = vnode;
+    const { el, type, anchor } = vnode;
+    if (type === Fragment) {
+      removeFragment(el!, anchor!);
+    }
+
     hostRemove(el!);
+  };
+
+  const removeFragment = (cur: RendererNode, end: RendererNode) => {
+    let next;
+    while (cur !== end) {
+      next = hostNextSibling(cur)!;
+      hostRemove(cur);
+      cur = next;
+    }
+    hostRemove(end);
   };
 
   const unmountComponent = (instance: ComponentInternalInstance) => {
@@ -396,6 +431,32 @@ export function createRenderer(options: RendererOptions) {
       mountComponent(n2, container, anchor, parentComponent);
     } else {
       updateComponent(n1, n2);
+    }
+  };
+
+  const processFragment = (
+    n1: VNode | null,
+    n2: VNode,
+    container: RendererElement,
+    anchor: RendererNode | null,
+    parentComponent: ComponentInternalInstance | null
+  ) => {
+    const fragmentStartAnchor = (n2.el = n1 ? n1.el : hostCreateText(""))!;
+    const fragmentEndAnchor = (n2.anchor = n1
+      ? n1.anchor
+      : hostCreateText(""))!;
+
+    if (n1 == null) {
+      hostInsert(fragmentStartAnchor, container, anchor);
+      hostInsert(fragmentEndAnchor, container, anchor);
+      mountChildren(
+        n2.children as VNode[],
+        container,
+        fragmentEndAnchor,
+        parentComponent
+      );
+    } else {
+      patchChildren(n1, n2, container, fragmentEndAnchor, parentComponent);
     }
   };
 
