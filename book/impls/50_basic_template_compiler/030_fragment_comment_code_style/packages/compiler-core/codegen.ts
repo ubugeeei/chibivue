@@ -1,4 +1,4 @@
-import { isArray, isString } from "../shared";
+import { isArray, isString, isSymbol } from "../shared";
 import {
   ArrayExpression,
   CallExpression,
@@ -104,10 +104,10 @@ export const generate = (ast: RootNode, option: CompilerOptions): string => {
   genFunctionPreamble(ast, context); // NOTE: 将来的には関数の外に出す
 
   push(`return `);
-  if (ast.children) {
-    ast.children.forEach((codegenNode) => {
-      genNode(codegenNode, context, option);
-    });
+  if (ast.codegenNode) {
+    genNode(ast.codegenNode, context, option);
+  } else {
+    push(`null`);
   }
 
   context.deindent();
@@ -137,6 +137,11 @@ const genNode = (
 ) => {
   if (isString(node)) {
     context.push(node);
+    return;
+  }
+
+  if (isSymbol(node)) {
+    context.push(context.helper(node));
     return;
   }
 
