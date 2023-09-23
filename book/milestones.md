@@ -39,11 +39,11 @@
   - v-on ✅
   - event modifiers ✅
   - v-bind ✅
-  - v-show
   - v-for
   - v-if / v-else / v-else-if
   - v-model
   - v-html
+  - v-show
   - v-slot
   - v-pre
   - v-once
