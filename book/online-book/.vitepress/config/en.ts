@@ -171,6 +171,10 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/en/50-basic-template-compiler/030-fragment",
           },
           {
+            text: "Support for Comment Node",
+            link: "/en/50-basic-template-compiler/035-comment",
+          },
+          {
             text: "v-if and Structural Directives",
             link: "/en/50-basic-template-compiler/030-v-if-and-structural-directive",
           },

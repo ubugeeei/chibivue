@@ -20,7 +20,7 @@ app.mount("#app");
 
 以下のようなエラーが出てしまうかと思います。
 
-![fragment_error.png](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/fragment_error.png.png)
+![fragment_error.png](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/fragment_error.png)
 
 エラーぶんをみてみると、 Function コンストラクタで起きているようです。
 
@@ -95,10 +95,10 @@ VNodeTypes の新たな種類として追加しましょう。
 
 ```ts
 export type VNodeTypes =
-  | string // html element name
-  | typeof Text // html text node
-  | typeof Fragment // fragment // これを追加
-  | ComponentPublicInstance; // Vue Component // `object` になってると思うので、ついでに直しておきました
+  | Component; // `object` になってると思うので、ついでに直しておきました
+  | typeof Text
+  | typeof Fragment  // これを追加
+  | string
 
 export const Fragment = Symbol(); // これを追加
 ```

@@ -144,7 +144,7 @@ export function createRenderer(options: RendererOptions) {
       }
     }
 
-    hostInsert(el, container);
+    hostInsert(el, container, anchor);
   };
 
   const mountChildren = (

@@ -1,8 +1,8 @@
-import { V_MODEL_TEXT } from "../compiler-dom/runtimeHelpers";
 import { isArray, isString, isSymbol } from "../shared";
 import {
   ArrayExpression,
   CallExpression,
+  CommentNode,
   CompoundExpressionNode,
   ExpressionNode,
   FunctionExpression,
@@ -18,6 +18,7 @@ import {
 } from "./ast";
 import { CodegenOptions } from "./options";
 import {
+  CREATE_COMMENT,
   CREATE_ELEMENT_VNODE,
   RESOLVE_COMPONENT,
   TO_DISPLAY_STRING,
@@ -189,6 +190,9 @@ function genNode(node: CodegenNode | symbol | string, context: CodegenContext) {
     case NodeTypes.COMPOUND_EXPRESSION:
       genCompoundExpression(node, context);
       break;
+    case NodeTypes.COMMENT:
+      genComment(node, context);
+      break;
     case NodeTypes.JS_CALL_EXPRESSION:
       genCallExpression(node, context);
       break;
@@ -253,6 +257,11 @@ function genExpressionAsPropertyKey(
   } else {
     push(`[${node.content}]`, node);
   }
+}
+
+function genComment(node: CommentNode, context: CodegenContext) {
+  const { push, helper } = context;
+  push(`${helper(CREATE_COMMENT)}(${JSON.stringify(node.content)})`, node);
 }
 
 function genVNodeCall(node: VNodeCall, context: CodegenContext) {
