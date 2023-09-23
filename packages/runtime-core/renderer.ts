@@ -26,6 +26,7 @@ import {
   type VNodeArrayChildren,
   isSameVNodeType,
   Fragment,
+  Comment,
 } from "./vnode";
 
 export type RootRenderFunction<HostElement = RendererElement> = (
@@ -136,6 +137,7 @@ export function createRenderer(options: RendererOptions) {
     patchProp: hostPatchProp,
     createElement: hostCreateElement,
     createText: hostCreateText,
+    createComment: hostCreateComment,
     setText: hostSetText,
     setElementText: hostSetElementText,
     parentNode: hostParentNode,
@@ -152,6 +154,8 @@ export function createRenderer(options: RendererOptions) {
     const { type, ref, shapeFlag } = n2;
     if (type === Text) {
       processText(n1, n2, container, anchor);
+    } else if (type === Comment) {
+      processCommentNode(n1, n2, container, anchor);
     } else if (type === Fragment) {
       processFragment(n1, n2, container, anchor, parentComponent);
     } else if (shapeFlag & ShapeFlags.ELEMENT) {
@@ -177,6 +181,23 @@ export function createRenderer(options: RendererOptions) {
       if (n2.children !== n1.children) {
         hostSetText(el, n2.children as string);
       }
+    }
+  };
+
+  const processCommentNode = (
+    n1: VNode | null,
+    n2: VNode,
+    container: RendererElement,
+    anchor: RendererElement | null
+  ) => {
+    if (n1 == null) {
+      hostInsert(
+        (n2.el = hostCreateComment((n2.children as string) || "")),
+        container,
+        anchor
+      );
+    } else {
+      n2.el = n1.el;
     }
   };
 

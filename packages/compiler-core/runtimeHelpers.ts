@@ -1,6 +1,7 @@
 export const FRAGMENT = Symbol();
 export const CREATE_VNODE = Symbol();
 export const CREATE_ELEMENT_VNODE = Symbol();
+export const CREATE_COMMENT = Symbol();
 export const RESOLVE_COMPONENT = Symbol(``);
 export const WITH_DIRECTIVES = Symbol();
 export const RENDER_LIST = Symbol();
@@ -18,6 +19,7 @@ export const helperNameMap: Record<symbol, string> = {
   [FRAGMENT]: `Fragment`,
   [CREATE_VNODE]: `createVNode`,
   [CREATE_ELEMENT_VNODE]: `createElementVNode`,
+  [CREATE_COMMENT]: `createCommentVNode`,
   [RESOLVE_COMPONENT]: `resolveComponent`,
   [TO_DISPLAY_STRING]: `toDisplayString`,
   [MERGE_PROPS]: `mergeProps`,

@@ -8,26 +8,27 @@ import {
   normalizeStyle,
 } from "../shared";
 import { currentRenderingInstance } from "./componentRenderContext";
-import { Data, type ComponentInternalInstance } from "./component";
+import { Data, type ComponentInternalInstance, Component } from "./component";
 import { type ComponentPublicInstance } from "./componentPublicInstance";
 import { AppContext } from "./apiCreateApp";
 import { DirectiveBinding } from "./directives";
 import { Ref } from "../reactivity";
 
 export type VNodeTypes =
-  | string // html element name
-  | typeof Text // html text node
-  | typeof Fragment // fragment
-  | ComponentPublicInstance; // Vue Component
+  | string
+  | typeof Text
+  | typeof Comment
+  | typeof Fragment
+  | Component;
 
-export const Fragment = Symbol.for("v-fgt") as any as {
+export const Text = Symbol();
+export const Comment = Symbol();
+export const Fragment = Symbol() as any as {
   __isFragment: true;
   new (): {
     $props: VNodeProps;
   };
 };
-
-export const Text = Symbol.for("v-txt");
 
 export interface VNode<HostNode = any> {
   __v_isVNode: true;
@@ -121,6 +122,10 @@ function createBaseVNode(
 }
 
 export { createVNode as createElementVNode };
+
+export function createCommentVNode(text: string = ""): VNode {
+  return createVNode(Comment, null, text);
+}
 
 export function normalizeChildren(vnode: VNode, children: unknown) {
   let type = 0;

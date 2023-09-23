@@ -27,8 +27,9 @@ export { renderList } from "./helpers/renderList";
 export {
   type VNode,
   type VNodeProps as VNodeData,
-  createTextVNode,
   createVNode,
+  createTextVNode,
+  createCommentVNode,
   createElementVNode,
   mergeProps,
   Fragment,

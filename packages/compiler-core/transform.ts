@@ -11,7 +11,7 @@ import {
   createVNodeCall,
 } from "./ast";
 import { TransformOptions } from "./options";
-import { FRAGMENT, TO_DISPLAY_STRING, helperNameMap } from "./runtimeHelpers";
+import { CREATE_COMMENT, FRAGMENT, TO_DISPLAY_STRING, helperNameMap } from "./runtimeHelpers";
 
 export type NodeTransform = (
   node: RootNode | TemplateChildNode,
@@ -168,6 +168,9 @@ export function traverseNode(
   }
 
   switch (node.type) {
+    case NodeTypes.COMMENT:
+      context.helper(CREATE_COMMENT);
+      break;
     case NodeTypes.INTERPOLATION: // no need to traverse, but we need to inject toString helper
       context.helper(TO_DISPLAY_STRING);
       break;

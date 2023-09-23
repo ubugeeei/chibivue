@@ -14,6 +14,7 @@ export const enum NodeTypes {
   ROOT,
   ELEMENT,
   TEXT,
+  COMMENT,
   INTERPOLATION,
   SIMPLE_EXPRESSION,
 
@@ -63,6 +64,7 @@ export type TemplateChildNode =
   | ElementNode
   | TextNode
   | InterpolationNode
+  | CommentNode
   | ForNode;
 
 export type TemplateTextChildNode = TextNode | InterpolationNode;
@@ -165,6 +167,11 @@ export interface TemplateNode extends BaseElementNode {
 
 export interface TextNode extends Node {
   type: NodeTypes.TEXT;
+  content: string;
+}
+
+export interface CommentNode extends Node {
+  type: NodeTypes.COMMENT;
   content: string;
 }
 
