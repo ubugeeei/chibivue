@@ -2,6 +2,7 @@ import { isArray, isString, isSymbol } from "../shared";
 import {
   ArrayExpression,
   CallExpression,
+  CommentNode,
   CompoundExpressionNode,
   ExpressionNode,
   InterpolationNode,
@@ -15,16 +16,9 @@ import {
   VNodeCall,
 } from "./ast";
 import { CompilerOptions } from "./options";
-import { CREATE_VNODE, helperNameMap } from "./runtimeHelpers";
+import { CREATE_COMMENT, CREATE_VNODE, helperNameMap } from "./runtimeHelpers";
 
-const CONSTANT = {
-  vNodeFuncName: "h",
-  mergeProps: "mergeProps",
-  normalizeClass: "normalizeClass",
-  normalizeStyle: "normalizeStyle",
-  normalizeProps: "normalizeProps",
-  ctxIdent: "_ctx",
-};
+const CONSTANT = { ctxIdent: "_ctx" };
 
 const aliasHelper = (s: symbol) => `${helperNameMap[s]}: _${helperNameMap[s]}`;
 
@@ -164,6 +158,9 @@ const genNode = (
     case NodeTypes.COMPOUND_EXPRESSION:
       genCompoundExpression(node, context, option);
       break;
+    case NodeTypes.COMMENT:
+      genComment(node, context);
+      break;
     case NodeTypes.JS_CALL_EXPRESSION:
       genCallExpression(node, context, option);
       break;
@@ -231,6 +228,11 @@ function genExpressionAsPropertyKey(
   } else {
     push(`[${node.content}]`, node);
   }
+}
+
+function genComment(node: CommentNode, context: CodegenContext) {
+  const { push, helper } = context;
+  push(`${helper(CREATE_COMMENT)}(${JSON.stringify(node.content)})`, node);
 }
 
 function genVNodeCall(

@@ -11,7 +11,7 @@ const App = defineComponent({
   -->
   <main>main</main>
 
-  <!-- this is header -->
+  <!-- this is footer -->
   <footer>footer</footer>`,
 });
 

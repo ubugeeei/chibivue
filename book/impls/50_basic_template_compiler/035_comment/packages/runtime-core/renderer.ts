@@ -20,6 +20,7 @@ import {
   normalizeVNode,
   isSameVNodeType,
   Fragment,
+  Comment,
 } from "./vnode";
 
 export type RootRenderFunction<HostElement = RendererElement> = (
@@ -43,6 +44,8 @@ export interface RendererOptions<
   createElement(type: string): HostElement;
 
   createText(text: string): HostNode;
+
+  createComment(text: string): HostNode;
 
   setText(node: HostNode, text: string): void;
 
@@ -69,6 +72,7 @@ export function createRenderer(options: RendererOptions) {
     createElement: hostCreateElement,
     createText: hostCreateText,
     setText: hostSetText,
+    createComment: hostCreateComment,
     setElementText: hostSetElementText,
     insert: hostInsert,
     remove: hostRemove,
@@ -86,6 +90,8 @@ export function createRenderer(options: RendererOptions) {
     const { type, ref, shapeFlag } = n2;
     if (type === Text) {
       processText(n1, n2, container, anchor);
+    } else if (type === Comment) {
+      processCommentNode(n1, n2, container, anchor);
     } else if (shapeFlag & ShapeFlags.ELEMENT) {
       processElement(n1, n2, container, anchor, parentComponent);
     } else if (type === Fragment) {
@@ -144,7 +150,7 @@ export function createRenderer(options: RendererOptions) {
       }
     }
 
-    hostInsert(el, container);
+    hostInsert(el, container, anchor);
   };
 
   const mountChildren = (
@@ -417,6 +423,23 @@ export function createRenderer(options: RendererOptions) {
       if (n2.children !== n1.children) {
         hostSetText(el, n2.children as string);
       }
+    }
+  };
+
+  const processCommentNode = (
+    n1: VNode | null,
+    n2: VNode,
+    container: RendererElement,
+    anchor: RendererElement | null
+  ) => {
+    if (n1 == null) {
+      hostInsert(
+        (n2.el = hostCreateComment((n2.children as string) || "")),
+        container,
+        anchor
+      );
+    } else {
+      n2.el = n1.el;
     }
   };
 

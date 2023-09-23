@@ -9,6 +9,8 @@ export const nodeOps: Omit<RendererOptions<Node, Element>, "patchProp"> = {
     return document.createTextNode(text);
   },
 
+  createComment: (text) => document.createComment(text),
+
   setText: (node, text) => {
     node.nodeValue = text;
   },

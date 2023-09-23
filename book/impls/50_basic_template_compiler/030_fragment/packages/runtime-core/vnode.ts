@@ -13,7 +13,7 @@ export type VNodeTypes =
   | typeof Fragment // fragment
   | ComponentPublicInstance; // Vue Component
 
-export const Fragment = Symbol(); // これを追加
+export const Fragment = Symbol();
 
 export const Text = Symbol();
 

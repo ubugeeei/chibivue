@@ -3,19 +3,20 @@ import { isArray, isFunction, isObject, isString } from "../shared";
 import { normalizeClass, normalizeStyle } from "../shared/normalizeProp";
 import { ShapeFlags } from "../shared/shapeFlags";
 import { AppContext } from "./apiCreateApp";
-import { ComponentInternalInstance, Data, currentInstance } from "./component";
-import { ComponentPublicInstance } from "./componentPublicInstance";
+import { Component, ComponentInternalInstance, Data } from "./component";
+
 import { RawSlots } from "./componentSlots";
 
-export type VNodeTypes =
-  | string // html element name
-  | typeof Text // html text node
-  | typeof Fragment // fragment
-  | ComponentPublicInstance; // Vue Component
-
-export const Fragment = Symbol(); // これを追加
-
+export const Fragment = Symbol();
 export const Text = Symbol();
+export const Comment = Symbol();
+
+export type VNodeTypes =
+  | string
+  | Component
+  | typeof Text
+  | typeof Comment
+  | typeof Fragment;
 
 export interface VNode<HostNode = any> {
   type: VNodeTypes;
@@ -71,6 +72,10 @@ export function createVNode(
   normalizeChildren(vnode, children);
 
   return vnode;
+}
+
+export function createCommentVNode(text: string = ""): VNode {
+  return createVNode(Comment, null, text);
 }
 
 export function normalizeChildren(vnode: VNode, children: unknown) {

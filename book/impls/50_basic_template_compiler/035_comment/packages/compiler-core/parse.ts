@@ -1,5 +1,6 @@
 import {
   AttributeNode,
+  CommentNode,
   DirectiveNode,
   ElementNode,
   ExpressionNode,
@@ -52,7 +53,12 @@ function parseChildren(
     if (startsWith(s, "{{")) {
       node = parseInterpolation(context);
     } else if (s[0] === "<") {
-      if (/[a-z]/i.test(s[1])) {
+      if (s[1] === "!") {
+        // https://html.spec.whatwg.org/multipage/parsing.html#markup-declaration-open-state
+        if (startsWith(s, "<!--")) {
+          node = parseComment(context);
+        }
+      } else if (/[a-z]/i.test(s[1])) {
         node = parseElement(context, ancestors);
       }
     }
@@ -65,6 +71,45 @@ function parseChildren(
   }
 
   return nodes;
+}
+
+function parseComment(context: ParserContext): CommentNode {
+  const start = getCursor(context);
+  let content: string;
+
+  // Regular comment.
+  const match = /--(\!)?>/.exec(context.source);
+  if (!match) {
+    content = context.source.slice(4);
+    advanceBy(context, context.source.length);
+    throw new Error("EOF_IN_COMMENT"); // TODO: error handling
+  } else {
+    if (match.index <= 3) {
+      throw new Error("ABRUPT_CLOSING_OF_EMPTY_COMMENT"); // TODO: error handling
+    }
+    if (match[1]) {
+      throw new Error("INCORRECTLY_CLOSED_COMMENT"); // TODO: error handling
+    }
+    content = context.source.slice(4, match.index);
+
+    const s = context.source.slice(0, match.index);
+    let prevIndex = 1,
+      nestedIndex = 0;
+    while ((nestedIndex = s.indexOf("<!--", prevIndex)) !== -1) {
+      advanceBy(context, nestedIndex - prevIndex + 1);
+      if (nestedIndex + 4 < s.length) {
+        throw new Error("NESTED_COMMENT"); // TODO: error handling
+      }
+      prevIndex = nestedIndex + 1;
+    }
+    advanceBy(context, match.index + match[0].length - prevIndex + 1);
+  }
+
+  return {
+    type: NodeTypes.COMMENT,
+    content,
+    loc: getSelection(context, start),
+  };
 }
 
 function advanceBy(context: ParserContext, numberOfCharacters: number): void {

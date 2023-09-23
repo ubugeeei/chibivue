@@ -95,10 +95,10 @@ VNodeTypes の新たな種類として追加しましょう。
 
 ```ts
 export type VNodeTypes =
-  | string // html element name
-  | typeof Text // html text node
-  | typeof Fragment // fragment // これを追加
-  | ComponentPublicInstance; // Vue Component // `object` になってると思うので、ついでに直しておきました
+  | Component; // `object` になってると思うので、ついでに直しておきました
+  | typeof Text
+  | typeof Fragment  // これを追加
+  | string
 
 export const Fragment = Symbol(); // これを追加
 ```

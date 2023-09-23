@@ -10,7 +10,7 @@ import {
   createVNodeCall,
 } from "./ast";
 import { TransformOptions } from "./options";
-import { FRAGMENT, helperNameMap } from "./runtimeHelpers";
+import { CREATE_COMMENT, FRAGMENT, helperNameMap } from "./runtimeHelpers";
 
 export type NodeTransform = (
   node: RootNode | TemplateChildNode,
@@ -103,6 +103,9 @@ export function traverseNode(
   }
 
   switch (node.type) {
+    case NodeTypes.COMMENT:
+      context.helper(CREATE_COMMENT);
+      break;
     case NodeTypes.INTERPOLATION:
       break;
     case NodeTypes.ELEMENT:
