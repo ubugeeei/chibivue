@@ -1,23 +1,18 @@
-import { Fragment, createApp, defineComponent, h, ref } from "chibivue";
-
-// const App = defineComponent({
-//   template: `<header>header</header>
-//   <main>main</main>
-//   <footer>footer</footer>`,
-// });
+import { createApp, defineComponent } from "chibivue";
 
 const App = defineComponent({
-  setup() {
-    const list = ref([0]);
-    const update = () => {
-      list.value = [...list.value, list.value.length];
-    };
-    return () =>
-      h(Fragment, {}, [
-        h("button", { onClick: update }, "update"),
-        ...list.value.map((i) => h("div", {}, i)),
-      ]);
-  },
+  template: `
+  <!-- this is heder. -->
+  <header>header</header>
+
+  <!-- 
+    this is main.
+    main content is here!
+  -->
+  <main>main</main>
+
+  <!-- this is header -->
+  <footer>footer</footer>`,
 });
 
 const app = createApp(App);
