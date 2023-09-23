@@ -40,7 +40,7 @@ npm i -g @antfu/ni
 
 [![Pages Deploy](https://github.com/Ubugeeei/chibivue/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/Ubugeeei/chibivue/actions/workflows/deploy.yml)
 
-> total: 260,000 chars ↑ (japanese)
+> total: 290,000 chars ↑ (japanese)
 
 ### book url (GitHub Pages)
 
@@ -148,15 +148,18 @@ Please refer to the information below for the progress status.
 | ----------------- | ---- | ---- |
 | v-bind            | ✅   | ✅   |
 | v-on              | ✅   | ✅   |
+| event modifier    | ✅   | ✅   |
+| v-if              |      |      |
 | v-for             | ✅   |      |
 | v-model           | ✅   |      |
-| v-if              |      |      |
 | v-show            |      |      |
 | mustache          | ✅   | ✅   |
 | slot (default)    |      |      |
 | slot (named)      |      |      |
 | slot (scoped)     |      |      |
 | dynamic component |      |      |
+| comment out       | ✅   | ✅   |
+| fragment          | ✅   | ✅   |
 
 ### SFC Compiler
 
