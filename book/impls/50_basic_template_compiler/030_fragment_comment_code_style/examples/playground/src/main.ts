@@ -1,32 +1,23 @@
-import { createApp, defineComponent, ref } from "chibivue";
+import { Fragment, createApp, defineComponent, h, ref } from "chibivue";
+
+// const App = defineComponent({
+//   template: `<header>header</header>
+//   <main>main</main>
+//   <footer>footer</footer>`,
+// });
 
 const App = defineComponent({
   setup() {
-    const inputText = ref("");
-
-    const buffer = ref("");
-    const handleInput = (e: Event) => {
-      const target = e.target as HTMLInputElement;
-      buffer.value = target.value;
+    const list = ref([0]);
+    const update = () => {
+      list.value = [...list.value, list.value.length];
     };
-    const submit = () => {
-      inputText.value = buffer.value;
-      buffer.value = "";
-    };
-
-    return { inputText, buffer, handleInput, submit };
+    return () =>
+      h(Fragment, {}, [
+        h("button", { onClick: update }, "update"),
+        ...list.value.map((i) => h("div", {}, i)),
+      ]);
   },
-
-  template: `<div>
-    <form>
-      <input 
-        :value="buffer" 
-        @input="handleInput" 
-        @keydown.prevent.meta.enter="submit" 
-      />
-    </form>
-    <p>inputText: {{ inputText }}</p>
-</div>`,
 });
 
 const app = createApp(App);
