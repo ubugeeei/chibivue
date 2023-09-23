@@ -164,8 +164,8 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/50-basic-template-compiler/027-event-modifier",
           },
           {
-            text: "Fragment 対応と code のフォーマットやコメントアウトの対応",
-            link: "/50-basic-template-compiler/030-fragment-comment-code-style",
+            text: "Fragment に対応する",
+            link: "/50-basic-template-compiler/030-fragment",
           },
           {
             text: "🚧 v-if と構造的ディレクティブ",

@@ -167,8 +167,8 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/en/50-basic-template-compiler/027-event-modifier",
           },
           {
-            text: "Support for Fragment and handling of code formatting and comments",
-            link: "/en/50-basic-template-compiler/030-fragment-comment-code-style",
+            text: "Support for Fragment",
+            link: "/en/50-basic-template-compiler/030-fragment",
           },
           {
             text: "v-if and Structural Directives",
