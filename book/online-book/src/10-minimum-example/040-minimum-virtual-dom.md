@@ -56,7 +56,7 @@ const vnode = {
     {
       type: "button",
       { onClick: increment },
-      ["increment"]
+      children: ["increment"]
     }
   ]
 }
@@ -77,7 +77,7 @@ const nextVnode = {
     {
       type: "button",
       { onClick: increment },
-      ["increment"]
+      children: ["increment"]
     }
   ]
 }
@@ -106,7 +106,7 @@ export function createVNode(
   props: VNodeProps | null,
   children: unknown
 ): VNode {
-  const vnode: VNode = { type, props, children: [] };
+  const vnode: VNode = { type, props, children };
   return vnode;
 }
 ```
