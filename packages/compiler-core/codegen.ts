@@ -4,6 +4,7 @@ import {
   CallExpression,
   CommentNode,
   CompoundExpressionNode,
+  ConditionalExpression,
   ExpressionNode,
   FunctionExpression,
   InterpolationNode,
@@ -171,6 +172,7 @@ function genNode(node: CodegenNode | symbol | string, context: CodegenContext) {
 
   switch (node.type) {
     case NodeTypes.ELEMENT:
+    case NodeTypes.IF:
     case NodeTypes.FOR: {
       genNode(node.codegenNode!, context);
       break;
@@ -204,6 +206,14 @@ function genNode(node: CodegenNode | symbol | string, context: CodegenContext) {
       break;
     case NodeTypes.JS_FUNCTION_EXPRESSION:
       genFunctionExpression(node, context);
+      break;
+    case NodeTypes.JS_CONDITIONAL_EXPRESSION:
+      genConditionalExpression(node, context);
+      break;
+    /* istanbul ignore next */
+    case NodeTypes.IF_BRANCH:
+      // noop
+      break;
       break;
     default: {
       // make sure we exhaust all possible types
@@ -358,6 +368,39 @@ function genFunctionExpression(
     deindent();
     push(`}`);
   }
+}
+
+function genConditionalExpression(
+  node: ConditionalExpression,
+  context: CodegenContext
+) {
+  const { test, consequent, alternate, newline: needNewline } = node;
+  const { push, indent, deindent, newline } = context;
+  if (test.type === NodeTypes.SIMPLE_EXPRESSION) {
+    genExpression(test, context);
+  } else {
+    push(`(`);
+    genNode(test, context);
+    push(`)`);
+  }
+  needNewline && indent();
+  context.indentLevel++;
+  needNewline || push(` `);
+  push(`? `);
+  genNode(consequent, context);
+  context.indentLevel--;
+  needNewline && newline();
+  needNewline || push(` `);
+  push(`: `);
+  const isNested = alternate.type === NodeTypes.JS_CONDITIONAL_EXPRESSION;
+  if (!isNested) {
+    context.indentLevel++;
+  }
+  genNode(alternate, context);
+  if (!isNested) {
+    context.indentLevel--;
+  }
+  needNewline && deindent(true /* without newline */);
 }
 
 function genNodeListAsArray(

@@ -11,7 +11,12 @@ import {
   createVNodeCall,
 } from "./ast";
 import { TransformOptions } from "./options";
-import { CREATE_COMMENT, FRAGMENT, TO_DISPLAY_STRING, helperNameMap } from "./runtimeHelpers";
+import {
+  CREATE_COMMENT,
+  FRAGMENT,
+  TO_DISPLAY_STRING,
+  helperNameMap,
+} from "./runtimeHelpers";
 
 export type NodeTransform = (
   node: RootNode | TemplateChildNode,
@@ -50,6 +55,8 @@ export interface TransformContext extends Required<TransformOptions> {
   helper<T extends symbol>(name: T): T;
   helperString(name: symbol): string;
   replaceNode(node: TemplateChildNode): void;
+  removeNode(node?: TemplateChildNode): void;
+  onNodeRemoved(): void;
   addIdentifiers(exp: ExpressionNode | string): void;
   removeIdentifiers(exp: ExpressionNode | string): void;
 }
@@ -88,6 +95,27 @@ export function createTransformContext(
     replaceNode(node) {
       context.parent!.children[context.childIndex] = context.currentNode = node;
     },
+    removeNode(node) {
+      const list = context.parent!.children;
+      const removalIndex = node
+        ? list.indexOf(node)
+        : context.currentNode
+        ? context.childIndex
+        : -1;
+      if (!node || node === context.currentNode) {
+        // current node removed
+        context.currentNode = null;
+        context.onNodeRemoved();
+      } else {
+        // sibling node removed
+        if (context.childIndex > removalIndex) {
+          context.childIndex--;
+          context.onNodeRemoved();
+        }
+      }
+      context.parent!.children.splice(removalIndex, 1);
+    },
+    onNodeRemoved: () => {},
     addIdentifiers(exp) {
       if (isString(exp)) {
         addId(exp);
@@ -175,6 +203,12 @@ export function traverseNode(
       context.helper(TO_DISPLAY_STRING);
       break;
 
+    case NodeTypes.IF:
+      for (let i = 0; i < node.branches.length; i++) {
+        traverseNode(node.branches[i], context);
+      }
+      break;
+    case NodeTypes.IF_BRANCH:
     case NodeTypes.ELEMENT:
     case NodeTypes.ROOT:
     case NodeTypes.FOR:
@@ -194,11 +228,16 @@ export function traverseChildren(
   parent: ParentNode,
   context: TransformContext
 ) {
-  for (let i = 0; i < parent.children.length; i++) {
+  let i = 0;
+  const nodeRemoved = () => {
+    i--;
+  };
+  for (; i < parent.children.length; i++) {
     const child = parent.children[i];
     if (isString(child)) continue;
     context.parent = parent;
     context.childIndex = i;
+    context.onNodeRemoved = nodeRemoved;
     traverseNode(child, context);
   }
 }

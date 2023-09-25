@@ -12,6 +12,7 @@ import { transformBind } from "./transforms/vBind";
 import { transformOn } from "./transforms/vOn";
 import { transformModel } from "./transforms/vModel";
 import { CompilerOptions } from "./options";
+import { transformIf } from "./transforms/vIf";
 
 export type TransformPreset = [
   NodeTransform[],
@@ -20,7 +21,7 @@ export type TransformPreset = [
 
 export function getBaseTransformPreset(): TransformPreset {
   return [
-    [transformFor, transformExpression, transformElement],
+    [transformIf, transformFor, transformExpression, transformElement],
     {
       on: transformOn,
       bind: transformBind,
