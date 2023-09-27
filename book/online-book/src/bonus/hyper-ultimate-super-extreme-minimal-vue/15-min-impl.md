@@ -302,9 +302,9 @@ transform 関数は `{ code: string }` のようなものを return すること
 ```ts
 export const VitePluginChibivue = () => ({
   name: "vite-plugin-chibivue",
-  transform: (code: string, id: string) => {
+  transform: (code: string, id: string) => ({
     code: "";
-  },
+  }),
 });
 ```
 
