@@ -6,7 +6,6 @@ import {
   CompoundExpressionNode,
   ConditionalExpression,
   ExpressionNode,
-  FunctionExpression,
   InterpolationNode,
   JSChildNode,
   NodeTypes,
@@ -17,59 +16,39 @@ import {
   TextNode,
   VNodeCall,
 } from "./ast";
-import { CodegenOptions } from "./options";
-import {
-  CREATE_COMMENT,
-  CREATE_ELEMENT_VNODE,
-  RESOLVE_COMPONENT,
-  TO_DISPLAY_STRING,
-  WITH_DIRECTIVES,
-  helperNameMap,
-} from "./runtimeHelpers";
-import { toValidAssetId } from "./transforms/transformElement";
+import { CompilerOptions } from "./options";
+import { CREATE_COMMENT, CREATE_VNODE, helperNameMap } from "./runtimeHelpers";
+
+const CONSTANT = { ctxIdent: "_ctx" };
 
 const aliasHelper = (s: symbol) => `${helperNameMap[s]}: _${helperNameMap[s]}`;
-
-export interface CodegenResult {
-  code: string;
-  preamble: string;
-  ast: RootNode;
-}
 
 type CodegenNode = TemplateChildNode | JSChildNode;
 
 export interface CodegenContext {
   source: string;
   code: string;
-  line: number;
-  column: number;
-  offset: number;
   indentLevel: number;
+  line: 1;
+  column: 1;
+  offset: 0;
   runtimeGlobalName: string;
-  runtimeModuleName: string;
-  inline?: boolean;
   helper(key: symbol): string;
   push(code: string, node?: CodegenNode): void;
   indent(): void;
   deindent(withoutNewLine?: boolean): void;
   newline(): void;
-  __BROWSER__: boolean;
 }
 
-function createCodegenContext(
-  ast: RootNode,
-  { __BROWSER__ = false }: CodegenOptions
-): CodegenContext {
+function createCodegenContext(ast: RootNode): CodegenContext {
   const context: CodegenContext = {
     source: ast.loc.source,
-    code: ``,
+    code: "",
     column: 1,
     line: 1,
     offset: 0,
     indentLevel: 0,
-    runtimeGlobalName: `ChibiVue`,
-    runtimeModuleName: "chibivue",
-    __BROWSER__,
+    runtimeGlobalName: "ChibiVue",
     helper(key) {
       return `_${helperNameMap[key]}`;
     },
@@ -98,37 +77,30 @@ function createCodegenContext(
   return context;
 }
 
-export function generate(
-  ast: RootNode,
-  options: CodegenOptions
-): CodegenResult {
-  const context = createCodegenContext(ast, {
-    __BROWSER__: options.__BROWSER__,
-  });
+export const generate = (ast: RootNode, option: CompilerOptions): string => {
+  const context = createCodegenContext(ast);
+
   const { push } = context;
-  const isSetupInlined = !options.__BROWSER__ && !!options.inline;
 
-  const preambleContext = isSetupInlined
-    ? createCodegenContext(ast, options)
-    : context;
-
-  genFunctionPreamble(ast, preambleContext);
-
-  const args = ["_ctx"];
+  const args = [CONSTANT.ctxIdent];
   const signature = args.join(", ");
 
-  push(`function render(${signature}) { `);
-  context.indent();
-
-  // generate asset resolution statements
-  if (ast.components.length) {
-    genAssets(ast.components, context);
-    context.newline();
+  if (option.isBrowser) {
+    push("return ");
   }
+  push(`function render(${signature}) { `);
+
+  if (option.isBrowser) {
+    context.indent();
+    push(`with (_ctx) {`);
+  }
+
+  context.indent();
+  genFunctionPreamble(ast, context); // NOTE: 将来的には関数の外に出す
 
   push(`return `);
   if (ast.codegenNode) {
-    genNode(ast.codegenNode, context);
+    genNode(ast.codegenNode, context, option);
   } else {
     push(`null`);
   }
@@ -136,30 +108,28 @@ export function generate(
   context.deindent();
   push(` }`);
 
-  return {
-    ast,
-    preamble: isSetupInlined ? preambleContext.code : ``,
-    code: context.code,
-  };
-}
-
-function genFunctionPreamble(ast: RootNode, context: CodegenContext) {
-  const { push, newline, runtimeGlobalName, runtimeModuleName, __BROWSER__ } =
-    context;
-
-  if (__BROWSER__) {
-    push(`const _ChibiVue = ${runtimeGlobalName}\n`);
-  } else {
-    push(`import * as _ChibiVue from '${runtimeModuleName}'\n`);
+  if (option.isBrowser) {
+    context.deindent();
+    push(` }`);
   }
 
+  return context.code;
+};
+
+function genFunctionPreamble(ast: RootNode, context: CodegenContext) {
+  const { push, newline, runtimeGlobalName } = context;
   const helpers = Array.from(ast.helpers);
-  push(`const { ${helpers.map(aliasHelper).join(", ")} } = _ChibiVue\n`);
+  push(
+    `const { ${helpers.map(aliasHelper).join(", ")} } = ${runtimeGlobalName}\n`
+  );
   newline();
-  if (__BROWSER__) push(`return `);
 }
 
-function genNode(node: CodegenNode | symbol | string, context: CodegenContext) {
+const genNode = (
+  node: CodegenNode,
+  context: CodegenContext,
+  option: CompilerOptions
+) => {
   if (isString(node)) {
     context.push(node);
     return;
@@ -173,10 +143,8 @@ function genNode(node: CodegenNode | symbol | string, context: CodegenContext) {
   switch (node.type) {
     case NodeTypes.ELEMENT:
     case NodeTypes.IF:
-    case NodeTypes.FOR: {
-      genNode(node.codegenNode!, context);
+      genNode(node.codegenNode!, context, option);
       break;
-    }
     case NodeTypes.TEXT:
       genText(node, context);
       break;
@@ -184,44 +152,39 @@ function genNode(node: CodegenNode | symbol | string, context: CodegenContext) {
       genExpression(node, context);
       break;
     case NodeTypes.INTERPOLATION:
-      genInterpolation(node, context);
+      genInterpolation(node, context, option);
       break;
     case NodeTypes.VNODE_CALL:
-      genVNodeCall(node, context);
+      genVNodeCall(node, context, option);
       break;
     case NodeTypes.COMPOUND_EXPRESSION:
-      genCompoundExpression(node, context);
+      genCompoundExpression(node, context, option);
       break;
     case NodeTypes.COMMENT:
       genComment(node, context);
       break;
     case NodeTypes.JS_CALL_EXPRESSION:
-      genCallExpression(node, context);
+      genCallExpression(node, context, option);
       break;
     case NodeTypes.JS_OBJECT_EXPRESSION:
-      genObjectExpression(node, context);
+      genObjectExpression(node, context, option);
       break;
     case NodeTypes.JS_ARRAY_EXPRESSION:
-      genArrayExpression(node, context);
-      break;
-    case NodeTypes.JS_FUNCTION_EXPRESSION:
-      genFunctionExpression(node, context);
+      genArrayExpression(node, context, option);
       break;
     case NodeTypes.JS_CONDITIONAL_EXPRESSION:
-      genConditionalExpression(node, context);
+      genConditionalExpression(node, context, option);
       break;
     /* istanbul ignore next */
     case NodeTypes.IF_BRANCH:
       // noop
       break;
-      break;
-    default: {
+    default:
       // make sure we exhaust all possible types
       const exhaustiveCheck: never = node;
       return exhaustiveCheck;
-    }
   }
-}
+};
 
 function genText(node: TextNode, context: CodegenContext) {
   context.push(JSON.stringify(node.content), node);
@@ -232,35 +195,42 @@ function genExpression(node: SimpleExpressionNode, context: CodegenContext) {
   context.push(isStatic ? JSON.stringify(content) : content, node);
 }
 
-function genInterpolation(node: InterpolationNode, context: CodegenContext) {
-  const { push, helper } = context;
-  push(`${helper(TO_DISPLAY_STRING)}(`);
-  genNode(node.content, context);
-  push(`)`);
+function genInterpolation(
+  node: InterpolationNode,
+  context: CodegenContext,
+  option: CompilerOptions
+) {
+  const { push } = context;
+  if (!option.isBrowser) {
+    push(`${CONSTANT.ctxIdent}.`);
+  }
+  push(node.content);
 }
 
 function genCompoundExpression(
   node: CompoundExpressionNode,
-  context: CodegenContext
+  context: CodegenContext,
+  option: CompilerOptions
 ) {
   for (let i = 0; i < node.children!.length; i++) {
     const child = node.children![i];
     if (isString(child)) {
       context.push(child);
     } else {
-      genNode(child, context);
+      genNode(child, context, option);
     }
   }
 }
 
 function genExpressionAsPropertyKey(
   node: ExpressionNode,
-  context: CodegenContext
+  context: CodegenContext,
+  option: CompilerOptions
 ) {
   const { push } = context;
   if (node.type === NodeTypes.COMPOUND_EXPRESSION) {
     push(`[`);
-    genCompoundExpression(node, context);
+    genCompoundExpression(node, context, option);
     push(`]`);
   } else if (node.isStatic) {
     push(JSON.stringify(node.content), node);
@@ -274,20 +244,17 @@ function genComment(node: CommentNode, context: CodegenContext) {
   push(`${helper(CREATE_COMMENT)}(${JSON.stringify(node.content)})`, node);
 }
 
-function genVNodeCall(node: VNodeCall, context: CodegenContext) {
+function genVNodeCall(
+  node: VNodeCall,
+  context: CodegenContext,
+  option: CompilerOptions
+) {
   const { push, helper } = context;
-  const { tag, props, children, directives } = node;
-  if (directives) {
-    push(helper(WITH_DIRECTIVES) + `(`);
-  }
-  push(helper(CREATE_ELEMENT_VNODE) + `(`, node);
-  genNodeList(genNullableArgs([tag, props, children]), context);
+  const { tag, props, children } = node;
+
+  push(helper(CREATE_VNODE) + `(`, node);
+  genNodeList(genNullableArgs([tag, props, children]), context, option);
   push(`)`);
-  if (directives) {
-    push(`, `);
-    genNode(directives, context);
-    push(`)`);
-  }
 }
 
 function genNullableArgs(args: any[]): CallExpression["arguments"] {
@@ -298,16 +265,23 @@ function genNullableArgs(args: any[]): CallExpression["arguments"] {
   return args.slice(0, i + 1).map((arg) => arg || `null`);
 }
 
-// JavaScript
-function genCallExpression(node: CallExpression, context: CodegenContext) {
+function genCallExpression(
+  node: CallExpression,
+  context: CodegenContext,
+  option: CompilerOptions
+) {
   const { push, helper } = context;
   const callee = isString(node.callee) ? node.callee : helper(node.callee);
   push(callee + `(`, node);
-  genNodeList(node.arguments, context);
+  genNodeList(node.arguments, context, option);
   push(`)`);
 }
 
-function genObjectExpression(node: ObjectExpression, context: CodegenContext) {
+function genObjectExpression(
+  node: ObjectExpression,
+  context: CodegenContext,
+  option: CompilerOptions
+) {
   const { push } = context;
   const { properties } = node;
 
@@ -320,59 +294,29 @@ function genObjectExpression(node: ObjectExpression, context: CodegenContext) {
   for (let i = 0; i < properties.length; i++) {
     const { key, value } = properties[i];
     // key
-    genExpressionAsPropertyKey(key, context);
+    genExpressionAsPropertyKey(key, context, option);
     push(`: `);
     // value
-    genNode(value, context);
+    genNode(value, context, option);
     if (i < properties.length - 1) {
-      // will only reach this if it's multilines
       push(`,`);
     }
   }
   push(` }`);
 }
 
-function genArrayExpression(node: ArrayExpression, context: CodegenContext) {
-  genNodeListAsArray(node.elements as CodegenNode[], context);
-}
-
-function genFunctionExpression(
-  node: FunctionExpression,
-  context: CodegenContext
+function genArrayExpression(
+  node: ArrayExpression,
+  context: CodegenContext,
+  option: CompilerOptions
 ) {
-  const { push, indent, deindent } = context;
-  const { params, returns, newline } = node;
-
-  push(`(`, node);
-  if (isArray(params)) {
-    genNodeList(params, context);
-  } else if (params) {
-    genNode(params, context);
-  }
-  push(`) => `);
-  if (newline) {
-    push(`{`);
-    indent();
-  }
-  if (returns) {
-    if (newline) {
-      push(`return `);
-    }
-    if (isArray(returns)) {
-      genNodeListAsArray(returns, context);
-    } else {
-      genNode(returns, context);
-    }
-  }
-  if (newline) {
-    deindent();
-    push(`}`);
-  }
+  genNodeListAsArray(node.elements as CodegenNode[], context, option);
 }
 
 function genConditionalExpression(
   node: ConditionalExpression,
-  context: CodegenContext
+  context: CodegenContext,
+  option: CompilerOptions
 ) {
   const { test, consequent, alternate, newline: needNewline } = node;
   const { push, indent, deindent, newline } = context;
@@ -380,14 +324,14 @@ function genConditionalExpression(
     genExpression(test, context);
   } else {
     push(`(`);
-    genNode(test, context);
+    genNode(test, context, option);
     push(`)`);
   }
   needNewline && indent();
   context.indentLevel++;
   needNewline || push(` `);
   push(`? `);
-  genNode(consequent, context);
+  genNode(consequent, context, option);
   context.indentLevel--;
   needNewline && newline();
   needNewline || push(` `);
@@ -396,7 +340,7 @@ function genConditionalExpression(
   if (!isNested) {
     context.indentLevel++;
   }
-  genNode(alternate, context);
+  genNode(alternate, context, option);
   if (!isNested) {
     context.indentLevel--;
   }
@@ -405,16 +349,18 @@ function genConditionalExpression(
 
 function genNodeListAsArray(
   nodes: (string | CodegenNode | TemplateChildNode[])[],
-  context: CodegenContext
+  context: CodegenContext,
+  option: CompilerOptions
 ) {
   context.push(`[`);
-  genNodeList(nodes, context);
+  genNodeList(nodes, context, option);
   context.push(`]`);
 }
 
 function genNodeList(
   nodes: (string | CodegenNode | TemplateChildNode[])[],
   context: CodegenContext,
+  option: CompilerOptions,
   comma: boolean = true
 ) {
   const { push } = context;
@@ -423,35 +369,13 @@ function genNodeList(
     if (isString(node)) {
       push(node);
     } else if (isArray(node)) {
-      genNodeListAsArray(node, context);
+      genNodeListAsArray(node, context, option);
     } else {
-      genNode(node, context);
+      genNode(node, context, option);
     }
 
     if (i < nodes.length - 1) {
       comma && push(", ");
-    }
-  }
-}
-
-function genAssets(
-  assets: string[],
-  { helper, push, newline }: CodegenContext
-) {
-  const resolver = helper(RESOLVE_COMPONENT);
-  for (let i = 0; i < assets.length; i++) {
-    let id = assets[i];
-    const maybeSelfReference = id.endsWith("__self");
-    if (maybeSelfReference) {
-      id = id.slice(0, -6);
-    }
-    push(
-      `const ${toValidAssetId(id, "component")} = ${resolver}(${JSON.stringify(
-        id
-      )}${maybeSelfReference ? `, true` : ``})`
-    );
-    if (i < assets.length - 1) {
-      newline();
     }
   }
 }

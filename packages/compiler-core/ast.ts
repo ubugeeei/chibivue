@@ -22,6 +22,8 @@ export const enum NodeTypes {
   DIRECTIVE,
 
   COMPOUND_EXPRESSION,
+  IF,
+  IF_BRANCH,
   FOR,
 
   // codegen
@@ -31,6 +33,7 @@ export const enum NodeTypes {
   JS_PROPERTY,
   JS_ARRAY_EXPRESSION,
   JS_FUNCTION_EXPRESSION,
+  JS_CONDITIONAL_EXPRESSION,
 }
 
 export const enum ElementTypes {
@@ -56,7 +59,7 @@ export interface Position {
   column: number;
 }
 
-export type ParentNode = RootNode | ElementNode | ForNode;
+export type ParentNode = RootNode | ElementNode | ForNode | IfBranchNode;
 
 export type ExpressionNode = SimpleExpressionNode | CompoundExpressionNode;
 
@@ -65,6 +68,8 @@ export type TemplateChildNode =
   | TextNode
   | InterpolationNode
   | CommentNode
+  | IfNode
+  | IfBranchNode
   | ForNode;
 
 export type TemplateTextChildNode = TextNode | InterpolationNode;
@@ -95,7 +100,8 @@ export type JSChildNode =
   | ObjectExpression
   | ArrayExpression
   | ExpressionNode
-  | FunctionExpression;
+  | FunctionExpression
+  | ConditionalExpression;
 
 export interface CallExpression extends Node {
   type: NodeTypes.JS_CALL_EXPRESSION;
@@ -133,6 +139,14 @@ export interface FunctionExpression extends Node {
    * the legacy $scopedSlots instance property.
    */
   isNonScopedSlot?: boolean;
+}
+
+export interface ConditionalExpression extends Node {
+  type: NodeTypes.JS_CONDITIONAL_EXPRESSION;
+  test: JSChildNode;
+  consequent: JSChildNode;
+  alternate: JSChildNode;
+  newline: boolean;
 }
 
 export interface RootNode extends Node {
@@ -209,6 +223,24 @@ export interface CompoundExpressionNode extends Node {
    */
   identifiers?: string[];
   isHandlerKey?: boolean;
+}
+
+export interface IfNode extends Node {
+  type: NodeTypes.IF;
+  branches: IfBranchNode[];
+  codegenNode?: IfConditionalExpression;
+}
+
+export interface IfConditionalExpression extends ConditionalExpression {
+  consequent: VNodeCall;
+  alternate: VNodeCall | IfConditionalExpression;
+}
+
+export interface IfBranchNode extends Node {
+  type: NodeTypes.IF_BRANCH;
+  condition: ExpressionNode | undefined; // else
+  children: TemplateChildNode[];
+  userKey?: AttributeNode | DirectiveNode;
 }
 
 export interface ForNode extends Node {
@@ -407,4 +439,20 @@ export function createFunctionExpression(
 
 export function getVNodeHelper(isComponent: boolean) {
   return isComponent ? CREATE_VNODE : CREATE_ELEMENT_VNODE;
+}
+
+export function createConditionalExpression(
+  test: ConditionalExpression["test"],
+  consequent: ConditionalExpression["consequent"],
+  alternate: ConditionalExpression["alternate"],
+  newline = true
+): ConditionalExpression {
+  return {
+    type: NodeTypes.JS_CONDITIONAL_EXPRESSION,
+    test,
+    consequent,
+    alternate,
+    newline,
+    loc: locStub,
+  };
 }

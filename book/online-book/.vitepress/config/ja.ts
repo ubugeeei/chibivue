@@ -172,28 +172,36 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/50-basic-template-compiler/035-comment",
           },
           {
-            text: "🚧 v-if と構造的ディレクティブ",
-            link: "/50-basic-template-compiler/030-v-if-and-structural-directive",
+            text: "v-if と構造的ディレクティブ",
+            link: "/50-basic-template-compiler/040-v-if-and-structural-directive",
           },
           {
             text: "🚧 v-for に対応する",
-            link: "/50-basic-template-compiler/040-v-for",
+            link: "/50-basic-template-compiler/050-v-for",
           },
           {
             text: "🚧 v-model に対応する",
-            link: "/50-basic-template-compiler/050-v-model",
-          },
-          {
-            text: "🚧 コンポーネントを解決する",
             link: "/50-basic-template-compiler/060-v-model",
           },
           {
+            text: "🚧 コンポーネントを解決する",
+            link: "/50-basic-template-compiler/070-resolve-component",
+          },
+          {
             text: "🚧 スロットに対応する",
-            link: "/50-basic-template-compiler/070-slot",
+            link: "/50-basic-template-compiler/080-slot",
+          },
+          {
+            text: "🚧 その他のディレクティブ",
+            link: "/50-basic-template-compiler/090-other-directives",
+          },
+          {
+            text: "🚧 微調整",
+            link: "/50-basic-template-compiler/100-chore-compiler",
           },
           {
             text: "🚧 カスタムディレクティブ",
-            link: "/50-basic-template-compiler/080-custom-directive",
+            link: "/50-basic-template-compiler/500-custom-directive",
           },
         ],
       },

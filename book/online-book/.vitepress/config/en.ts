@@ -176,27 +176,35 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
           },
           {
             text: "v-if and Structural Directives",
-            link: "/en/50-basic-template-compiler/030-v-if-and-structural-directive",
+            link: "/en/50-basic-template-compiler/040-v-if-and-structural-directive",
           },
           {
             text: "Support for v-for",
-            link: "/en/50-basic-template-compiler/040-v-for",
+            link: "/en/50-basic-template-compiler/050-v-for",
           },
           {
             text: "Support for v-model",
-            link: "/en/50-basic-template-compiler/050-v-model",
-          },
-          {
-            text: "Resolving Components",
             link: "/en/50-basic-template-compiler/060-v-model",
           },
           {
+            text: "Resolving Components",
+            link: "/en/50-basic-template-compiler/070-resolve-component",
+          },
+          {
             text: "Support for Slot",
-            link: "/en/50-basic-template-compiler/070-slot",
+            link: "/en/50-basic-template-compiler/080-slot",
+          },
+          {
+            text: "Other Directives",
+            link: "/en/50-basic-template-compiler/090-other-directives",
+          },
+          {
+            text: "Chore Compiler",
+            link: "/en/50-basic-template-compiler/100-chore-compiler",
           },
           {
             text: "Custom Directives",
-            link: "/en/50-basic-template-compiler/080-custom-directive",
+            link: "/en/50-basic-template-compiler/500-custom-directive",
           },
         ],
       },
