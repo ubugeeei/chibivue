@@ -1,18 +1,22 @@
-import { createApp, defineComponent } from "chibivue";
+import { createApp, defineComponent, ref } from "chibivue";
 
 const App = defineComponent({
+  setup() {
+    const n = ref(1);
+    const inc = () => {
+      n.value++;
+    };
+
+    return { n, inc };
+  },
+
   template: `
-  <!-- this is heder. -->
-  <header>header</header>
-
-  <!-- 
-    this is main.
-    main content is here!
-  -->
-  <main>main</main>
-
-  <!-- this is footer -->
-  <footer>footer</footer>`,
+    <button @click="inc">inc</button>
+    <p v-if="n % 5 === 0 && n % 3 === 0">FizzBuzz</p>
+    <p v-else-if="n % 5 === 0">Buzz</p>
+    <p v-else-if="n % 3 === 0">Fizz</p>
+    <p v-else>{{ n }}</p>
+  `,
 });
 
 const app = createApp(App);
