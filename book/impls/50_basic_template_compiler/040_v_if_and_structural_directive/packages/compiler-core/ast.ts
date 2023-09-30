@@ -15,6 +15,8 @@ export const enum NodeTypes {
   DIRECTIVE,
 
   COMPOUND_EXPRESSION,
+  IF,
+  IF_BRANCH,
 
   // codegen
   VNODE_CALL,
@@ -22,6 +24,7 @@ export const enum NodeTypes {
   JS_OBJECT_EXPRESSION,
   JS_PROPERTY,
   JS_ARRAY_EXPRESSION,
+  JS_CONDITIONAL_EXPRESSION,
 }
 
 export interface Node {
@@ -29,7 +32,7 @@ export interface Node {
   loc: SourceLocation;
 }
 
-export type ParentNode = RootNode | ElementNode;
+export type ParentNode = RootNode | ElementNode | IfBranchNode;
 
 export type ExpressionNode = SimpleExpressionNode | CompoundExpressionNode;
 
@@ -50,6 +53,24 @@ export interface CompoundExpressionNode extends Node {
   )[];
 }
 
+export interface IfNode extends Node {
+  type: NodeTypes.IF;
+  branches: IfBranchNode[];
+  codegenNode?: IfConditionalExpression;
+}
+
+export interface IfConditionalExpression extends ConditionalExpression {
+  consequent: VNodeCall;
+  alternate: VNodeCall | IfConditionalExpression;
+}
+
+export interface IfBranchNode extends Node {
+  type: NodeTypes.IF_BRANCH;
+  condition: ExpressionNode | undefined; // else
+  children: TemplateChildNode[];
+  userKey?: AttributeNode | DirectiveNode;
+}
+
 export type TemplateTextChildNode = TextNode | InterpolationNode;
 
 export interface VNodeCall extends Node {
@@ -67,6 +88,7 @@ export type JSChildNode =
   | CallExpression
   | ObjectExpression
   | ArrayExpression
+  | ConditionalExpression
   | ExpressionNode;
 
 export interface CallExpression extends Node {
@@ -89,6 +111,14 @@ export interface Property extends Node {
 export interface ArrayExpression extends Node {
   type: NodeTypes.JS_ARRAY_EXPRESSION;
   elements: Array<string | Node>;
+}
+
+export interface ConditionalExpression extends Node {
+  type: NodeTypes.JS_CONDITIONAL_EXPRESSION;
+  test: JSChildNode;
+  consequent: JSChildNode;
+  alternate: JSChildNode;
+  newline: boolean;
 }
 
 export interface RootNode extends Node {
@@ -121,7 +151,9 @@ export type TemplateChildNode =
   | ElementNode
   | TextNode
   | InterpolationNode
-  | CommentNode;
+  | CommentNode
+  | IfNode
+  | IfBranchNode;
 
 export interface AttributeNode extends Node {
   type: NodeTypes.ATTRIBUTE;
@@ -262,4 +294,20 @@ export function createCallExpression<T extends CallExpression["callee"]>(
     callee,
     arguments: args,
   } as CallExpression;
+}
+
+export function createConditionalExpression(
+  test: ConditionalExpression["test"],
+  consequent: ConditionalExpression["consequent"],
+  alternate: ConditionalExpression["alternate"],
+  newline = true
+): ConditionalExpression {
+  return {
+    type: NodeTypes.JS_CONDITIONAL_EXPRESSION,
+    test,
+    consequent,
+    alternate,
+    newline,
+    loc: locStub,
+  };
 }
