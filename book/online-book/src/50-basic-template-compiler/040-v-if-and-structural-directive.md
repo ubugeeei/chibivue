@@ -24,7 +24,7 @@ angular のドキュメントだと項目として明記されていたりもし
 
 https://angular.jp/guide/structural-directives
 
-v-if や v-for は単にその要素の属性(振舞い)を変更するだけでなく、AST Node の存在切り替えたり、リストの数に応じて AST Node を生成・削除したりと、AST Node の構造を変更するディレクティブです。
+v-if や v-for は単にその要素の属性(+イベントに対する振舞い)を変更するだけでなく、要素の存在切り替えたり、リストの数に応じて 要素を生成・削除したりと、要素の構造を変更するディレクティブです。
 
 ## 目指す開発者インターフェース
 
@@ -57,7 +57,7 @@ const app = createApp(App);
 app.mount("#app");
 ```
 
-今回はまず初めに、どういうコードを生成した以下についても考えてみようかと思います。
+今回はまず初めに、どういうコードを生成したいかについても考えてみようかと思います。
 
 結論から言ってしまうと、v-if や v-else は以下のように条件式に変換されます。
 
@@ -311,9 +311,20 @@ function render(_ctx) {
 }
 ```
 
-最終的な分岐については条件式(三項演算子)に変換されていることが分かります。
+最終的には条件式(三項演算子)に変換されていることが分かります。
 
-これまで条件式を扱ったことはないので、Codegen のために AST 側でこれを取り扱う必要があるようです。
+これまで条件式を扱ったことはないので、Codegen のために AST 側でこれを取り扱う必要があるようです。  
+基本的に考えたいものは 3 つの情報です。("三項"演算子なのでね)
+
+- **条件**  
+  A ? B : C の A にあたる部分です。  
+  condition という名前で表現されます。
+- **条件にマッチした時の Node**  
+  A ? B : C の B にあたる部分です。  
+  consequent という名前で表現されます。
+- **条件にマッチしなかった時の Node**  
+  A ? B : C の C にあたる部分です。  
+  alternate という名前で表現されます。
 
 ```ts
 export const enum NodeTypes {
@@ -328,7 +339,7 @@ export interface ConditionalExpression extends Node {
   test: JSChildNode;
   consequent: JSChildNode;
   alternate: JSChildNode;
-  newline: boolean;
+  newline: boolean; // これは codegen のフォーマット用なのであまり気にしなくていいです
 }
 
 export type JSChildNode =
@@ -357,18 +368,6 @@ export function createConditionalExpression(
 ```
 
 これらを使って VIf の Node を表現する AST を実装していきます。
-
-基本的に考えたいものは 3 つの情報です。
-
-- **条件**  
-  A ? B : C の A にあたる部分です。  
-  condition という名前で表現されます。
-- **条件にマッチした時の Node**  
-  A ? B : C の B にあたる部分です。  
-  consequent という名前で表現されます。
-- **条件にマッチしなかった時の Node**  
-  A ? B : C の C にあたる部分です。  
-  alternate という名前で表現されます。
 
 ```ts
 export const enum NodeTypes {
