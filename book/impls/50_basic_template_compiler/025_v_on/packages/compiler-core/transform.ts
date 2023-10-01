@@ -31,8 +31,11 @@ export interface TransformContext extends Required<TransformOptions> {
   parent: ParentNode | null;
   childIndex: number;
   helpers: Map<symbol, number>;
+  identifiers: { [name: string]: number | undefined };
   helper<T extends symbol>(name: T): T;
   helperString(name: symbol): string;
+  addIdentifiers(exp: string): void;
+  removeIdentifiers(exp: string): void;
 }
 
 export function createTransformContext(
@@ -51,6 +54,7 @@ export function createTransformContext(
     parent: null,
     childIndex: 0,
     helpers: new Map(),
+    identifiers: Object.create(null),
     helper(name) {
       const count = context.helpers.get(name) || 0;
       context.helpers.set(name, count + 1);
@@ -59,7 +63,29 @@ export function createTransformContext(
     helperString(name) {
       return `_${helperNameMap[context.helper(name)]}`;
     },
+    addIdentifiers(exp) {
+      if (!isBrowser) {
+        addId(exp);
+      }
+    },
+    removeIdentifiers(exp) {
+      if (!isBrowser) {
+        removeId(exp);
+      }
+    },
   };
+
+  function addId(id: string) {
+    const { identifiers } = context;
+    if (identifiers[id] === undefined) {
+      identifiers[id] = 0;
+    }
+    identifiers[id]!++;
+  }
+
+  function removeId(id: string) {
+    context.identifiers[id]!--;
+  }
 
   return context;
 }

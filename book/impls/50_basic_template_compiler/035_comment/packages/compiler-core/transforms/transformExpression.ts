@@ -22,7 +22,11 @@ export const transformExpression: NodeTransform = (node, ctx) => {
       if (dir.type === NodeTypes.DIRECTIVE) {
         const exp = dir.exp;
         const arg = dir.arg;
-        if (exp && exp.type === NodeTypes.SIMPLE_EXPRESSION) {
+        if (
+          exp &&
+          exp.type === NodeTypes.SIMPLE_EXPRESSION &&
+          !(dir.name === "on" && arg)
+        ) {
           dir.exp = processExpression(exp, ctx);
         }
         if (arg && arg.type === NodeTypes.SIMPLE_EXPRESSION && !arg.isStatic) {
@@ -60,11 +64,16 @@ export function processExpression(
   const ast = parse(`(${rawExp})`).program;
   type QualifiedId = Identifier & PrefixMeta;
   const ids: QualifiedId[] = [];
+  const knownIds: Record<string, number> = Object.create(ctx.identifiers);
 
-  walkIdentifiers(ast, (node) => {
-    node.name = rewriteIdentifier(node.name);
-    ids.push(node as QualifiedId);
-  });
+  walkIdentifiers(
+    ast,
+    (node) => {
+      node.name = rewriteIdentifier(node.name);
+      ids.push(node as QualifiedId);
+    },
+    knownIds
+  );
 
   const children: CompoundExpressionNode["children"] = [];
   ids.sort((a, b) => a.start - b.start);
