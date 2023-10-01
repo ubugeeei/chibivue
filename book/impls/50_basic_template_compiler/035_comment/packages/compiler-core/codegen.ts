@@ -191,11 +191,7 @@ function genInterpolation(
   context: CodegenContext,
   option: CompilerOptions
 ) {
-  const { push } = context;
-  if (!option.isBrowser) {
-    push(`${CONSTANT.ctxIdent}.`);
-  }
-  push(node.content);
+  genNode(node.content, context, option);
 }
 
 function genCompoundExpression(
