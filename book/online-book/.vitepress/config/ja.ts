@@ -156,6 +156,10 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/50-basic-template-compiler/020-v-bind",
           },
           {
+            text: "template 内での式の評価",
+            link: "/50-basic-template-compiler/022-transform-expression",
+          },
+          {
             text: "v-on に対応する",
             link: "/50-basic-template-compiler/025-v-on",
           },

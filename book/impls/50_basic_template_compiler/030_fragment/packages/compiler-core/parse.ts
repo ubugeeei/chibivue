@@ -163,7 +163,12 @@ function parseInterpolation(
 
   return {
     type: NodeTypes.INTERPOLATION,
-    content,
+    content: {
+      type: NodeTypes.SIMPLE_EXPRESSION,
+      isStatic: false,
+      content,
+      loc: getSelection(context, innerStart, innerEnd),
+    },
     loc: getSelection(context, start),
   };
 }

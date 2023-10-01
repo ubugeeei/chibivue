@@ -160,6 +160,7 @@ Please refer to the information below for the progress status.
 | dynamic component |      |      |
 | comment out       | ✅   | ✅   |
 | fragment          | ✅   | ✅   |
+| bind expressions  | ✅   | ✅   |
 
 ### SFC Compiler
 

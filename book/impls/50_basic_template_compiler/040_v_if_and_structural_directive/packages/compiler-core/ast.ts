@@ -183,7 +183,7 @@ export interface Position {
 
 export interface InterpolationNode extends Node {
   type: NodeTypes.INTERPOLATION;
-  content: string;
+  content: ExpressionNode;
 }
 
 export const locStub: SourceLocation = {
