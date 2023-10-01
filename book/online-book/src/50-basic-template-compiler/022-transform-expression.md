@@ -1,39 +1,118 @@
 # transformExpression
 
-## 現状のマスタッシュ構文の課題
+## 目指す開発者インターフェースと現状の課題
 
-マスタッシュ構文、つまりは InterpolationNode についてですが、  
-現時点では content を string でもち、codegen する際は先頭に`_ctx.`を付与するという簡易的な実装になっています。
+まずはこちらのコンポーネントを見てください。
 
-```ts
-export interface InterpolationNode extends Node {
-  type: NodeTypes.INTERPOLATION;
-  content: string;
+```vue
+<script>
+import { ref } from "chibivue";
+
+export default {
+  setup() {
+    const count = ref(0);
+    const increment = () => {
+      count.value++;
+    };
+    return { count, increment };
+  },
+};
+</script>
+
+<template>
+  <div>
+    <button :onClick="increment">count + count is: {{ count + count }}</button>
+  </div>
+</template>
+```
+
+このコンポーネントにはいくつかの問題があります。  
+このコンポーネントは SFC で記述されているため、with 文が使用されません。
+つまり、バインディングがうまくいっていません。
+
+コンパイルされたコードを見てみましょう。
+
+```js
+const _sfc_main = {
+  setup() {
+    const count = ref(0);
+    const increment = () => {
+      count.value++;
+    };
+    return { count, increment };
+  },
+};
+
+function render(_ctx) {
+  const { h, mergeProps, normalizeProps, normalizeClass, normalizeStyle } =
+    ChibiVue;
+
+  return h("div", null, [
+    "\n    ",
+    h("button", normalizeProps({ onClick: increment }), [
+      "count + count is: ",
+      _ctx.count + count,
+    ]),
+    "\n  ",
+  ]);
 }
+
+export default { ..._sfc_main, render };
 ```
 
-```ts
-function genInterpolation(node: InterpolationNode, context: CodegenContext) {
-  const { push } = context;
-  push(`${CONSTANT.ctxIdent}.${node.content}`);
+- 上手くいっていないポイント 1  
+  イベントハンドラに登録される increment が \_ctx を辿れていません。  
+  これは当たり前で、前回の v-bind の実装では prefix の付与を行なっていないためです。
+- 上手くいっていないポイント 2  
+  count + count が \_ctx を辿れていません。  
+  マスタッシュに関しては、先頭に `_ctx.` を付与しているだけで、それ以外の識別子に対応できていません。  
+  このように、式の途中で登場する識別子は全て `_ctx.` を付与する必要があります。これはマスタッシュに限らず全ての箇所で同様です。
+
+式中に登場する識別子に対して `_ctx.` を付与して行くような処理が必要なようです。
+
+::: details 以下のようにコンパイルしたい
+
+```js
+const _sfc_main = {
+  setup() {
+    const count = ref(0);
+    const increment = () => {
+      count.value++;
+    };
+    return { count, increment };
+  },
+};
+
+function render(_ctx) {
+  const { h, mergeProps, normalizeProps, normalizeClass, normalizeStyle } =
+    ChibiVue;
+
+  return h("div", null, [
+    "\n    ",
+    h("button", normalizeProps({ onClick: _ctx.increment }), [
+      "count + count is: ",
+      _ctx.count + _ctx.count,
+    ]),
+    "\n  ",
+  ]);
 }
+
+export default { ..._sfc_main, render };
 ```
 
-全くもってこれではいけません。それは容易に想像できるかと思います。
+:::
 
-これでは、
+::: warning
 
-```html
-<p>{{ 1 + 2 * count }}</p>
-```
+実は、本家の実装では少しだけアプローチが違います。
 
-や
+以下をみてもらえれば分かる通り、本家では setup 関数からバインディングされるものは `$setup` を介して解決されます。
 
-```html
-<p>{{ getMessage(count) }}</p>
-```
+![resolve_bindings_original](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/resolve_bindings_original.png)
 
-などのコードをうまくコンパイルすることができていません。
+しかしこの実装をするのは少々大変なので、簡略化として `_ctx.` を付与するように実装します。(props も setup も全て \_ctx から解決する)
+
+:::
 
 ## 実装方針
 
@@ -55,7 +134,7 @@ if (!a) a = 1; // これは Statement
 for (let i = 0; i < 10; i++) a++; // これは Statement
 ```
 
-マスタッシュ構文で想定されるのは Expression (式)です。  
+今回考えたいのは Expression (式)です。  
 Expression にはさまざまな種類があります。Identifier というのはそのうちの一つで、識別子で表現された Expression です。  
 (概ね変数名だと思ってもらえれば問題ないです)
 
@@ -68,11 +147,15 @@ func(); // func --- (2)
 ident + func(); // ident, func --- (3)
 ```
 
-のようなもので、(1)に関してはそれ単体が Identifier であり、(2)は CallExpression の callee が Identifier、  
-(3)は BinaryExpression の left が Identifier、right が CallExpression でその callee が Identifier になっています。
+のようなもので、(1) に関してはそれ単体が Identifier であり、(2) は CallExpression の callee が Identifier、  
+(3) は BinaryExpression の left が Identifier、right が CallExpression でその callee が Identifier になっています。
+
+このように、Identifier は式中のいろんなところで登場します。
 
 AST は以下のサイトでプログラムを入力すれば容易に観察できるので、ぜひさまざまな Expression 上の Identifier を観測してみてください。  
 https://astexplorer.net/#/gist/670a1bee71dbd50bec4e6cc176614ef8/9a9ff250b18ccd9000ed253b0b6970696607b774
+
+## Identifier を探索する
 
 やりたいことは分かったとして、どうやって実装していきましょうか。
 
@@ -84,7 +167,7 @@ babel で parse することによって得られた AST をこのライブラ�
 この walk 関数は AST Node 単位で walk していくのですが、その Node に到達した時点の処理で処理を行うのが enter というオプションです。  
 他にも、その Node の去り際に処理をするための leave なども用意されています。今回はこの enter のみを扱います。
 
-`compiler-core/babelUtils.ts`を新たに作成して Identifier に対して操作を行えるようなユーティル関数を実装します。
+`compiler-core/babelUtils.ts`を新たに作成して Identifier に対して操作を行えるような utility 関数を実装します。
 
 とりあえず estree-walker はインストールします。
 
@@ -113,23 +196,25 @@ export function walkIdentifiers(
 }
 ```
 
-あと式の AST を生成し、この関すに渡して node を書き換えながら transform を行なっていけばいいです。
+あとは式の AST を生成し、この関すに渡して node を書き換えながら transform を行なっていけばいいです。
 
 ## transformExpression の実装
 
-変換処理の本体である transformExpression を実装していきます。  
-とりあえず transformExpression 自体は InterpolationNode を対象とするように実装してみます。
+### AST の変更とパーサ
 
-とりあえず、InterpolationNode は content として SimpleExpressionNode を持つように変更します。
+変換処理の本体である transformExpression を実装していきます。
+
+とりあえず、InterpolationNode は content として string ではなく SimpleExpressionNode を持つように変更します。
 
 ```ts
 export interface InterpolationNode extends Node {
   type: NodeTypes.INTERPOLATION;
-  content: ExpressionNode;
+  content: string; // [!code --]
+  content: ExpressionNode; // [!code ++]
 }
 ```
 
-それに伴って、parseInterpolation も修正です。
+それに伴って parseInterpolation も修正です。
 
 ```ts
 function parseInterpolation(
@@ -151,12 +236,29 @@ function parseInterpolation(
 }
 ```
 
-式の変換に関しては他の transformer でも扱いたいので、processExpression として関数化します。
+### transformer (本体)の実装
+
+式の変換に関しては他の transformer でも使えるようにしたいので、`processExpression` という関数として切り出します。  
+transformExpression では、INTERPOLATION と DIRECTIVE が持つ ExpressionNode を処理します。
 
 ```ts
 export const transformExpression: NodeTransform = (node) => {
   if (node.type === NodeTypes.INTERPOLATION) {
     node.content = processExpression(node.content as SimpleExpressionNode);
+  } else if (node.type === NodeTypes.ELEMENT) {
+    for (let i = 0; i < node.props.length; i++) {
+      const dir = node.props[i];
+      if (dir.type === NodeTypes.DIRECTIVE) {
+        const exp = dir.exp;
+        const arg = dir.arg;
+        if (exp && exp.type === NodeTypes.SIMPLE_EXPRESSION) {
+          dir.exp = processExpression(exp);
+        }
+        if (arg && arg.type === NodeTypes.SIMPLE_EXPRESSION && !arg.isStatic) {
+          dir.arg = processExpression(arg);
+        }
+      }
+    }
   }
 };
 
@@ -228,6 +330,8 @@ export function processExpression(node: SimpleExpressionNode): ExpressionNode {
 ```
 
 注意するべき点としては、ここまでではまだ estree を操作しただけで、ast の node は何も操作されていないという点です。
+
+### CompoundExpression
 
 続いて 2 です。ここで新しい AST Node を定義します。`CompoundExpressionNode`というものです。  
 Compound には「配合」「複合」といった意味が含まれます。  
@@ -324,13 +428,18 @@ Babel によってパースされた Node は start と end (もと文字列の�
 CompoundExpressionNode を生成することができるようになったので、Codegen の方でも対応します。
 
 ```ts
-function genInterpolation(node: InterpolationNode, context: CodegenContext) {
-  genNode(node.content, context);
+function genInterpolation(
+  node: InterpolationNode,
+  context: CodegenContext,
+  option: Required<CompilerOptions>
+) {
+  genNode(node.content, context, option);
 }
 
 function genCompoundExpression(
   node: CompoundExpressionNode,
-  context: CodegenContext
+  context: CodegenContext,
+  option: Required<CompilerOptions>
 ) {
   for (let i = 0; i < node.children!.length; i++) {
     const child = node.children![i];
@@ -339,7 +448,7 @@ function genCompoundExpression(
       context.push(child);
     } else {
       // それ以外は Node を codegen する
-      genNode(child, context);
+      genNode(child, context, option);
     }
   }
 }
@@ -347,12 +456,15 @@ function genCompoundExpression(
 
 (genInterpolation がただの genNode になってしまいましたがまぁ、一応残しておきます。)
 
+## 動かしてみる
+
 さて、ここまで実装できたらコンパイラを完成させて動かしてみましょう！
 
 ```ts
 // transformExpressionを追加する
 export function getBaseTransformPreset(): TransformPreset {
-  return [[transformExpression, transformElement], {}];
+  return [[transformElement], { bind: transformBind }]; // [!code --]
+  return [[transformExpression, transformElement], { bind: transformBind }]; // [!code ++]
 }
 ```
 
@@ -378,5 +490,4 @@ const app = createApp(App);
 app.mount("#app");
 ```
 
-ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/020_transform_expression)
+ここまでのソースコード:

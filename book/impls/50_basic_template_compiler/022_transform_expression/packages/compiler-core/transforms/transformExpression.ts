@@ -1,21 +1,35 @@
 import { parse } from "@babel/parser";
 import { Identifier } from "@babel/types";
 
-import { advancePositionWithClone, isSimpleIdentifier } from "../utils";
-import { walkIdentifiers } from "../babelUtils";
 import {
-  CompoundExpressionNode,
-  ExpressionNode,
   NodeTypes,
   SimpleExpressionNode,
-  createCompoundExpression,
+  ExpressionNode,
+  CompoundExpressionNode,
   createSimpleExpression,
+  createCompoundExpression,
 } from "../ast";
+import { walkIdentifiers } from "../babelUtils";
 import { NodeTransform } from "../transform";
+import { advancePositionWithClone, isSimpleIdentifier } from "../utils";
 
 export const transformExpression: NodeTransform = (node) => {
   if (node.type === NodeTypes.INTERPOLATION) {
     node.content = processExpression(node.content as SimpleExpressionNode);
+  } else if (node.type === NodeTypes.ELEMENT) {
+    for (let i = 0; i < node.props.length; i++) {
+      const dir = node.props[i];
+      if (dir.type === NodeTypes.DIRECTIVE) {
+        const exp = dir.exp;
+        const arg = dir.arg;
+        if (exp && exp.type === NodeTypes.SIMPLE_EXPRESSION) {
+          dir.exp = processExpression(exp);
+        }
+        if (arg && arg.type === NodeTypes.SIMPLE_EXPRESSION && !arg.isStatic) {
+          dir.arg = processExpression(arg);
+        }
+      }
+    }
   }
 };
 
@@ -36,7 +50,6 @@ export function processExpression(node: SimpleExpressionNode): ExpressionNode {
     return node;
   }
 
-  // find ids
   const ast = parse(`(${rawExp})`).program;
   type QualifiedId = Identifier & PrefixMeta;
   const ids: QualifiedId[] = [];

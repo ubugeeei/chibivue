@@ -159,6 +159,10 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/en/50-basic-template-compiler/020-v-bind",
           },
           {
+            text: "Eval expression in template",
+            link: "/en/50-basic-template-compiler/022-transform-expression",
+          },
+          {
             text: "Supporting v-on",
             link: "/en/50-basic-template-compiler/025-v-on",
           },

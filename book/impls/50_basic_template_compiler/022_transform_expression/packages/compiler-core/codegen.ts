@@ -2,6 +2,7 @@ import { isArray, isString } from "../shared";
 import {
   ArrayExpression,
   CallExpression,
+  CompoundExpressionNode,
   ExpressionNode,
   InterpolationNode,
   JSChildNode,
@@ -155,6 +156,9 @@ const genNode = (
     case NodeTypes.VNODE_CALL:
       genVNodeCall(node, context, option);
       break;
+    case NodeTypes.COMPOUND_EXPRESSION:
+      genCompoundExpression(node, context, option);
+      break;
     case NodeTypes.JS_CALL_EXPRESSION:
       genCallExpression(node, context, option);
       break;
@@ -185,19 +189,35 @@ function genInterpolation(
   context: CodegenContext,
   option: Required<CompilerOptions>
 ) {
-  const { push } = context;
-  if (!option.isBrowser) {
-    push(`${CONSTANT.ctxIdent}.`);
+  genNode(node.content, context, option);
+}
+
+function genCompoundExpression(
+  node: CompoundExpressionNode,
+  context: CodegenContext,
+  option: Required<CompilerOptions>
+) {
+  for (let i = 0; i < node.children!.length; i++) {
+    const child = node.children![i];
+    if (isString(child)) {
+      context.push(child);
+    } else {
+      genNode(child, context, option);
+    }
   }
-  push(node.content);
 }
 
 function genExpressionAsPropertyKey(
   node: ExpressionNode,
-  context: CodegenContext
+  context: CodegenContext,
+  option: Required<CompilerOptions>
 ) {
   const { push } = context;
-  if (node.isStatic) {
+  if (node.type === NodeTypes.COMPOUND_EXPRESSION) {
+    push(`[`);
+    genCompoundExpression(node, context, option);
+    push(`]`);
+  } else if (node.isStatic) {
     push(JSON.stringify(node.content), node);
   } else {
     push(`[${node.content}]`, node);
@@ -254,7 +274,7 @@ function genObjectExpression(
   for (let i = 0; i < properties.length; i++) {
     const { key, value } = properties[i];
     // key
-    genExpressionAsPropertyKey(key, context);
+    genExpressionAsPropertyKey(key, context, option);
     push(`: `);
     // value
     genNode(value, context, option);

@@ -14,6 +14,6 @@ export default {
 
 <template>
   <div>
-    <button :on-click="increment">count + count is: {{ count + count }}</button>
+    <button :onClick="increment">count + count is: {{ count + count }}</button>
   </div>
 </template>

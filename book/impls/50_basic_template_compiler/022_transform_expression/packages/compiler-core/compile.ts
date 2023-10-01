@@ -3,6 +3,7 @@ import { CompilerOptions } from "./options";
 import { baseParse } from "./parse";
 import { DirectiveTransform, NodeTransform, transform } from "./transform";
 import { transformElement } from "./transforms/transformElement";
+import { transformExpression } from "./transforms/transformExpression";
 import { transformBind } from "./transforms/vBind";
 
 export type TransformPreset = [
@@ -11,7 +12,7 @@ export type TransformPreset = [
 ];
 
 export function getBaseTransformPreset(): TransformPreset {
-  return [[transformElement], { bind: transformBind }];
+  return [[transformExpression, transformElement], { bind: transformBind }];
 }
 
 export function baseCompile(
