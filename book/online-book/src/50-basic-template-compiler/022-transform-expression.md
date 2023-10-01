@@ -273,7 +273,7 @@ node が単体の Identifier だった場合はそのままこの関数を適用
 
 一点注意があるのは、この processExpression は SFC の場合 (with 文を使わない場合)限定の話です。  
 つまりは isBrowser フラグが立っている場合にはそのまま node を返すように実装しておきます。  
-フラグは ctx 経友で受け取れるように実装を変更します。
+フラグは ctx 経由で受け取れるように実装を変更します。
 
 ```ts
 export function processExpression(
