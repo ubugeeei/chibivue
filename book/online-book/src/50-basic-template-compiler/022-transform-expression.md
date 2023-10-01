@@ -271,8 +271,20 @@ export function processExpression(node: SimpleExpressionNode): ExpressionNode {
 まず、processExpression の内部に Identifier を書き換えるための rewriteIdentifier という関数を実装します。  
 node が単体の Identifier だった場合はそのままこの関数を適用しておしまいです。
 
+一点注意があるのは、この processExpression は SFC の場合 (with 文を使わない場合)限定の話です。  
+つまりは isBrowser フラグが立っている場合にはそのまま node を返すように実装しておきます。  
+フラグは ctx 経友で受け取れるように実装を変更します。
+
 ```ts
-export function processExpression(node: SimpleExpressionNode): ExpressionNode {
+export function processExpression(
+  node: SimpleExpressionNode,
+  ctx: TransformContext
+): ExpressionNode {
+  if (ctx.isBrowser) {
+    // ブラウザの場合には何もしない
+    return node;
+  }
+
   const rawExp = node.content;
 
   const rewriteIdentifier = (raw: string) => {

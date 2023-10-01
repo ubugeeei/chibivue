@@ -10,12 +10,12 @@ import {
   createCompoundExpression,
 } from "../ast";
 import { walkIdentifiers } from "../babelUtils";
-import { NodeTransform } from "../transform";
+import { NodeTransform, TransformContext } from "../transform";
 import { advancePositionWithClone, isSimpleIdentifier } from "../utils";
 
-export const transformExpression: NodeTransform = (node) => {
+export const transformExpression: NodeTransform = (node, ctx) => {
   if (node.type === NodeTypes.INTERPOLATION) {
-    node.content = processExpression(node.content as SimpleExpressionNode);
+    node.content = processExpression(node.content as SimpleExpressionNode, ctx);
   } else if (node.type === NodeTypes.ELEMENT) {
     for (let i = 0; i < node.props.length; i++) {
       const dir = node.props[i];
@@ -23,10 +23,10 @@ export const transformExpression: NodeTransform = (node) => {
         const exp = dir.exp;
         const arg = dir.arg;
         if (exp && exp.type === NodeTypes.SIMPLE_EXPRESSION) {
-          dir.exp = processExpression(exp);
+          dir.exp = processExpression(exp, ctx);
         }
         if (arg && arg.type === NodeTypes.SIMPLE_EXPRESSION && !arg.isStatic) {
-          dir.arg = processExpression(arg);
+          dir.arg = processExpression(arg, ctx);
         }
       }
     }
@@ -38,7 +38,14 @@ interface PrefixMeta {
   end: number;
 }
 
-export function processExpression(node: SimpleExpressionNode): ExpressionNode {
+export function processExpression(
+  node: SimpleExpressionNode,
+  ctx: TransformContext
+): ExpressionNode {
+  if (ctx.isBrowser) {
+    return node;
+  }
+
   const rawExp = node.content;
 
   const rewriteIdentifier = (raw: string) => {

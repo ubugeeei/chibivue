@@ -39,9 +39,14 @@ export interface TransformContext extends Required<TransformOptions> {
 
 export function createTransformContext(
   root: RootNode,
-  { nodeTransforms = [], directiveTransforms = {} }: TransformOptions
+  {
+    nodeTransforms = [],
+    directiveTransforms = {},
+    isBrowser = false,
+  }: TransformOptions
 ): TransformContext {
   const context: TransformContext = {
+    isBrowser,
     nodeTransforms,
     directiveTransforms,
     currentNode: root,
