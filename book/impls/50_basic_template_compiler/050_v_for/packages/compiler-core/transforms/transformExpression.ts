@@ -1,5 +1,5 @@
 import { parse } from "@babel/parser";
-import { Identifier } from "@babel/types";
+import { Identifier, Node } from "@babel/types";
 
 import {
   NodeTypes,
@@ -19,7 +19,7 @@ export const transformExpression: NodeTransform = (node, ctx) => {
   } else if (node.type === NodeTypes.ELEMENT) {
     for (let i = 0; i < node.props.length; i++) {
       const dir = node.props[i];
-      if (dir.type === NodeTypes.DIRECTIVE) {
+      if (dir.type === NodeTypes.DIRECTIVE && dir.name !== "for") {
         const exp = dir.exp;
         const arg = dir.arg;
         if (
@@ -44,7 +44,8 @@ interface PrefixMeta {
 
 export function processExpression(
   node: SimpleExpressionNode,
-  ctx: TransformContext
+  ctx: TransformContext,
+  asParams = false
 ): ExpressionNode {
   if (ctx.isBrowser) {
     return node;
@@ -57,13 +58,18 @@ export function processExpression(
   };
 
   if (isSimpleIdentifier(rawExp)) {
-    node.content = rewriteIdentifier(rawExp);
+    const isScopeVarReference = ctx.identifiers[rawExp];
+    if (!asParams && !isScopeVarReference) {
+      node.content = rewriteIdentifier(rawExp);
+    }
     return node;
   }
 
-  const ast = parse(`(${rawExp})`).program;
+  const source = `(${rawExp})${asParams ? `=>{}` : ``}`;
+  const ast = parse(source).program;
   type QualifiedId = Identifier & PrefixMeta;
   const ids: QualifiedId[] = [];
+  const parentStack: Node[] = [];
   const knownIds: Record<string, number> = Object.create(ctx.identifiers);
 
   walkIdentifiers(
@@ -72,7 +78,8 @@ export function processExpression(
       node.name = rewriteIdentifier(node.name);
       ids.push(node as QualifiedId);
     },
-    knownIds
+    knownIds,
+    parentStack
   );
 
   const children: CompoundExpressionNode["children"] = [];
@@ -105,6 +112,8 @@ export function processExpression(
   } else {
     ret = node;
   }
+
+  ret.identifiers = Object.keys(knownIds);
 
   return ret;
 }
