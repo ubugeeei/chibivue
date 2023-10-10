@@ -134,7 +134,7 @@ export function createRenderer(options: RendererOptions) {
     if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
       hostSetElementText(el, vnode.children as string);
     } else if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
-      mountChildren(vnode.children as VNode[], el, anchor, parentComponent);
+      mountChildren(vnode.children as VNode[], el, null, parentComponent);
     }
 
     if (props) {
