@@ -1,4 +1,10 @@
-import { JSChildNode, NodeTypes, Position, SimpleExpressionNode } from "./ast";
+import {
+  JSChildNode,
+  NodeTypes,
+  Position,
+  SimpleExpressionNode,
+  SourceLocation,
+} from "./ast";
 
 const nonIdentifierRE = /^\d|[^\$\w]/;
 export const isSimpleIdentifier = (name: string): boolean =>
@@ -84,6 +90,29 @@ export const isMemberExpression = (path: string): boolean => {
   }
   return !currentOpenBracketCount && !currentOpenParensCount;
 };
+
+export function getInnerRange(
+  loc: SourceLocation,
+  offset: number,
+  length: number
+): SourceLocation {
+  const source = loc.source.slice(offset, offset + length);
+  const newLoc: SourceLocation = {
+    source,
+    start: advancePositionWithClone(loc.start, loc.source, offset),
+    end: loc.end,
+  };
+
+  if (length != null) {
+    newLoc.end = advancePositionWithClone(
+      loc.start,
+      loc.source,
+      offset + length
+    );
+  }
+
+  return newLoc;
+}
 
 export function advancePositionWithClone(
   pos: Position,
