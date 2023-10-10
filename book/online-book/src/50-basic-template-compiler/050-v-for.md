@@ -7,7 +7,7 @@
 まぁ、Vue.js を触ったことあるみなさんならお馴染みのディレクティブだと思います。
 
 v-for には様々な syntax があります。
-最もベーシックなのは、配列をループすることですが、他にも、文字列であったりオブジェクトの key, range, などなど様々なものをループできます。
+最もベーシックなのは配列をループすることですが、他にも文字列であったりオブジェクトの key, range, などなど様々なものをループできます。
 
 https://ja.vuejs.org/guide/essentials/list.html
 
@@ -155,7 +155,7 @@ h(
 一旦、配列のみを想定すると、\_renderList 関数の実装自体は概ね Array.prototype.map と同じようなものだと理解できるかと思います。  
 配列以外の値に関しては、\_renderList の方で正規化してあげればいいだけなので、初めのうちは忘れてしまいましょう。(配列のことだけ考えてれば OK)
 
-そして、ここまで様々なディレクティブを実装してきたみなさんにとってはこのようなコンパイラ(transformer) を実装するのはさほど難し事ではないとは思います。
+そして、ここまで様々なディレクティブを実装してきたみなさんにとってはこのようなコンパイラ(transformer) を実装するのはさほど難しい事ではないとは思います。
 
 ## 実装の肝 (難しいポイント)
 
@@ -385,8 +385,7 @@ function genFunctionExpression(
 
 transformer の実装をしていきますが、ここでもまたいくつか下準備です。
 
-v-on の時にもやりましたが、v-for の場合には processExpression を実行するタイミングが少し特殊 (ローカル変数を収集しないといけない) なので、  
-transformExpression の方ではスキップしてあげます。
+v-on の時にもやりましたが、v-for の場合には processExpression を実行するタイミングが少し特殊 (ローカル変数を収集しないといけない) なので、transformExpression の方ではスキップしてあげます。
 
 ```ts
 export const transformExpression: NodeTransform = (node, ctx) => {
@@ -417,7 +416,7 @@ export const transformExpression: NodeTransform = (node, ctx) => {
 
 現在 processExpression では identifier を探索し、 `_ctx` を付与するような実装がされていますが、今回は付与せずに収集だけするような実装が必要そうです。これを実現していきます。
 
-まず、収集したものを溜めておくための場所を用意します。これは各 Node が持っておいた方が codegen などの時に便利なので、その Node 常に存在する identifier (複数) を持っておけるようなプロパティを AST に追加してしまいましょう。
+まず、収集したものを溜めておくための場所を用意します。これは各 Node が持っておいた方が codegen などの時に便利なので、その Node 上に存在する identifier (複数) を持っておけるようなプロパティを AST に追加してしまいましょう。
 
 対象は `CompoundExpressionNode` と `SimpleExpressionNode` です。
 
@@ -596,8 +595,7 @@ ret.identifiers = Object.keys(knownIds); //　knownIds を元に identifiers を
 return ret;
 ```
 
-少しファイルが前後しますが、walkFunctionParams, markScopeIdentifier は何をやっているかというと、  
-これは単純で、 param の walk と、 Node.name を knownIds に追加しているだけです。
+少しファイルが前後しますが、walkFunctionParams, markScopeIdentifier は何をやっているかというと、これは単純で、 param の walk と Node.name を knownIds に追加しているだけです。
 
 ```ts
 export function walkFunctionParams(
@@ -629,9 +627,9 @@ function markScopeIdentifier(
 }
 ```
 
-これで identifier の収集ができるようになったはずです。 これを使って transformVFor を実装し、v-for ディレクティブを完成させましょう！
+これで identifier の収集ができるようになったはずです。 これを使って transformFor を実装し、v-for ディレクティブを完成させましょう！
 
-### transformVFor
+### transformFor
 
 さて、山は超えたのであとはいつも通り今あるものを使って transformer を実装していきます。
 あと少し、頑張りましょう！
