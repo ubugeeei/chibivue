@@ -184,10 +184,6 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/50-basic-template-compiler/050-v-for",
           },
           {
-            text: "🚧 v-model に対応する",
-            link: "/50-basic-template-compiler/060-v-model",
-          },
-          {
             text: "🚧 コンポーネントを解決する",
             link: "/50-basic-template-compiler/070-resolve-component",
           },
