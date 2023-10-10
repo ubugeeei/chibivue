@@ -5,6 +5,7 @@ import { DirectiveTransform, NodeTransform, transform } from "./transform";
 import { transformElement } from "./transforms/transformElement";
 import { transformExpression } from "./transforms/transformExpression";
 import { transformBind } from "./transforms/vBind";
+import { transformFor } from "./transforms/vFor";
 import { transformIf } from "./transforms/vIf";
 import { transformOn } from "./transforms/vOn";
 
@@ -15,7 +16,7 @@ export type TransformPreset = [
 
 export function getBaseTransformPreset(): TransformPreset {
   return [
-    [transformIf, transformExpression, transformElement],
+    [transformIf, transformFor, transformExpression, transformElement],
     { bind: transformBind, on: transformOn },
   ];
 }
