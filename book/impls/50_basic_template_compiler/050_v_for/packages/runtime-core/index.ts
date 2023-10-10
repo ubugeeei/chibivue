@@ -42,3 +42,4 @@ export { provide, inject, type InjectionKey } from "./apiInject";
 export { createVNode, createCommentVNode, Fragment } from "./vnode";
 
 export { toHandlers } from "./helpers/toHandlers";
+export { renderList } from "./helpers/renderList";
