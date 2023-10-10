@@ -8,6 +8,7 @@ import {
   ElementNode,
   DirectiveNode,
   createVNodeCall,
+  ExpressionNode,
 } from "./ast";
 import { TransformOptions } from "./options";
 import { CREATE_COMMENT, FRAGMENT, helperNameMap } from "./runtimeHelpers";
@@ -42,8 +43,8 @@ export interface TransformContext extends Required<TransformOptions> {
   identifiers: { [name: string]: number | undefined };
   helper<T extends symbol>(name: T): T;
   helperString(name: symbol): string;
-  addIdentifiers(exp: string): void;
-  removeIdentifiers(exp: string): void;
+  addIdentifiers(exp: ExpressionNode | string): void;
+  removeIdentifiers(exp: ExpressionNode | string): void;
   replaceNode(node: TemplateChildNode): void;
   removeNode(node?: TemplateChildNode): void;
   onNodeRemoved(): void;
@@ -76,12 +77,24 @@ export function createTransformContext(
     },
     addIdentifiers(exp) {
       if (!isBrowser) {
-        addId(exp);
+        if (isString(exp)) {
+          addId(exp);
+        } else if (exp.identifiers) {
+          exp.identifiers.forEach(addId);
+        } else if (exp.type === NodeTypes.SIMPLE_EXPRESSION) {
+          addId(exp.content);
+        }
       }
     },
     removeIdentifiers(exp) {
       if (!isBrowser) {
-        removeId(exp);
+        if (isString(exp)) {
+          removeId(exp);
+        } else if (exp.identifiers) {
+          exp.identifiers.forEach(removeId);
+        } else if (exp.type === NodeTypes.SIMPLE_EXPRESSION) {
+          removeId(exp.content);
+        }
       }
     },
     replaceNode(node) {
@@ -180,6 +193,7 @@ export function traverseNode(
     case NodeTypes.IF_BRANCH:
     case NodeTypes.ELEMENT:
     case NodeTypes.ROOT:
+    case NodeTypes.FOR:
       traverseChildren(node, context);
       break;
   }
