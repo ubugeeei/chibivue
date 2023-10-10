@@ -1,7 +1,8 @@
 import { isString } from "../shared";
-import { CREATE_VNODE } from "./runtimeHelpers";
+import { CREATE_VNODE, FRAGMENT, RENDER_LIST } from "./runtimeHelpers";
 import { TransformContext } from "./transform";
 import { PropsExpression } from "./transforms/transformElement";
+import { ForParseResult } from "./transforms/vFor";
 
 export const enum NodeTypes {
   ROOT,
@@ -15,6 +16,7 @@ export const enum NodeTypes {
   DIRECTIVE,
 
   COMPOUND_EXPRESSION,
+  FOR,
   IF,
   IF_BRANCH,
 
@@ -23,6 +25,7 @@ export const enum NodeTypes {
   JS_CALL_EXPRESSION,
   JS_OBJECT_EXPRESSION,
   JS_PROPERTY,
+  JS_FUNCTION_EXPRESSION,
   JS_ARRAY_EXPRESSION,
   JS_CONDITIONAL_EXPRESSION,
 }
@@ -32,7 +35,7 @@ export interface Node {
   loc: SourceLocation;
 }
 
-export type ParentNode = RootNode | ElementNode | IfBranchNode;
+export type ParentNode = RootNode | ElementNode | ForNode | IfBranchNode;
 
 export type ExpressionNode = SimpleExpressionNode | CompoundExpressionNode;
 
@@ -40,6 +43,7 @@ export interface SimpleExpressionNode extends Node {
   type: NodeTypes.SIMPLE_EXPRESSION;
   content: string;
   isStatic: boolean;
+  identifiers?: string[];
 }
 
 export interface CompoundExpressionNode extends Node {
@@ -51,6 +55,17 @@ export interface CompoundExpressionNode extends Node {
     | TextNode
     | string
   )[];
+  identifiers?: string[];
+}
+
+export interface ForNode extends Node {
+  type: NodeTypes.FOR;
+  source: ExpressionNode;
+  valueAlias: ExpressionNode | undefined;
+  keyAlias: ExpressionNode | undefined;
+  children: TemplateChildNode[];
+  parseResult: ForParseResult;
+  codegenNode?: ForCodegenNode;
 }
 
 export interface IfNode extends Node {
@@ -80,6 +95,7 @@ export interface VNodeCall extends Node {
   children:
     | TemplateChildNode[] // multiple children
     | TemplateTextChildNode
+    | ForRenderListExpression
     | undefined;
 }
 
@@ -89,7 +105,8 @@ export type JSChildNode =
   | ObjectExpression
   | ArrayExpression
   | ConditionalExpression
-  | ExpressionNode;
+  | ExpressionNode
+  | FunctionExpression;
 
 export interface CallExpression extends Node {
   type: NodeTypes.JS_CALL_EXPRESSION;
@@ -111,6 +128,13 @@ export interface Property extends Node {
 export interface ArrayExpression extends Node {
   type: NodeTypes.JS_ARRAY_EXPRESSION;
   elements: Array<string | Node>;
+}
+
+export interface FunctionExpression extends Node {
+  type: NodeTypes.JS_FUNCTION_EXPRESSION;
+  params: ExpressionNode | string | (ExpressionNode | string)[] | undefined;
+  returns?: TemplateChildNode | TemplateChildNode[] | JSChildNode;
+  newline: boolean;
 }
 
 export interface ConditionalExpression extends Node {
@@ -152,6 +176,7 @@ export type TemplateChildNode =
   | TextNode
   | InterpolationNode
   | CommentNode
+  | ForNode
   | IfNode
   | IfBranchNode;
 
@@ -167,6 +192,22 @@ export interface DirectiveNode extends Node {
   exp: ExpressionNode | undefined;
   arg: ExpressionNode | undefined;
   modifiers: string[];
+}
+
+export interface ForCodegenNode extends VNodeCall {
+  isBlock: true;
+  tag: typeof FRAGMENT;
+  props: undefined;
+  children: ForRenderListExpression;
+}
+
+export interface ForRenderListExpression extends CallExpression {
+  callee: typeof RENDER_LIST;
+  arguments: [ExpressionNode, ForIteratorExpression];
+}
+
+export interface ForIteratorExpression extends FunctionExpression {
+  returns: VNodeCall;
 }
 
 export interface SourceLocation {
@@ -309,5 +350,20 @@ export function createConditionalExpression(
     alternate,
     newline,
     loc: locStub,
+  };
+}
+
+export function createFunctionExpression(
+  params: FunctionExpression["params"],
+  returns: FunctionExpression["returns"] = undefined,
+  newline: boolean = false,
+  loc: SourceLocation = locStub
+): FunctionExpression {
+  return {
+    type: NodeTypes.JS_FUNCTION_EXPRESSION,
+    params,
+    returns,
+    newline,
+    loc,
   };
 }
