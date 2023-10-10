@@ -180,7 +180,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/50-basic-template-compiler/040-v-if-and-structural-directive",
           },
           {
-            text: "🚧 v-for に対応する",
+            text: "v-for に対応する",
             link: "/50-basic-template-compiler/050-v-for",
           },
           {
