@@ -6,6 +6,7 @@ import {
   CompoundExpressionNode,
   ConditionalExpression,
   ExpressionNode,
+  FunctionExpression,
   InterpolationNode,
   JSChildNode,
   NodeTypes,
@@ -126,7 +127,7 @@ function genFunctionPreamble(ast: RootNode, context: CodegenContext) {
 }
 
 const genNode = (
-  node: CodegenNode,
+  node: CodegenNode | string,
   context: CodegenContext,
   option: CompilerOptions
 ) => {
@@ -142,6 +143,7 @@ const genNode = (
 
   switch (node.type) {
     case NodeTypes.ELEMENT:
+    case NodeTypes.FOR:
     case NodeTypes.IF:
       genNode(node.codegenNode!, context, option);
       break;
@@ -171,6 +173,9 @@ const genNode = (
       break;
     case NodeTypes.JS_ARRAY_EXPRESSION:
       genArrayExpression(node, context, option);
+      break;
+    case NodeTypes.JS_FUNCTION_EXPRESSION:
+      genFunctionExpression(node, context, option);
       break;
     case NodeTypes.JS_CONDITIONAL_EXPRESSION:
       genConditionalExpression(node, context, option);
@@ -373,5 +378,40 @@ function genNodeList(
     if (i < nodes.length - 1) {
       comma && push(", ");
     }
+  }
+}
+
+function genFunctionExpression(
+  node: FunctionExpression,
+  context: CodegenContext,
+  option: CompilerOptions
+) {
+  const { push, indent, deindent } = context;
+  const { params, returns, newline } = node;
+
+  push(`(`, node);
+  if (isArray(params)) {
+    genNodeList(params, context, option);
+  } else if (params) {
+    genNode(params, context, option);
+  }
+  push(`) => `);
+  if (newline) {
+    push(`{`);
+    indent();
+  }
+  if (returns) {
+    if (newline) {
+      push(`return `);
+    }
+    if (isArray(returns)) {
+      genNodeListAsArray(returns, context, option);
+    } else {
+      genNode(returns, context, option);
+    }
+  }
+  if (newline) {
+    deindent();
+    push(`}`);
   }
 }
