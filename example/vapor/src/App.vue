@@ -1,9 +1,9 @@
 <script>
 import { defineComponent, ref } from "chibivue";
-import MyVaporButton from "./MyButton.vapor";
+import MyVaporComponent from "./MyComponent.vapor";
 
 export default defineComponent({
-  components: { MyVaporButton },
+  components: { MyVaporComponent },
   setup() {
     const count = ref(0);
     return { count };
@@ -13,12 +13,7 @@ export default defineComponent({
 
 <template>
   <div>
-    <h1>My App</h1>
-
-    <p>vapor component</p>
-    <MyVaporButton />
-
-    <p>native component</p>
+    <MyVaporComponent />
     <button @click="count++">{{ count }}</button>
   </div>
 </template>

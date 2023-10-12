@@ -186,7 +186,9 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
     }
   }
 
-  instance.render = Component.render as any;
+  if (Component.render) {
+    instance.render = Component.render as any;
+  }
 
   // Options API
   setCurrentInstance(instance);

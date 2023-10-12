@@ -1,14 +1,15 @@
-export type VaporComponent<HostNode = any> = () => VaporNode<HostNode>;
-export type VaporNode<HostNode = any> = HostNode & {
-  __is_vapor: true;
-};
+import { VNode, createRenderer } from "chibivue/runtime-core";
+import { RootRenderFunction } from "chibivue/runtime-core/renderer";
+import { nodeOps } from "chibivue/runtime-dom/nodeOps";
+import { patchProp } from "chibivue/runtime-dom/patchProp";
 
-export const template = (tmp: string): Element & { __is_vapor: true } => {
+export type VaporComponent = () => VaporNode;
+export type VaporNode = Element & { __is_vapor: true };
+
+export const template = (tmp: string): VaporNode => {
   const container = document.createElement("div");
   container.innerHTML = tmp;
-  const el = container.firstElementChild as Element & {
-    __is_vapor: true;
-  };
+  const el = container.firstElementChild as VaporNode;
   el.__is_vapor = true;
   return el;
 };
@@ -36,4 +37,13 @@ export const setText = (target: Element, format: any, ...values: any[]) => {
 
 export const on = (element: Element, event: string, callback: () => void) => {
   element.addEventListener(event, callback);
+};
+
+export const createComponent = (component: VNode, parent: VaporNode) => {
+  const renderer = createRenderer({ ...nodeOps, patchProp });
+  const render = ((...args) => {
+    renderer.render(...args);
+  }) as RootRenderFunction<Element>;
+
+  render(component, parent);
 };

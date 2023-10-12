@@ -1,5 +1,8 @@
-import { effect, ref } from "chibivue";
-import { template, setText, on } from "chibivue/vapor";
+import { effect, h, ref } from "chibivue";
+import { template, setText, on, createComponent } from "chibivue/vapor";
+
+// @ts-ignore
+import Counter from "./Counter.vue";
 
 const t0 = () => template("<div><button>");
 
@@ -7,7 +10,9 @@ export default () => {
   const count = ref(0);
 
   const div = t0();
+
   const button = div.firstChild as Element;
+
   let _button_text: any;
 
   effect(() => {
@@ -15,6 +20,8 @@ export default () => {
   });
 
   on(button, "click", () => count.value++);
+
+  createComponent(h(Counter, null, []), div);
 
   return div;
 };
