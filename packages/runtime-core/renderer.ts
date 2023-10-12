@@ -200,7 +200,6 @@ export function createRenderer(options: RendererOptions) {
     anchor?: RendererNode | null
   ) => {
     const { type } = vnode;
-    console.log("🚀 ~ file: renderer.ts:203 ~ createRenderer ~ type:", type);
     hostInsert((vnode.el = (type as VaporComponent)()), container, anchor);
   };
 
