@@ -5,6 +5,7 @@
   "scripts": {
     "setup": "pnpm i && jiti tools/create-chibivue/main.ts",
     "dev": "cd example/playground && pnpm i && pnpm run dev",
+    "dev:vapor": "cd example/vapor && pnpm i && pnpm run dev",
     "dev:setup": "jiti tools/chibivue-playground/main.ts",
     "vue": "cd example/vue && pnpm i && pnpm run dev",
     "vue:setup": "jiti tools/vue-playground/main.ts",
