@@ -12,6 +12,7 @@ export {
   ReactiveEffect,
   // effect scope
   EffectScope,
+  effect,
 } from "../reactivity";
 export type { Ref, ReactiveFlags, ComputedRef } from "../reactivity";
 

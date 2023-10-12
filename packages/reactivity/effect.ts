@@ -132,3 +132,21 @@ function triggerEffect(effect: ReactiveEffect) {
 export function getDepFromReactive(object: any, key: string | number | symbol) {
   return targetMap.get(object)?.get(key);
 }
+
+export interface ReactiveEffectRunner<T = any> {
+  (): T;
+  effect: ReactiveEffect;
+}
+
+export function effect<T = any>(fn: () => T): ReactiveEffectRunner {
+  if ((fn as ReactiveEffectRunner).effect instanceof ReactiveEffect) {
+    fn = (fn as ReactiveEffectRunner).effect.fn;
+  }
+
+  const _effect = new ReactiveEffect(fn);
+  _effect.run();
+
+  const runner = _effect.run.bind(_effect) as ReactiveEffectRunner;
+  runner.effect = _effect;
+  return runner;
+}
