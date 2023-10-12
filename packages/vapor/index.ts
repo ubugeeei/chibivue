@@ -1,14 +1,19 @@
-export const template = (tmp: string): HTMLElement => {
-  const container = document.createElement("div");
-  container.innerHTML = tmp;
-  return container.firstElementChild as HTMLElement;
+export type VaporComponent<HostNode = any> = () => VaporNode<HostNode>;
+export type VaporNode<HostNode = any> = HostNode & {
+  __is_vapor: true;
 };
 
-export const setText = (
-  target: Element,
-  format: any,
-  ...values: any[]
-) => {
+export const template = (tmp: string): Element & { __is_vapor: true } => {
+  const container = document.createElement("div");
+  container.innerHTML = tmp;
+  const el = container.firstElementChild as Element & {
+    __is_vapor: true;
+  };
+  el.__is_vapor = true;
+  return el;
+};
+
+export const setText = (target: Element, format: any, ...values: any[]) => {
   if (!target) return;
 
   if (!values.length) {
@@ -29,10 +34,6 @@ export const setText = (
   target.textContent = text;
 };
 
-export const on = (
-  element: Element,
-  event: string,
-  callback: () => void
-) => {
+export const on = (element: Element, event: string, callback: () => void) => {
   element.addEventListener(event, callback);
 };

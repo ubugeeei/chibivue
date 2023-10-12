@@ -1,5 +1,7 @@
-import App from "./App.vapor";
+import { createApp } from "chibivue";
 
-const app = App();
+// @ts-ignore
+import App from "./App.vue";
 
-document.getElementById("app")?.appendChild(app);
+const app = createApp(App);
+app.mount("#app");

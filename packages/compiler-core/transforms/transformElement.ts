@@ -24,6 +24,7 @@ import {
   NORMALIZE_CLASS,
   NORMALIZE_PROPS,
   NORMALIZE_STYLE,
+  RESOLVE_COMPONENT,
   TO_HANDLERS,
 } from "../runtimeHelpers";
 import { NodeTransform, TransformContext } from "../transform";
@@ -295,6 +296,7 @@ export function resolveComponentType(
   // TODO: 3. user component (from setup bindings)
 
   // TODO: 4. Self referencing component (inferred from filename)
+  context.helper(RESOLVE_COMPONENT)
 
   // 5. user component (resolve)
   context.components.add(tag);

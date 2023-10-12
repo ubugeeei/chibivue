@@ -1,5 +1,6 @@
+import { VaporComponent } from "chibivue/vapor";
 import { ReactiveEffect } from "../reactivity/effect";
-import { invokeArrayFns } from "../shared";
+import { invokeArrayFns, isFunction } from "../shared";
 import { ShapeFlags } from "../shared/shapeFlags";
 import { createAppAPI } from "./apiCreateApp";
 import {
@@ -80,6 +81,14 @@ type PatchFn = (
   parentComponent?: ComponentInternalInstance | null
 ) => void;
 
+type ProcessVaporComponentFn = (
+  n1: VNode | null,
+  n2: VNode,
+  container: RendererElement,
+  anchor: RendererNode | null,
+  parentComponent?: ComponentInternalInstance | null
+) => void;
+
 type ProcessTextOrCommentFn = (
   n1: VNode | null,
   n2: VNode,
@@ -152,7 +161,9 @@ export function createRenderer(options: RendererOptions) {
     parentComponent = null
   ) => {
     const { type, ref, shapeFlag } = n2;
-    if (type === Text) {
+    if (isFunction(type)) {
+      processVaporComponent(n1, n2, container, anchor, parentComponent);
+    } else if (type === Text) {
       processText(n1, n2, container, anchor);
     } else if (type === Comment) {
       processCommentNode(n1, n2, container, anchor);
@@ -167,6 +178,30 @@ export function createRenderer(options: RendererOptions) {
     if (ref) {
       setRef(ref, n2);
     }
+  };
+
+  const processVaporComponent: ProcessVaporComponentFn = (
+    n1,
+    n2,
+    container,
+    anchor
+  ) => {
+    if (n1 == null) {
+      mountVaporComponent(n2, container, anchor);
+    } else {
+      // do nothing
+      // reactivity patch
+    }
+  };
+
+  const mountVaporComponent = (
+    vnode: VNode,
+    container: RendererElement,
+    anchor?: RendererNode | null
+  ) => {
+    const { type } = vnode;
+    console.log("🚀 ~ file: renderer.ts:203 ~ createRenderer ~ type:", type);
+    hostInsert((vnode.el = (type as VaporComponent)()), container, anchor);
   };
 
   const processText: ProcessTextOrCommentFn = (n1, n2, container, anchor) => {

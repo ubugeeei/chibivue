@@ -13,13 +13,15 @@ import { type ComponentPublicInstance } from "./componentPublicInstance";
 import { AppContext } from "./apiCreateApp";
 import { DirectiveBinding } from "./directives";
 import { Ref } from "../reactivity";
+import { VaporComponent } from "../vapor";
 
 export type VNodeTypes =
   | string
   | typeof Text
   | typeof Comment
   | typeof Fragment
-  | Component;
+  | Component
+  | VaporComponent;
 
 export const Text = Symbol();
 export const Comment = Symbol();
