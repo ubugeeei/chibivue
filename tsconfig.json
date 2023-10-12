@@ -10,6 +10,9 @@
       "chibivue": [
         "./packages"
       ],
+      "chibivue/*": [
+        "./packages/*"
+      ],
       "chibivue-store": [
         "./packages/@extensions/chibivue-store"
       ],
@@ -27,7 +30,7 @@
   "include": [
     "packages/**/*.ts",
     "example/**/**.ts",
-    "example/**/**.vue",
+    "example/**/**.vue", "example/playground/vapor/App.ts",
   ],
   "exclude": [
     "node_modules",
