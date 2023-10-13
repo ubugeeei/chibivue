@@ -13,7 +13,7 @@ export default defineComponent({
 
 <template>
   <div>
+    <button @click="count++">App.vue {{ count }}</button>
     <MyVaporComponent />
-    <button @click="count++">{{ count }}</button>
   </div>
 </template>

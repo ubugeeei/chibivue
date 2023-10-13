@@ -14,11 +14,19 @@ export const template = (tmp: string): VaporNode => {
   return el;
 };
 
-export const setText = (target: Element, format: any, ...values: any[]) => {
+export const setText = (target: Element, format: string, ...values: any[]) => {
+  const fmt = (): string => {
+    let text = format;
+    for (let i = 0; i < values.length; i++) {
+      text = text.replace("{}", values[i]);
+    }
+    return text;
+  };
+
   if (!target) return;
 
   if (!values.length) {
-    target.textContent = format;
+    target.textContent = fmt();
     return;
   }
 
@@ -27,12 +35,7 @@ export const setText = (target: Element, format: any, ...values: any[]) => {
     return;
   }
 
-  let text = format;
-  for (let i = 0; i < values.length; i++) {
-    text = text.replace("{}", values[i]);
-  }
-
-  target.textContent = text;
+  target.textContent = fmt();
 };
 
 export const on = (element: Element, event: string, callback: () => void) => {

@@ -13,7 +13,7 @@ export default () => {
 
   const button = div.firstChild as Element;
 
-  let _button_text: any;
+  const _button_text = "MyComponent.vapor (in App.vue) {}";
 
   effect(() => {
     setText(button, _button_text, count.value);

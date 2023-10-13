@@ -5,6 +5,6 @@ const count = ref(0);
 
 <template>
   <div>
-    <button @click="count++">{{ count }}</button>
+    <button @click="count++">Counter.vue (in MyComponent.vapor) {{ count }}</button>
   </div>
 </template>
