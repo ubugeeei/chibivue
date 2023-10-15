@@ -165,7 +165,7 @@ app.mount("#app");
 runtime-dom というのは名前の通り、DOM に依存した実装を置くディレクトリです。ざっくり「ブラウザに依存した処理」という理解をしてもらえれば問題ないです。  
 例を挙げると querySelector や createElement などの DOM 操作が含まれます。
 
-runtime-core ではそういった処理書かず、あくまで純粋は TypeScript の世界の中で Vue.js のランタイムに関するコアロジックを記述するような設計になっています。  
+runtime-core ではそういった処理書かず、あくまで純粋な TypeScript の世界の中で Vue.js のランタイムに関するコアロジックを記述するような設計になっています。  
 例を挙げると、 virtual DOM  に関する実装であったり、コンポーネントに関する実装だったりです。  
 まあ、この辺りに関しては chibivue の開発が進むにつれて明確になってくると思うのでわからなかったらとりあえず本の通りにリファクタしてもらえれば問題ありません。
 
@@ -304,7 +304,7 @@ renderer の設計を見てみました。改めて整理をしておくと、
 といった感じでした。  
 一般的にはこのような設計を「DIP」を利用した「DI」と言います。  
 まず、DIP についてですが、DIP(Dependency inversion principle)インタフェースを実装することにより、依存性の逆転を行います。  
-注目するべきところは、renderer.ts に実装した `RendererOptions` というい interface です。  
+注目するべきところは、renderer.ts に実装した `RendererOptions` という interface です。  
 ファクトリ関数も、nodeOps もこの `RendererOptions` を守るように実装します。(RendererOptions というインタフェースに依存させる)  
 これを利用して DI を行います。DI (Dependency Injection)はあるオブジェクトが依存しているあるオブジェクトを外から注入することによって依存度を下げるテクニックです。  
 今回のケースでいうと、renderer は RendererOptions(を実装したオブジェクト(今回でいえば nodeOps))に依存しています。  
