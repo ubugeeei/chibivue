@@ -131,7 +131,7 @@ export const helloChibivue = () => {
 pwd # ~/
 mkdir examples
 cd examples
-nlx create vite
+nlx create-vite
 
 ## --------- Setting up with the Vite CLI
 ## Project name: playground
