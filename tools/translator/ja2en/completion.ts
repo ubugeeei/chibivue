@@ -72,7 +72,7 @@ const post = async (prompt: string, apiKey: string): Promise<string> => {
       Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: "gpt-3.5-turbo-0613",
+      model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: prompt }],
       temperature: 0.1,
     }),

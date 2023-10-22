@@ -73,7 +73,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         ],
       },
       {
-        text: "🚧 Basic Virtual DOM",
+        text: "Basic Virtual DOM",
         collapsed: false,
         items: [
           {
@@ -89,13 +89,13 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/en/20-basic-virtual-dom/030-scheduler",
           },
           {
-            text: "Patch for Unhandled Props",
+            text: "🚧 Patch for Unhandled Props",
             link: "/en/20-basic-virtual-dom/040-patch-other-attrs",
           },
         ],
       },
       {
-        text: "🚧 Basic Reactivity System",
+        text: "Basic Reactivity System",
         collapsed: false,
         items: [
           {
@@ -121,7 +121,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         ],
       },
       {
-        text: "🚧 Basic Component System",
+        text: "Basic Component System",
         collapsed: false,
         items: [
           {
@@ -147,7 +147,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         ],
       },
       {
-        text: "🚧 Basic Template Compiler",
+        text: "Basic Template Compiler",
         collapsed: false,
         items: [
           {
@@ -187,27 +187,23 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/en/50-basic-template-compiler/050-v-for",
           },
           {
-            text: "Support for v-model",
-            link: "/en/50-basic-template-compiler/060-v-model",
-          },
-          {
-            text: "Resolving Components",
+            text: "🚧 Resolving Components",
             link: "/en/50-basic-template-compiler/070-resolve-component",
           },
           {
-            text: "Support for Slot",
+            text: "🚧 Support for Slot",
             link: "/en/50-basic-template-compiler/080-slot",
           },
           {
-            text: "Other Directives",
+            text: "🚧 Other Directives",
             link: "/en/50-basic-template-compiler/090-other-directives",
           },
           {
-            text: "Chore Compiler",
+            text: "🚧 Chore Compiler",
             link: "/en/50-basic-template-compiler/100-chore-compiler",
           },
           {
-            text: "Custom Directives",
+            text: "🚧 Custom Directives",
             link: "/en/50-basic-template-compiler/500-custom-directive",
           },
         ],
@@ -239,7 +235,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         collapsed: false,
         items: [
           {
-            text: "Plugin",
+            text: "🚧 Plugin",
             collapsed: false,
             items: [
               {
@@ -254,7 +250,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
           },
 
           {
-            text: "Server Side Rendering",
+            text: "🚧 Server Side Rendering",
             collapsed: false,
             items: [
               {
