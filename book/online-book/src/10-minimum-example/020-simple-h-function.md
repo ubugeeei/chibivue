@@ -147,7 +147,7 @@ mount(rootContainer: HostElement) {
 ```
 
 それでは、render 関数を実装してみましょう。
-RendererOptions に  createElement` と `createText` と `insert` を実装します。
+RendererOptions に `createElement` と `createText` と `insert` を実装します。
 
 ```ts
 export interface RendererOptions<HostNode = RendererNode> {
