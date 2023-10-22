@@ -121,7 +121,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         ],
       },
       {
-        text: "🚧 Basic Component System",
+        text: "Basic Component System",
         collapsed: false,
         items: [
           {
