@@ -73,7 +73,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         ],
       },
       {
-        text: "🚧 Basic Virtual DOM",
+        text: "Basic Virtual DOM",
         collapsed: false,
         items: [
           {
@@ -89,7 +89,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/en/20-basic-virtual-dom/030-scheduler",
           },
           {
-            text: "Patch for Unhandled Props",
+            text: "🚧 Patch for Unhandled Props",
             link: "/en/20-basic-virtual-dom/040-patch-other-attrs",
           },
         ],

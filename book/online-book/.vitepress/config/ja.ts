@@ -86,7 +86,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/20-basic-virtual-dom/030-scheduler",
           },
           {
-            text: "対応できていない Props のパッチ",
+            text: "🚧 対応できていない Props のパッチ",
             link: "/20-basic-virtual-dom/040-patch-other-attrs",
           },
         ],
