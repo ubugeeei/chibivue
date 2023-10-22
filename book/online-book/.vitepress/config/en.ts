@@ -95,7 +95,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         ],
       },
       {
-        text: "🚧 Basic Reactivity System",
+        text: "Basic Reactivity System",
         collapsed: false,
         items: [
           {
