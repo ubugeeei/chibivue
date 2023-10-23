@@ -1,3 +1,4 @@
+import { isVapor } from "chibivue/vapor";
 import { camelize, capitalize } from "../../shared";
 import { ConcreteComponent, currentInstance } from "../component";
 import { ComponentOptions } from "../componentOptions";
@@ -14,7 +15,7 @@ export function resolveComponent(name: string): ConcreteComponent | string {
 function resolveAsset(type: AssetTypes, name: string) {
   const instance = currentRenderingInstance || currentInstance;
 
-  if (instance) {
+  if (instance && !isVapor(instance)) {
     const Component = instance.type;
     const res =
       // local registration
