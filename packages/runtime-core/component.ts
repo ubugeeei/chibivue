@@ -1,3 +1,4 @@
+import { VaporComponentInternalInstance, isVapor } from "chibivue/vapor";
 import { proxyRefs } from "../reactivity";
 import { ReactiveEffect } from "../reactivity/effect";
 import { EffectScope } from "../reactivity/effectScope";
@@ -29,7 +30,7 @@ export type Data = Record<string, unknown>;
 export type Component = ConcreteComponent;
 export type ConcreteComponent = ComponentOptions;
 
-type LifecycleHook<TFn = Function> = TFn[] | null;
+export type LifecycleHook<TFn = Function> = TFn[] | null;
 
 export interface ComponentInternalInstance {
   uid: number;
@@ -142,17 +143,32 @@ export function createComponentInstance(
   return instance;
 }
 
-export let currentInstance: ComponentInternalInstance | null = null;
-export const getCurrentInstance: () => ComponentInternalInstance | null = () =>
-  currentInstance;
+export let currentInstance:
+  | ComponentInternalInstance
+  | VaporComponentInternalInstance
+  | null = null;
+export const getCurrentInstance: () =>
+  | ComponentInternalInstance
+  | VaporComponentInternalInstance
+  | null = () => currentInstance;
 
-export const setCurrentInstance = (instance: ComponentInternalInstance) => {
+export const setCurrentInstance = (
+  instance: ComponentInternalInstance | VaporComponentInternalInstance
+) => {
   currentInstance = instance;
-  instance.scope.on();
+  if (isVapor(instance)) {
+    // do nothing
+  } else {
+    instance.scope?.on();
+  }
 };
 
 export const unsetCurrentInstance = () => {
-  currentInstance && currentInstance.scope.off();
+  if (currentInstance && isVapor(currentInstance)) {
+    // do nothing
+  } else {
+    currentInstance && currentInstance.scope?.off();
+  }
   currentInstance = null;
 };
 

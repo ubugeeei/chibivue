@@ -1,3 +1,4 @@
+import { VaporComponentInternalInstance } from "chibivue/vapor";
 import {
   ComponentInternalInstance,
   currentInstance,
@@ -8,7 +9,10 @@ import { LifecycleHooks } from "./enums";
 export function injectHook(
   type: LifecycleHooks,
   hook: Function,
-  target: ComponentInternalInstance | null = currentInstance
+  target:
+    | ComponentInternalInstance
+    | VaporComponentInternalInstance
+    | null = currentInstance
 ): Function | undefined {
   if (target) {
     const hooks = target[type] || (target[type] = []);
@@ -24,7 +28,13 @@ export function injectHook(
 
 export const createHook =
   <T extends Function = () => any>(lifecycle: LifecycleHooks) =>
-  (hook: T, target: ComponentInternalInstance | null = currentInstance) =>
+  (
+    hook: T,
+    target:
+      | ComponentInternalInstance
+      | VaporComponentInternalInstance
+      | null = currentInstance
+  ) =>
     injectHook(lifecycle, (...args: unknown[]) => hook(...args), target);
 
 export const onBeforeMount = createHook(LifecycleHooks.BEFORE_MOUNT);

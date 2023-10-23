@@ -1,4 +1,7 @@
-import { VaporComponent } from "chibivue/vapor";
+import {
+  createVaporComponentInstance,
+  initialRenderVaporComponent,
+} from "chibivue/vapor";
 import { ReactiveEffect } from "../reactivity/effect";
 import { invokeArrayFns, isFunction } from "../shared";
 import { ShapeFlags } from "../shared/shapeFlags";
@@ -199,8 +202,13 @@ export function createRenderer(options: RendererOptions) {
     container: RendererElement,
     anchor?: RendererNode | null
   ) => {
-    const { type } = vnode;
-    hostInsert((vnode.el = (type as VaporComponent)()), container, anchor);
+    const instance = createVaporComponentInstance(vnode);
+    const el = (vnode.el = initialRenderVaporComponent(instance));
+    const { bm, m } = instance;
+    if (bm) invokeArrayFns(bm);
+    hostInsert(el, container, anchor);
+    instance.isMounted = true;
+    if (m) queuePostFlushCb(m);
   };
 
   const processText: ProcessTextOrCommentFn = (n1, n2, container, anchor) => {

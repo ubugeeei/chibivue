@@ -17,7 +17,14 @@ export {
 export type { Ref, ReactiveFlags, ComputedRef } from "../reactivity";
 
 export { computed } from "./apiComputed";
-export { onMounted } from "./apiLifecycle";
+export {
+  onBeforeMount,
+  onMounted,
+  onBeforeUpdate,
+  onUpdated,
+  onBeforeUnmount,
+  onUnmounted,
+} from "./apiLifecycle";
 export { provide, inject, type InjectionKey } from "./apiInject";
 
 export { h } from "./h";
