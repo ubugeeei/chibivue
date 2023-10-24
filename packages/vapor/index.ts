@@ -2,9 +2,9 @@ import { VNode, createRenderer } from "chibivue/runtime-core";
 import { RootRenderFunction } from "chibivue/runtime-core/renderer";
 import { nodeOps } from "chibivue/runtime-dom/nodeOps";
 import { patchProp } from "chibivue/runtime-dom/patchProp";
+import { VaporComponentInternalInstance } from "./component";
 
 export * from "./component";
-
 
 export type VaporNode = Element & { __is_vapor: true };
 
@@ -55,5 +55,8 @@ const renderer = createRenderer({ ...nodeOps, patchProp });
 const render = ((...args) =>
   renderer.render(...args)) as RootRenderFunction<Element>;
 
-export const createComponent = (component: VNode, parent: VaporNode) =>
-  render(component, parent);
+export const createComponent = (
+  self: VaporComponentInternalInstance,
+  component: VNode,
+  container: VaporNode
+) => render(component, container, self);

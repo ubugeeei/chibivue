@@ -36,6 +36,7 @@ export interface ComponentInternalInstance {
   uid: number;
   type: ConcreteComponent;
   appContext: AppContext;
+  parent: ComponentInternalInstance | VaporComponentInternalInstance | null;
 
   vnode: VNode;
   next: VNode | null;
@@ -93,7 +94,7 @@ export type InternalRenderFunction = {
 let uid = 0;
 export function createComponentInstance(
   vnode: VNode,
-  parent: ComponentInternalInstance | null
+  parent: ComponentInternalInstance | VaporComponentInternalInstance | null
 ): ComponentInternalInstance {
   const type = vnode.type as ConcreteComponent;
   const appContext =
@@ -102,6 +103,7 @@ export function createComponentInstance(
   const instance: ComponentInternalInstance = {
     uid: uid++,
     type,
+    parent,
     vnode,
     appContext,
     next: null,

@@ -17,13 +17,12 @@ export function provide<T>(key: InjectionKey<T> | string | number, value: T) {
 export function inject<T>(key: InjectionKey<T> | string): T | undefined {
   const instance = currentInstance;
   if (instance) {
-    if (isVapor(instance)) {
-      // do nothing
-    } else {
-      const provides = instance.appContext?.provides;
-      if (provides && (key as string | symbol) in provides) {
-        return provides[key as string];
-      }
+    const provides =
+      instance.parent == null
+        ? instance.appContext?.provides
+        : instance.parent.provides;
+    if (provides && (key as string | symbol) in provides) {
+      return provides[key as string];
     }
   }
 }
