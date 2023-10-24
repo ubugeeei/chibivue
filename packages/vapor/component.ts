@@ -1,19 +1,31 @@
-import { VNode } from "chibivue/runtime-core";
 import {
-  ComponentInternalInstance,
-  LifecycleHook,
+  createAppContext,
+  type AppContext,
+} from "chibivue/runtime-core/apiCreateApp";
+import { type VNode } from "chibivue/runtime-core";
+import {
+  type ComponentInternalInstance,
+  type Data,
+  type LifecycleHook,
   setCurrentInstance,
   unsetCurrentInstance,
 } from "chibivue/runtime-core/component";
 import { LifecycleHooks } from "chibivue/runtime-core/enums";
-import { VaporNode } from ".";
+import { type VaporNode } from ".";
 
-export type VaporComponent = () => VaporNode;
+export type VaporComponent = (
+  self: VaporComponentInternalInstance
+) => VaporNode;
 
 export interface VaporComponentInternalInstance {
   __is_vapor: true;
   uid: number;
   type: VaporComponent;
+  parent: ComponentInternalInstance | VaporComponentInternalInstance | null;
+  appContext: AppContext;
+
+  provides: Data;
+
   isMounted: boolean;
   [LifecycleHooks.BEFORE_MOUNT]: LifecycleHook;
   [LifecycleHooks.MOUNTED]: LifecycleHook;
@@ -25,12 +37,21 @@ export interface VaporComponentInternalInstance {
 
 let uid = 0;
 export const createVaporComponentInstance = (
-  vnode: VNode
+  vnode: VNode,
+  parent?: ComponentInternalInstance | VaporComponentInternalInstance | null
 ): VaporComponentInternalInstance => {
+  const appContext =
+    (parent ? parent.appContext : vnode.appContext) || createAppContext();
+
   const instance: VaporComponentInternalInstance = {
     __is_vapor: true,
     uid: uid++,
     type: vnode.type as VaporComponent,
+    parent: parent ?? null,
+    appContext,
+
+    provides: parent ? parent.provides : Object.create(appContext.provides),
+
     isMounted: false,
     [LifecycleHooks.BEFORE_MOUNT]: null,
     [LifecycleHooks.MOUNTED]: null,
@@ -46,7 +67,7 @@ export const initialRenderVaporComponent = (
   instance: VaporComponentInternalInstance
 ): VaporNode => {
   setCurrentInstance(instance as any); //TODO: types
-  const el = instance.type();
+  const el = instance.type(instance);
   unsetCurrentInstance();
   return el;
 };

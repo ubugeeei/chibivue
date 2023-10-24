@@ -1,4 +1,5 @@
 import {
+  VaporComponentInternalInstance,
   createVaporComponentInstance,
   initialRenderVaporComponent,
 } from "chibivue/vapor";
@@ -36,7 +37,10 @@ import {
 export type RootRenderFunction<HostElement = RendererElement> = (
   vnode: VNode | null,
   container: HostElement,
-  isSVG?: boolean
+  parentComponent:
+    | ComponentInternalInstance
+    | VaporComponentInternalInstance
+    | null
 ) => void;
 
 export interface RendererOptions<
@@ -81,7 +85,10 @@ type PatchFn = (
   n2: VNode,
   container: RendererElement,
   anchor: RendererNode | null,
-  parentComponent?: ComponentInternalInstance | null
+  parentComponent:
+    | ComponentInternalInstance
+    | VaporComponentInternalInstance
+    | null
 ) => void;
 
 type ProcessVaporComponentFn = (
@@ -89,7 +96,10 @@ type ProcessVaporComponentFn = (
   n2: VNode,
   container: RendererElement,
   anchor: RendererNode | null,
-  parentComponent?: ComponentInternalInstance | null
+  parentComponent:
+    | ComponentInternalInstance
+    | VaporComponentInternalInstance
+    | null
 ) => void;
 
 type ProcessTextOrCommentFn = (
@@ -103,7 +113,10 @@ type MountChildrenFn = (
   children: VNodeArrayChildren,
   container: RendererElement,
   anchor: RendererNode | null,
-  parentComponent: ComponentInternalInstance | null
+  parentComponent:
+    | ComponentInternalInstance
+    | VaporComponentInternalInstance
+    | null
 ) => void;
 
 type PatchChildrenFn = (
@@ -111,7 +124,10 @@ type PatchChildrenFn = (
   n2: VNode,
   container: RendererElement,
   anchor: RendererNode | null,
-  parentComponent: ComponentInternalInstance | null
+  parentComponent:
+    | ComponentInternalInstance
+    | VaporComponentInternalInstance
+    | null
 ) => void;
 
 type MoveFn = (
@@ -124,7 +140,10 @@ type MountComponentFn = (
   initialVNode: VNode,
   container: RendererElement,
   anchor: RendererNode | null,
-  parentComponent: ComponentInternalInstance | null
+  parentComponent:
+    | ComponentInternalInstance
+    | VaporComponentInternalInstance
+    | null
 ) => void;
 
 type NextFn = (vnode: VNode) => RendererNode | null;
@@ -187,10 +206,11 @@ export function createRenderer(options: RendererOptions) {
     n1,
     n2,
     container,
-    anchor
+    anchor,
+    parentComponent
   ) => {
     if (n1 == null) {
-      mountVaporComponent(n2, container, anchor);
+      mountVaporComponent(n2, container, anchor, parentComponent);
     } else {
       // do nothing
       // reactivity patch
@@ -200,9 +220,13 @@ export function createRenderer(options: RendererOptions) {
   const mountVaporComponent = (
     vnode: VNode,
     container: RendererElement,
-    anchor?: RendererNode | null
+    anchor: RendererNode | null,
+    parentComponent:
+      | ComponentInternalInstance
+      | VaporComponentInternalInstance
+      | null
   ) => {
-    const instance = createVaporComponentInstance(vnode);
+    const instance = createVaporComponentInstance(vnode, parentComponent);
     const el = (vnode.el = initialRenderVaporComponent(instance));
     const { bm, m } = instance;
     if (bm) invokeArrayFns(bm);
@@ -248,7 +272,10 @@ export function createRenderer(options: RendererOptions) {
     n2: VNode,
     container: RendererElement,
     anchor: RendererNode | null,
-    parentComponent: ComponentInternalInstance | null
+    parentComponent:
+      | ComponentInternalInstance
+      | VaporComponentInternalInstance
+      | null
   ) => {
     if (n1 == null) {
       mountElement(n2, container, anchor, parentComponent);
@@ -261,7 +288,10 @@ export function createRenderer(options: RendererOptions) {
     vnode: VNode,
     container: RendererElement,
     anchor: RendererNode | null,
-    parentComponent: ComponentInternalInstance | null
+    parentComponent:
+      | ComponentInternalInstance
+      | VaporComponentInternalInstance
+      | null
   ) => {
     let el: RendererElement;
     const { type, props, shapeFlag, dirs } = vnode;
@@ -295,7 +325,10 @@ export function createRenderer(options: RendererOptions) {
   const patchElement = (
     n1: VNode,
     n2: VNode,
-    parentComponent: ComponentInternalInstance | null
+    parentComponent:
+      | ComponentInternalInstance
+      | VaporComponentInternalInstance
+      | null
   ) => {
     const el = (n2.el = n1.el!);
     const { dirs } = n2;
@@ -314,7 +347,10 @@ export function createRenderer(options: RendererOptions) {
     n2: VNode,
     container: RendererElement,
     anchor: RendererNode | null,
-    parentComponent: ComponentInternalInstance | null = null
+    parentComponent:
+      | ComponentInternalInstance
+      | VaporComponentInternalInstance
+      | null = null
   ) => {
     if (n1 == null) {
       mountComponent(n2, container, anchor, parentComponent);
@@ -344,7 +380,10 @@ export function createRenderer(options: RendererOptions) {
     n2: VNode,
     container: RendererElement,
     anchor: RendererNode | null,
-    parentComponent: ComponentInternalInstance | null
+    parentComponent:
+      | ComponentInternalInstance
+      | VaporComponentInternalInstance
+      | null
   ) => {
     const fragmentStartAnchor = (n2.el = n1 ? n1.el : hostCreateText(""))!;
     const fragmentEndAnchor = (n2.anchor = n1
@@ -533,7 +572,10 @@ export function createRenderer(options: RendererOptions) {
     c2: VNode[],
     container: RendererElement,
     parentAnchor: RendererNode | null,
-    parentComponent: ComponentInternalInstance | null
+    parentComponent:
+      | ComponentInternalInstance
+      | VaporComponentInternalInstance
+      | null
   ) => {
     let i = 0;
     const l2 = c2.length;
@@ -789,13 +831,13 @@ export function createRenderer(options: RendererOptions) {
     return hostNextSibling(vnode.el!);
   };
 
-  const render: RootRenderFunction = (vnode, container) => {
+  const render: RootRenderFunction = (vnode, container, parent) => {
     if (vnode === null) {
       if (container._vnode) {
         unmount(container._vnode);
       }
     } else {
-      patch((container as any)._vnode || null, vnode, container, null, null);
+      patch((container as any)._vnode || null, vnode, container, null, parent);
     }
     flushPreFlushCbs();
     flushPostFlushCbs();
