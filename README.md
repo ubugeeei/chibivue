@@ -210,3 +210,7 @@ The title is "**Hyper Ultimate Super Extreme Minimal Vue - writing Vue.js on 15 
 [Online Book](https://ubugeeei.github.io/chibivue/en/bonus/hyper-ultimate-super-extreme-minimal-vue) | [Actual Source](https://github.com/Ubugeeei/chibivue/blob/main/book/impls/bonus/hyper-ultimate-super-extreme-minimal-vue/packages/index.ts)
 
 <img src="./book/images/hyper-ultimate-super-extreme-minimal-vue.png">
+
+# Contributing
+
+Please see [contributing.md](https://github.com/Ubugeeei/chibivue/blob/main/.github/contributing.md).
