@@ -35,7 +35,7 @@
 
 もしかすると普段は npm や yarn を使っている方が多いかもしれません。  
 今回は pnpm を使っていくので、こちらの方も合わせてインストールしてください。  
-基本的はコマンドは npm とほとんど一緒です。  
+基本的なコマンドは npm とほとんど一緒です。  
 https://pnpm.io/installation
 
 また、本書では上記に加え、パッケージマネージャのマネージャ(?) である [ni](https://github.com/antfu/ni) を使っています。  
@@ -94,7 +94,7 @@ https://github.com/vuejs/core/blob/main/.github/contributing.md#scripts
 
 ```
 
-examples というディレクトリにプレウグラウンドを実装します。
+examples というディレクトリにプレイグラウンドを実装します。
 packages に chibivue 本体の TypeScript ファイル群を実装して、example 側からそれを import する形にします。
 
 以下はそれを構築する手順です。
