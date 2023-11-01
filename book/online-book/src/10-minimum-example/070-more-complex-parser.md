@@ -2,7 +2,7 @@
 
 ## もっと複雑な HTML を書きたい
 
-今の状態だとせいぜいタグの名前や属性を、テキストの内容くらいしか表すことができていません。  
+今の状態だとせいぜいタグの名前や属性、テキストの内容くらいしか表すことができていません。  
 そこで、もっと複雑な HTML を template に書けるようにしたいです。
 具体的には、これくらいのテンプレートをコンパイルできるようになりたいです。
 
@@ -289,7 +289,7 @@ function parseText(context: ParserContext): TextNode {
 
   const start = getCursor(context); // これは loc 用
 
-  //　entIndexの情報を元に Text データをパースします。
+  // endIndexの情報を元に Text データをパースします。
   const content = parseTextData(context, endIndex);
 
   return {
@@ -510,7 +510,7 @@ function parseAttribute(
 }
 
 // 属性のvalueをパース
-// valueのクォーとはシングルでもダブルでもパースできるように実装しています。
+// valueのクォートはシングルでもダブルでもパースできるように実装しています。
 // これも頑張ってクォートで囲まれたvalueを取り出したりしているだけです。
 function parseAttributeValue(context: ParserContext): AttributeValue {
   const start = getCursor(context);
@@ -747,4 +747,4 @@ app.mount("#app");
 ```
 
 これで正常に動作していることを確認します。  
-どうでしょう。機能は少ないにしろ、だんだんと普段の Vue の開発者インタフェースに近づいてきたのではないでしょうか
+どうでしょう。機能は少ないにしろ、だんだんと普段の Vue の開発者インタフェースに近づいてきたのではないでしょうか。

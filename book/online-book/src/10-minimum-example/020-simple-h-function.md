@@ -16,7 +16,7 @@ const app = createApp({
 app.mount("#app");
 ```
 
-これはシンプルは `Hello World.` と画面に描画するための関数でした。  
+これはシンプルな `Hello World.` と画面に描画するための関数でした。  
 メッセージだけでは何とも寂しいので、HTML 要素も描画できるような開発者インタフェースを考えてみましょう。  
 そこで登場するのが `h function` です。この `h` というのは `hyperscript` の略で、HTML (Hyper Text Markup Language)を JS で記述する関数として提供されます。
 
@@ -68,7 +68,7 @@ const result = {
 };
 ```
 
-つまり、render 関数から上機能ようなオブジェクトをもらい、それを元に DOM 操作をしてレンダリングをすればいいのです。
+つまり、render 関数から上記のようなオブジェクトをもらい、それを元に DOM 操作をしてレンダリングをすればいいのです。
 イメージ的にはこうです。(createApp の mount の中です。)
 
 ```ts
@@ -161,7 +161,7 @@ export interface RendererOptions<HostNode = RendererNode> {
 }
 ```
 
-render 関数に`renderVNode`という関数を実装してみます。とりあえず一旦 (props は無視して実装しています。)
+render 関数に`renderVNode`という関数を実装してみます。(とりあえず一旦 props は無視して実装しています。)
 
 ```ts
 export function createRenderer(options: RendererOptions) {
@@ -254,7 +254,7 @@ https://github.com/vuejs/core/tree/main/packages/runtime-dom/src
 modules の中には class や style, その他 props の操作をするためのファイルが実装されています。
 https://github.com/vuejs/core/tree/main/packages/runtime-dom/src/modules
 
-それらをそれらを patchProp という関数にまとめているのが patchProp.ts で、これを nodeOps に混ぜ込んでいます。
+それらを patchProp という関数にまとめているのが patchProp.ts で、これを nodeOps に混ぜ込んでいます。
 
 言葉で説明するのも何なので、実際にこの設計に基づいてやってみようと思います。
 
@@ -298,7 +298,7 @@ export interface RendererOptions<
   .
 ```
 
-それに伴って、nodeOps では patchProps 以外の部分をしようするように書き換えます。
+それに伴って、nodeOps では patchProps 以外の部分を使用するように書き換えます。
 
 ```ts
 // patchPropをomitする
@@ -311,7 +311,7 @@ export const nodeOps: Omit<RendererOptions, "patchProp"> = {
   .
 ```
 
-そして、`runtime-dom/index`の renderer を生成する際に patchProp も一緒に渡すように変更します
+そして、`runtime-dom/index`の renderer を生成する際に patchProp も一緒に渡すように変更します。
 
 ```ts
 const { render } = createRenderer({ ...nodeOps, patchProp });
@@ -394,7 +394,7 @@ function createInvoker(initialValue: EventValue) {
 少し大きいですが、分割すればとても単純なことです。
 
 addEventListener は名前の通り、ただイベントのリスナーを登録するための関数です。  
-本当は然るべきタイミング remove する必要があるのですが、ここでは一旦気にしないことにします。
+本当は然るべきタイミングで remove する必要があるのですが、ここでは一旦気にしないことにします。
 
 patchEvent では invoker という関数でラップしてリスナーを登録しています。  
 parseName に関しては、単純に props のキー名は `onClick` や `onInput` のようになっているので、それらを on を除いた小文字に変換しているだけです。(eg. click, input)  

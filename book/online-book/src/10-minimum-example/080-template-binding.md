@@ -47,7 +47,7 @@ app.mount("#app");
 
 setup から return した値をテンプレートに記述して扱えるようにしたいのですが、このことをこれからは「テンプレートバインディング」であったり、単に「バインディング」という言葉で表現することにします。  
 バインディングをこれから実装していくわけですがイベントハンドラやマスタッシュ構文を実装する前にやっておきたいことがあります。  
-`setup から return した値`と言ったのですが、今 setup の戻り値は`undefined`または、`関数｀(レンダー関数)です。  
+`setup から return した値`と言ったのですが、今 setup の戻り値は`undefined`または、`関数`(レンダー関数)です。  
 バインディングの実装の準備として、setup からステート等を return できるようにして、それらをコンポーネントのデータとして保持できるようにしておく必要があるようです。
 
 ```ts
@@ -253,7 +253,7 @@ export type TemplateChildNode = ElementNode | TextNode | InterpolationNode; // I
 
 export interface InterpolationNode extends Node {
   type: NodeTypes.INTERPOLATION;
-  content: string; // マスタッシュの中に記述された内容 (今回は　setup で定義された単一の変数名がここに入る)
+  content: string; // マスタッシュの中に記述された内容 (今回は setup で定義された単一の変数名がここに入る)
 }
 ```
 
@@ -525,8 +525,8 @@ const app = createApp({
 
 動きましたね！　やったね！　完成！
 
-と言いたいところですが、流石に実装が綺麗じゃないのでリファくたしていこうかと思います。
-`@click`というものはせっかく、「ディレクティブ」という名前で分類されていて、今後は v-bind や v-model を実装していくことは容易の想像できるかと思いますので、AST 上で`DIRECTIVE`と表現することにして、単純な ATTRIBUTE と区別するようにしておきましょう。
+と言いたいところですが、流石に実装が綺麗じゃないのでリファクタしていこうかと思います。
+`@click`というものはせっかく、「ディレクティブ」という名前で分類されていて、今後は v-bind や v-model を実装していくことは容易に想像できるかと思いますので、AST 上で`DIRECTIVE`と表現することにして、単純な ATTRIBUTE と区別するようにしておきましょう。
 
 いつも通り AST -> parse -> codegen の順で実装してみます。
 

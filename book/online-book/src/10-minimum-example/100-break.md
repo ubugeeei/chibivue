@@ -25,7 +25,7 @@
 chibivue
 ![minimum_example_artifacts](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/minimum_example_artifacts.png)
 
-※ 本家のコードはデカてスクショに収まりきらないので割愛
+※ 本家のコードはデカくてスクショに収まりきらないので割愛
 
 https://github.com/vuejs/core
 
@@ -34,7 +34,7 @@ https://github.com/vuejs/core
 
 ## 宣言的 UI の実現方法が分かった
 
-h 関数の実装をとして、宣言的 UI はどうやって実現されているかということについて理解しました。
+h 関数の実装を通して、宣言的 UI はどうやって実現されているかということについて理解しました。
 
 ```ts
 // 内部的に {tag, props, children} のようなオブジェクトを生成し、それを元にDOM操作をしている
