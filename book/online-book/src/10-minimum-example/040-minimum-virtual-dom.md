@@ -93,7 +93,7 @@ patch(vnode, nextVnode, container)
 ```
 
 先に関数名を紹介してしまいましたが、この差分レンダリングは「パッチ」と呼ばれます。差分検出処理 (reconciliation)と呼ばれることもあるようです。
-このように 2 つの virtual DOM  を利用することで効率的に画面の更新を行うことができます。
+このように 2 つの virtual DOM を利用することで効率的に画面の更新を行うことができます。
 
 ## patch 関数の実装を行う前に
 
@@ -183,7 +183,7 @@ export function normalizeVNode(child: VNodeChild): VNode {
 ## patch 関数の設計
 
 まず、patch 関数の設計をコードベースで見てみましょう。(実装フェーズはまた別であるのでここではまだ実装しなくていいです。理解だけ。)  
-patch 関数でやりたいことは 2 つの vnode の比較なので、便宜上しぞれ vnode1, vnode2 とするのですが、初回は vnode1 がありません。  
+patch 関数でやりたいことは 2 つの vnode の比較なので、便宜上それぞれ vnode1, vnode2 とするのですが、初回は vnode1 がありません。  
 つまり、patch 関数での処理は「初回(vnode2 から dom を生成)」と、「vnode1 と vnode2 の差分を更新」の処理に分かれます。  
 これらの処理をそれぞれ「mount」と「patch」と名付けることにします。  
 そしてそれらは ElementNode と TextNode それぞれで行うようにします。(それぞれの mount と patch を process と言う名前でまとめてます。)
@@ -328,7 +328,7 @@ const processText = (
 };
 ```
 
-一旦ここまでで、初回のマウントはできるようになったはずので、render 関数で patch 関数をしようして playground で試してみましょう!  
+一旦ここまでで、初回のマウントはできるようになったはずなので、render 関数で patch 関数を使用して playground で試してみましょう!  
 今まで、createAppAPI の mount に書いていた処理を一部 render 関数に移植して、２つの vnode を保持できるようにします。  
 具体的には。render 関数に rootComponent を渡して、その中で ReactiveEffect の登録等を行うように変更します。
 

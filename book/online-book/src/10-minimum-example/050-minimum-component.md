@@ -172,7 +172,7 @@ export function createComponentInstance(
 }
 ```
 
-各プロパティの型は non-null なのですが、インスタンを生成した段階では null で入れてしまいます。(本家の Vue.js に合わせてこのような設計にしています。)
+各プロパティの型は non-null なのですが、インスタンスを生成した段階では null で入れてしまいます。(本家の Vue.js に合わせてこのような設計にしています。)
 
 ```ts
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
@@ -183,7 +183,7 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
 };
 ```
 
-続いて setup です。これは今まで render に直接書いていた処理をここで行うようにして、変数ではなくインスタンに保持させてしまえば OK です。
+続いて setup です。これは今まで render に直接書いていた処理をここで行うようにして、変数ではなくインスタンスに保持させてしまえば OK です。
 
 ```ts
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
@@ -387,7 +387,7 @@ export interface PropOptions<T = any> {
 export type PropType<T> = { new (...args: any[]): T & {} };
 ```
 
-ユーザーがコンポーネントを実装する際のオプションにも追加します
+ユーザーがコンポーネントを実装する際のオプションにも追加します。
 
 ```ts
 export type ComponentOptions = {

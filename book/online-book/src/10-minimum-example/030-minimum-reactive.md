@@ -45,7 +45,7 @@ reactive 関数でステートを定義し、それを書き換える increment 
 
 - setup 関数を実行することで戻り値から vnode 取得用の関数を得る
 - reactive 関数に渡したオブジェクトをリアクティブにする
-- ボタンをクリックするたと、ステートが更新される
+- ボタンをクリックすると、ステートが更新される
 - ステートの更新を追跡して render 関数を再実行し、画面を再描画する
 
 ## reactivity system とはどのようなもの?
@@ -67,7 +67,7 @@ reactive 関数でステートを定義し、それを書き換える increment 
 ## setup 関数の実装
 
 やることはとっても簡単です。
-setup オプションをを受け取り実行し、あとはそれはこれまでの render オプションと同じように使えば OK です。
+setup オプションをを受け取り実行し、あとはそれをこれまでの render オプションと同じように使えば OK です。
 
 ~/packages/runtime-core/componentOptions.ts を編集します。
 

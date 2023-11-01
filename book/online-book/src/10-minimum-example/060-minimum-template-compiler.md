@@ -156,7 +156,7 @@ h("p", { class: "hello" }, ["Hello World"]);
 
 ## 実装アプローチ
 
-基本的なアプローチとしては、template オプションでで渡された文字列を操作して特定の関数を生成する感じです。  
+基本的なアプローチとしては、template オプションで渡された文字列を操作して特定の関数を生成する感じです。  
 コンパイラを３つの要素に分割してみます。
 
 ### 解析
@@ -435,7 +435,7 @@ export function compile(template: string) {
 実はここでも関数の生成は行なっておらず、どこで行うかというと`package/index.ts`です。(本家のコードで言うと [packages/vue/src/index.ts](https://github.com/vuejs/core/blob/main/packages/vue/src/index.ts) です)
 
 `package/index.ts`を実装したいところですが、ちょいと下準備があるので先にそちらからやります。
-その下準備というのは、`package/runtime-core/component.ts`にコンパイラ本体を保持する変数と、登録用の関数を実装です。
+その下準備というのは、`package/runtime-core/component.ts`にコンパイラ本体を保持する変数と、登録用の関数の実装です。
 
 `package/runtime-core/component.ts`
 
@@ -566,7 +566,7 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
 };
 ```
 
-これで template オプションで私た簡素な HTML がコンパイルできるようになったはずなので playground で試してみましょう！
+これで template オプションで渡した簡素な HTML がコンパイルできるようになったはずなので playground で試してみましょう！
 
 ```ts
 const app = createApp({ template: `<p class="hello">Hello World</p>` });
