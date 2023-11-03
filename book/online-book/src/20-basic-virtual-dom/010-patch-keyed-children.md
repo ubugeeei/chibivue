@@ -139,7 +139,7 @@ for (i = 0; i <= e1; i++) {
   const prevChild = c1[i];
   newIndex = keyToNewIndexMap.get(prevChild.key);
   if (newIndex === undefined) {
-    // 新しいマップに存在しなければアンマウント
+    // 移動先が見つからなければアンマウント
     unmount(prevChild);
   } else {
     newIndexToOldIndexMap[newIndex] = i + 1; // マップ形成
@@ -314,7 +314,7 @@ for (i = 0; i <= e1; i++) {
   const prevChild = c1[i];
   newIndex = keyToNewIndexMap.get(prevChild.key);
   if (newIndex === undefined) {
-    // 新しいマップに存在しなければアンマウント
+    // 移動先が見つからなければアンマウント
     unmount(prevChild);
   } else {
     newIndexToOldIndexMap[newIndex] = i + 1; // マップ形成
