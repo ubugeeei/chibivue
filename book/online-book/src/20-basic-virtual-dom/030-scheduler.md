@@ -66,7 +66,7 @@ export function queueJob(job: SchedulerJob) {
 }
 ```
 
-肝心のジョブの id ですが、今回の場合はコンポーネント単位でまとめたいので、コンポーネントに uid を持たせるようにして、それらを job の id となるように自走します。
+肝心のジョブの id ですが、今回の場合はコンポーネント単位でまとめたいので、コンポーネントに uid を持たせるようにして、それらを job の id となるように実装します。
 
 uid といっても単にインクリメントによって得られる識別子です。
 
@@ -183,7 +183,7 @@ app.mount("#app");
 ![old_state_dom](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/old_state_dom.png)
 
 `state.count`を更新した後にコンソールに出力しているのに、情報が古くなってしまっています。  
-それもそのはずステートを更新しても瞬時に DOM が更新されるわけではなく、コンソールに出力した段階ではまだ DOM は古い状態のままです。
+それもそのはず、ステートを更新しても瞬時に DOM が更新されるわけではなく、コンソールに出力した段階ではまだ DOM は古い状態のままです。
 
 ここで登場するのが nextTick です。
 

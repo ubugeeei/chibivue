@@ -25,7 +25,7 @@ const patchChildren = (n1: VNode, n2: VNode, container: RendererElement) => {
 ```
 
 これは、c2(つまり次の vnode)の長さを基準にループを回しています。
-つまり、c1 と c2 が同じようのの場合にしか基本的には成り立っていないのです。
+つまり、c1 と c2 が同じ要素の場合にしか基本的には成り立っていないのです。
 
 ![c1c2map](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/c1c2map.png)
 
@@ -34,7 +34,7 @@ patch のループは c2 を基本としているわけなので、4 つめの�
 
 ![c1c2map_deleted](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/c1c2map_deleted.png)
 
-このようになった時、どうなるかというと、単純に 1~3 つ目の要素は更新され、4 つ目は消えずの c1 のものが残ってしまいます。
+このようになった時、どうなるかというと、単純に 1~3 つ目の要素は更新され、4 つ目は消えず、 c1 のものが残ってしまいます。
 
 実際に動作を見てみましょう。
 
@@ -124,7 +124,7 @@ for (i = s2; i <= e2; i++) {
 なので、まずは`unknown sequence`の部分を読み進めて実装することにしましょう。
 
 まずは、要素の移動のことは忘れて、key を元に VNode を patch していきましょう。
-先ほど作った`keyToNewIndexMap`を利用して、n1 と n2 の組みを算出して patch します。
+先ほど作った`keyToNewIndexMap`を利用して、n1 と n2 の組を算出して patch します。
 この時点で、新しくマウントするものや、アンマウントする必要があればその処理も行ってしまいます。
 
 ざっくりいうとこういうこと ↓ (かなり省略しています。詳しくは vue/core の renderer.ts を読んでみてください。)
@@ -139,7 +139,7 @@ for (i = 0; i <= e1; i++) {
   const prevChild = c1[i];
   newIndex = keyToNewIndexMap.get(prevChild.key);
   if (newIndex === undefined) {
-    // 新しいに存在しなければアンマウント
+    // 新しいマップに存在しなければアンマウント
     unmount(prevChild);
   } else {
     newIndexToOldIndexMap[newIndex] = i + 1; // マップ形成
@@ -179,7 +179,7 @@ export const nodeOps: Omit<RendererOptions, "patchProp"> = {
 };
 ```
 
-このメソットは第二引数に node を渡すことで、その node の直前に insert されるようになります。  
+このメソッドは第二引数に node を渡すことで、その node の直前に insert されるようになります。  
 https://developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore
 
 これを利用して実際の DOM を移動させます。
@@ -314,7 +314,7 @@ for (i = 0; i <= e1; i++) {
   const prevChild = c1[i];
   newIndex = keyToNewIndexMap.get(prevChild.key);
   if (newIndex === undefined) {
-    // 新しいに存在しなければアンマウント
+    // 新しいマップに存在しなければアンマウント
     unmount(prevChild);
   } else {
     newIndexToOldIndexMap[newIndex] = i + 1; // マップ形成
@@ -367,4 +367,4 @@ Todo だけまとめておきます。
 5. 4 で得た部分列と c2 を元に move する
 
 ここからは本家 Vue の実装を見てもらってもいいですし、もちろん chibivue を参考にしてもらっても良いです。
-(おすすめなは本家 Vue を実際に読みながらです。)
+(おすすめなのは本家 Vue を実際に読みながらです。)
