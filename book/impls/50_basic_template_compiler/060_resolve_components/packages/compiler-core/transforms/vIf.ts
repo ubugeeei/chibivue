@@ -1,6 +1,5 @@
 import {
   DirectiveNode,
-  ElementNode,
   IfBranchNode,
   IfConditionalExpression,
   IfNode,
@@ -8,6 +7,8 @@ import {
   VNodeCall,
   createCallExpression,
   createConditionalExpression,
+  ElementNode,
+  SimpleExpressionNode,
 } from "../ast";
 import { CREATE_COMMENT } from "../runtimeHelpers";
 import {
@@ -15,6 +16,7 @@ import {
   createStructuralDirectiveTransform,
   traverseNode,
 } from "../transform";
+import { processExpression } from "./transformExpression";
 
 export const transformIf = createStructuralDirectiveTransform(
   /^(if|else|else-if)$/,
@@ -48,6 +50,10 @@ export function processIf(
     isRoot: boolean
   ) => (() => void) | undefined
 ) {
+  if (!context.isBrowser && dir.exp) {
+    dir.exp = processExpression(dir.exp as SimpleExpressionNode, context);
+  }
+
   if (dir.name === "if") {
     const branch = createIfBranch(node, dir);
     const ifNode: IfNode = {

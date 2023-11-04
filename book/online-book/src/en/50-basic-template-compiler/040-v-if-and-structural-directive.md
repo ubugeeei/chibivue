@@ -531,6 +531,11 @@ export function processIf(
     isRoot: boolean
   ) => (() => void) | undefined
 ) {
+  // We will run processExpression on exp in advance.
+  if (!context.isBrowser && dir.exp) {
+    dir.exp = processExpression(dir.exp as SimpleExpressionNode, context);
+  }
+
   if (dir.name === "if") {
     const branch = createIfBranch(node, dir);
     const ifNode: IfNode = {
