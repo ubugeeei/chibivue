@@ -79,7 +79,7 @@ export class ComputedRefImpl<T> {
 computed は実は遅延評価のような性質を持っており、再計算が必要な場合は値が読み取られる際に初めて再計算されます。
 そしてこのフラグを true に書き換え関数は不特定多数の依存に trigger されるため、ReactiveEffect の scheduler として登録します。
 
-基本的な流れはこのような感じです。実装するにあったって、加えて注意する点がいくつかあるので以下にまとめておきます。
+基本的な流れはこのような感じです。実装するにあたって、加えて注意する点がいくつかあるので以下にまとめておきます。
 
 - \_dirty フラグを true に書き換えた段階で自信が持つ依存関係は trigger してしまう
   ```ts
@@ -167,7 +167,7 @@ const app = createApp({
 app.mount("#app");
 ```
 
-watch の実装は reactivity ではなく、runtime-core の方に実装していきます (apiWatch.ts)
+watch の実装は reactivity ではなく、runtime-core の方に実装していきます (apiWatch.ts)。
 
 さまざまな api が混在しているので、少し複雑に見えますが、範囲を絞ればとても単純なことです。  
 目標とする api(watch 関数)のシグネチャを以下に実装しておくので、是非実装してみてください。  
