@@ -43,3 +43,4 @@ export { createVNode, createCommentVNode, Fragment } from "./vnode";
 
 export { toHandlers } from "./helpers/toHandlers";
 export { renderList } from "./helpers/renderList";
+export { resolveComponent } from "./helpers/resolveAssets";
