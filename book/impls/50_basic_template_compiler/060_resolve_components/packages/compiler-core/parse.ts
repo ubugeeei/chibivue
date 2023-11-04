@@ -2,7 +2,6 @@ import {
   AttributeNode,
   CommentNode,
   DirectiveNode,
-  ElementNode,
   ExpressionNode,
   InterpolationNode,
   NodeTypes,
@@ -12,12 +11,22 @@ import {
   TemplateChildNode,
   TextNode,
   createRoot,
+  ElementNode,
+  ElementTypes,
 } from "./ast";
+import { ParserOptions } from "./options";
 import { advancePositionWithClone } from "./utils";
+
+type OptionalOptions = "isNativeTag"; // | TODO:
+
+type MergedParserOptions = Omit<Required<ParserOptions>, OptionalOptions> &
+  Pick<ParserOptions, OptionalOptions>;
+
+export const defaultParserOptions: MergedParserOptions = {};
 
 export interface ParserContext {
   readonly originalSource: string;
-
+  options: MergedParserOptions;
   source: string;
 
   offset: number;
@@ -25,8 +34,22 @@ export interface ParserContext {
   column: number;
 }
 
-function createParserContext(content: string): ParserContext {
+function createParserContext(
+  content: string,
+  rawOptions: ParserOptions
+): ParserContext {
+  const options = Object.assign({}, defaultParserOptions);
+
+  let key: keyof ParserOptions;
+  for (key in rawOptions) {
+    options[key] =
+      rawOptions[key] === undefined
+        ? defaultParserOptions[key]
+        : rawOptions[key];
+  }
+
   return {
+    options,
     originalSource: content,
     source: content,
     column: 1,
@@ -35,8 +58,11 @@ function createParserContext(content: string): ParserContext {
   };
 }
 
-export const baseParse = (content: string): RootNode => {
-  const context = createParserContext(content);
+export const baseParse = (
+  content: string,
+  options: ParserOptions = {}
+): RootNode => {
+  const context = createParserContext(content, options);
   const children = parseChildren(context, []);
   return createRoot(children);
 };
@@ -290,15 +316,31 @@ function parseTag(context: ParserContext, type: TagType): ElementNode {
   isSelfClosing = startsWith(context.source, "/>");
   advanceBy(context, isSelfClosing ? 2 : 1);
 
+  let tagType = ElementTypes.ELEMENT;
+  if (isComponent(tag, context)) {
+    tagType = ElementTypes.COMPONENT;
+  }
+
   return {
     type: NodeTypes.ELEMENT,
     tag,
+    tagType,
     props,
     children: [],
     isSelfClosing,
     codegenNode: undefined, // to be created during transform phase
     loc: getSelection(context, start),
   };
+}
+
+function isComponent(tag: string, context: ParserContext) {
+  const options = context.options;
+  if (
+    /^[A-Z]/.test(tag) ||
+    (options.isNativeTag && !options.isNativeTag(tag))
+  ) {
+    return true;
+  }
 }
 
 function parseAttributes(

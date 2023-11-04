@@ -7,3 +7,7 @@ export interface TransformOptions {
   nodeTransforms?: NodeTransform[];
   directiveTransforms?: Record<string, DirectiveTransform | undefined>;
 }
+
+export interface ParserOptions {
+  isNativeTag?: (tag: string) => boolean;
+}
