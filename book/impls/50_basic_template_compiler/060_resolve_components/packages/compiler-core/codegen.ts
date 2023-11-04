@@ -18,7 +18,13 @@ import {
   VNodeCall,
 } from "./ast";
 import { CompilerOptions } from "./options";
-import { CREATE_COMMENT, CREATE_VNODE, helperNameMap } from "./runtimeHelpers";
+import {
+  CREATE_COMMENT,
+  CREATE_VNODE,
+  RESOLVE_COMPONENT,
+  helperNameMap,
+} from "./runtimeHelpers";
+import { toValidAssetId } from "./utils";
 
 const CONSTANT = { ctxIdent: "_ctx" };
 
@@ -81,7 +87,7 @@ function createCodegenContext(ast: RootNode): CodegenContext {
 export const generate = (ast: RootNode, option: CompilerOptions): string => {
   const context = createCodegenContext(ast);
 
-  const { push } = context;
+  const { push, newline } = context;
 
   const args = [CONSTANT.ctxIdent];
   const signature = args.join(", ");
@@ -98,6 +104,12 @@ export const generate = (ast: RootNode, option: CompilerOptions): string => {
 
   context.indent();
   genFunctionPreamble(ast, context); // NOTE: 将来的には関数の外に出す
+
+  if (ast.components.length) {
+    genAssets(ast.components, "component", context);
+    newline();
+    newline();
+  }
 
   push(`return `);
   if (ast.codegenNode) {
@@ -124,6 +136,26 @@ function genFunctionPreamble(ast: RootNode, context: CodegenContext) {
     `const { ${helpers.map(aliasHelper).join(", ")} } = ${runtimeGlobalName}\n`
   );
   newline();
+}
+
+function genAssets(
+  assets: string[],
+  type: "component" /* TODO: */,
+  { helper, push, newline }: CodegenContext
+) {
+  if (type === "component") {
+    const resolver = helper(RESOLVE_COMPONENT);
+    for (let i = 0; i < assets.length; i++) {
+      let id = assets[i];
+
+      push(
+        `const ${toValidAssetId(id, type)} = ${resolver}(${JSON.stringify(id)})`
+      );
+      if (i < assets.length - 1) {
+        newline();
+      }
+    }
+  }
 }
 
 const genNode = (
