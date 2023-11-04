@@ -54,7 +54,7 @@ export function parse(
     styles: [],
   };
 
-  const ast = compiler.parse(source,);
+  const ast = compiler.parse(source);
   ast.children.forEach((node) => {
     if (node.type !== NodeTypes.ELEMENT) return;
 
