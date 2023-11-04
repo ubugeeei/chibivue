@@ -75,7 +75,7 @@ export class ReactiveEffect<T = any> {
 }
 ```
 
-ReactiveEffect にクリーンアップ処理が登録できたので、ついでに watch のクリーンアップ関数を実装してみましょう.
+ReactiveEffect にクリーンアップ処理が登録できたので、ついでに watch のクリーンアップ関数を実装してみましょう。
 
 以下のようなコードが動くようになれば OK です。
 
@@ -187,7 +187,7 @@ const unmountComponent = (...) => {
 ```
 
 EffectScope の構造ですが、activeEffectScope という現在 active な EffectScope を指す変数を一つ持ち、EffectScope に実装された on/off/run/stop というメソッドでその状態を管理します。  
-on/off メソッドは、自身を activeEffectScope として持ち上げたり、持ち上げた状態を元に戻す(元々の EffectScope に戻す)と言ったことを行います。  
+on/off メソッドは、自身を activeEffectScope として持ち上げたり、持ち上げた状態を元に戻す(元々の EffectScope に戻す)といったことを行います。  
 そして、ReactiveEffect が生成される際は、effect を activeEffectScope に登録するようにします。
 
 少しわかりづらいので、イメージをソースコードで書くと、
