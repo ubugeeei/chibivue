@@ -193,26 +193,6 @@ const resolveModifiers = (modifiers: string[]) => {
 };
 ```
 
-`makeMap` is a helper function for existence checking implemented in vuejs/core, which returns a boolean indicating whether it matches the string defined with comma separation.
-
-```ts
-export function makeMap(
-  str: string,
-  expectsLowerCase?: boolean
-): (key: string) => boolean {
-  const map: Record<string, boolean> = Object.create(null);
-  const list: Array<string> = str.split(",");
-  for (let i = 0; i < list.length; i++) {
-    map[list[i]] = true;
-  }
-  return expectsLowerCase
-    ? (val) => !!map[val.toLowerCase()]
-    : (val) => !!map[val];
-}
-```
-
-Although you can simply use `includes` in a normal way, I used `makeMap` here.
-
 Now that we have extracted `eventModifiers`, how should we use it? In conclusion, we will implement a helper function called `withModifiers` on the runtime-dom side and transform it into an expression that calls that function.
 
 ```ts

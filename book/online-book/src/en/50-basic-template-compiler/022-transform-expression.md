@@ -270,6 +270,8 @@ One thing to note is that this processExpression is specific to SFC (Single File
 In other words, if the isBrowser flag is set, we implement it to simply return the node.
 We modify the implementation to receive the flag via ctx.
 
+Also, I want to leave literals like true and false as they are, so I'll create a whitelist for literals.
+
 ```ts
 export function processExpression(
   node: SimpleExpressionNode,
@@ -292,6 +294,24 @@ export function processExpression(
   }
 
   // TODO:
+}
+```
+
+`makeMap` is a helper function for existence checking implemented in vuejs/core, which returns a boolean indicating whether it matches the string defined with comma separation.
+
+```ts
+export function makeMap(
+  str: string,
+  expectsLowerCase?: boolean
+): (key: string) => boolean {
+  const map: Record<string, boolean> = Object.create(null);
+  const list: Array<string> = str.split(",");
+  for (let i = 0; i < list.length; i++) {
+    map[list[i]] = true;
+  }
+  return expectsLowerCase
+    ? (val) => !!map[val.toLowerCase()]
+    : (val) => !!map[val];
 }
 ```
 

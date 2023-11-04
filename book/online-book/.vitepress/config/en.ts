@@ -187,7 +187,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/en/50-basic-template-compiler/050-v-for",
           },
           {
-            text: "🚧 Resolving Components",
+            text: "Resolving Components",
             link: "/en/50-basic-template-compiler/070-resolve-component",
           },
           {

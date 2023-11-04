@@ -546,6 +546,11 @@ export function processIf(
     isRoot: boolean
   ) => (() => void) | undefined
 ) {
+  // あらかじめ、exp には processExpression を実行しておきます。
+  if (!context.isBrowser && dir.exp) {
+    dir.exp = processExpression(dir.exp as SimpleExpressionNode, context);
+  }
+
   if (dir.name === "if") {
     const branch = createIfBranch(node, dir);
     const ifNode: IfNode = {
@@ -743,6 +748,5 @@ function genConditionalExpression(
 ちゃんと動いています！
 
 ![vif_fizzbuzz](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/vif_fizzbuzz.png)
-
 
 ここまでのソースコード: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/040_v_if_and_structural_directive)

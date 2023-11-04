@@ -40,7 +40,7 @@ npm i -g @antfu/ni
 
 [![Pages Deploy](https://github.com/Ubugeeei/chibivue/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/Ubugeeei/chibivue/actions/workflows/deploy.yml)
 
-> total: 340,000 chars ↑ (japanese)
+> total: 360,000 chars ↑ (japanese)
 
 ### book url (GitHub Pages)
 
@@ -144,23 +144,24 @@ Please refer to the information below for the progress status.
 
 ### Template Compiler
 
-| feature           | impl | book |
-| ----------------- | ---- | ---- |
-| v-bind            | ✅   | ✅   |
-| v-on              | ✅   | ✅   |
-| event modifier    | ✅   | ✅   |
-| v-if              | ✅   | ✅   |
-| v-for             | ✅   | ✅   |
-| v-model           | ✅   |      |
-| v-show            |      |      |
-| mustache          | ✅   | ✅   |
-| slot (default)    |      |      |
-| slot (named)      |      |      |
-| slot (scoped)     |      |      |
-| dynamic component |      |      |
-| comment out       | ✅   | ✅   |
-| fragment          | ✅   | ✅   |
-| bind expressions  | ✅   | ✅   |
+| feature            | impl | book |
+| ------------------ | ---- | ---- |
+| v-bind             | ✅   | ✅   |
+| v-on               | ✅   | ✅   |
+| event modifier     | ✅   | ✅   |
+| v-if               | ✅   | ✅   |
+| v-for              | ✅   | ✅   |
+| v-model            | ✅   |      |
+| v-show             |      |      |
+| mustache           | ✅   | ✅   |
+| slot (default)     |      |      |
+| slot (named)       |      |      |
+| slot (scoped)      |      |      |
+| dynamic component  |      |      |
+| comment out        | ✅   | ✅   |
+| fragment           | ✅   | ✅   |
+| bind expressions   | ✅   | ✅   |
+| resolve components | ✅   | ✅   |
 
 ### SFC Compiler
 
@@ -182,21 +183,20 @@ Please refer to the information below for the progress status.
 
 ## 🗓️ Big Plans
 
-- Complete Basic Template Compiler  
-  - Component resolution
+- Complete Basic Template Compiler
   - Slots
-- Complete Basic SFC Compiler  
+- Complete Basic SFC Compiler
   - script setup
   - compiler macro
-- Overall restructuring  
+- Overall restructuring
   - Fixing typos and errors
   - Reviewing English version of the text
   - Making explanations more understandable
-- Incorporate refactoring of the reactivity package that will likely be included in Vue.js 3.4  
+- Incorporate refactoring of the reactivity package that will likely be included in Vue.js 3.4
 - Implementation and explanation of SSR / SSG
 - Implementation and explanation of compile-time optimization  
   Tree flattening and static hoisting, among others
-- 🌟 Implementation and explanation of **__Vapor Mode__**  
+- 🌟 Implementation and explanation of \***\*Vapor Mode\*\***  
   Since the official version has not been released, we will implement it based on our predictions.
 
 ## 🎉 Bonus Track

@@ -58,7 +58,7 @@ export function createAppAPI<HostElement>(
       mount(rootContainer: HostElement) {
         const vnode = createVNode(rootComponent as ComponentPublicInstance);
         vnode.appContext = context;
-        render(vnode, rootContainer);
+        render(vnode, rootContainer, null);
       },
 
       provide(key, value) {
