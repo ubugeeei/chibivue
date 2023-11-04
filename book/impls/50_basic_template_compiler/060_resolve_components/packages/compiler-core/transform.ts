@@ -5,10 +5,10 @@ import {
   TemplateChildNode,
   ParentNode,
   Property,
-  ElementNode,
   DirectiveNode,
   createVNodeCall,
   ExpressionNode,
+  ElementNode,
 } from "./ast";
 import { TransformOptions } from "./options";
 import { CREATE_COMMENT, FRAGMENT, helperNameMap } from "./runtimeHelpers";
@@ -40,6 +40,7 @@ export interface TransformContext extends Required<TransformOptions> {
   parent: ParentNode | null;
   childIndex: number;
   helpers: Map<symbol, number>;
+  components: Set<string>;
   identifiers: { [name: string]: number | undefined };
   helper<T extends symbol>(name: T): T;
   helperString(name: symbol): string;
@@ -66,6 +67,7 @@ export function createTransformContext(
     parent: null,
     childIndex: 0,
     helpers: new Map(),
+    components: new Set(),
     identifiers: Object.create(null),
     helper(name) {
       const count = context.helpers.get(name) || 0;
@@ -143,6 +145,7 @@ export function transform(root: RootNode, options: TransformOptions) {
   traverseNode(root, context);
   createRootCodegen(root, context);
   root.helpers = new Set([...context.helpers.keys()]);
+  root.components = [...context.components];
 }
 
 function createRootCodegen(root: RootNode, context: TransformContext) {

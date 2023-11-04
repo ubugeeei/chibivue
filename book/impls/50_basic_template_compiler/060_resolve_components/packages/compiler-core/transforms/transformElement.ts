@@ -1,7 +1,6 @@
 import {
   CallExpression,
   DirectiveNode,
-  ElementNode,
   ExpressionNode,
   NodeTypes,
   ObjectExpression,
@@ -12,16 +11,20 @@ import {
   createObjectProperty,
   createSimpleExpression,
   createVNodeCall,
+  ComponentNode,
+  ElementNode,
+  ElementTypes,
 } from "../ast";
 import {
   MERGE_PROPS,
   NORMALIZE_CLASS,
   NORMALIZE_PROPS,
   NORMALIZE_STYLE,
+  RESOLVE_COMPONENT,
   TO_HANDLERS,
 } from "../runtimeHelpers";
 import { NodeTransform, TransformContext } from "../transform";
-import { isStaticExp } from "../utils";
+import { isStaticExp, toValidAssetId } from "../utils";
 
 export type PropsExpression =
   | ObjectExpression
@@ -35,8 +38,12 @@ export const transformElement: NodeTransform = (node, context) => {
     if (node.type !== NodeTypes.ELEMENT) return;
 
     const { tag, props } = node;
+    const isComponent = node.tagType === ElementTypes.COMPONENT;
 
-    const vnodeTag = `"${tag}"`;
+    const vnodeTag = isComponent
+      ? resolveComponentType(node as ComponentNode, context)
+      : `"${tag}"`;
+
     let vnodeProps: VNodeCall["props"];
     let vnodeChildren: VNodeCall["children"];
 
@@ -71,6 +78,13 @@ export const transformElement: NodeTransform = (node, context) => {
     );
   };
 };
+
+function resolveComponentType(node: ComponentNode, context: TransformContext) {
+  let { tag } = node;
+  context.helper(RESOLVE_COMPONENT);
+  context.components.add(tag);
+  return toValidAssetId(tag, `component`);
+}
 
 export function buildProps(
   node: ElementNode,

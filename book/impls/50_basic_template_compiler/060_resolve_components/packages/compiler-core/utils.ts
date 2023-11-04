@@ -91,6 +91,15 @@ export const isMemberExpression = (path: string): boolean => {
   return !currentOpenBracketCount && !currentOpenParensCount;
 };
 
+export function toValidAssetId(
+  name: string,
+  type: "component" // | TODO:
+): string {
+  return `_${type}_${name.replace(/[^\w]/g, (searchValue, replaceValue) => {
+    return searchValue === "-" ? "_" : name.charCodeAt(replaceValue).toString();
+  })}`;
+}
+
 export function getInnerRange(
   loc: SourceLocation,
   offset: number,
