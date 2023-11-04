@@ -15,6 +15,9 @@ import { NodeTransform, TransformContext } from "../transform";
 import { genPropsAccessExp, hasOwn } from "../../shared";
 import { BindingTypes } from "../options";
 import { UNREF } from "../runtimeHelpers";
+import { makeMap } from "chibivue/shared/makeMap";
+
+const isLiteralWhitelisted = makeMap("true,false,null,this");
 
 export const transformExpression: NodeTransform = (node, context) => {
   if (node.type === NodeTypes.INTERPOLATION) {
@@ -89,8 +92,9 @@ export function processExpression(
   };
 
   if (isSimpleIdentifier(rawExp)) {
+    const isLiteral = isLiteralWhitelisted(rawExp);
     const isScopeVarReference = context.identifiers[rawExp];
-    if (!isScopeVarReference) {
+    if (!isScopeVarReference && !isLiteral) {
       node.content = rewriteIdentifier(rawExp);
       return node;
     }

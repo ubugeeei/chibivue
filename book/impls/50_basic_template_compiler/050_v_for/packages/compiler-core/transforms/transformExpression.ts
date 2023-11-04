@@ -12,6 +12,9 @@ import {
 import { walkIdentifiers } from "../babelUtils";
 import { NodeTransform, TransformContext } from "../transform";
 import { advancePositionWithClone, isSimpleIdentifier } from "../utils";
+import { makeMap } from "../../shared/makeMap";
+
+const isLiteralWhitelisted = makeMap("true,false,null,this");
 
 export const transformExpression: NodeTransform = (node, ctx) => {
   if (node.type === NodeTypes.INTERPOLATION) {
@@ -58,8 +61,9 @@ export function processExpression(
   };
 
   if (isSimpleIdentifier(rawExp)) {
+    const isLiteral = isLiteralWhitelisted(rawExp);
     const isScopeVarReference = ctx.identifiers[rawExp];
-    if (!asParams && !isScopeVarReference) {
+    if (!asParams && !isScopeVarReference && !isLiteral) {
       node.content = rewriteIdentifier(rawExp);
     }
     return node;

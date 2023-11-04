@@ -275,7 +275,11 @@ node が単体の Identifier だった場合はそのままこの関数を適用
 つまりは isBrowser フラグが立っている場合にはそのまま node を返すように実装しておきます。  
 フラグは ctx 経由で受け取れるように実装を変更します。
 
+また、true や false などのリテラルはそのままにしておきたいので、リテラルのホワイトリストを作成しておきます。
+
 ```ts
+const isLiteralWhitelisted = makeMap("true,false,null,this");
+
 export function processExpression(
   node: SimpleExpressionNode,
   ctx: TransformContext
@@ -292,11 +296,32 @@ export function processExpression(
   };
 
   if (isSimpleIdentifier(rawExp)) {
-    node.content = rewriteIdentifier(rawExp);
+    const isLiteral = isLiteralWhitelisted(rawExp);
+    if (!isLiteral) {
+      node.content = rewriteIdentifier(rawExp);
+    }
     return node;
   }
 
   // TODO:
+}
+```
+
+makeMap とは vuejs/core で実装されている存在チェック用のヘルパー関数で、カンマ区切りで定義した文字列に一致しているかどうかを boolean で返してくれます。
+
+```ts
+export function makeMap(
+  str: string,
+  expectsLowerCase?: boolean
+): (key: string) => boolean {
+  const map: Record<string, boolean> = Object.create(null);
+  const list: Array<string> = str.split(",");
+  for (let i = 0; i < list.length; i++) {
+    map[list[i]] = true;
+  }
+  return expectsLowerCase
+    ? (val) => !!map[val.toLowerCase()]
+    : (val) => !!map[val];
 }
 ```
 

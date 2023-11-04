@@ -195,26 +195,6 @@ const resolveModifiers = (modifiers: string[]) => {
 };
 ```
 
-makeMap とは vuejs/core で実装されている存在チェック用のヘルパー関数で、カンマ区切りで定義した文字列に一致しているかどうかを boolean で返してくれます。
-
-```ts
-export function makeMap(
-  str: string,
-  expectsLowerCase?: boolean
-): (key: string) => boolean {
-  const map: Record<string, boolean> = Object.create(null);
-  const list: Array<string> = str.split(",");
-  for (let i = 0; i < list.length; i++) {
-    map[list[i]] = true;
-  }
-  return expectsLowerCase
-    ? (val) => !!map[val.toLowerCase()]
-    : (val) => !!map[val];
-}
-```
-
-普通に includes でみてもいいんですが、ここでは makeMap を使ってみました。
-
 eventModifiers を抽出できたところでこれをどう使いましょうか。
 結論から言うと、これは runtime-dom 側に withModifiers というヘルパー関数を実装し、その関数を呼び出す式に transform していきます。
 
