@@ -17,7 +17,12 @@ import {
   onUpdated,
 } from "./apiLifecycle";
 import { WatchCallback, WatchOptions, watch } from "./apiWatch";
-import { ComponentInternalInstance, Data, SetupContext } from "./component";
+import {
+  Component,
+  ComponentInternalInstance,
+  Data,
+  SetupContext,
+} from "./component";
 import { EmitsOptions } from "./componentEmits";
 import { PropType } from "./componentProps";
 import {
@@ -53,12 +58,11 @@ export type ComponentOptions<
     props: ResolveProps<P>,
     ctx: SetupContext<E, S>
   ) => (() => VNode) | B;
-
+  template?: string;
   render?: (
     ctx: CreateComponentPublicInstance<ResolveProps<P>, B, D, C, M, I, S, E, EE>
   ) => VNode;
-
-  template?: string;
+  components?: Record<string, Component>;
 
   beforeCreate?(): void;
   created?(): void;
