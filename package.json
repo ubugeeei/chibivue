@@ -1,6 +1,6 @@
 {
   "name": "chibivue",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "scripts": {
     "setup": "pnpm i && jiti tools/create-chibivue/main.ts",
