@@ -7,7 +7,6 @@ import {
   ForNode,
   ForRenderListExpression,
   NodeTypes,
-  PlainElementNode,
   SimpleExpressionNode,
   SourceLocation,
   VNodeCall,
@@ -42,7 +41,7 @@ export const transformFor = createStructuralDirectiveTransform(
       return () => {
         // finish the codegen now that all children have been traversed
         const { children } = forNode;
-        const childBlock = (children[0] as PlainElementNode)
+        const childBlock = (children[0] as ElementNode)
           .codegenNode as VNodeCall;
 
         renderExp.arguments.push(
