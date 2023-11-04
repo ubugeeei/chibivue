@@ -7,6 +7,7 @@ import {
   setupComponent,
 } from "./component";
 import { updateProps } from "./componentProps";
+import { setCurrentRenderingInstance } from "./componentRenderContext";
 import { setRef } from "./rendererTemplateRef";
 import {
   SchedulerJob,
@@ -509,7 +510,9 @@ export function createRenderer(options: RendererOptions) {
         if (bm) {
           invokeArrayFns(bm);
         }
+        const prev = setCurrentRenderingInstance(instance);
         const subTree = (instance.subTree = normalizeVNode(render(proxy!)));
+        setCurrentRenderingInstance(prev);
         patch(null, subTree, container, anchor, instance);
         initialVNode.el = subTree.el;
         instance.isMounted = true;
