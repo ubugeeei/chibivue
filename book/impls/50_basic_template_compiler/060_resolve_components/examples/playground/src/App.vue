@@ -1,7 +1,7 @@
 <script>
-import Counter from "./components/Counter.vue";
-
 import { defineComponent } from "chibivue";
+
+import Counter from "./components/Counter.vue";
 
 export default defineComponent({
   components: { Counter },

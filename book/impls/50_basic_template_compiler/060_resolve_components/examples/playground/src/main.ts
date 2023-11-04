@@ -1,10 +1,9 @@
 import { createApp } from "chibivue";
 
 // @ts-ignore
-import Counter from "./components/Counter.vue";
-
-// @ts-ignore
 import App from "./App.vue";
+// @ts-ignore
+import Counter from "./components/Counter.vue";
 
 const app = createApp(App);
 
