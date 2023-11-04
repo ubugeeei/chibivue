@@ -4,12 +4,14 @@ import { RootRenderFunction } from "./renderer";
 import { createVNode } from "./vnode";
 
 export interface App<HostElement = any> {
+  component(name: string, component: Component): this;
   mount(rootContainer: HostElement | string): void;
   provide<T>(key: InjectionKey<T> | string, value: T): this;
 }
 
 export interface AppContext {
   app: App;
+  components: Record<string, Component>;
   provides: Record<string | symbol, any>;
 }
 
@@ -17,6 +19,7 @@ export function createAppContext(): AppContext {
   return {
     app: null as any,
     provides: Object.create(null),
+    components: {},
   };
 }
 
@@ -40,6 +43,11 @@ export function createAppAPI<HostElement>(
       provide(key, value) {
         context.provides[key as string | symbol] = value;
 
+        return app;
+      },
+
+      component(name: string, component: Component): any {
+        context.components[name] = component;
         return app;
       },
     });
