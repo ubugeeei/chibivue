@@ -30,6 +30,11 @@ export const enum NodeTypes {
   JS_CONDITIONAL_EXPRESSION,
 }
 
+export const enum ElementTypes {
+  ELEMENT,
+  COMPONENT,
+}
+
 export interface Node {
   type: NodeTypes;
   loc: SourceLocation;
@@ -150,15 +155,28 @@ export interface RootNode extends Node {
   children: TemplateChildNode[];
   codegenNode?: TemplateChildNode | VNodeCall;
   helpers: Set<symbol>;
+  components: string[];
 }
 
-export interface ElementNode extends Node {
+export type ElementNode = PlainElementNode | ComponentNode;
+
+export interface BaseElementNode extends Node {
   type: NodeTypes.ELEMENT;
   tag: string;
+  tagType: ElementTypes;
+  isSelfClosing: boolean;
   props: Array<AttributeNode | DirectiveNode>;
   children: TemplateChildNode[];
-  isSelfClosing: boolean;
+}
+
+export interface PlainElementNode extends BaseElementNode {
+  tagType: ElementTypes.ELEMENT;
   codegenNode: VNodeCall | SimpleExpressionNode | undefined;
+}
+
+export interface ComponentNode extends BaseElementNode {
+  tagType: ElementTypes.COMPONENT;
+  codegenNode: VNodeCall | undefined;
 }
 
 export interface TextNode extends Node {
@@ -241,6 +259,7 @@ export function createRoot(
     type: NodeTypes.ROOT,
     children,
     helpers: new Set(),
+    components: [],
     codegenNode: undefined,
     loc,
   };
