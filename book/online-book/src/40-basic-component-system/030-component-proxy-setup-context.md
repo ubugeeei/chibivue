@@ -91,7 +91,7 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
   get(instance: ComponentRenderContext, key: string) {
     const { setupState, ctx, props } = instance;
 
-    // keyを元に setupState -> props -> ctx の順にチェックして存在していれば値を返す
+    // key を元に setupState -> props -> ctx の順にチェックして存在していれば値を返す
   },
 };
 ```
