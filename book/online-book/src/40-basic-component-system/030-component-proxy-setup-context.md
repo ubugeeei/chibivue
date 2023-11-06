@@ -4,7 +4,7 @@
 
 コンポーネントが持つ重要な概念として Proxy というものがあります。  
 これは、簡単にいうと、コンポーネントのインスタンスが持つデータ(public なプロパティ)にアクセスするための Proxy で、
-この Proxy に setup の結果(ステートや関数)、data、props、などのアクセスはまとめてしまいます。
+この Proxy に setup の結果(ステートや関数)、data、props などのアクセスはまとめてしまいます。
 
 以下のようなコードを考えてみましょう。(chibivue で実装していない範囲のものも含みます。普段の Vue だと思ってください)
 
@@ -91,7 +91,7 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
   get(instance: ComponentRenderContext, key: string) {
     const { setupState, ctx, props } = instance;
 
-    // keyを元にsetupState -> props -> ctx の順にチェックして存在していれば値を返す
+    // key を元に setupState -> props -> ctx の順にチェックして存在していれば値を返す
   },
 };
 ```
@@ -103,7 +103,7 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
 ここまでのソースコード:  
 [chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/40_basic_component_system/030_component_proxy)
 
-※ ついでに defineComponent の実装とそれに関連する型付も実装しています (そうすると proxy のデータの型を推論できるようになります。)
+※ ついでに defineComponent の実装とそれに関連する型付も実装しています。 (そうすると proxy のデータの型を推論できるようになります。)
 
 ![infer_component_types](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/infer_component_types.png)
 
@@ -113,7 +113,7 @@ https://ja.vuejs.org/api/composition-api-setup.html#setup-context
 
 Vue には setupContext という概念があります。これは setup 内に公開される context で、emit や expose などが挙げられます。
 
-現時点では emit は仕えるようにはなっているものの、少々雑に実装してしまっています。
+現時点では emit は使えるようにはなっているものの、少々雑に実装してしまっています。
 
 ```ts
 const setupResult = component.setup(instance.props, {
@@ -299,7 +299,7 @@ const Child2 = {
 ```
 
 なんの変哲もないコードですが、実はこれは動きません。  
-state が定義さていないと怒られてしまいます。
+state が定義されていないと怒られてしまいます。
 
 ![state_is_not_defined](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/state_is_not_defined.png)
 
@@ -307,7 +307,7 @@ state が定義さていないと怒られてしまいます。
 
 [Creating dynamic namespaces using the with statement and a proxy (MDN)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/with#creating_dynamic_namespaces_using_the_with_statement_and_a_proxy)
 
-と言うわけで、PublicInstanceProxyHandlers 　に has を実装してみましょう。  
+というわけで、PublicInstanceProxyHandlers に has を実装してみましょう。  
 setupState, props, ctx のいずれかに key が存在していれば true を返すようにします。
 
 ```ts
