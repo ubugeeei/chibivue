@@ -14,7 +14,7 @@ const app = createApp({
     //.
     //.
     //.
-    provide("key", someValue); // これはコンポーネントからでprovideするケース
+    provide("key", someValue); // これはコンポーネントから provide するケース
     //.
     //.
   },

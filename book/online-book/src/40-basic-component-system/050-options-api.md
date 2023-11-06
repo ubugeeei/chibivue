@@ -87,7 +87,7 @@ export function applyOptions(instance: ComponentInternalInstance) {
 }
 ```
 
-基本的にはこの原理を使って一つづつ実装していけば難しくないはずです。
+基本的にはこの原理を使って一つずつ実装していけば難しくないはずです。
 
 data をリアクティブにしたければ reactive 関数をここで呼び出しますし、computed したければ computed 関数をここで呼び出します。 (provide/inject も同様)
 
@@ -103,7 +103,7 @@ applyOptions が実行される前には setCurrentInstance によってイン�
 
 難しいポイントとしては、各オプションのユーザーの定義によって this の型が変動する点です。data オプションで number 型の count というプロパティを定義した場合には computed や method での this には `count: number` が推論されたいわけです。
 
-もちろん、data だけではなく computed や methods でに定義されたものについても同様です。
+もちろん、data だけではなく computed や methods に定義されたものについても同様です。
 
 ```ts
 const App = defineComponent({
@@ -133,7 +133,7 @@ defineComponent に対する型付を起点に、ComponentOptions, ComponentPubl
 ここでは一旦、data オプションと methods に絞って説明します。
 
 まずはいつもの ComponentOptions という型です。
-こちらもジェネリックに拡張し、data と methods の型を受け取れるように D と M いうパラメータを取るようにします。
+こちらもジェネリックに拡張し、data と methods の型を受け取れるように D と M というパラメータを取るようにします。
 
 ```ts
 export type ComponentOptions<
@@ -168,7 +168,7 @@ type ComponentPublicInstance<
   D = {},
   M extends MethodOptions = MethodOptions
 > = {
-  /** public instanceが持ついろんな型 */
+  /** public instance が持ついろんな型 */
 } & D &
   M;
 ```
@@ -185,7 +185,7 @@ type ComponentOptions<D = {}, M extends MethodOptions = MethodOptions> = {
 こうしておくことで、option 中の this から data や method に定義したプロパティを推論することができます。
 
 実際には props であったり、computed, inject など様々な型を推論する必要がありますが、基本原理はこれと同じです。  
-ぱっと見ジェネリクスがたくさんあったり、型の変換(inject から key だけを取り出したり)が混ざっているのでウッとなってしまうかもしれませんが落ち着いて原理に戻っと実装すれば大丈夫なはずです。  
+ぱっと見ジェネリクスがたくさんあったり、型の変換(inject から key だけを取り出したり)が混ざっているのでウッとなってしまうかもしれませんが落ち着いて原理に戻って実装すれば大丈夫なはずです。  
 本書のコードでは本家の Vue をインスパイアして、`CreateComponentPublicInstance`という抽象化を一段階挟んでいたり、`ComponentPublicInstanceConstructor`と言う型を実装していますが、あまり気にしないでください。(興味があればそこも読んでみてください！　)
 
 ここまでのソースコード:  
