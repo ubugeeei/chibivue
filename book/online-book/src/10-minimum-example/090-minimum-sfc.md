@@ -225,7 +225,7 @@ pwd # ~
 rm -rf ./plugin-sample
 ```
 
-plugin の本体なのですが、本来これは vue/core の範囲外なので packages に`@extensions`というディレクトリを切ってそこに実装していきます。
+plugin の本体なのですが、本来これは vuejs/core の範囲外なので packages に`@extensions`というディレクトリを切ってそこに実装していきます。
 
 ```sh
 pwd # ~

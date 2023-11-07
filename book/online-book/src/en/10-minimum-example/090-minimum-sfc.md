@@ -224,7 +224,7 @@ pwd # ~
 rm -rf ./plugin-sample
 ```
 
-This is the main part of the plugin, but since this is originally outside the scope of vue/core, we will create a directory called `@extensions` in the `packages` directory and implement it there.
+This is the main part of the plugin, but since this is originally outside the scope of vuejs/core, we will create a directory called `@extensions` in the `packages` directory and implement it there.
 
 ```sh
 pwd # ~

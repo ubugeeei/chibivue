@@ -12,7 +12,7 @@ Let me first summarize the purpose of this book.
   What is Vue.js? How is it structured?
 - **Be able to implement basic functions of Vue.js**  
   Actually try implementing basic functionalities.
-- **Read the source code of vue/core**  
+- **Read the source code of vuejs/core**  
   Understand the relation between implementations and the official code, and grasp how they are really built.
 
 I've provided a rough outline of goals, but it's not necessary to fulfill all of them, nor is it a call to pursue perfection.  

@@ -126,7 +126,7 @@ First, forget about moving elements and patch VNodes based on the key.
 Using the `keyToNewIndexMap` we created earlier, calculate the pairs of n1 and n2 and patch them.
 At this point, if there are new elements to be mounted or if there is a need to unmount, perform those operations as well.
 
-Roughly speaking, it looks like this ↓ (I'm skipping a lot of details. Please read vue/core's renderer.ts for more details.)
+Roughly speaking, it looks like this ↓ (I'm skipping a lot of details. Please read vuejs/core's renderer.ts for more details.)
 
 ```ts
 const toBePatched = e2 + 1;
