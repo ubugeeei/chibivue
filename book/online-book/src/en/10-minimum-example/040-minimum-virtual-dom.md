@@ -176,10 +176,11 @@ const patch = (
   n2: VNode | string,
   container: HostElement
 ) => {
-  if (typeof n2 === "object") {
-    processElement(n1, n2, container);
-  } else {
+  const { type } = n2;
+  if (type === Text) {
     processText(n1, n2, container);
+  } else {
+    processElement(n1, n2, container);
   }
 };
 
@@ -212,11 +213,10 @@ Now let's actually implement the patch function for the virtual DOM. First, we w
 
 ```ts
 export interface VNode<HostNode = RendererNode> {
-  type: string;
-  props: VNodeProps;
-  children: (VNode | string)[];
-
-  el: HostNode | undefined; // added
+  type: VNodeTypes;
+  props: VNodeProps | null;
+  children: VNodeNormalizedChildren;
+  el: HostNode | undefined; // [!code++]
 }
 ```
 
@@ -228,15 +228,12 @@ export function createRenderer(options: RendererOptions) {
   // .
   // .
 
-  const patch = (
-    n1: VNode | string | null,
-    n2: VNode | string,
-    container: RendererElement
-  ) => {
-    if (typeof n2 === "object") {
-      // processElement(n1, n2, container);
-    } else {
+  const patch = (n1: VNode | null, n2: VNode, container: RendererElement) => {
+    const { type } = n2;
+    if (type === Text) {
       // processText(n1, n2, container);
+    } else {
+      // processElement(n1, n2, container);
     }
   };
 }
@@ -277,10 +274,7 @@ const mountElement = (vnode: VNode, container: RendererElement) => {
 Since it is an element, we also need to mount its children. Let's use the `normalize` function we created earlier.
 
 ```ts
-const mountChildren = (
-  children: (VNode | string)[],
-  container: RendererElement
-) => {
+const mountChildren = (children: VNode[], container: RendererElement) => {
   for (let i = 0; i < children.length; i++) {
     const child = (children[i] = normalizeVNode(children[i]));
     patch(null, child, container);
@@ -292,8 +286,8 @@ With this, we have implemented the mounting of elements. Next, let's move on to 
 
 ```ts
 const processText = (
-  n1: string | null,
-  n2: string,
+  n1: VNode | null,
+  n2: VNode,
   container: RendererElement
 ) => {
   if (n1 == null) {
@@ -308,12 +302,13 @@ Now, with the mounting of the initial render completed, let's move some of the p
 
 ```ts
 return function createApp(rootComponent) {
-    const app: App = {
-      mount(rootContainer: HostElement) {
-        // Just pass rootComponent
-        render(rootComponent, rootContainer);
-      },
-    };
+  const app: App = {
+    mount(rootContainer: HostElement) {
+      // Just pass rootComponent
+      render(rootComponent, rootContainer);
+    },
+  };
+};
 ```
 
 ```ts
@@ -370,8 +365,8 @@ The same goes for Text nodes.
 
 ```ts
 const processText = (
-  n1: string | null,
-  n2: string,
+  n1: VNode | null,
+  n2: VNode,
   container: RendererElement
 ) => {
   if (n1 == null) {
