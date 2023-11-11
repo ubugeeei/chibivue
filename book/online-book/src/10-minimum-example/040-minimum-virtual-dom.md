@@ -421,3 +421,5 @@ const processText = (
 ![patch_rendering](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/patch_rendering.png)
 
 これで virtual DOM  を利用したパッチが実装できました!!!!! 祝
+
+ここまでのソースコード: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/040_vdom_system)
