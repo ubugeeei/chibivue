@@ -1,6 +1,6 @@
-# Minimum virtual DOM
+# Minimum Virtual DOM
 
-## What is virtual DOM used for?
+## What is Virtual DOM used for?
 
 By introducing the reactivity system in the previous chapter, we were able to dynamically update the screen. Let's take a look at the content of the current render function again.
 
@@ -32,9 +32,9 @@ const app = createApp({
 });
 ```
 
-The problem is that only the part that changes when increment is executed is the `count: ${state.count}` part, but in renderVNode, all the DOM elements are removed and recreated from scratch. This feels very wasteful. Although it seems to be working fine for now because it is still small, you can easily imagine that performance will be greatly reduced if you have to recreate a complex DOM from scratch every time you develop a web application. Therefore, since we already have a virtual DOM, we want to implement an implementation that compares the current virtual DOM with the previous one and only updates the parts where there are differences using DOM operations. Now, this is the main theme of this chapter.
+The problem is that only the part that changes when increment is executed is the `count: ${state.count}` part, but in renderVNode, all the DOM elements are removed and recreated from scratch. This feels very wasteful. Although it seems to be working fine for now because it is still small, you can easily imagine that performance will be greatly reduced if you have to recreate a complex DOM from scratch every time you develop a web application. Therefore, since we already have a Virtual DOM, we want to implement an implementation that compares the current Virtual DOM with the previous one and only updates the parts where there are differences using DOM operations. Now, this is the main theme of this chapter.
 
-Let's see what we want to do in the source code. When we have a component like the one above, the return value of the render function becomes a virtual DOM like the following. At the time of the initial rendering, the count is 0, so it looks like this:
+Let's see what we want to do in the source code. When we have a component like the one above, the return value of the render function becomes a Virtual DOM like the following. At the time of the initial rendering, the count is 0, so it looks like this:
 
 ```ts
 const vnode = {
@@ -84,7 +84,7 @@ const nextVnode = {...}
 patch(vnode, nextVnode, container)
 ```
 
-I introduced the function name earlier, but this differential rendering is called "patch". It is also sometimes called "reconciliation". By using these two virtual DOMs, you can efficiently update the screen.
+I introduced the function name earlier, but this differential rendering is called "patch". It is also sometimes called "reconciliation". By using these two Virtual DOMs, you can efficiently update the screen.
 
 ## Before implementing the patch function
 
@@ -207,7 +207,7 @@ const processText = (n1: string | null, n2: string, container: HostElement) => {
 
 ## Actual implementation
 
-Now let's actually implement the patch function for the virtual DOM. First, we want to have a reference to the actual DOM in the vnode when it is mounted, whether it is an Element or a Text. So we add the "el" property to the vnode.
+Now let's actually implement the patch function for the Virtual DOM. First, we want to have a reference to the actual DOM in the vnode when it is mounted, whether it is an Element or a Text. So we add the "el" property to the vnode.
 
 `~/packages/runtime-core/vnode.ts`
 
@@ -381,12 +381,12 @@ const processText = (
 };
 ```
 
-※ Regarding patchChildren, normally we need to handle dynamic-length child elements by adding key attributes, but since we are implementing a small virtual DOM, we won't cover the practicality of that here. If you are interested, please refer to the Basic Virtual DOM section. Here, we aim to understand the implementation and role of virtual DOM up to a certain extent.
+※ Regarding patchChildren, normally we need to handle dynamic-length child elements by adding key attributes, but since we are implementing a small Virtual DOM, we won't cover the practicality of that here. If you are interested, please refer to the Basic Virtual DOM section. Here, we aim to understand the implementation and role of Virtual DOM up to a certain extent.
 
 Now that we can perform diff rendering, let's take a look at the playground.
 
 ![patch_rendering](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/patch_rendering.png)
 
-We have successfully implemented patching using virtual DOM!!!!! Congratulations!
+We have successfully implemented patching using Virtual DOM!!!!! Congratulations!
 
 Source code up to this point: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/040_vdom_system)

@@ -2,7 +2,7 @@
 
 ## Actually, we have everything we need for the operation so far (?)
 
-So far, we have implemented the reactivity system, virtual DOM, and Component.
+So far, we have implemented the Reactivity System, Virtual DOM, and Component.
 Although these are very small and not practical, it is not an exaggeration to say that we have understood the overall configuration elements necessary for operation.
 Although the functionality of each element itself is insufficient, it feels like we have gone through it superficially.
 

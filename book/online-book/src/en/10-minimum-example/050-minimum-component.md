@@ -2,8 +2,8 @@
 
 ## Thinking based on organizing existing implementations
 
-So far, we have implemented createAppAPI, reactivity system, and virtual DOM system in a small scale.
-With the current implementation, we can dynamically change the UI using the reactivity system and perform efficient rendering using the virtual DOM system. However, as a developer interface, everything is written in createAppAPI.
+So far, we have implemented createApp API, Reactivity System, and Virtual DOM system in a small scale.
+With the current implementation, we can dynamically change the UI using the reactivity system and perform efficient rendering using the Virtual DOM system. However, as a developer interface, everything is written in createAppAPI.
 In reality, I want to divide the files more and implement generic components for reusability.
 First, let's review the parts that are currently messy in the existing implementation. Please take a look at the render function in renderer.ts.
 

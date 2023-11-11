@@ -40,7 +40,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/10-minimum-example/030-minimum-reactive",
           },
           {
-            text: "小さい virtual DOM",
+            text: "小さい Virtual DOM",
             link: "/10-minimum-example/040-minimum-virtual-dom",
           },
           {

@@ -57,9 +57,9 @@ That's it for this part.
 
 ## h Function and Virtual DOM (0.5 min)
 
-To perform patch rendering, we need a virtual DOM and functions to generate it.
+To perform patch rendering, we need a Virtual DOM and functions to generate it.
 
-The virtual DOM represents tag names, attributes, and child elements using JavaScript objects. The Vue renderer handles the virtual DOM and applies updates to the actual DOM.
+The Virtual DOM represents tag names, attributes, and child elements using JavaScript objects. The Vue renderer handles the Virtual DOM and applies updates to the actual DOM.
 
 Let's consider a VNode that represents a name, a click event handler, and child elements (text) for this example:
 
@@ -78,7 +78,7 @@ That's it for this part.
 
 Now let's implement the renderer.
 
-This rendering process is often referred to as patching because it compares the old and new virtual DOMs and applies the differences to the actual DOM.
+This rendering process is often referred to as patching because it compares the old and new Virtual DOMs and applies the differences to the actual DOM.
 
 The function signature would be:
 
@@ -360,7 +360,7 @@ export const createApp = (option: CreateAppOption) => ({
   },
 });
 
-// virtual dom patch
+// Virtual DOM patch
 export const render = (n1: VNode | null, n2: VNode, container: Element) => {
   const mountElement = (vnode: VNode, container: Element) => {
     const el = document.createElement(vnode.tag);
@@ -374,7 +374,7 @@ export const render = (n1: VNode | null, n2: VNode, container: Element) => {
   n1 == null ? mountElement(n2, container) : patchElement(n1, n2);
 };
 
-// virtual dom
+// Virtual DOM
 type VNode = { tag: string; onClick: (e: Event) => void; children: string };
 export const h = (
   tag: string,

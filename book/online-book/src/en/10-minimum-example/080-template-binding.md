@@ -2,7 +2,7 @@
 
 ## Want to bind to the template
 
-Currently, we are directly manipulating the DOM, so we are not able to take advantage of the reactivity system or virtual DOM.  
+Currently, we are directly manipulating the DOM, so we are not able to take advantage of the Reactivity System or Virtual DOM.  
 In reality, we want to write event handlers and text content in the template section. That's where the joy of declarative UI comes in.  
 We aim for a developer interface like the following.
 

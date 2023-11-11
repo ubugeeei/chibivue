@@ -46,7 +46,7 @@
 いいえ、そうではありません。今回 15 分で対応するものをいかに列挙してみます。
 
 - create app api
-- virtual dom
+- Virtual DOM
 - patch rendering
 - reactivity system
 - template compiler

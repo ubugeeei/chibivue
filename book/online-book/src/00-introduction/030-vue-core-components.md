@@ -42,10 +42,10 @@ const increment = () => {
 };
 ```
 
-### virtual DOM
+### Virtual DOM
 
-virtual DOM (仮想 DOM) もまた、Vue.js の強力なシステムの一つです。
-virtual DOM は JS のランタイム上に DOM を模倣した JavaScript のオブジェクトを定義し、それを現在の DOM と見立て、更新時は現在の virtual DOM と新しい virtual DOM とを比較して差分のみを本物の DOM に反映する仕組みです。詳しくは専用のチャプターで詳しく解説します。
+Virtual DOM (仮想 DOM) もまた、Vue.js の強力なシステムの一つです。
+Virtual DOM は JS のランタイム上に DOM を模倣した JavaScript のオブジェクトを定義し、それを現在の DOM と見立て、更新時は現在の Virtual DOM と新しい Virtual DOM とを比較して差分のみを本物の DOM に反映する仕組みです。詳しくは専用のチャプターで詳しく解説します。
 
 ### Component
 
@@ -55,7 +55,7 @@ Vue.js はコンポーネント指向なフレームワークです。
 
 (よくよく考えると、値を変更しているだけなのにちゃんと画面が更新されているのは不思議ですよね。)
 
-## compiler
+## Compiler
 
 コンパイラとは開発者インタフェースと内部実装の変換を担う部分です。  
 ここでいう「開発者インタフェース」とは、「実際に Vue.js を使用して Web アプリケーション開発を行う開発者」と「Vue の内部実装」の境界のことです。  
@@ -67,12 +67,12 @@ Vue.js で開発をしていると、明らかに JavaScript の記述ではな�
 
 このコンパイラも大きく二つのセクションに別れています。
 
-### template compiler (compiler core)
+### Template Compiler (compiler core)
 
 名前の通りテンプレート部分のコンパイラです。
 具体的には v-if や v-on といったディレクティブの記法や、ユーザーコンポーネントの記述(`<Counter />`みたいなオリジナルのタグとして書くやつ)や slot の機能などです。
 
-### SFC compiler
+### SFC Compiler
 
 名前の通り Single File Component のコンパイラです。
 .vue という拡張子のファイルで、コンポーネントの template, script, style を単一のファイルで記述する機能です。

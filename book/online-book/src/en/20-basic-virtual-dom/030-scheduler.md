@@ -31,7 +31,7 @@ const app = createApp({
 app.mount("#app");
 ```
 
-When the button is clicked, the `set` function is called twice on `state.message`, so naturally, the `trigger` function will be executed twice as well. This means that the virtual DOM will be computed twice and the patching will be performed twice.
+When the button is clicked, the `set` function is called twice on `state.message`, so naturally, the `trigger` function will be executed twice as well. This means that the Virtual DOM will be computed twice and the patching will be performed twice.
 
 ![non_scheduled_effect](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/non_scheduled_effect.png)
 

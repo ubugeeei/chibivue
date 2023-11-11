@@ -5,7 +5,7 @@
 At the beginning, I mentioned that this book is divided into several sections, and the first section, "Minimal Example," is now complete. Well done!  
 The reason why I specifically use the term "section" is because there are two reasons.  
 First, from here on, I aim to create a configuration where each section has as little dependency as possible, so that each section can deepen their understanding in their respective areas of interest (sections).  
-If you are interested in virtual DOM and patch rendering, you can proceed to the Basic Virtual DOM section. If you want to extend components further, you can go to the Basic Component section. If you are interested in richer expressions (directives, etc.) with templates, you can go to the Basic Template Compiler section. If you are interested in script setup and compiler macros, you can proceed to the Basic SFC Compiler section. (Of course, you can do all of them if you want!)  
+If you are interested in Virtual DOM and patch rendering, you can proceed to the Basic Virtual DOM section. If you want to extend components further, you can go to the Basic Component section. If you are interested in richer expressions (directives, etc.) with templates, you can go to the Basic Template Compiler section. If you are interested in script setup and compiler macros, you can proceed to the Basic SFC Compiler section. (Of course, you can do all of them if you want!)  
 And above all, since this "Minimal Example" is also a respectable section, if you just want to have a general understanding without going too deep, it is sufficient to stop here.  
 (Regarding the Web Application Essentials section, there are some dependencies on the basic implementation of Vue, so the implementations of each section are mixed to some extent.)
 
@@ -48,7 +48,7 @@ h("div", { id: "my-app" }, [
 ]);
 ```
 
-This is where something like virtual DOM first appears.
+This is where something like Virtual DOM first appears.
 
 ## We now know what the reactivity system is and how to dynamically update the screen
 
@@ -94,12 +94,12 @@ const component = {
 };
 ```
 
-## We now know what virtual DOM is, why it is beneficial, and how to implement it
+## We now know what Virtual DOM is, why it is beneficial, and how to implement it
 
-As an improvement to rendering using the h function, we understood the efficient rendering method using virtual DOM through comparison.
+As an improvement to rendering using the h function, we understood the efficient rendering method using Virtual DOM through comparison.
 
 ```ts
-// Interface for virtual DOM
+// Interface for Virtual DOM
 export interface VNode<HostNode = any> {
   type: string | typeof Text | object;
   props: VNodeProps | null;

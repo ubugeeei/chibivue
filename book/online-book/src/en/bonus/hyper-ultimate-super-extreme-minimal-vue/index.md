@@ -47,7 +47,7 @@ Although I will be implementing it in a very sloppy way from now on, I am compar
 No, that's not the case. This time, I will try to list what will be implemented in 15 minutes.
 
 - create app api
-- virtual dom
+- Virtual DOM
 - patch rendering
 - reactivity system
 - template compiler

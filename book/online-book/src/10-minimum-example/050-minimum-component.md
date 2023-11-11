@@ -2,8 +2,8 @@
 
 ## 既存実装の整理ベースで考える
 
-これまで、createAppAPI や reactivity system 、 virtual DOM  システムを小さく実装してきました。  
-今現時点での実装では reactivity system によって UI を動的に変更することもできますし、 virtual DOM  によって効率的なレンダリングを行うことができているのですが、開発者インタフェースとしては全ての内容を createAppAPI に書く感じになってしまっています。  
+これまで、createApp API や Reactivity System 、 Virtual DOM を小さく実装してきました。  
+今現時点での実装では reactivity system によって UI を動的に変更することもできますし、 Virtual DOM によって効率的なレンダリングを行うことができているのですが、開発者インタフェースとしては全ての内容を createApp API に書く感じになってしまっています。  
 実際にはもっとファイルを分割したり、再利用のために汎用的なコンポーネントを実装したいです。  
 まずは既存実装の散らかってしまっている部分を見直してみます。renderer.ts の render 関数をみてください。
 
@@ -146,8 +146,8 @@ const updateComponent = (n1: VNode, n2: VNode) => {
 やることは 3 つです。
 
 1. コンポーネントのインスタンスを生成
-1. setup の実行とその結果をインスタンスに保持
-1. ReactiveEffect の生成とそれをインスタンスに保持
+2. setup の実行とその結果をインスタンスに保持
+3. ReactiveEffect の生成とそれをインスタンスに保持
 
 まず、component.ts にコンポーネントのインスタンスを生成するための関数(コンストラクタの役割をするもの)を実装してみます。
 

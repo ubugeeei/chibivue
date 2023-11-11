@@ -61,7 +61,7 @@ Since this book has turned out quite voluminous, I've set achievement milestones
 - **Minimal Example Section**  
    Here, Vue.js is implemented in its most basic form.  
    Although this section covers the smallest set of features, it will deal with  
-   the virtual DOM, the reactive system, the compiler, and SFC (Single File Components) support.  
+   the Virtual DOM, the Reactivity System, the Compiler, and SFC (Single File Components) support.  
    However, these implementations are far from practical and are highly simplified.  
    But, for those wanting a broad overview of Vue.js, this section offers sufficient insight.  
    Being an introductory section, the explanations here are more detailed than in other parts.  
@@ -126,7 +126,7 @@ Since this book has turned out quite voluminous, I've set achievement milestones
   ```
 
 - **Basic Virtual DOM Section**  
-  In this section, we will implement a fairly practical patch rendering functionality for the virtual DOM. While we won't be implementing features like "suspense" or other optimizations, it will be proficient enough to handle basic rendering tasks. We will also implement the scheduler here.
+  In this section, we will implement a fairly practical patch rendering functionality for the Virtual DOM. While we won't be implementing features like "suspense" or other optimizations, it will be proficient enough to handle basic rendering tasks. We will also implement the scheduler here.
 
 - **Basic Reactive System Section**  
   Although we implemented the reactive API in the Minimal Example section, in this section we will implement other APIs. Starting from basic APIs like ref, watch, and computed, we'll also delve into more advanced APIs like effectScope and the shallow series.
@@ -135,7 +135,7 @@ Since this book has turned out quite voluminous, I've set achievement milestones
   Here, we will undertake the basic implementations related to the Component System. In fact, since we'll have already set the base for the Component System in the Basic Virtual DOM section, here we'll focus on other aspects of the Component System. This includes features like props/emit, provide/inject, extensions to the reactive system, and lifecycle hooks.
 
 - **Basic Template Compiler Section**  
-  In addition to a compiler for the virtual DOM system implemented in the Basic Virtual DOM section, we will implement directives like v-on, v-bind, and v-for. Generally, this will involve the component's template option, and we won't cover SFC (Single File Components) here.
+  In addition to a compiler for the Virtual DOM system implemented in the Basic Virtual DOM section, we will implement directives like v-on, v-bind, and v-for. Generally, this will involve the component's template option, and we won't cover SFC (Single File Components) here.
 
 - **Basic SFC Compiler Section**  
   In this section, we will craft a fairly practical SFC compiler. Leveraging the template compiler from the Basic Template Compiler section, the primary focus here will be on implementing the script compiler. Specifically, we'll implement the script's default exports and the script setup of SFCs. By the end of this section, the feel should be quite close to the usual Vue experience.

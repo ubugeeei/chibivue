@@ -18,7 +18,7 @@ export const createApp = (option: CreateAppOption) => ({
   },
 });
 
-// virtual dom patch
+// Virtual DOM patch
 export const render = (n1: VNode | null, n2: VNode, container: Element) => {
   const mountElement = (vnode: VNode, container: Element) => {
     const el = document.createElement(vnode.tag);
@@ -32,7 +32,7 @@ export const render = (n1: VNode | null, n2: VNode, container: Element) => {
   n1 == null ? mountElement(n2, container) : patchElement(n1, n2);
 };
 
-// virtual dom
+// Virtual DOM
 type VNode = { tag: string; onClick: (e: Event) => void; children: string };
 export const h = (
   tag: string,
