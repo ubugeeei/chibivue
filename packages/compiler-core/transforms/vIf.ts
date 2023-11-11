@@ -50,10 +50,9 @@ export function processIf(
     isRoot: boolean
   ) => (() => void) | undefined
 ) {
-  // FIXME:
-  // if (!context.isBrowser && dir.exp) {
-  //   dir.exp = processExpression(dir.exp as SimpleExpressionNode, context);
-  // }
+  if (!context.isBrowser && dir.exp) {
+    dir.exp = processExpression(dir.exp as SimpleExpressionNode, context);
+  }
 
   if (dir.name === "if") {
     const branch = createIfBranch(node, dir);
@@ -115,18 +114,15 @@ function createCodegenNodeForBranch(
   if (branch.condition) {
     return createConditionalExpression(
       branch.condition,
-      createChildrenCodegenNode(branch, context),
+      createChildrenCodegenNode(branch),
       createCallExpression(context.helper(CREATE_COMMENT), ['""', "true"])
     ) as IfConditionalExpression;
   } else {
-    return createChildrenCodegenNode(branch, context);
+    return createChildrenCodegenNode(branch);
   }
 }
 
-function createChildrenCodegenNode(
-  branch: IfBranchNode,
-  context: TransformContext
-): VNodeCall {
+function createChildrenCodegenNode(branch: IfBranchNode): VNodeCall {
   const { children } = branch;
   const firstChild = children[0];
   const vnodeCall = (firstChild as ElementNode).codegenNode as VNodeCall;

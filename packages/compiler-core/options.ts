@@ -3,28 +3,16 @@ import { TextModes } from "./parse";
 import { DirectiveTransform, NodeTransform } from "./transform";
 
 export interface ParserOptions {
-  /**
-   * e.g. platform native elements, e.g. `<div>` for browsers
-   */
   isNativeTag?: (tag: string) => boolean;
-
-  /**
-   * @default ['{{', '}}']
-   */
   delimiters?: [string, string];
-
   decodeEntities?: (rawText: string, asAttr: boolean) => string;
-
-  /**
-   * Get text parsing mode for this element
-   */
   getTextMode?: (
     node: ElementNode,
     parent: ElementNode | undefined
   ) => TextModes;
 }
 
-export interface TransformOptions {
+export interface TransformOptions extends SharedTransformCodegenOptions {
   nodeTransforms?: NodeTransform[];
   directiveTransforms?: Record<string, DirectiveTransform | undefined>;
   inline?: boolean;
@@ -36,6 +24,10 @@ export type BindingMetadata = {
 } & {
   __isScriptSetup?: boolean;
 };
+
+interface SharedTransformCodegenOptions {
+  isBrowser?: boolean;
+}
 
 export const enum BindingTypes {
   DATA = "data",
@@ -49,9 +41,8 @@ export const enum BindingTypes {
   OPTIONS = "options",
 }
 
-export interface CodegenOptions {
+export interface CodegenOptions extends SharedTransformCodegenOptions {
   inline?: boolean;
-  __BROWSER__?: boolean;
 }
 
 export type CompilerOptions = ParserOptions & TransformOptions & CodegenOptions;

@@ -31,7 +31,7 @@ export function compileTemplate({
 }: SFCTemplateCompileOptions): SFCTemplateCompileResults {
   let { code, ast, preamble } = compiler.compile(source, {
     ...compilerOptions,
-    __BROWSER__: false,
+    isBrowser: false,
   });
   return { code: code, ast, source, preamble };
 }
