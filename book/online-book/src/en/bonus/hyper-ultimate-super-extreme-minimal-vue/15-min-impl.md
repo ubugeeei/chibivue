@@ -286,9 +286,9 @@ The transform function returns something like `{ code: string }`, and the string
 ```ts
 export const VitePluginChibivue = () => ({
   name: "vite-plugin-chibivue",
-  transform: (code: string, id: string) => {
+  transform: (code: string, id: string) => ({
     code: "";
-  },
+  }),
 });
 ```
 
