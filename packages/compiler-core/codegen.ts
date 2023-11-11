@@ -53,12 +53,12 @@ export interface CodegenContext {
   indent(): void;
   deindent(withoutNewLine?: boolean): void;
   newline(): void;
-  __BROWSER__: boolean;
+  isBrowser: boolean;
 }
 
 function createCodegenContext(
   ast: RootNode,
-  { __BROWSER__ = false }: CodegenOptions
+  { isBrowser = false }: CodegenOptions
 ): CodegenContext {
   const context: CodegenContext = {
     source: ast.loc.source,
@@ -69,7 +69,7 @@ function createCodegenContext(
     indentLevel: 0,
     runtimeGlobalName: `ChibiVue`,
     runtimeModuleName: "chibivue",
-    __BROWSER__,
+    isBrowser,
     helper(key) {
       return `_${helperNameMap[key]}`;
     },
@@ -103,10 +103,10 @@ export function generate(
   options: CodegenOptions
 ): CodegenResult {
   const context = createCodegenContext(ast, {
-    __BROWSER__: options.__BROWSER__,
+    isBrowser: options.isBrowser,
   });
   const { push } = context;
-  const isSetupInlined = !options.__BROWSER__ && !!options.inline;
+  const isSetupInlined = !options.isBrowser && !!options.inline;
 
   const preambleContext = isSetupInlined
     ? createCodegenContext(ast, options)
@@ -144,10 +144,10 @@ export function generate(
 }
 
 function genFunctionPreamble(ast: RootNode, context: CodegenContext) {
-  const { push, newline, runtimeGlobalName, runtimeModuleName, __BROWSER__ } =
+  const { push, newline, runtimeGlobalName, runtimeModuleName, isBrowser } =
     context;
 
-  if (__BROWSER__) {
+  if (isBrowser) {
     push(`const _ChibiVue = ${runtimeGlobalName}\n`);
   } else {
     push(`import * as _ChibiVue from '${runtimeModuleName}'\n`);
@@ -156,7 +156,7 @@ function genFunctionPreamble(ast: RootNode, context: CodegenContext) {
   const helpers = Array.from(ast.helpers);
   push(`const { ${helpers.map(aliasHelper).join(", ")} } = _ChibiVue\n`);
   newline();
-  if (__BROWSER__) push(`return `);
+  if (isBrowser) push(`return `);
 }
 
 function genNode(node: CodegenNode | symbol | string, context: CodegenContext) {
@@ -213,7 +213,6 @@ function genNode(node: CodegenNode | symbol | string, context: CodegenContext) {
     /* istanbul ignore next */
     case NodeTypes.IF_BRANCH:
       // noop
-      break;
       break;
     default: {
       // make sure we exhaust all possible types
