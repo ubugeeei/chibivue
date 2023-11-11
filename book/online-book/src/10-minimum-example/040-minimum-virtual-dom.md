@@ -1,6 +1,6 @@
 # 小さい virtual DOM
 
-##  virtual DOM 、何に使われる?
+## virtual DOM 、何に使われる?
 
 前のチャプターで reactivity system を導入したことで画面を動的に更新できるようになりました。
 改めて現在の render 関数の内容を見てみましょう。
@@ -34,13 +34,13 @@ const app = createApp({
 });
 ```
 
-何がまずいかというと、increment を実行した時に変化する部分は、`count: ${state.count}`の部分だけなのに、renderVNode では一度全ての DOM を削除し、1 から再生成しているのです。  
+何がまずいかというと、increment を実行した時に変化する部分は、`count: ${state.count}` の部分だけなのに、renderVNode では一度全ての DOM を削除し、1 から再生成しているのです。  
 これはなんとも無駄だらけな感じがしてなりません。今はまだ小さいので、これくらいでも特に問題なく動いているように見えますが、普段 Web アプリケーションを開発しているときような複雑な DOM を毎度毎度丸ごと作り替えるととんでもなくパフォーマンスが落ちてしまうのが容易に想像できると思います。  
-そこで、せっかく virtual DOM  を持っているわけですから、画面を描画する際に、前の virtual DOM  と比較して差分があったところだけを DOM 操作で書き換えるような実装をしたくなります。  
+そこで、せっかく virtual DOM を持っているわけですから、画面を描画する際に、前の virtual DOM と比較して差分があったところだけを DOM 操作で書き換えるような実装をしたくなります。  
 さて、今回のメインテーマはこれです。
 
 やりたいことをソースコードベースで見てみましょう。
-上記のようなコンポーネントがあったとき、render 関数の戻り値は以下のような virtual DOM  になっています。
+上記のようなコンポーネントがあったとき、render 関数の戻り値は以下のような virtual DOM になっています。
 初回のレンダリング時には count は 0 なので以下のようになります。
 
 ```ts
@@ -194,10 +194,11 @@ const patch = (
   n2: VNode | string,
   container: HostElement
 ) => {
-  if (typeof n2 === "object") {
-    processElement(n1, n2, container);
-  } else {
+  const { type } = n2;
+  if (type === Text) {
     processText(n1, n2, container);
+  } else {
+    processElement(n1, n2, container);
   }
 };
 
@@ -224,18 +225,17 @@ const processText = (n1: string | null, n2: string, container: HostElement) => {
 
 ## 実際に実装してみる
 
-ここから実際に virtual DOM  の patch を実装していきます。  
+ここから実際に virtual DOM の patch を実装していきます。  
 まず、 Element にしろ、Text にしろ、マウントした段階で vnode に実際の DOM への参照を持たせておきたいので、vnode の el というプロパティを持たせておきます。
 
 `~/packages/runtime-core/vnode.ts`
 
 ```ts
 export interface VNode<HostNode = RendererNode> {
-  type: string;
-  props: VNodeProps;
-  children: (VNode | string)[];
-
-  el: HostNode | undefined; // 追加
+  type: VNodeTypes;
+  props: VNodeProps | null;
+  children: VNodeNormalizedChildren;
+  el: HostNode | undefined; // [!code++]
 }
 ```
 
@@ -249,15 +249,12 @@ export function createRenderer(options: RendererOptions) {
   // .
   // .
 
-  const patch = (
-    n1: VNode | string | null,
-    n2: VNode | string,
-    container: RendererElement
-  ) => {
-    if (typeof n2 === "object") {
-      // processElement(n1, n2, container);
-    } else {
+  const patch = (n1: VNode | null, n2: VNode, container: RendererElement) => {
+    const { type } = n2;
+    if (type === Text) {
       // processText(n1, n2, container);
+    } else {
+      // processElement(n1, n2, container);
     }
   };
 }
@@ -299,10 +296,7 @@ const mountElement = (vnode: VNode, container: RendererElement) => {
 ここで、先ほど作った normalize 関数を噛ませておきましょう。
 
 ```ts
-const mountChildren = (
-  children: (VNode | string)[],
-  container: RendererElement
-) => {
+const mountChildren = (children: VNode[], container: RendererElement) => {
   for (let i = 0; i < children.length; i++) {
     const child = (children[i] = normalizeVNode(children[i]));
     patch(null, child, container);
@@ -316,8 +310,8 @@ const mountChildren = (
 
 ```ts
 const processText = (
-  n1: string | null,
-  n2: string,
+  n1: VNode | null,
+  n2: VNode,
   container: RendererElement
 ) => {
   if (n1 == null) {
@@ -334,13 +328,13 @@ const processText = (
 
 ```ts
 return function createApp(rootComponent) {
-    const app: App = {
-      mount(rootContainer: HostElement) {
-        // rootComponentを渡すだけに
-        render(rootComponent, rootContainer);
-      },
-    };
-
+  const app: App = {
+    mount(rootContainer: HostElement) {
+      // rootComponentを渡すだけに
+      render(rootComponent, rootContainer);
+    },
+  };
+};
 ```
 
 ```ts
@@ -397,8 +391,8 @@ Text も同様に。
 
 ```ts
 const processText = (
-  n1: string | null,
-  n2: string,
+  n1: VNode | null,
+  n2: VNode,
   container: RendererElement
 ) => {
   if (n1 == null) {
@@ -413,13 +407,13 @@ const processText = (
 };
 ```
 
-※ patchChildren に関して、本来は key 属性などを付与して動的な長さの子要素に対応したりしないといけないのですが、今回は小さく virtual DOM  を実装するのでその辺の実用性については触れません。  
-そのあたりをやりたい方は Basic Virtual Dom 部門で説明するのでぜひそちらをご覧ください。ここでは virtual DOM  の実装雰囲気であったり、役割が理解できるところまでの理解を目指します。
+※ patchChildren に関して、本来は key 属性などを付与して動的な長さの子要素に対応したりしないといけないのですが、今回は小さく virtual DOM を実装するのでその辺の実用性については触れません。  
+そのあたりをやりたい方は Basic Virtual Dom 部門で説明するのでぜひそちらをご覧ください。ここでは virtual DOM の実装雰囲気であったり、役割が理解できるところまでの理解を目指します。
 
 さて、これで差分レンダリングができるようになったので、playground を見てみましょう。
 
 ![patch_rendering](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/patch_rendering.png)
 
-これで virtual DOM  を利用したパッチが実装できました!!!!! 祝
+これで virtual DOM を利用したパッチが実装できました!!!!! 祝
 
 ここまでのソースコード: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/040_vdom_system)
