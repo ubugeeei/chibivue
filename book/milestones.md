@@ -8,7 +8,7 @@
 - props
   NOTE: innerHTML / textContent については再考
 
-# ★ Basic Reactive System 部門
+# ★ Basic Reactivity System 部門
 
 - ref api ✅
   -> 6/3

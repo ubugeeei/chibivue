@@ -27,7 +27,7 @@ The runtime encompasses everything that affects the actual operation - from rend
 
 Vue.js is a component-oriented framework. Depending on the user's requirements, you can maintainably create and encapsulate components for reuse. It also offers functionalities like state sharing between components (props/emits or provide/inject) and lifecycle hooks.
 
-### Reactive System
+### Reactivity System
 
 It tracks the state held by components and updates the screen when changes occur. This monitoring and responding mechanism is called reactivity.
 

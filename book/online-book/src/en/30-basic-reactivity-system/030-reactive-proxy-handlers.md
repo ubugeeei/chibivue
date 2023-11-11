@@ -2,7 +2,7 @@
 
 ## Objects that should not be reactive
 
-Now, let's solve a problem with the current reactivity system.  
+Now, let's solve a problem with the current Reactivity System.  
 First, try running the following code.
 
 ```ts

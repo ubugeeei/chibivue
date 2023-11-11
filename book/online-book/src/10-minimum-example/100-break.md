@@ -54,9 +54,9 @@ h("div", { id: "my-app" }, [
 
 ここで初めて Virtual DOM  のようなものが登場しました。
 
-##  reactivity system とは何か、どうやって画面を動的に更新していくかということが分かった
+##  Reactivity System とは何か、どうやって画面を動的に更新していくかということが分かった
 
-Vue の醍醐味である、 reactivity system がどのような実装で成り立っているのか、そもそも reactivity system とはなんのことなのか、ということについて理解しました
+Vue の醍醐味である、Reactivity System がどのような実装で成り立っているのか、そもそも Reactivity System とはなんのことなのか、ということについて理解しました
 
 ```ts
 const targetMap = new WeakMap<any, KeyToDepMap>();
@@ -312,7 +312,7 @@ export default {
   - スケジューラの実装
   - 対応できていないパッチの実装 (主に属性周り)
   - Fragment の対応
-- Basic Reactive System 部門
+- Basic Reactivity System 部門
   - ref api
   - computed api
   - watch api

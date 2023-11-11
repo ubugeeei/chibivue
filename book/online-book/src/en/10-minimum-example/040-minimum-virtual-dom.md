@@ -2,7 +2,7 @@
 
 ## What is Virtual DOM used for?
 
-By introducing the reactivity system in the previous chapter, we were able to dynamically update the screen. Let's take a look at the content of the current render function again.
+By introducing the Reactivity System in the previous chapter, we were able to dynamically update the screen. Let's take a look at the content of the current render function again.
 
 ```ts
 const render: RootRenderFunction = (vnode, container) => {

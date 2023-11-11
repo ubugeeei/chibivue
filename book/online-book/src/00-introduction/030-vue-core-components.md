@@ -25,7 +25,7 @@ https://github.com/vuejs/core/blob/main/.github/contributing.md
 Vue.js で開発した Web アプリケーションのうち、ブラウザ上やサーバー上(SSR の場合)で動作している部分全般のことです。  
 具体的には以下の要素を含んでます。(それぞれの詳しい説明は各チャプターでやるのでざっくり)
 
-### reactivity system
+### Reactivity System
 
 「リアクティビティ」は日本語で言うと「反応性」です。
 コンポーネントでもつステートを追跡し、変更があった場合に画面の更新をしたりします。

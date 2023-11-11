@@ -117,9 +117,9 @@ export const render = (n1: VNode | null, n2: VNode, container: Element) => {
 
 That's it for this part.
 
-## reactivity system (2 min)
+## Reactivity System (2 min)
 
-Now let's implement the logic to track state changes defined in the setup option and trigger the render function. This process of tracking state changes and performing specific actions is called the "reactivity system."
+Now let's implement the logic to track state changes defined in the setup option and trigger the render function. This process of tracking state changes and performing specific actions is called the "Reactivity System."
 
 Let's consider using the `reactive` function to define states:
 
@@ -382,7 +382,7 @@ export const h = (
   children: string
 ): VNode => ({ tag, onClick, children });
 
-// reactive system
+// Reactivity System
 export const reactive = <T extends Record<string, unknown>>(obj: T): T =>
   new Proxy(obj, {
     get: (target, key, receiver) => Reflect.get(target, key, receiver),

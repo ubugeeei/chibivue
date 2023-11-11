@@ -1,4 +1,4 @@
-// create app api
+// createApp API
 type CreateAppOption = {
   setup: () => Record<string, unknown>;
   render: (ctx: Record<string, unknown>) => VNode;
@@ -40,7 +40,7 @@ export const h = (
   children: string
 ): VNode => ({ tag, onClick, children });
 
-// reactive system
+// Reactivity System
 export const reactive = <T extends Record<string, unknown>>(obj: T): T =>
   new Proxy(obj, {
     get: (target, key, receiver) => Reflect.get(target, key, receiver),
@@ -51,7 +51,7 @@ export const reactive = <T extends Record<string, unknown>>(obj: T): T =>
     },
   });
 
-// template compiler
+// Template Compiler
 type AST = {
   tag: string;
   onClick: string;
@@ -84,7 +84,7 @@ const codegen = (node: AST) =>
     .join("")}\`)`;
 const compile = (template: string): string => codegen(parse(template));
 
-// sfc compiler (vite transformer)
+// SFC Compiler (Vite plugin)
 export const VitePluginChibivue = () => ({
   name: "vite-plugin-chibivue",
   transform: (code: string, id: string) =>

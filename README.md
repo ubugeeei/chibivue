@@ -13,7 +13,7 @@ https://ubugeeei.github.io/chibivue
 ---
 
 chibivue is minimal [Vue.js v3](https://github.com/vuejs/core) core implementations.  
-(reactivity system, vnode and patch rendering, component, compiler)
+(Reactivity System, Virtual DOM and Patch Rendering, Component System, Template Compiler, SFC Compiler)
 
 "`chibi`" means "`small`" in Japanese.
 
@@ -90,7 +90,7 @@ This online book is currently a work in progress.
 
 Please refer to the information below for the progress status.
 
-### Reactive System
+### Reactivity System
 
 | feature         | impl | book |
 | --------------- | ---- | ---- |

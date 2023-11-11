@@ -50,9 +50,9 @@ h("div", { id: "my-app" }, [
 
 This is where something like Virtual DOM first appears.
 
-## We now know what the reactivity system is and how to dynamically update the screen
+## We now know what the Reactivity System is and how to dynamically update the screen
 
-We understood the implementation of Vue's unique feature, the reactivity system, how it works, and what it actually is.
+We understood the implementation of Vue's unique feature, the Reactivity System, how it works, and what it actually is.
 
 ```ts
 const targetMap = new WeakMap<any, KeyToDepMap>();
@@ -305,7 +305,7 @@ From here, it will be divided into 5 parts + 1 appendix.
   - Implementation of the scheduler
   - Implementation of unsupported patches (mainly related to attributes)
   - Support for Fragment
-- Basic Reactive System Part
+- Basic Reactivity System Part
   - ref API
   - computed API
   - watch API

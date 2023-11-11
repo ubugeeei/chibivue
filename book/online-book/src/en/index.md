@@ -17,7 +17,7 @@ hero:
 
 features:
   - title: Reactivity System
-    details: From the basic principles of the reactivity system, we will cover a wide range of implementations, from EffectScope to advanced APIs like CustomRef.
+    details: From the basic principles of the Reactivity System, we will cover a wide range of implementations, from EffectScope to advanced APIs like CustomRef.
     icon: 🔆
   - title: Virtual DOM
     details: We will cover a broad range of implementations, from the basic setup of the Virtual DOM to patch rendering and scheduler implementations.

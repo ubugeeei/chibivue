@@ -128,11 +128,11 @@ Since this book has turned out quite voluminous, I've set achievement milestones
 - **Basic Virtual DOM Section**  
   In this section, we will implement a fairly practical patch rendering functionality for the Virtual DOM. While we won't be implementing features like "suspense" or other optimizations, it will be proficient enough to handle basic rendering tasks. We will also implement the scheduler here.
 
-- **Basic Reactive System Section**  
+- **Basic Reactivity System Section**  
   Although we implemented the reactive API in the Minimal Example section, in this section we will implement other APIs. Starting from basic APIs like ref, watch, and computed, we'll also delve into more advanced APIs like effectScope and the shallow series.
 
 - **Basic Component System Section**  
-  Here, we will undertake the basic implementations related to the Component System. In fact, since we'll have already set the base for the Component System in the Basic Virtual DOM section, here we'll focus on other aspects of the Component System. This includes features like props/emit, provide/inject, extensions to the reactive system, and lifecycle hooks.
+  Here, we will undertake the basic implementations related to the Component System. In fact, since we'll have already set the base for the Component System in the Basic Virtual DOM section, here we'll focus on other aspects of the Component System. This includes features like props/emit, provide/inject, extensions to the Reactivity System, and lifecycle hooks.
 
 - **Basic Template Compiler Section**  
   In addition to a compiler for the Virtual DOM system implemented in the Basic Virtual DOM section, we will implement directives like v-on, v-bind, and v-for. Generally, this will involve the component's template option, and we won't cover SFC (Single File Components) here.

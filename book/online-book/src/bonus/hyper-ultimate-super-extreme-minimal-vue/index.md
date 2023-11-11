@@ -48,7 +48,7 @@
 - create app api
 - Virtual DOM
 - patch rendering
-- reactivity system
+- Reactivity System
 - template compiler
 - sfc compiler (vite-plugin)
 

@@ -28,7 +28,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         collapsed: false,
         items: [
           {
-            text: "初めてのレンダリングとcreateApp API",
+            text: "初めてのレンダリングと createApp API",
             link: "/10-minimum-example/010-create-app-api",
           },
           {
@@ -36,7 +36,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: "/10-minimum-example/020-simple-h-function",
           },
           {
-            text: "小さい reactivity system ",
+            text: "小さい Reactivity System ",
             link: "/10-minimum-example/030-minimum-reactive",
           },
           {
