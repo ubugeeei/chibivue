@@ -196,7 +196,7 @@ export function walkIdentifiers(
 }
 ```
 
-あとは式の AST を生成し、この関すに渡して node を書き換えながら transform を行なっていけばいいです。
+あとは式の AST を生成し、この関数に渡して node を書き換えながら transform を行なっていけばいいです。
 
 ## transformExpression の実装
 
@@ -372,7 +372,7 @@ export function processExpression(node: SimpleExpressionNode): ExpressionNode {
 
 続いて 2 です。ここで新しい AST Node を定義します。`CompoundExpressionNode`というものです。  
 Compound には「配合」「複合」といった意味が含まれます。  
-この Node は children をもち、これらは少し特殊な値を撮ります。  
+この Node は children をもち、これらは少し特殊な値をとります。  
 まずは AST の定義をご覧ください。
 
 ```ts

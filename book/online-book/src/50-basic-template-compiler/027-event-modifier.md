@@ -58,7 +58,7 @@ app.mount("#app");
 
 テンプレートの新しいシンタックスを追加するわけなので、Parser と AST の変更が必要になります。
 
-ますは AST を見てみましょう。これはとっても簡単で、`DirectiveNode` に `modifiers` というプロパティ(string の配列)を追加するだけです。
+まずは AST を見てみましょう。これはとっても簡単で、`DirectiveNode` に `modifiers` というプロパティ(string の配列)を追加するだけです。
 
 ```ts
 export interface DirectiveNode extends Node {
@@ -109,7 +109,7 @@ function parseAttribute(
 
 ![50-027-compiler-architecture](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/50-027-compiler-architecture.drawio.png)
 
-compiler-core と compiler-dom のそれぞれの役悪を改めて理解してみると、  
+compiler-core と compiler-dom のそれぞれの役割を改めて理解してみると、  
 compiler-core は DOM に依存しないコンパイラの機能を提供するもので、AST の生成や、その変換を行います。
 
 これまでに、v-on ディレクティブなどを compiler-core に実装しましたが、これは`@click="handle"` という記述を `{ onClick: handle }` というオブジェクトに変換しているだけで、  
@@ -136,9 +136,9 @@ export type DirectiveTransform = (
 ```
 
 augmentor というものを追加してみました。  
-まぁ、これはただのコールバック関数です。 `DirectiveTransform` の interface としてコールバックを受け取れようにして、transform 関数を拡張可能にしています。
+まぁ、これはただのコールバック関数です。 `DirectiveTransform` の interface としてコールバックを受け取れるようにして、transform 関数を拡張可能にしています。
 
-compiler-dom の方では、compiler-core で実装した transformer をラップした transformer の実装をして行くようにします。
+compiler-dom の方では、compiler-core で実装した transformer をラップした transformer の実装をしていくようにします。
 
 ```ts
 // 実装イメージ
