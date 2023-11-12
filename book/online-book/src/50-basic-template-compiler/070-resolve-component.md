@@ -144,7 +144,7 @@ function render(_ctx) {
 
 ### AST
 
-コンポーネントとして解決すコードを生成するためには、"MyComponent" がコンポーネントであることを知っている必要があります。  
+コンポーネントとして解決するコードを生成するためには、"MyComponent" がコンポーネントであることを知っている必要があります。  
 parse の段階で、タグ名をハンドリングして、AST 上は通常の Element と Component で分けるようにします。
 
 まずは AST の定義を考えてみましょう。  
@@ -192,7 +192,7 @@ export interface ComponentNode extends BaseElementNode {
 
 問題は、どうやって Element なのか Component なのかを判断するかです。
 
-基本的な何考え方は単純で、"ネイティブなタグかどうか" を判断するだけです。
+基本的な考え方は単純で、"ネイティブなタグかどうか" を判断するだけです。
 
 ・  
 ・  
@@ -499,7 +499,7 @@ function genAssets(
 
 ### runtime-core 側の実装
 
-ここまでくれば目的のコードは生成できているので、、あとは runtime-core の実装です。
+ここまでくれば目的のコードは生成できているので、あとは runtime-core の実装です。
 
 #### コンポーネントのオプションとして component を追加できるように
 

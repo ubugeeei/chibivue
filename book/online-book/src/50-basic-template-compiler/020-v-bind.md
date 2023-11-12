@@ -75,10 +75,10 @@ export interface DirectiveNode extends Node {
 name は v-bind や v-on などのディレクティブ名です。on や bind が入ります。
 今回は v-bind を実装していくので、bind が入ります。
 
-arg は `:` で指定する引数です。v-bind で言うと、 id や style などが入ります。  
+arg は `:` で指定する引数です。v-bind でいうと、 id や style などが入ります。  
 (v-on の場合は click や input などがここに入ってきます。)
 
-exp は右辺です。`v-bind:id="count"` で言うと count が入ります。  
+exp は右辺です。`v-bind:id="count"` でいうと count が入ります。  
 exp も arg も、動的に変数を埋め込むことができるので、型は `ExpressionNode` になります。  
 ( `v-bind:[key]="count"` のように arg も動的にできるので)
 
@@ -206,9 +206,9 @@ v-bind:id="count"
 
 引用元: https://github.com/vuejs/core/blob/623ba514ec0f5adc897db90c0f986b1b6905e014/packages/compiler-core/src/transforms/vBind.ts#L13C1-L14C16
 
-流れを見てもわかる通り、transformElement では directive の arg をチェックして、存在していなければ transformVBind を実行せず mergeProps と言う関数呼び出しに変換しています。
+流れを見てもわかる通り、transformElement では directive の arg をチェックして、存在していなければ transformVBind を実行せず mergeProps という関数呼び出しに変換しています。
 
-`v-bind="hoge"`の形式で渡された引数と、そほのかの props をマージする関数です。
+`v-bind="hoge"`の形式で渡された引数と、そのほかの props をマージする関数です。
 
 ```vue
 <p v-bind="bindingObject" class="my-class">hello</p>
@@ -225,7 +225,7 @@ https://vuejs.org/api/built-in-directives.html#v-bind
 
 normalizeClass と normalizeStyle という関数を実装し、それぞれに適用します。
 
-arg が動的な場合は、特定が不可能なため、normalizeProps と言う関数を実装し、それを呼び出すようにします。 (内部で normalizeClass と normalizeStyle を呼び出します)
+arg が動的な場合は、特定が不可能なため、normalizeProps という関数を実装し、それを呼び出すようにします。 (内部で normalizeClass と normalizeStyle を呼び出します)
 
 さてここまで実装できたら動作を見てみましょう！
 

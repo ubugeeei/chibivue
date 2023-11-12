@@ -4,7 +4,7 @@
 
 さて、ここからはテンプレートのコンパイラをより本格的に実装していきます。  
 Minimum Example 部門でやったところから少し時間が空いてしまったので、今の実装がどうなっていたか少しおさらいをしておきましょう。  
-主ななキーワードは Parse, AST, Codegen でした。
+主なキーワードは Parse, AST, Codegen でした。
 
 ![me_template_compiler_design](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/me_template_compiler_design.drawio.png)
 
@@ -46,7 +46,7 @@ export function baseCompile(
 
 ## transform とは?
 
-上記のコードでもなんとなく想像がつく通り、パースによって得られた AST を transform によってなんらかしらの形の変換しています。
+上記のコードでもなんとなく想像がつく通り、パースによって得られた AST を transform によってなんらかしらの形に変換しています。
 
 ここを読んでれば、なんとなく想像がつくかもしれません。  
 https://github.com/vuejs/core/blob/37a14a5dae9999bbe684c6de400afc63658ffe90/packages/compiler-core/src/ast.ts#L43C1-L51C23
@@ -115,7 +115,7 @@ type TemplateChildNode = ElementNode | InterpolationNode | TextNode;
 
 このように、Codegen で生成されるコードを AST として表現したものが「生成するコードを表す AST」です。
 今はこれをわざわざ分けるほどの利点が感じられないかもしれませんが、これからディレクティブを実装したりしていくにあたっては便利なのです。
-input にちゃくもした AST と output に着目した AST に分ける感じで、`input の AST -> output の AST` の変換を行う関数こそが `transform` です。
+input に着目した AST と output に着目した AST に分ける感じで、`input の AST -> output の AST` の変換を行う関数こそが `transform` です。
 
 ## Codegen Node
 
@@ -127,7 +127,7 @@ https://github.com/vuejs/core/blob/37a14a5dae9999bbe684c6de400afc63658ffe90/pack
 この、"JS" から始まる Node + VNODE_CALL が output に着目した AST (以下 CodegenNode と呼びます) です。
 しかし、CodegenNode の全てがこれらの Node で構成されているというわけではなく、ElementNode や InterpolationNode などを含んで構成されることになります。
 
-今回扱うもの列挙しつつコメントで説明します。多少省略しているものもあるので、正確にはソースコードを参照してください。
+今回扱うものを列挙しつつコメントで説明します。多少省略しているものもあるので、正確にはソースコードを参照してください。
 
 ```ts
 export interface SimpleExpressionNode extends Node {
@@ -430,7 +430,7 @@ Codegen に入ってくる AST としては主に VNodeClass (とそれらが持
 
 既存の Codegen は非常に簡素な実装になっているので、ここでもう少し形式的にしておきましょう。(結構ハードコードになっているので)  
 Codegen の方でも Codegen 用の context を持つことにして、生成したコードをそこに push していくような構成にしてみようと思います。  
-ついでに、context の方に幾つかのヘルパー関数を実装してみます (インデント系とか)
+ついでに、context の方に幾つかのヘルパー関数を実装してみます。 (インデント系とか)
 
 ```ts
 export interface CodegenContext {
