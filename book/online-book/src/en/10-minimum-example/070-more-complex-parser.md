@@ -125,6 +125,13 @@ In the parse function, we will implement the conversion of the template string i
 
 ## Implementation of a full-fledged parser
 
+::: warning
+A major refactoring was conducted in late November 2023 in vuejs/core. You can find the details of the refactoring in this [pull request](https://github.com/vuejs/core/pull/9674).  
+Currently, it has been merged into the [minor branch of vuejs/core](https://github.com/vuejs/core/tree/minor/packages/compiler-core) and will soon be incorporated into the main branch.  
+Please note that this online book is referencing the implementation prior to this refactoring.  
+We plan to update this online book accordingly at the appropriate time.  
+:::
+
 Implement it in `~/packages/compiler-core/parse.ts`.
 Even if I say it's full-fledged, you don't have to be too nervous. Basically, all you're doing is generating an AST while reading the string and using branching and looping.
 The source code will be a bit longer, but I think the explanation will be easier to understand in the code base. So let's proceed that way.
