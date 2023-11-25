@@ -192,12 +192,16 @@ Please refer to the information below for the progress status.
   - Fixing typos and errors
   - Reviewing English version of the text
   - Making explanations more understandable
-- Incorporate refactoring of the reactivity package that will likely be included in Vue.js 3.4
 - Implementation and explanation of SSR / SSG
 - Implementation and explanation of compile-time optimization  
   Tree flattening and static hoisting, among others
+- Incorporate refactoring of the parser that will likely be included in Vue.js 3.4  
+　https://github.com/vuejs/core/pull/9674
+- Incorporate refactoring of the reactivity package that will likely be included in Vue.js 3.4  
+  https://github.com/vuejs/core/pull/5912
 - 🌟 Implementation and explanation of \***\*Vapor Mode\*\***  
-  Since the official version has not been released, we will implement it based on our predictions.
+  Since the official version has not been released, we will implement it based on our predictions.  
+  https://github.com/vuejs/core-vapor/tree/main
 
 ## 🎉 Bonus Track
 
