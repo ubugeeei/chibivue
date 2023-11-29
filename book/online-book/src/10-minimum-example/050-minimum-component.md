@@ -540,7 +540,7 @@ export function updateProps(
 }
 ```
 
-`~/packages/runtime-core/componentProps.ts`
+`~/packages/runtime-core/renderer.ts`
 
 ```ts
 const setupRenderEffect = (
