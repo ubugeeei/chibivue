@@ -439,7 +439,7 @@ function setFullProps(
     for (let key in rawProps) {
       const value = rawProps[key];
       if (options && options.hasOwnProperty(key)) {
-        props[ke] = value;
+        props[key] = value;
       }
     }
   }
