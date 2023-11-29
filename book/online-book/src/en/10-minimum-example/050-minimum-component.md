@@ -317,7 +317,7 @@ app.mount("#app");
 ```
 
 Source code up to this point:
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10-minimum-example/050_component_system)
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/050_component_system)
 
 ## Communication between components
 
@@ -438,7 +438,7 @@ function setFullProps(
     for (let key in rawProps) {
       const value = rawProps[key];
       if (options && options.hasOwnProperty(key)) {
-        props[ke] = value;
+        props[key] = value;
       }
     }
   }
@@ -539,7 +539,7 @@ export function updateProps(
 }
 ```
 
-`~/packages/runtime-core/componentProps.ts`
+`~/packages/runtime-core/renderer.ts`
 
 ```ts
 const setupRenderEffect = (
@@ -571,7 +571,7 @@ Now, you can pass data to the component using props! Great job!
 ![props](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/props.png)
 
 Source code up to this point:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10-minimum-example/050_component_system2)
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/050_component_system2)
 
 As a side note, although it's not necessary, let's implement the ability to receive props in kebab-case, just like in the original Vue.
 At this point, create a directory called `~/packages/shared` and create a file called `general.ts` in it.

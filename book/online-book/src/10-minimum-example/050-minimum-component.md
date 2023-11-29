@@ -319,7 +319,7 @@ app.mount("#app");
 ```
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10-minimum-example/050_component_system)
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/050_component_system)
 
 ## コンポーネント間のやりとり
 
@@ -439,7 +439,7 @@ function setFullProps(
     for (let key in rawProps) {
       const value = rawProps[key];
       if (options && options.hasOwnProperty(key)) {
-        props[ke] = value;
+        props[key] = value;
       }
     }
   }
@@ -540,7 +540,7 @@ export function updateProps(
 }
 ```
 
-`~/packages/runtime-core/componentProps.ts`
+`~/packages/runtime-core/renderer.ts`
 
 ```ts
 const setupRenderEffect = (
@@ -572,7 +572,7 @@ const setupRenderEffect = (
 ![props](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/props.png)
 
 ここまでのソースコード：  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10-minimum-example/050_component_system2)
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/050_component_system2)
 
 ついでと言ってはなんなのですが、本家 Vue は props をケバブケースで受け取ることができるのでこれも実装してみましょう。  
 ここで、新たに `~/packages/shared` というディレクトリを作成し、 `general.ts` を作成します。  
