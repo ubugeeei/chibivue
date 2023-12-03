@@ -212,6 +212,40 @@ export default defineConfig({
 });
 ```
 
+tsconfig.json の中身を以下のように書き換えます。
+
+```json
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
+    "moduleResolution": "Node",
+    "strict": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "skipLibCheck": true,
+    "paths": {
+      "chibivue": [
+        "../../packages"
+      ],
+    }
+  },
+  "include": [
+    "src"
+  ]
+}
+```
+
 最後に、chibivue プロジェクトの package.json に playground を起動するコマンドを記述して実際に起動してみましよう！
 
 ~/package.json に以下を追記

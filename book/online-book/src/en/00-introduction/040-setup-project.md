@@ -198,6 +198,40 @@ export default defineConfig({
 });
 ```
 
+Modify tsconfig.json as follows.
+
+```json
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
+    "moduleResolution": "Node",
+    "strict": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "skipLibCheck": true,
+    "paths": {
+      "chibivue": [
+        "../../packages"
+      ],
+    }
+  },
+  "include": [
+    "src"
+  ]
+}
+```
+
 Lastly, let's add a command to the package.json of the chibivue project to launch the playground and try starting it!
 
 Append the following to ~/package.json
