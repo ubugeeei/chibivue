@@ -264,7 +264,7 @@ https://github.com/vuejs/core/tree/main/packages/runtime-dom/src/modules
 
 ```sh
 pwd # ~
-touch runtime-dom/patchProp.ts
+touch packages/runtime-dom/patchProp.ts
 ```
 
 `runtime-dom/patchProp.ts` の内容

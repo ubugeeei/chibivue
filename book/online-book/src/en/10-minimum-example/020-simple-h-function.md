@@ -264,7 +264,7 @@ First, let's create the framework.
 
 ```sh
 pwd # ~
-touch runtime-dom/patchProp.ts
+touch packages/runtime-dom/patchProp.ts
 ```
 
 Contents of `runtime-dom/patchProp.ts`
