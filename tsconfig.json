@@ -1,36 +1,42 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "ES2020",
+    "baseUrl": ".",
+    "outDir": "temp",
+    "target": "ESNext",
+    "module": "ESNext",
     "lib": [
       "DOM"
     ],
     "strict": true,
     "paths": {
+      "@chibivue/*": [
+        "./packages/*/src"
+      ],
       "chibivue": [
-        "./packages"
+        "./packages/chibivue/src"
       ],
-      "chibivue/*": [
-        "./packages/*"
-      ],
+      // extensions
       "chibivue-store": [
-        "./packages/@extensions/chibivue-store"
+        "./packages/@extensions/chibivue-store/src"
       ],
       "chibivue-router": [
-        "./packages/@extensions/chibivue-router"
+        "./packages/@extensions/chibivue-router/src"
+      ],
+      "vite-plugin-chibivue": [
+        "./packages/@extensions/vite-plugin-chibivue/src"
       ],
     },
     "types": [
       "vitest/importMeta",
     ],
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
     "allowJs": true,
     "esModuleInterop": true,
   },
   "include": [
     "packages/**/*.ts",
-    "example/**/**.ts",
-    "example/**/**.vue", "example/playground/vapor/App.ts",
+    "examples/**/**.ts",
+    "examples/**/**.vue",
   ],
   "exclude": [
     "node_modules",
