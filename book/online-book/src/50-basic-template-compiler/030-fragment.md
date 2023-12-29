@@ -41,7 +41,7 @@ return の先がおかしなことになってしまっていますね。今の 
 
 ## どういうコードを生成すればいいのか
 
-修正していくとはいえ、どう言うコードを生成できるようになれば良いでしょうか。
+修正していくとはいえ、どういうコードを生成できるようになれば良いでしょうか。
 
 結論から言うと以下のようなコードになります。
 
@@ -63,7 +63,7 @@ return function render(_ctx) {
 };
 ```
 
-この `Fragment` と言うものは Vue で定義されている symbol です。  
+この `Fragment` というものは Vue で定義されている symbol です。  
 つまり、Fragment は FragmentNode のような AST として表現されるものではなく、単に ElementNode の tag として表現されます。
 
 そして、tag が Fragment あった場合の処理を renderer に実装します。  
@@ -253,6 +253,6 @@ const app = createApp(App);
 app.mount("#app");
 ```
 
-ちゃんど動作しているようです！
+ちゃんと動作しているようです！
 
 ここまでのソースコード: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/030_fragment)

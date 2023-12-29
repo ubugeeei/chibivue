@@ -124,11 +124,11 @@ export const render = (n1: VNode | null, n2: VNode, container: Element) => {
 
 以上になります。
 
-## reactivity system (2 min)
+## Reactivity System (2 min)
 
 これからは実際に setup オプションで でセットアップされたステートの変更を追跡して、
 
-render 関数を発火させる処理を実装していきます。ステートの更新を追跡して特定の作用を実行することから「reactivity system」というふうな名前がついています。
+render 関数を発火させる処理を実装していきます。ステートの更新を追跡して特定の作用を実行することから「Reactivity System」というふうな名前がついています。
 
 今回は `reactive` という関数でユーザーにステートを定義さることを考えてみます。
 
@@ -377,7 +377,7 @@ export const createApp = (option: CreateAppOption) => ({
   },
 });
 
-// virtual dom patch
+// Virtual DOM patch
 export const render = (n1: VNode | null, n2: VNode, container: Element) => {
   const mountElement = (vnode: VNode, container: Element) => {
     const el = document.createElement(vnode.tag);
@@ -391,7 +391,7 @@ export const render = (n1: VNode | null, n2: VNode, container: Element) => {
   n1 == null ? mountElement(n2, container) : patchElement(n1, n2);
 };
 
-// virtual dom
+// Virtual DOM
 type VNode = { tag: string; onClick: (e: Event) => void; children: string };
 export const h = (
   tag: string,
@@ -399,7 +399,7 @@ export const h = (
   children: string
 ): VNode => ({ tag, onClick, children });
 
-// reactive system
+// Reactivity System
 export const reactive = <T extends Record<string, unknown>>(obj: T): T =>
   new Proxy(obj, {
     get: (target, key, receiver) => Reflect.get(target, key, receiver),

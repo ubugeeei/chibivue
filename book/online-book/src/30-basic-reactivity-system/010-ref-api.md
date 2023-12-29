@@ -1,4 +1,4 @@
-# ref api (Basic Reactive System 部門スタート)
+# ref api (Basic Reactivity System 部門スタート)
 
 ## ref api のおさらい (と実装)
 

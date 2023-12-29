@@ -186,7 +186,7 @@ Let's implement the renderer.
 
 As usual, branch the case of Comment in patch and generate a comment when mounting.
 
-As for patch, since it is a back-end implementation, we don't do anything special. (In the code, we simply assign it as it is.)
+Regarding the patch, since it's static this time, I won't be doing anything special. (In the code, it's just set to assign as is.)
 
 ```ts
 const patch = (

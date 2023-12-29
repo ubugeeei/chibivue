@@ -42,14 +42,14 @@ Although I will be implementing it in a very sloppy way from now on, I am compar
 
 :::
 
-## You're just going to implement a reactive system, right?
+## You're just going to implement a Reactivity System, right?
 
 No, that's not the case. This time, I will try to list what will be implemented in 15 minutes.
 
 - create app api
-- virtual dom
+- Virtual DOM
 - patch rendering
-- reactivity system
+- Reactivity System
 - template compiler
 - sfc compiler (vite-plugin)
 

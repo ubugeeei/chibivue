@@ -58,7 +58,7 @@
 本書はかなりボリューミーな感じになってしまっているので、各部門ごとに達成マイルストーンを立てて分割します。
 
 - **Minimal Example 部門**  
-  最小の構成で Vue.js を実装します。機能としても一番小さい部門ですが、 virtual DOM ,  reactivity system , コンパイラ, SFC の実装を行います。  
+  最小の構成で Vue.js を実装します。機能としても一番小さい部門ですが、 Virtual DOM,  Reactivity System , コンパイラ, SFC の実装を行います。  
   とはいえ実用的なものからは程遠く、かなり簡略化した実装になっています。  
   しかし、Vue.js の全体像がどうなっているかのざっくりした理解をしたい方にとっては十分な達成率です。  
   入門の部門でもあるということで、説明も他の部門と比べて最も丁寧に行なっています。  
@@ -124,20 +124,20 @@
   ```
 
 - **Basic Virtual DOM 部門**  
-  ここではある程度実用的な virtual DOM  のパッチレンダリング機能の実装を行います。
+  ここではある程度実用的な Virtual DOM のパッチレンダリング機能の実装を行います。
   suspense などの機能や最適化の実装は行いませんが、基本的なレンダリングであれば問題なくできる程度の完成度です。
   スケジューラの実装などもここで行います。
 
-- **Basic Reactive System 部門**  
+- **Basic Reactivity System 部門**  
   Minimal Example 部門では reactive という API を実装しましたが、この部門ではその他の API を実装します。
   ref/watch/computed というベーシックな API をはじめ、effectScope や shallow 系などの応用的な API まで幅広く実装します。
 
 - **Basic Component System 部門**  
   ここでは Component System 関する基本実装を行います。実は、Basic Virtual DOM 部門で Component System のベースは実装してしまうので、
-  それ以外の部分の Component System を実装します。例えば props/emit や provide/inject、 reactivity system の拡張、ライフサイクルフックなどです。
+  それ以外の部分の Component System を実装します。例えば props/emit や provide/inject、 Reactivity System の拡張、ライフサイクルフックなどです。
 
 - **Basic Template Compiler 部門**  
-  Basic Virtual DOM で実装した virtual DOM  システムに対応する機能のコンパイラに加え、v-on, v-bind, v-for 等のディレクティブなどの実装を行います。   
+  Basic Virtual DOM で実装した Virtual DOM システムに対応する機能のコンパイラに加え、v-on, v-bind, v-for 等のディレクティブなどの実装を行います。   
   基本的にはコンポーネントの template オプションを利用した実装で、SFC の対応はここではやりません。
 
 - **Basic SFC Compiler 部門**  

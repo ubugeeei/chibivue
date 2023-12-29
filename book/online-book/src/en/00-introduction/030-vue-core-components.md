@@ -27,7 +27,7 @@ The runtime encompasses everything that affects the actual operation - from rend
 
 Vue.js is a component-oriented framework. Depending on the user's requirements, you can maintainably create and encapsulate components for reuse. It also offers functionalities like state sharing between components (props/emits or provide/inject) and lifecycle hooks.
 
-### Reactive System
+### Reactivity System
 
 It tracks the state held by components and updates the screen when changes occur. This monitoring and responding mechanism is called reactivity.
 
@@ -46,7 +46,7 @@ const increment = () => {
 
 ### Virtual DOM System
 
-The virtual DOM system is another one of Vue.js's potent mechanisms. It defines a JavaScript object imitating the DOM on JS's runtime. When updating, it compares the current virtual DOM to a new one and reflects only the differences to the real DOM. We'll delve deeper into this in a dedicated chapter.
+The Virtual DOM system is another one of Vue.js's potent mechanisms. It defines a JavaScript object imitating the DOM on JS's runtime. When updating, it compares the current Virtual DOM to a new one and reflects only the differences to the real DOM. We'll delve deeper into this in a dedicated chapter.
 
 ## Compiler
 

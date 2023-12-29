@@ -2,7 +2,7 @@
 
 ## 実はここまでで動作に必要なものは揃った(?)
 
-これまで、 reactivity system や virtual DOM 、Componentなどを実装してきました。  
+これまで、 Reactivity System や Virtual DOM 、Component などを実装してきました。  
 これらは非常に小さなもので、実用的なものではないのですが、実は動作に必要な構成要素の全体像としては一通り理解できたと言っても過言ではないのです。  
 それぞれの要素自体の機能は足りていないですが、浅〜〜〜〜〜く 1 周した感じです。
 
@@ -589,4 +589,4 @@ app.mount("#app");
 ちゃんと実装できているようです！
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10-minimum-example/060_template_compiler)
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler)

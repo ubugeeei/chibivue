@@ -20,7 +20,7 @@ app.mount("#app");
 メッセージだけでは何とも寂しいので、HTML 要素も描画できるような開発者インタフェースを考えてみましょう。  
 そこで登場するのが `h function` です。この `h` というのは `hyperscript` の略で、HTML (Hyper Text Markup Language)を JS で記述する関数として提供されます。
 
-> h() is short for hyperscript - which means "JavaScript that produces HTML (hypertext markup language)". This name is inherited from conventions shared by many virtual DOM implementations. A more descriptive name could be createVnode(), but a shorter name helps when you have to call this function many times in a render function.
+> h() is short for hyperscript - which means "JavaScript that produces HTML (hypertext markup language)". This name is inherited from conventions shared by many Virtual DOM implementations. A more descriptive name could be createVnode(), but a shorter name helps when you have to call this function many times in a render function.
 
 引用: https://vuejs.org/guide/extras/render-function.html#creating-vnodes
 
@@ -83,8 +83,8 @@ const app: App = {
 まあ、変わったところというと、message という文字列ではなく node というオブジェクトに変えただけです。  
 あとは render 関数でオブジェクトを元に DOM 操作をすれば OK です。
 
-実は、このオブジェクトには名前がついていて、「 virtual DOM 」と言います。  
- virtual DOM  については virtual DOM  のチャプターで詳しく解説するので、とりあえず名前だけ覚えてもらえれば大丈夫です。
+実は、このオブジェクトには名前がついていて、「Virtual DOM」と言います。  
+Virtual DOM については Virtual DOM のチャプターで詳しく解説するので、とりあえず名前だけ覚えてもらえれば大丈夫です。
 
 ## h function を実装する
 
@@ -264,7 +264,7 @@ https://github.com/vuejs/core/tree/main/packages/runtime-dom/src/modules
 
 ```sh
 pwd # ~
-touch runtime-dom/patchProp.ts
+touch packages/runtime-dom/patchProp.ts
 ```
 
 `runtime-dom/patchProp.ts` の内容

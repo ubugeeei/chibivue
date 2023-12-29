@@ -1,4 +1,4 @@
-# ref api (Basic Reactive System Start)
+# ref api (Basic Reactivity System Start)
 
 ## Review of ref api (and implementation)
 

@@ -29,7 +29,7 @@ app.mount("#app");
 
 ## AST とパーサの実装
 
-コメントアウトどう実装するかですが、一見 パースするときに無視してしまえばいい感じもします。
+コメントアウトをどう実装するかですが、一見 パースするときに無視してしまえばいい感じもします。
 
 しかし、Vue のコメントアウトは、template に記述したものがそのまま HTML として出力されるようになっています。
 
@@ -186,7 +186,7 @@ renderer の実装をやっていきます。
 
 いつものように patch で Comment の場合を分岐し、mount 時にコメントを生成します。
 
-patch に関しては、今回は背的なものなので、特に何も行いません。(コード上はそのまま代入するようにしています。)
+patch に関しては、今回は静的なものなので、特に何も行いません。(コード上はそのまま代入するようにしています。)
 
 ```ts
 const patch = (
@@ -214,7 +214,7 @@ const processCommentNode = (
 ) => {
   if (n1 == null) {
     hostInsert(
-      (n2.el = hostCreateComment((n2.children as string) || "")), // hostCreateComment を nodeOps 側に実装しましょう！s
+      (n2.el = hostCreateComment((n2.children as string) || "")), // hostCreateComment を nodeOps 側に実装しましょう！
       container,
       anchor
     );

@@ -1,8 +1,8 @@
-# Minimal reactivity system
+# Minimal Reactivity System
 
 ## Developer interface we aim for this time
 
-From here, we will talk about the essence of Vue.js, which is the reactivity system.  
+From here, we will talk about the essence of Vue.js, which is the Reactivity System.  
 The previous implementation, although it looks similar to Vue.js, is not actually Vue.js in terms of functionality.  
 I simply implemented the initial developer interface and made it possible to display various HTML.
 
@@ -48,7 +48,7 @@ To summarize what we want to do:
 - When the button is clicked, the state is updated
 - Track the state updates, re-execute the render function, and redraw the screen
 
-## What is the reactivity system?
+## What is the Reactivity System?
 
 Now, let's review what reactivity is.  
 Let's refer to the official documentation.
@@ -57,7 +57,7 @@ Let's refer to the official documentation.
 
 [Source](https://v3.vuejs.org/guide/reactivity-fundamentals.html)
 
-> One of Vue's most distinctive features is its modest reactivity system. The state of a component is composed of reactive JavaScript objects. When the state changes, the view is updated.
+> One of Vue's most distinctive features is its modest Reactivity System. The state of a component is composed of reactive JavaScript objects. When the state changes, the view is updated.
 
 [Source](https://v3.vuejs.org/guide/reactivity-in-depth.html)
 
@@ -136,7 +136,7 @@ This is the main theme for this time. I want to execute `updateComponent` when t
 
 The key to this is an object called Proxy.
 
-First, let me explain about each of them, not about the implementation method of the reactivity system.
+First, let me explain about each of them, not about the implementation method of the Reactivity System.
 
 https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Proxy
 
@@ -194,11 +194,11 @@ const o = new Proxy(
 
 This is the extent of understanding Proxy.
 
-## Trying to achieve reactivity system with Proxy
+## Trying to achieve Reactivity System with Proxy
 
 To clarify the purpose again, the purpose this time is to "execute `updateComponent` when the state is changed". Let me explain the implementation process using Proxy.
 
-First, Vue.js's reactivity system involves `target`, `Proxy`, `ReactiveEffect`, `Dep`, `track`, `trigger`, `targetMap`, and `activeEffect`.
+First, Vue.js's Reactivity System involves `target`, `Proxy`, `ReactiveEffect`, `Dep`, `track`, `trigger`, `targetMap`, and `activeEffect`.
 
 First, let's talk about the structure of targetMap.
 targetMap is a mapping of keys and deps for a certain target.

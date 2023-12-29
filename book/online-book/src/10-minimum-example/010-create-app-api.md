@@ -1,4 +1,4 @@
-# 初めてのレンダリングとcreateApp API
+# 初めてのレンダリングと createApp API
 
 ## Vue.js の開発者インタフェース
 
@@ -166,7 +166,7 @@ runtime-dom というのは名前の通り、DOM に依存した実装を置く�
 例を挙げると querySelector や createElement などの DOM 操作が含まれます。
 
 runtime-core ではそういった処理は書かず、あくまで純粋な TypeScript の世界の中で Vue.js のランタイムに関するコアロジックを記述するような設計になっています。  
-例を挙げると、 virtual DOM  に関する実装であったり、コンポーネントに関する実装だったりです。  
+例を挙げると、 Virtual DOM に関する実装であったり、コンポーネントに関する実装だったりです。  
 まあ、この辺りに関しては chibivue の開発が進むにつれて明確になってくると思うのでわからなかったらとりあえず本の通りにリファクタしてもらえれば問題ありません。
 
 #### 各ファイルの役割と依存関係
@@ -215,7 +215,7 @@ export const createApp = (options: Options): App => {
 ```
 
 ここまでではコードも少なく、全く複雑ではないので一見問題ないように見えます。  
-ですが、今後は virtual DOM  のパッチレンダリングのロジック等を書くことになるのでかなり複雑になります。
+ですが、今後は Virtual DOM のパッチレンダリングのロジック等を書くことになるのでかなり複雑になります。
 Vue.js ではこのレンダリングを担う部分を`renderer`として切り出しています。
 それが`runtime-core/renderer.ts`です。
 レンダリングというと SPA においてはブラウザの DOM を司る API(document)に依存することが安易に想像できると思います。(element を作ったり text をセットしたり)
@@ -230,7 +230,7 @@ Vue.js ではこのレンダリングを担う部分を`renderer`として切り
 ここまでの話が図の赤く囲まれた部分です。
 ![refactor_createApp_render](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/refactor_createApp_render.png)
 
-ソースコードベースで説明してみます。今の時点ではまだ virtual DOM  のレンダリング機能は実装していないので、先ほどと同じ機能で作ります。
+ソースコードベースで説明してみます。今の時点ではまだ Virtual DOM のレンダリング機能は実装していないので、先ほどと同じ機能で作ります。
 
 まず、`runtime-core/renderer`に Node(DOM に限らず)のオペレーション用オブジェクトの interface を実装します。
 

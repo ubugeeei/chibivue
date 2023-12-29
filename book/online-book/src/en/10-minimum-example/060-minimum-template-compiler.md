@@ -2,7 +2,7 @@
 
 ## Actually, we have everything we need for the operation so far (?)
 
-So far, we have implemented the reactivity system, virtual DOM, and Component.
+So far, we have implemented the Reactivity System, Virtual DOM, and Component.
 Although these are very small and not practical, it is not an exaggeration to say that we have understood the overall configuration elements necessary for operation.
 Although the functionality of each element itself is insufficient, it feels like we have gone through it superficially.
 
@@ -552,4 +552,4 @@ app.mount("#app");
 It appears to be implemented correctly!
 
 Source code up to this point:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10-minimum-example/060_template_compiler)
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler)

@@ -82,7 +82,7 @@ What these two problems have in common is that "the node that needs to be treate
 To solve this, it is necessary to assign a key to the elements and patch based on that key.  
 Now, let's take a look at the explanation of the key attribute in the Vue documentation.
 
-> The special attribute key is primarily used as a hint for Vue's virtual DOM algorithm to identify VNodes when diffing the new list of nodes against the old list.
+> The special attribute key is primarily used as a hint for Vue's Virtual DOM algorithm to identify VNodes when diffing the new list of nodes against the old list.
 
 https://v3.vuejs.org/guide/migration/key-attribute.html
 

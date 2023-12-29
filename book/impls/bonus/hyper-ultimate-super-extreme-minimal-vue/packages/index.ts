@@ -1,4 +1,4 @@
-// create app api
+// createApp API
 type CreateAppOption = {
   setup: () => Record<string, unknown>;
   render: (ctx: Record<string, unknown>) => VNode;
@@ -18,7 +18,7 @@ export const createApp = (option: CreateAppOption) => ({
   },
 });
 
-// virtual dom patch
+// Virtual DOM patch
 export const render = (n1: VNode | null, n2: VNode, container: Element) => {
   const mountElement = (vnode: VNode, container: Element) => {
     const el = document.createElement(vnode.tag);
@@ -32,7 +32,7 @@ export const render = (n1: VNode | null, n2: VNode, container: Element) => {
   n1 == null ? mountElement(n2, container) : patchElement(n1, n2);
 };
 
-// virtual dom
+// Virtual DOM
 type VNode = { tag: string; onClick: (e: Event) => void; children: string };
 export const h = (
   tag: string,
@@ -40,7 +40,7 @@ export const h = (
   children: string
 ): VNode => ({ tag, onClick, children });
 
-// reactive system
+// Reactivity System
 export const reactive = <T extends Record<string, unknown>>(obj: T): T =>
   new Proxy(obj, {
     get: (target, key, receiver) => Reflect.get(target, key, receiver),
@@ -51,7 +51,7 @@ export const reactive = <T extends Record<string, unknown>>(obj: T): T =>
     },
   });
 
-// template compiler
+// Template Compiler
 type AST = {
   tag: string;
   onClick: string;
@@ -84,7 +84,7 @@ const codegen = (node: AST) =>
     .join("")}\`)`;
 const compile = (template: string): string => codegen(parse(template));
 
-// sfc compiler (vite transformer)
+// SFC Compiler (Vite plugin)
 export const VitePluginChibivue = () => ({
   name: "vite-plugin-chibivue",
   transform: (code: string, id: string) =>

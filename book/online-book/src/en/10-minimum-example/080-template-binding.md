@@ -2,7 +2,7 @@
 
 ## Want to bind to the template
 
-Currently, we are directly manipulating the DOM, so we are not able to take advantage of the reactivity system or virtual DOM.  
+Currently, we are directly manipulating the DOM, so we are not able to take advantage of the Reactivity System or Virtual DOM.  
 In reality, we want to write event handlers and text content in the template section. That's where the joy of declarative UI comes in.  
 We aim for a developer interface like the following.
 
@@ -685,6 +685,6 @@ You did it. We're getting closer to Vue!
 With this, the implementation of the small template is complete. Good job.
 
 Source code up to this point:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10-minimum-example/060_template_compiler3)
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler3)
 
 <!-- It seems to be working properly, so we have finished implementing the three tasks that were split when starting the compiler implementation. Well done! -->

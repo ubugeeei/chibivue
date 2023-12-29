@@ -20,7 +20,7 @@ This is a function that simply renders "Hello World." on the screen.
 Since it's a bit lonely with just a message, let's think about a developer interface that can also render HTML elements.  
 That's where the `h function` comes in. This `h` stands for `hyperscript` and is provided as a function for writing HTML (Hyper Text Markup Language) in JavaScript.
 
-> h() is short for hyperscript - which means "JavaScript that produces HTML (hypertext markup language)". This name is inherited from conventions shared by many virtual DOM implementations. A more descriptive name could be createVnode(), but a shorter name helps when you have to call this function many times in a render function.
+> h() is short for hyperscript - which means "JavaScript that produces HTML (hypertext markup language)". This name is inherited from conventions shared by many Virtual DOM implementations. A more descriptive name could be createVnode(), but a shorter name helps when you have to call this function many times in a render function.
 
 Quote: https://vuejs.org/guide/extras/render-function.html#creating-vnodes
 
@@ -83,8 +83,8 @@ const app: App = {
 Well, the only thing that has changed is that we changed the `message` string to an `node` object.  
 All we have to do now is perform DOM operations based on the object in the render function.
 
-Actually, this object has a name, "virtual DOM".  
-We will explain more about the virtual DOM in the virtual DOM chapter, so for now, just remember the name.
+Actually, this object has a name, "Virtual DOM".  
+We will explain more about the Virtual DOM in the Virtual DOM chapter, so for now, just remember the name.
 
 ## Implementing the h function
 
@@ -264,7 +264,7 @@ First, let's create the framework.
 
 ```sh
 pwd # ~
-touch runtime-dom/patchProp.ts
+touch packages/runtime-dom/patchProp.ts
 ```
 
 Contents of `runtime-dom/patchProp.ts`

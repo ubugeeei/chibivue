@@ -2,7 +2,7 @@
 
 ## テンプレートにバインドしたい
 
-今の状態だと、直接 DOM 操作をしているので、 reactivity system や virtual DOM  の恩恵を得ることができていません。  
+今の状態だと、直接 DOM 操作をしているので、 Reactivity System や Virtual DOM の恩恵を得ることができていません。  
 実際にはイベントハンドラであったり、テキストの内容はテンプレート部分に書きたいわけです。それでこそ宣言的 UI の嬉しさと言った感じですよね。  
 以下のような開発者インタフェースを目指します。
 
@@ -691,6 +691,6 @@ const app = createApp({
 ここまでで小さなテンプレートの実装は完了です。お疲れ様でした。
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10-minimum-example/060_template_compiler3)
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler3)
 
 <!-- ちゃんと動いているようなのでコンパイラ実装を始める際に分割した 3 つのタスクを実装し終えました。やったね！ -->

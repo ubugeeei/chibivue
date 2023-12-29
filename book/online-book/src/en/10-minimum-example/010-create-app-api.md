@@ -147,7 +147,7 @@ To explain what each of them is, "runtime-core" contains the core functionality 
 
 So, I think it would be easier to understand by looking at the relationship with "runtime-dom". As the name suggests, "runtime-dom" is a directory that contains DOM-dependent implementations. Roughly speaking, it can be understood as "browser-dependent operations". It includes DOM operations such as querySelector and createElement.
 
-In runtime-core, we don't write such operations, but instead, we design it to describe the core logic of Vue.js runtime in the world of pure TypeScript. For example, it includes implementations related to virtual DOM and components. Well, I think it will become clearer as the development of chibivue progresses, so if you don't understand, please refactor as described in the book for now.
+In runtime-core, we don't write such operations, but instead, we design it to describe the core logic of Vue.js runtime in the world of pure TypeScript. For example, it includes implementations related to Virtual DOM and Components. Well, I think it will become clearer as the development of chibivue progresses, so if you don't understand, please refactor as described in the book for now.
 
 #### Roles and Dependencies of Each File
 
@@ -192,7 +192,7 @@ export const createApp = (options: Options): App => {
 };
 ```
 
-At this point, the code is short and not complex at all, so it seems fine at first glance. However, it will become much more complex as we write the patch rendering logic for the virtual DOM in the future. In Vue.js, this part responsible for rendering is separated as "renderer". That is "runtime-core/renderer.ts". When it comes to rendering, it is easy to imagine that it depends on the API (document) that controls the DOM in the browser in an SPA (creating elements, setting text, etc.). Therefore, in order to separate this part that depends on the DOM from the core rendering logic of Vue.js, some tricks have been made. Here's how it works:
+At this point, the code is short and not complex at all, so it seems fine at first glance. However, it will become much more complex as we write the patch rendering logic for the Virtual DOM in the future. In Vue.js, this part responsible for rendering is separated as "renderer". That is "runtime-core/renderer.ts". When it comes to rendering, it is easy to imagine that it depends on the API (document) that controls the DOM in the browser in an SPA (creating elements, setting text, etc.). Therefore, in order to separate this part that depends on the DOM from the core rendering logic of Vue.js, some tricks have been made. Here's how it works:
 
 - Implement an object in `runtime-dom/nodeOps` for DOM operations.
 - Implement a factory function in `runtime-core/renderer` that generates an object that only contains the logic for rendering. In doing so, make sure to pass the object that handles nodes (not limited to DOM) as an argument to the factory function.
@@ -201,7 +201,7 @@ At this point, the code is short and not complex at all, so it seems fine at fir
 This is the part highlighted in red in the diagram.
 ![refactor_createApp_render](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/refactor_createApp_render.png)
 
-Let me explain the source code. At this point, the rendering feature of the virtual DOM has not been implemented yet, so we will create it with the same functionality as before.
+Let me explain the source code. At this point, the rendering feature of the Virtual DOM has not been implemented yet, so we will create it with the same functionality as before.
 
 First, implement the interface for the object used for node (not limited to DOM) operations in `runtime-core/renderer`.
 

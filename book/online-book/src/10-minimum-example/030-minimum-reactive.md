@@ -1,8 +1,8 @@
-# 小さい reactivity system
+# 小さい Reactivity System
 
 ## 今回目指す開発者インタフェース
 
-ここからは Vue.js の醍醐味である reactivity system というものについてやっていきます。  
+ここからは Vue.js の醍醐味である Reactivity System というものについてやっていきます。  
 これ以前の実装は、見た目が Vue.js に似ていれど、それは見た目だけで機能的には全く Vue.js ではありません。  
 たんに最初の開発者インタフェースを実装し、いろんな HTML を表示できるようにしてみました。
 
@@ -48,7 +48,7 @@ reactive 関数でステートを定義し、それを書き換える increment 
 - ボタンをクリックすると、ステートが更新される
 - ステートの更新を追跡して render 関数を再実行し、画面を再描画する
 
-## reactivity system とはどのようなもの?
+## Reactivity System とはどのようなもの?
 
 さてここで、そもそもリアクティブとは何だったかのおさらいです。
 公式ドキュメントを参照してみます。
@@ -57,7 +57,7 @@ reactive 関数でステートを定義し、それを書き換える increment 
 
 [引用元](https://ja.vuejs.org/guide/essentials/reactivity-fundamentals.html)
 
-> Vue の最も特徴的な機能の 1 つは、控えめな reactivity system です。コンポーネントの状態はリアクティブな JavaScript オブジェクトで構成されています。状態を変更すると、ビュー (View) が更新されます。
+> Vue の最も特徴的な機能の 1 つは、控えめな Reactivity System です。コンポーネントの状態はリアクティブな JavaScript オブジェクトで構成されています。状態を変更すると、ビュー (View) が更新されます。
 
 [引用元](https://ja.vuejs.org/guide/extras/reactivity-in-depth.html)
 
@@ -136,7 +136,7 @@ app.mount("#app");
 
 Proxy と呼ばれるオブジェクトが肝になっています。
 
-まず、 reactivity system の実装方法についてではなく、それぞれについての説明をしてみます。
+まず、 Reactivity System の実装方法についてではなく、それぞれについての説明をしてみます。
 
 https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Proxy
 
@@ -194,12 +194,12 @@ const o = new Proxy(
 
 Proxy の理解はこの程度で OK です。
 
-## Proxy で reactivity system を実現してみる
+## Proxy で Reactivity System を実現してみる
 
 改めて目的を明確にしておくと、今回の目的は「ステートが変更された時に `updateComponent` を実行したい」です。  
 Proxy を用いた実装の流れについて説明してみます。
 
-まず、Vue.js の reactivity system には `target`, `Proxy`, `ReactiveEffect`, `Dep`, `track`, `trigger`, `targetMap`, `activeEffect`というものが登場します。
+まず、Vue.js の Reactivity System には `target`, `Proxy`, `ReactiveEffect`, `Dep`, `track`, `trigger`, `targetMap`, `activeEffect`というものが登場します。
 
 まず、targetMap の構造についてです。  
 targetMap はある target の key と dep のマッピングです。  
@@ -397,10 +397,10 @@ increment では `state.count` を書き換えているので `setter` が実行
 
 一番難しいところは上記までの理解なので、理解ができればあとはソースコードを書くだけです。  
 とは言っても、実際のところどうなってるのかよく分からず上記だけでは理解ができない方もいるでしょう。  
-そんな方も一旦ここで実装してみましょう。それから実際のコードを読みながら先ほどのセクションを見返してもらえてらと思います!
+そんな方も一旦ここで実装してみましょう。それから実際のコードを読みながら先ほどのセクションを見返してもらえたらと思います!
 
 まずは必要なファイルを作ります。`packages/reactivity`に作っていきます。
-ここでも本家 Vue の構成をなるべく意識します。˝
+ここでも本家 Vue の構成をなるべく意識します。
 
 ```sh
 pwd # ~
@@ -416,7 +416,7 @@ touch packages/reactivity/baseHandler.ts
 
 例の如く、index.ts は export しているだけなので特に説明はしません。reactivity 外部パッケージから使いたくなったものはここから export しましょう。
 
-deps.ts からです。
+dep.ts からです。
 
 ```ts
 import { type ReactiveEffect } from "./effect";
@@ -522,7 +522,7 @@ export const mutableHandlers: ProxyHandler<object> = {
 ここで、Reflect というものが登場していますが、Proxy と似た雰囲気のものなんですが、Proxy があるオブジェクトに対する設定を書き込む処理だったのに対し、Reflect はあるオブジェクトに対する処理を行うものです。  
 Proxy も Reflect も JS エンジン内のオブジェクトにまつわる処理の API で、普通にオブジェクトを使うのと比べてメタなプログラミングを行うことができます。  
 そのオブジェクトを変化させる関数を実行したり、読み取る関数を実行したり、key が存在するのかをチェクしたりさまざまなメタ操作ができます。  
-とりあえず、Proxy = オブジェクトを作る段階でのメタ設定, Reflect = 既に存在しているオブジェクトに対するメタ操作くらいの理解があれば OK です。
+とりあえず、Proxy = オブジェクトを作る段階でのメタ設定、 Reflect = 既に存在しているオブジェクトに対するメタ操作くらいの理解があれば OK です。
 
 続いて reactive.ts です。
 
