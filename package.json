@@ -44,6 +44,7 @@
     "tsx": "^4.7.0",
     "typescript": "^5.2.2",
     "vitepress": "1.0.0-rc.4",
+    "vitepress-plugin-mermaid": "^2.0.16",
     "vitest": "^0.29.2"
   },
   "volta": {
