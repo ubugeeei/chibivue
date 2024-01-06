@@ -71,7 +71,7 @@ $ cd chibivue
 $ ni
 
 # generate playground files to ~/example/playground (git ignored)
-$ nr dev:setup
+$ nr setup:dev
 
 # listen localhost
 $ nr dev
