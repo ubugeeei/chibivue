@@ -207,7 +207,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       },
       {
         text: '🚧 Basic SFC Compiler',
-        collapsed: false,
+        collapsed: true,
         items: [
           {
             text: '🚧 script setup に対応する',
@@ -229,7 +229,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       },
       {
         text: '🚧 Web Application Essentials',
-        collapsed: false,
+        collapsed: true,
         items: [
           {
             text: '🚧 Plugin',
@@ -302,12 +302,22 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         collapsed: false,
         items: [
           {
-            text: 'chibivue、デカくないですか...?',
-            link: '/bonus/hyper-ultimate-super-extreme-minimal-vue/',
+            text: '15 分で Vue を作る',
+            collapsed: true,
+            items: [
+              {
+                text: 'chibivue、デカくないですか...?',
+                link: '/bonus/hyper-ultimate-super-extreme-minimal-vue/',
+              },
+              {
+                text: '実装',
+                link: '/bonus/hyper-ultimate-super-extreme-minimal-vue/15-min-impl',
+              },
+            ],
           },
           {
-            text: '15 分で Vue を作る',
-            link: '/bonus/hyper-ultimate-super-extreme-minimal-vue/15-min-impl',
+            text: '本家のソースコードをデバッグする',
+            link: '/bonus/debug-vuejs-core',
           },
         ],
       },

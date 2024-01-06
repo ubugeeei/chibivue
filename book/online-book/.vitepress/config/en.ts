@@ -210,7 +210,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       },
       {
         text: '🚧 Basic SFC Compiler',
-        collapsed: false,
+        collapsed: true,
         items: [
           {
             text: 'Supporting script setup',
@@ -232,7 +232,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       },
       {
         text: '🚧 Web Application Essentials',
-        collapsed: false,
+        collapsed: true,
         items: [
           {
             text: '🚧 Plugin',
@@ -306,12 +306,22 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         collapsed: false,
         items: [
           {
-            text: "chibivue, isn't it small...?",
-            link: '/en/bonus/hyper-ultimate-super-extreme-minimal-vue/',
+            text: 'Writing Vue.js in 15 minutes.',
+            collapsed: true,
+            items: [
+              {
+                text: "chibivue, isn't it small...?",
+                link: '/en/bonus/hyper-ultimate-super-extreme-minimal-vue/',
+              },
+              {
+                text: 'Implement',
+                link: '/en/bonus/hyper-ultimate-super-extreme-minimal-vue/15-min-impl.md',
+              },
+            ],
           },
           {
-            text: 'Writing Vue.js in 15 minutes.',
-            link: '/en/bonus/hyper-ultimate-super-extreme-minimal-vue/15-min-impl.md',
+            text: 'debug original Vue.js source',
+            link: '/en/bonus/debug-vuejs-core',
           },
         ],
       },
