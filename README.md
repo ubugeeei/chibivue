@@ -12,7 +12,7 @@ https://ubugeeei.github.io/chibivue
 
 ---
 
-chibivue is minimal [Vue.js v3](https://github.com/vuejs/core) core implementations.  
+chibivue is minimal [vuejs/core](https://github.com/vuejs/core) implementations.  
 (Reactivity System, Virtual DOM and Patch Rendering, Component System, Template Compiler, SFC Compiler)
 
 "`chibi`" means "`small`" in Japanese.
@@ -40,11 +40,11 @@ npm i -g @antfu/ni
 
 [![Pages Deploy](https://github.com/Ubugeeei/chibivue/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/Ubugeeei/chibivue/actions/workflows/deploy.yml)
 
-> total: 360,000 chars ↑ (japanese)
+> total: 370,000 chars ↑ (japanese)
 
 ### book url (GitHub Pages)
 
-English: https://ubugeeei.github.io/chibivue/en/
+English: https://ubugeeei.github.io/chibivue/en
 
 Japaneses: https://ubugeeei.github.io/chibivue
 
@@ -75,13 +75,6 @@ $ nr setup:dev
 
 # listen localhost
 $ nr dev
-```
-
-original vue.js 3.3 playground
-
-```sh
-$ nr vue:setup
-$ nr vue
 ```
 
 # ⚠️ status
