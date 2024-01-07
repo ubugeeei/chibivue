@@ -60,7 +60,6 @@ export class ReactiveEffect<T = any> {
 }
 
 export function track(target: object, key: unknown) {
-  console.log('🚀 ~ file: effect.ts:63 ~ track ~ key:', key)
   let depsMap = targetMap.get(target)
   if (!depsMap) {
     targetMap.set(target, (depsMap = new Map()))
