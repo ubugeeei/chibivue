@@ -145,7 +145,7 @@ Proxy is a very interesting object.
 You can use it by passing an object as an argument and using `new` like this:
 
 ```ts
-const o = new Proxy({ value: 1 })
+const o = new Proxy({ value: 1 },  {})
 console.log(o.value) // 1
 ```
 
