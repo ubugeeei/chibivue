@@ -118,8 +118,8 @@ importers:
   examples/playground:
     devDependencies:
       vite:
-        specifier: ^5.0.2
-        version: 5.0.10(@types/node@20.10.5)
+        specifier: ^3.0.9
+        version: 3.2.7(@types/node@20.10.5)
 
   examples/vapor:
     devDependencies:
