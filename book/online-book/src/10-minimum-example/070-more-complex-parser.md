@@ -473,7 +473,6 @@ function parseAttributes(
 ): AttributeNode[] {
   const props = []
   const attributeNames = new Set<string>()
-  s
 
   // タグが終わるまで読み続ける
   while (
@@ -631,6 +630,9 @@ export function baseCompile(template: string) {
 いい感じにパースができているようです。
 それではここで生成した AST を元に codegen の方の実装を進めていこうと思います。
 
+ここまでのソースコード:  
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler2)
+
 ## AST を元に render 関数を生成する
 
 さて、本格的なパーサが実装できたところで次はそれに適応したコードジェネレータを作っていきます。  
@@ -742,7 +744,7 @@ import { createApp } from 'chibivue'
 const app = createApp({
   setup() {
     // マウント後に DOM 操作をしたいので Promise.resolve で処理を遅らせる
-    Promise.resolve(() => {
+    Promise.resolve().then(() => {
       const btn = document.getElementById('btn')
       btn &&
         btn.addEventListener('click', () => {
