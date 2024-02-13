@@ -630,8 +630,6 @@ export function baseCompile(template: string) {
 いい感じにパースができているようです。
 それではここで生成した AST を元に codegen の方の実装を進めていこうと思います。
 
-ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler2)
 
 ## AST を元に render 関数を生成する
 
@@ -783,3 +781,6 @@ app.mount('#app')
 
 これで正常に動作していることを確認します。  
 どうでしょう。機能は少ないにしろ、だんだんと普段の Vue の開発者インタフェースに近づいてきたのではないでしょうか。
+
+ここまでのソースコード:  
+[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler2)
