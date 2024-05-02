@@ -96,7 +96,7 @@ Since there may be few people who have never written a Vite plugin, let's start 
 
 ```sh
 pwd # ~
-pnpx create-vite
+nlx create-vite
 ## ✔ Project name: … plugin-sample
 ## ✔ Select a framework: › Vue
 ## ✔ Select a variant: › TypeScript
@@ -223,6 +223,13 @@ Although this is a sample plugin that we created earlier, let's delete it becaus
 ```sh
 pwd # ~
 rm -rf ./plugin-sample
+```
+
+Also, install the main Vite package in order to create a Vite plugin.
+
+```sh
+pwd # ~
+ni vite
 ```
 
 This is the main part of the plugin, but since this is originally outside the scope of vuejs/core, we will create a directory called `@extensions` in the `packages` directory and implement it there.

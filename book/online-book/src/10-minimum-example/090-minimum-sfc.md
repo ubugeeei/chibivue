@@ -97,7 +97,7 @@ vite のプラグインを書いたことのない方も少ないと思うので
 
 ```sh
 pwd # ~
-pnpx create-vite
+nlx create-vite
 ## ✔ Project name: … plugin-sample
 ## ✔ Select a framework: › Vue
 ## ✔ Select a variant: › TypeScript
@@ -224,6 +224,13 @@ nr dev
 ```sh
 pwd # ~
 rm -rf ./plugin-sample
+```
+
+また Vite の plugin を作成するため Vite 本体をインストールしておきます。
+
+```sh
+pwd # ~
+ni vite
 ```
 
 plugin の本体なのですが、本来これは vuejs/core の範囲外なので packages に`@extensions`というディレクトリを切ってそこに実装していきます。
