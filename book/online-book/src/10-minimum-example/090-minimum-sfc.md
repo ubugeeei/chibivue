@@ -1104,7 +1104,7 @@ export function rewriteDefault(input: string, as: string): string {
 基本的には AST を手繰っていって、type によって分岐処理を書いて magic-string のメソッドで s を操作していくだけです。
 
 ```ts
-export function hasDefaultExport(input: string): boolean {
+export function rewriteDefault(input: string, as: string): string {
   // .
   // .
   ast.forEach(node => {
@@ -1178,8 +1178,7 @@ export function hasDefaultExport(input: string): boolean {
       }
     }
   })
-  // .
-  // .
+  return s.toString()
 }
 
 // 宣言文の終端を算出する
@@ -1282,7 +1281,7 @@ import 'app.css'
 
 vite の仮想モジュールという機能を使って SFC から仮想的な CSS ファイルを作り、アウトプットの JS ファイルの import 文に追加する方針で実装してみます。  
 仮想モジュール、と聞くとなんだか難しいように聞こえますが、「実際には存在しないファイルをあたかも存在するようにインメモリに保持しておける」と捉えてもらえれば問題ないです。  
-vite では`load`と`resolve`というオプションを使って仮想モジュールを実現することができます。
+vite では`load`と`resolveId`というオプションを使って仮想モジュールを実現することができます。
 
 ```ts
 export default function myPlugin() {
@@ -1304,7 +1303,7 @@ export default function myPlugin() {
 }
 ```
 
-resolve に解決したいモジュールの id を任意に設定し、load でその id をハンドリングすることによってモジュールを読み込むことができます。  
+resolveId に解決したいモジュールの id を任意に設定し、load でその id をハンドリングすることによってモジュールを読み込むことができます。  
 上記の例だと、`virtual:my-module`というファイルは実際には存在しませんが、
 
 ```ts

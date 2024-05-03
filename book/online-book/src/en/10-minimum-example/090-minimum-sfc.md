@@ -1078,7 +1078,7 @@ export function rewriteDefault(input: string, as: string): string {
 From here, we will manipulate the string `s` based on the JavaScript AST (Abstract Syntax Tree) obtained by the Babel parser. Although it is a bit long, I will provide additional explanations in the comments in the source code. Basically, we traverse the AST and write conditional statements based on the `type` property, and manipulate the string `s` using the methods of `magic-string`.
 
 ```ts
-export function hasDefaultExport(input: string): boolean {
+export function rewriteDefault(input: string, as: string): string {
   // .
   // .
   ast.forEach(node => {
@@ -1152,8 +1152,7 @@ export function hasDefaultExport(input: string): boolean {
       }
     }
   })
-  // .
-  // .
+  return s.toString()
 }
 
 // Calculate the end of the declaration statement
@@ -1254,7 +1253,7 @@ Let's also support styles. In Vite, you can import CSS files by using the `.css`
 import 'app.css'
 ```
 
-We will implement this by using Vite's virtual modules. Virtual modules allow you to keep non-existent files in memory as if they exist. You can use the `load` and `resolve` options to implement virtual modules.
+We will implement this by using Vite's virtual modules. Virtual modules allow you to keep non-existent files in memory as if they exist. You can use the `load` and `resolveId` options to implement virtual modules.
 
 ```ts
 export default function myPlugin() {
@@ -1276,7 +1275,7 @@ export default function myPlugin() {
 }
 ```
 
-By setting the desired module ID in `resolve` and handling the ID in `load`, you can load the module. In the example above, if you write `import { msg } from "virtual:my-module";`, `export const msg = "from virtual module"` will be loaded.
+By setting the desired module ID in `resolveId` and handling the ID in `load`, you can load the module. In the example above, if you write `import { msg } from "virtual:my-module";`, `export const msg = "from virtual module"` will be loaded.
 
 [Reference](https://vitejs.dev/guide/api-plugin.html#virtual-modules)
 
