@@ -197,3 +197,30 @@ chibivue (もしくは ubugeeei, もしくはこのコミュニティ) に興味
 
 必ず general/rules を一読していただきたいです。
 あとは特にありません。
+
+## 著者について
+
+**ubugeeei (うぶげ)** 
+
+<img src="/ubugeeei.jpg" alt="ubugeeei" width="200">
+
+Vue.js メンバー, Vue.js Japan User Group コアスタッフ．\
+Vapor Mode の開発に立ち上げ (2023/11) から携わる. \
+2023/12 に vuejs/core-vapor の external collaborator になる.\
+2024/4 に vuejs organization のメンバーになり，Vapor Team のメンバーになる.
+
+https://ublog.dev/
+
+<div align="center">
+
+## スポンサー
+
+<a href="https://github.com/sponsors/ubugeeei">
+  <img src="https://raw.githubusercontent.com/ubugeeei/sponsors/main/sponsors.png" alt="ubugeeei's sponsors" />
+</a>
+
+もしよろしければ，私の仕事を応援していただけると嬉しいです！
+
+https://github.com/sponsors/ubugeeei
+
+</div>

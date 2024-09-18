@@ -186,3 +186,30 @@ Anyone interested in chibivue (or ubugeeei, or this community)!
 
 Please make sure to read general/rules thoroughly.
 Other than that, there are no specific requirements.
+
+## About the Author
+
+**ubugeeei**
+
+<img src="/ubugeeei.jpg" alt="ubugeeei" width="200">
+
+Vue.js member and core staff of the Vue.js Japan User Group.\
+Involved in the development of Vapor Mode from its inception (November 2023).\
+Became an external collaborator for vuejs/core-vapor in December 2023.\
+In April 2024, joined the Vue.js organization and became a member of the Vapor Team.
+
+https://ublog.dev/
+
+<div align="center">
+
+## Sponsors
+
+<a href="https://github.com/sponsors/ubugeeei">
+  <img src="https://raw.githubusercontent.com/ubugeeei/sponsors/main/sponsors.png" alt="ubugeeei's sponsors" />
+</a>
+
+If you'd like to support my work, I would greatly appreciate it!
+
+https://github.com/sponsors/ubugeeei
+
+</div>
