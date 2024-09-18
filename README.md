@@ -174,7 +174,7 @@ Please refer to the information below for the progress status.
 | keep-alive |      |      |
 | suspense   |      |      |
 
-## 🗓️ Big Plans
+# 🗓️ Big Plans
 
 - Complete Basic Template Compiler
   - Slots
@@ -196,7 +196,7 @@ Please refer to the information below for the progress status.
   Since the official version has not been released, we will implement it based on our predictions.  
   https://github.com/vuejs/core-vapor/tree/main
 
-## 🎉 Bonus Track
+# 🎉 Bonus Track
 
 This is bonus track on writing Vue.js in 15 minutes because chibivue has gotten so big.
 
@@ -211,3 +211,20 @@ The title is "**Hyper Ultimate Super Extreme Minimal Vue - writing Vue.js on 15 
 # Contributing
 
 Please see [contributing.md](https://github.com/Ubugeeei/chibivue/blob/main/.github/contributing.md).
+
+
+<div align="center">
+
+# Sponsors
+
+<a href="https://github.com/sponsors/ubugeeei">
+  <img src="https://raw.githubusercontent.com/ubugeeei/sponsors/main/sponsors.png" alt="ubugeeei's sponsors" />
+</a>
+
+If you'd like to support my work, I would greatly appreciate it!
+
+https://github.com/sponsors/ubugeeei
+
+</div>
+
+</div>
