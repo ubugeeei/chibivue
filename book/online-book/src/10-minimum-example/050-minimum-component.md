@@ -2,10 +2,10 @@
 
 ## 既存実装の整理ベースで考える
 
-これまで、createApp API や Reactivity System、 Virtual DOM を小さく実装してきました。  
-今現時点での実装では Reactivity System によって UI を動的に変更することもできますし、 Virtual DOM によって効率的なレンダリングを行うことができているのですが、開発者インタフェースとしては全ての内容を createApp API に書く感じになってしまっています。  
-実際にはもっとファイルを分割したり、再利用のために汎用的なコンポーネントを実装したいです。  
-まずは既存実装の散らかってしまっている部分を見直してみます。renderer.ts の render 関数をみてください。
+これまで，createApp API や Reactivity System， Virtual DOM を小さく実装してきました．  
+今現時点での実装では Reactivity System によって UI を動的に変更することもできますし， Virtual DOM によって効率的なレンダリングを行うことができているのですが，開発者インタフェースとしては全ての内容を createApp API に書く感じになってしまっています．  
+実際にはもっとファイルを分割したり，再利用のために汎用的なコンポーネントを実装したいです．  
+まずは既存実装の散らかってしまっている部分を見直してみます．renderer.ts の render 関数をみてください．
 
 ```ts
 const render: RootRenderFunction = (rootComponent, container) => {
@@ -25,14 +25,14 @@ const render: RootRenderFunction = (rootComponent, container) => {
 }
 ```
 
-render 関数内にルートコンポーネントに関する情報を直接定義してしまっています。  
-実際には、n1 や n2, updateComponent, effect は各コンポーネントごとに存在します。  
-実際、これからはユーザー側でコンポーネント(ある意味でコンストラクタ)を定義してそれをインスタンス化したいわけです。  
-そして、そのインスタンスが n1 や n2, updateComponent などを持つような感じにしたいです。  
-そこで、コンポーネントのインスタンスとしてこれらを閉じ込めることについて考えてみます。
+render 関数内にルートコンポーネントに関する情報を直接定義してしまっています．  
+実際には，n1 や n2, updateComponent, effect は各コンポーネントごとに存在します．  
+実際，これからはユーザー側でコンポーネント(ある意味でコンストラクタ)を定義してそれをインスタンス化したいわけです．  
+そして，そのインスタンスが n1 や n2, updateComponent などを持つような感じにしたいです．  
+そこで，コンポーネントのインスタンスとしてこれらを閉じ込めることについて考えてみます．
 
-`~/packages/runtime-core/component.ts`に`ComponentInternalInstance`と言うものを定義してみます。
-これがインスタンスの型となります。
+`~/packages/runtime-core/component.ts`に`ComponentInternalInstance`と言うものを定義してみます．
+これがインスタンスの型となります．
 
 ```ts
 export interface ComponentInternalInstance {
@@ -51,11 +51,11 @@ export type InternalRenderFunction = {
 }
 ```
 
-このインスタンスが持つ vnode と subTree と next は少しややこしいのですが、
-これから、VNode の type として ConcreteComponent を指定できるように実装するのですが、instance.vnode にはその VNode 自体を保持しておきます。
-そして、subTree, next というのはそのコンポーネントのレンダリング結果である VNode を保持させます。(ここは今までの n1 と n2 と変わらない)
+このインスタンスが持つ vnode と subTree と next は少しややこしいのですが，
+これから，VNode の type として ConcreteComponent を指定できるように実装するのですが，instance.vnode にはその VNode 自体を保持しておきます．
+そして，subTree, next というのはそのコンポーネントのレンダリング結果である VNode を保持させます．(ここは今までの n1 と n2 と変わらない)
 
-イメージ的には、
+イメージ的には，
 
 ```ts
 const MyComponent = {
@@ -71,11 +71,11 @@ const App = {
 }
 ```
 
-のように利用し、  
-MyComponent のインスタンスを instance とすると、instance.vnode には`h(MyComponent, {}, [])`の結果が、instance.subTree には`h("p", {}, ["hello"])`の結果が格納される感じです。
+のように利用し，  
+MyComponent のインスタンスを instance とすると，instance.vnode には`h(MyComponent, {}, [])`の結果が，instance.subTree には`h("p", {}, ["hello"])`の結果が格納される感じです．
 
-とりあえず、h 関数の第一引数にコンポーネントを指定できるように実装してみましょう。  
-と、言ってもただ単に type としてコンポーネント定義のオブジェクトを受け取るようにするだけです。  
+とりあえず，h 関数の第一引数にコンポーネントを指定できるように実装してみましょう．  
+と，言ってもただ単に type としてコンポーネント定義のオブジェクトを受け取るようにするだけです．  
 `~/packages/runtime-core/vnode.ts`
 
 ```ts
@@ -91,7 +91,7 @@ export function h(
 ) {..}
 ```
 
-VNode に component のインスタンスを持たせるようにもしておきます。
+VNode に component のインスタンスを持たせるようにもしておきます．
 
 ```ts
 export interface VNode<HostNode = any> {
@@ -102,9 +102,9 @@ export interface VNode<HostNode = any> {
 }
 ```
 
-それに伴って、renderer の方でもコンポーネントを扱う必要が出てくるのですが、Element や Text と同様 processComponent を実装して、mountComponent と patchComponent (updateComponent) も実装していきましょう。
+それに伴って，renderer の方でもコンポーネントを扱う必要が出てくるのですが，Element や Text と同様 processComponent を実装して，mountComponent と patchComponent (updateComponent) も実装していきましょう．
 
-まずガワから作って詳細な説明をします。
+まずガワから作って詳細な説明をします．
 
 ```ts
 const patch = (n1: VNode | null, n2: VNode, container: RendererElement) => {
@@ -142,14 +142,14 @@ const updateComponent = (n1: VNode, n2: VNode) => {
 }
 ```
 
-では、mountComponent から見てみましょう。  
-やることは 3 つです。
+では，mountComponent から見てみましょう．  
+やることは 3 つです．
 
 1. コンポーネントのインスタンスを生成
 2. setup の実行とその結果をインスタンスに保持
 3. ReactiveEffect の生成とそれをインスタンスに保持
 
-まず、component.ts にコンポーネントのインスタンスを生成するための関数(コンストラクタの役割をするもの)を実装してみます。
+まず，component.ts にコンポーネントのインスタンスを生成するための関数(コンストラクタの役割をするもの)を実装してみます．
 
 ```ts
 export function createComponentInstance(
@@ -172,7 +172,7 @@ export function createComponentInstance(
 }
 ```
 
-各プロパティの型は non-null なのですが、インスタンスを生成した段階では null で入れてしまいます。(本家の Vue.js に合わせてこのような設計にしています。)
+各プロパティの型は non-null なのですが，インスタンスを生成した段階では null で入れてしまいます．(本家の Vue.js に合わせてこのような設計にしています．)
 
 ```ts
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
@@ -183,7 +183,7 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
 }
 ```
 
-続いて setup です。これは今まで render に直接書いていた処理をここで行うようにして、変数ではなくインスタンスに保持させてしまえば OK です。
+続いて setup です．これは今まで render に直接書いていた処理をここで行うようにして，変数ではなくインスタンスに保持させてしまえば OK です．
 
 ```ts
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
@@ -199,8 +199,8 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
 }
 ```
 
-最後に、effect の形成なのですが、少し長くなりそうなので setupRenderEffect という関数にまとめてしまいます。  
-ここに関しても、やるべきことは基本的に今まで render 関数に直接実装していたものをインスタンスの状態を活用しつつ移植するだけです。
+最後に，effect の形成なのですが，少し長くなりそうなので setupRenderEffect という関数にまとめてしまいます．  
+ここに関しても，やるべきことは基本的に今まで render 関数に直接実装していたものをインスタンスの状態を活用しつつ移植するだけです．
 
 ```ts
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
@@ -257,7 +257,7 @@ const setupRenderEffect = (
 }
 ```
 
-※ 1: nodeOps に親 Node を取得するための`parentNode`という関数を実装してください。
+※ 1: nodeOps に親 Node を取得するための`parentNode`という関数を実装してください．
 
 ```ts
 parentNode: (node) => {
@@ -265,8 +265,8 @@ parentNode: (node) => {
 },
 ```
 
-多少長いですが、特に難しいことはないかと思います。
-setupRenderEffect でインスタンスの update メソッドとして更新のための関数を登録してあるので、updateComponent ではそれを呼んであげるだけです。
+多少長いですが，特に難しいことはないかと思います．
+setupRenderEffect でインスタンスの update メソッドとして更新のための関数を登録してあるので，updateComponent ではそれを呼んであげるだけです．
 
 ```ts
 const updateComponent = (n1: VNode, n2: VNode) => {
@@ -276,7 +276,7 @@ const updateComponent = (n1: VNode, n2: VNode) => {
 }
 ```
 
-最後に、今まで render 関数に定義していた実装は不要になるので消してしまいます。
+最後に，今まで render 関数に定義していた実装は不要になるので消してしまいます．
 
 ```ts
 const render: RootRenderFunction = (rootComponent, container) => {
@@ -285,8 +285,8 @@ const render: RootRenderFunction = (rootComponent, container) => {
 }
 ```
 
-これで Component をレンダリングすることができました。試しに playground コンポーネントを作ってみてみましょう。  
-このように、コンポーネントに分割してレンダリングができるようになっているかと思います。
+これで Component をレンダリングすることができました．試しに playground コンポーネントを作ってみてみましょう．  
+このように，コンポーネントに分割してレンダリングができるようになっているかと思います．
 
 ```ts
 import { createApp, h, reactive } from 'chibivue'
@@ -323,14 +323,14 @@ app.mount('#app')
 
 ## コンポーネント間のやりとり
 
-コンポーネントが使えるようになり、再利用が可能になったわけですが、実際には Props や Emits を利用してもっと便利にしたいわけです。
-ここからは Props/Emit によってコンポーネント間のやりとりを行えるように実装を進めていきます。
+コンポーネントが使えるようになり，再利用が可能になったわけですが，実際には Props や Emits を利用してもっと便利にしたいわけです．
+ここからは Props/Emit によってコンポーネント間のやりとりを行えるように実装を進めていきます．
 
 ## Props
 
-まずは props から実装していきます。  
-最終的な開発者インタフェースから考えてみましょう。  
-props は setup 関数の第一引数として渡ってくるようなものを考えてみます。
+まずは props から実装していきます．  
+最終的な開発者インタフェースから考えてみましょう．  
+props は setup 関数の第一引数として渡ってくるようなものを考えてみます．
 
 ```ts
 const MyComponent = {
@@ -357,8 +357,8 @@ const app = createApp({
 })
 ```
 
-これを元に ComponentInternalInstance に持たせたい情報を考えてみます。
-`props: { message: { type: String } }`のように指定された props の定義と、props の値を実際に保持するプロパティが必要なので以下のように追加します。
+これを元に ComponentInternalInstance に持たせたい情報を考えてみます．
+`props: { message: { type: String } }`のように指定された props の定義と，props の値を実際に保持するプロパティが必要なので以下のように追加します．
 
 ```ts
 export type Data = Record<string, unknown>
@@ -373,7 +373,7 @@ export interface ComponentInternalInstance {
 }
 ```
 
-`~/packages/runtime-core/componentProps.ts`というファイルを以下の内容で新たに作成します。
+`~/packages/runtime-core/componentProps.ts`というファイルを以下の内容で新たに作成します．
 
 ```ts
 export type Props = Record<string, PropOptions | null>
@@ -387,7 +387,7 @@ export interface PropOptions<T = any> {
 export type PropType<T> = { new (...args: any[]): T & {} }
 ```
 
-ユーザーがコンポーネントを実装する際のオプションにも追加します。
+ユーザーがコンポーネントを実装する際のオプションにも追加します．
 
 ```ts
 export type ComponentOptions = {
@@ -397,7 +397,7 @@ export type ComponentOptions = {
 }
 ```
 
-オプションから渡された props の定義を createComponentInstance でインスタンスを生成する際に propsOptions にセットします。
+オプションから渡された props の定義を createComponentInstance でインスタンスを生成する際に propsOptions にセットします．
 
 ```ts
 export function createComponentInstance(
@@ -413,10 +413,10 @@ export function createComponentInstance(
     props: {},
 ```
 
-肝心の instance.props をどう形成するかというと、コンポーネントのマウント時に vnode が保持している props を propsOptions を元にフィルターします。
-フィルターしてできたオブジェクトを reactive 関数によってリアクティブなオブジェクトにし、instance.prop にセットします。
+肝心の instance.props をどう形成するかというと，コンポーネントのマウント時に vnode が保持している props を propsOptions を元にフィルターします．
+フィルターしてできたオブジェクトを reactive 関数によってリアクティブなオブジェクトにし，instance.prop にセットします．
 
-この一連の流れを実装する`initProps`という関数を componentProps.ts に実装します。
+この一連の流れを実装する`initProps`という関数を componentProps.ts に実装します．
 
 ```ts
 export function initProps(
@@ -446,7 +446,7 @@ function setFullProps(
 }
 ```
 
-実際に mount 時に initProps を実行し、setup 関数の引数に props を渡してみましょう。
+実際に mount 時に initProps を実行し，setup 関数の引数に props を渡してみましょう．
 
 ```ts
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
@@ -476,7 +476,7 @@ export type ComponentOptions = {
 }
 ```
 
-この時点で props を子コンポーネントに渡せるようになっているはずなので playground で確認してみましょう。
+この時点で props を子コンポーネントに渡せるようになっているはずなので playground で確認してみましょう．
 
 ```ts
 const MyComponent = {
@@ -499,7 +499,7 @@ const app = createApp({
 })
 ```
 
-しかし、実はこれだけでは不十分で、props を変更した際に描画が更新されません。
+しかし，実はこれだけでは不十分で，props を変更した際に描画が更新されません．
 
 ```ts
 const MyComponent = {
@@ -526,7 +526,7 @@ const app = createApp({
 })
 ```
 
-このようなコンポーネントを動作させるために、componentProps.ts に `updateProps` を実装し、コンポーネントが update する際に実行してあげます。
+このようなコンポーネントを動作させるために，componentProps.ts に `updateProps` を実装し，コンポーネントが update する際に実行してあげます．
 
 `~/packages/runtime-core/componentProps.ts`
 
@@ -566,7 +566,7 @@ const setupRenderEffect = (
           updateProps(instance, next.props); // ここ
 ```
 
-これで画面が更新されるようになれば OK です。
+これで画面が更新されるようになれば OK です．
 これで props を利用することによってコンポーネントにデータを受け渡せるようになりました！　やったね！
 
 ![props](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/props.png)
@@ -574,11 +574,11 @@ const setupRenderEffect = (
 ここまでのソースコード：  
 [chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/050_component_system2)
 
-ついでと言ってはなんなのですが、本家 Vue は props をケバブケースで受け取ることができるのでこれも実装してみましょう。  
-ここで、新たに `~/packages/shared` というディレクトリを作成し、 `general.ts` を作成します。  
-ここは、runtime-core や runtime-dom に限らず、汎用的な関数を定義する場所です。
-このタイミングで作る意味というのは特別ないのですが、本家に倣ってついでに作っておきます。
-そして、今回は `hasOwn` と `camelize` を実装してみます。
+ついでと言ってはなんなのですが，本家 Vue は props をケバブケースで受け取ることができるのでこれも実装してみましょう．  
+ここで，新たに `~/packages/shared` というディレクトリを作成し， `general.ts` を作成します．  
+ここは，runtime-core や runtime-dom に限らず，汎用的な関数を定義する場所です．
+このタイミングで作る意味というのは特別ないのですが，本家に倣ってついでに作っておきます．
+そして，今回は `hasOwn` と `camelize` を実装してみます．
 
 `~/packages/shared/general.ts`
 
@@ -595,7 +595,7 @@ export const camelize = (str: string): string => {
 }
 ```
 
-componentProps.ts で camelize してあげましょう。
+componentProps.ts で camelize してあげましょう．
 
 ```ts
 export function updateProps(
@@ -630,7 +630,7 @@ function setFullProps(
 }
 ```
 
-これでケバブケースを扱うこともできるようになったはずです。 playground で確認してみましょう。
+これでケバブケースを扱うこともできるようになったはずです． playground で確認してみましょう．
 
 ```ts
 const MyComponent = {
@@ -659,10 +659,10 @@ const app = createApp({
 
 ## Emits
 
-props に引き続き emit の実装をしていきます。
-emit の実装は比較的ライトなのですぐに終わります。
+props に引き続き emit の実装をしていきます．
+emit の実装は比較的ライトなのですぐに終わります．
 
-開発者インタフェース的には emit は setup 関数の第 2 引数から受け取れるような形にします。
+開発者インタフェース的には emit は setup 関数の第 2 引数から受け取れるような形にします．
 
 ```ts
 const MyComponent: Component = {
@@ -701,9 +701,9 @@ const app = createApp({
 })
 ```
 
-props の時と同じように、`~/packages/runtime-core/componentEmits.ts`というファイルを作成してそこに実装していきます。
+props の時と同じように，`~/packages/runtime-core/componentEmits.ts`というファイルを作成してそこに実装していきます．
 
-emit は単純に、instance に emit 用の関数を実装し、実行時は vnode が持つ props からハンドラを探し実行します。
+emit は単純に，instance に emit 用の関数を実装し，実行時は vnode が持つ props からハンドラを探し実行します．
 
 `~/packages/runtime-core/componentEmits.ts`
 
@@ -759,7 +759,7 @@ export function createComponentInstance(
 }
 ```
 
-これを setup 関数に渡してあげれば OK です。
+これを setup 関数に渡してあげれば OK です．
 
 `~/packages/runtime-core/componentOptions.ts`
 

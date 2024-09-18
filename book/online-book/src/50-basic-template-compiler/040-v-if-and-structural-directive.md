@@ -2,33 +2,33 @@
 
 さてここからはまたディレクティブの実装をやっていきましょう！
 
-ついに v-if を実装していきます。
+ついに v-if を実装していきます．
 
 ## v-if ディレクティブとこれまでのディレクティブの違い
 
-これまでの v-bind や v-on などを実装してきました。
+これまでの v-bind や v-on などを実装してきました．
 
-これから v-if を実装して行くのですが、v-if はこれらのディレクティブとは少し作りが違います。
+これから v-if を実装して行くのですが，v-if はこれらのディレクティブとは少し作りが違います．
 
-以下は Vue.js の公式ドキュメントのコンパイル時最適化に関する項目の一説ですが、
+以下は Vue.js の公式ドキュメントのコンパイル時最適化に関する項目の一説ですが，
 
 > In this case, the entire template has a single block because it does not contain any structural directives like v-if and v-for.
 
 https://vuejs.org/guide/extras/rendering-mechanism.html#tree-flattening
 
-という言葉が見受けられます。(Tree Flattening が何かについては別で解説するので気にしなくていいです。)
+という言葉が見受けられます．(Tree Flattening が何かについては別で解説するので気にしなくていいです．)
 
-この通り、v-if や v-if は `structural directives` と呼ばれるもので、構造を伴うディレクティブです。
+この通り，v-if や v-if は `structural directives` と呼ばれるもので，構造を伴うディレクティブです．
 
-angular のドキュメントだと項目として明記されていたりもします。
+angular のドキュメントだと項目として明記されていたりもします．
 
 https://angular.jp/guide/structural-directives
 
-v-if や v-for は単にその要素の属性(+イベントに対する振舞い)を変更するだけでなく、要素の存在を切り替えたり、リストの数に応じて 要素を生成・削除したりと、要素の構造を変更するディレクティブです。
+v-if や v-for は単にその要素の属性(+イベントに対する振舞い)を変更するだけでなく，要素の存在を切り替えたり，リストの数に応じて 要素を生成・削除したりと，要素の構造を変更するディレクティブです．
 
 ## 目指す開発者インターフェース
 
-v-if / v-else-if / v-else を組み合わせて FizzBuzz が実装できるようなものを考えてみましょう。
+v-if / v-else-if / v-else を組み合わせて FizzBuzz が実装できるようなものを考えてみましょう．
 
 ```ts
 import { createApp, defineComponent, ref } from 'chibivue'
@@ -57,9 +57,9 @@ const app = createApp(App)
 app.mount('#app')
 ```
 
-今回はまず初めに、どういうコードを生成したいかについても考えてみようかと思います。
+今回はまず初めに，どういうコードを生成したいかについても考えてみようかと思います．
 
-結論から言ってしまうと、v-if や v-else は以下のように条件式に変換されます。
+結論から言ってしまうと，v-if や v-else は以下のように条件式に変換されます．
 
 ```ts
 function render(_ctx) {
@@ -90,15 +90,15 @@ function render(_ctx) {
 }
 ```
 
-これをみても分かる通り、これまで実装してきたものに条件を表す構造を持たせています。
+これをみても分かる通り，これまで実装してきたものに条件を表す構造を持たせています．
 
-このようなコードを生成するための AST に変形させる transformer を実装するには一工夫必要そうです。
+このようなコードを生成するための AST に変形させる transformer を実装するには一工夫必要そうです．
 
 ::: warning
 
-現時点での実装では空白などの読み飛ばしの実装を行っていないので実際には間に余計な文字 Node が入ってしまうかと思います。
+現時点での実装では空白などの読み飛ばしの実装を行っていないので実際には間に余計な文字 Node が入ってしまうかと思います．
 
-が、 v-if の実装上は特に問題ありませんので(後でわかります)、今回は無視してください。
+が， v-if の実装上は特に問題ありませんので(後でわかります)，今回は無視してください．
 
 :::
 
@@ -106,13 +106,13 @@ function render(_ctx) {
 
 ### 構造にまつわるメソッドを実装する
 
-v-if の実装を行っていく前に、少し準備です。
+v-if の実装を行っていく前に，少し準備です．
 
-最初にも v-if や v-for という構造的ディレクティブは AST Node の構造を変更するディレクティブであるということを説明しました。
+最初にも v-if や v-for という構造的ディレクティブは AST Node の構造を変更するディレクティブであるということを説明しました．
 
-これらを実現するために、ベースとなる transformer にいくつかの実装を行います。
+これらを実現するために，ベースとなる transformer にいくつかの実装を行います．
 
-具体的には、TransformContext に以下の３つを実装します。
+具体的には，TransformContext に以下の３つを実装します．
 
 ```ts
 export interface TransformContext extends Required<TransformOptions> {
@@ -125,15 +125,15 @@ export interface TransformContext extends Required<TransformOptions> {
 }
 ```
 
-traverseChildren の方で現在の parent と children の index は保持するようになっていると思うので、それらを使って 上記のメソッドを実装していきます。
+traverseChildren の方で現在の parent と children の index は保持するようになっていると思うので，それらを使って 上記のメソッドを実装していきます．
 
 <!-- NOTE: このチャプターまで実装しなくてもいいかもしれない -->
 
 ::: details 念の為
 
-この部分です。
+この部分です．
 
-実装していると思いますが、これを実装したチャプターではあまり詳しく説明していなかったので念の為補足です。
+実装していると思いますが，これを実装したチャプターではあまり詳しく説明していなかったので念の為補足です．
 
 ```ts
 export function traverseChildren(
@@ -197,9 +197,9 @@ export function createTransformContext(
 }
 ```
 
-既存の実装も少し修正が必要です。transform 中に removeNode が呼ばれることを想定して、traverseChildren の方を調整してあげます。
+既存の実装も少し修正が必要です．transform 中に removeNode が呼ばれることを想定して，traverseChildren の方を調整してあげます．
 
-Node が削除されると index が変わってしまうので、Node が 削除された際に for の index を減らしてあげます。
+Node が削除されると index が変わってしまうので，Node が 削除された際に for の index を減らしてあげます．
 
 ```ts
 export function traverseChildren(
@@ -223,11 +223,11 @@ export function traverseChildren(
 
 ### createStructuralDirectiveTransform の実装
 
-v-if や v-for といったディレクティブを実装するにあたって、createStructuralDirectiveTransform というヘルパー関数を実装します。
+v-if や v-for といったディレクティブを実装するにあたって，createStructuralDirectiveTransform というヘルパー関数を実装します．
 
-これらの transformer は NodeTypes.ELEMENT のみに作用し、その Node が持つ DirectiveNode に対して 各 transformer の実装を適用します。
+これらの transformer は NodeTypes.ELEMENT のみに作用し，その Node が持つ DirectiveNode に対して 各 transformer の実装を適用します．
 
-まぁ、実装自体は大きなものではないので、実際に見てもらった方がわかりやすいと思います。以下のような感じです。
+まぁ，実装自体は大きなものではないので，実際に見てもらった方がわかりやすいと思います．以下のような感じです．
 
 ```ts
 // 各 transformer (v-if/v-for など) はこの interface にそって実装されます。
@@ -272,15 +272,15 @@ export function createStructuralDirectiveTransform(
 
 ### AST の実装
 
-上記までで準備は終わりです。ここからは v-if の実装を行っていきます。
+上記までで準備は終わりです．ここからは v-if の実装を行っていきます．
 
-いつものように、AST の定義から行なって、パーサーを実装していきましょう。
+いつものように，AST の定義から行なって，パーサーを実装していきましょう．
 
-と言いたいところでしたが、今回はパーサーは必要なさそうです。
+と言いたいところでしたが，今回はパーサーは必要なさそうです．
 
-どちらかというと、今回は transform 後の AST をどういう形にしたいかを考えて、それに変形させるための transformer を実装していく感じになります。
+どちらかというと，今回は transform 後の AST をどういう形にしたいかを考えて，それに変形させるための transformer を実装していく感じになります．
 
-改めて、冒頭で想定していたコンパイル後のコードを見てみましょう。
+改めて，冒頭で想定していたコンパイル後のコードを見てみましょう．
 
 ```ts
 function render(_ctx) {
@@ -311,20 +311,20 @@ function render(_ctx) {
 }
 ```
 
-最終的には条件式(三項演算子)に変換されていることが分かります。
+最終的には条件式(三項演算子)に変換されていることが分かります．
 
-これまで条件式を扱ったことはないので、Codegen のために AST 側でこれを取り扱う必要があるようです。  
-基本的に考えたいものは 3 つの情報です。("三項"演算子なのでね)
+これまで条件式を扱ったことはないので，Codegen のために AST 側でこれを取り扱う必要があるようです．  
+基本的に考えたいものは 3 つの情報です．("三項"演算子なのでね)
 
 - **条件**  
-  A ? B : C の A にあたる部分です。  
-  condition という名前で表現されます。
+  A ? B : C の A にあたる部分です．  
+  condition という名前で表現されます．
 - **条件にマッチした時の Node**  
-  A ? B : C の B にあたる部分です。  
-  consequent という名前で表現されます。
+  A ? B : C の B にあたる部分です．  
+  consequent という名前で表現されます．
 - **条件にマッチしなかった時の Node**  
-  A ? B : C の C にあたる部分です。  
-  alternate という名前で表現されます。
+  A ? B : C の C にあたる部分です．  
+  alternate という名前で表現されます．
 
 ```ts
 export const enum NodeTypes {
@@ -367,7 +367,7 @@ export function createConditionalExpression(
 }
 ```
 
-これらを使って VIf の Node を表現する AST を実装していきます。
+これらを使って VIf の Node を表現する AST を実装していきます．
 
 ```ts
 export const enum NodeTypes {
@@ -405,11 +405,11 @@ export type ParentNode =
 
 ### transformer の実装
 
-AST ができたので、実際にこの AST を生成する transformer を実装していきます。
+AST ができたので，実際にこの AST を生成する transformer を実装していきます．
 
-イメージ的にはいくつかの `ElementNode` をもとに `IfNode` を生成するという感じです。
+イメージ的にはいくつかの `ElementNode` をもとに `IfNode` を生成するという感じです．
 
-「いくつかの」といったのは、今回の場合、ある一つの Node を違う一つの Node に変形するようなものではなく、
+「いくつかの」といったのは，今回の場合，ある一つの Node を違う一つの Node に変形するようなものではなく，
 
 ```html
 <p v-if="n % 5 === 0 && n % 3 === 0">FizzBuzz</p>
@@ -418,15 +418,15 @@ AST ができたので、実際にこの AST を生成する transformer を実�
 <p v-else>{{ n }}</p>
 ```
 
-のような複数の ElementNode があった場合には v-if ~ v-else までを一つの IfNode として生成する必要があります。
+のような複数の ElementNode があった場合には v-if ~ v-else までを一つの IfNode として生成する必要があります．
 
-最初の v-if にマッチした場合、後続の Node が v-else-if や v-else に当たるものでないかどうかを判定しながら IfNode を生成していきます。
+最初の v-if にマッチした場合，後続の Node が v-else-if や v-else に当たるものでないかどうかを判定しながら IfNode を生成していきます．
 
-具体的な それぞれの処理は processIf という関数に逃しておくとして、とりあえず大枠を実装してみましょう。
-先ほどの `createStructuralDirectiveTransform` を活用します。
+具体的な それぞれの処理は processIf という関数に逃しておくとして，とりあえず大枠を実装してみましょう．
+先ほどの `createStructuralDirectiveTransform` を活用します．
 
-具体的には、最終的に codegenNode に先ほど実装した AST を詰めていきたいわけなので、
-この transformer の `onExit` で Node を生成します。
+具体的には，最終的に codegenNode に先ほど実装した AST を詰めていきたいわけなので，
+この transformer の `onExit` で Node を生成します．
 
 ```ts
 export const transformIf = createStructuralDirectiveTransform(
@@ -515,12 +515,12 @@ function getParentCondition(
 }
 ```
 
-`processIf` ではより具体的な AST Node の変形処理を行なっていきます。
+`processIf` ではより具体的な AST Node の変形処理を行なっていきます．
 
-if / else-if / else の場合がありますが、まずは `if` だった場合を考えてみます。
+if / else-if / else の場合がありますが，まずは `if` だった場合を考えてみます．
 
-こちらはかなり単純です。 IfNode を生成し、codegenNode の生成を実行してあげるだけです。
-この際、今の Node を IfBranch としてを生成し、それを IfNode に持たせた上で IfNode に replace しておきます。
+こちらはかなり単純です． IfNode を生成し，codegenNode の生成を実行してあげるだけです．
+この際，今の Node を IfBranch としてを生成し，それを IfNode に持たせた上で IfNode に replace しておきます．
 
 ```
 - parent
@@ -533,7 +533,7 @@ if / else-if / else の場合がありますが、まずは `if` だった場合
     - IfBranch (currentNode)
 ```
 
-のように構造を変更するイメージです。
+のように構造を変更するイメージです．
 
 ```ts
 export function processIf(
@@ -577,11 +577,11 @@ function createIfBranch(node: ElementNode, dir: DirectiveNode): IfBranchNode {
 }
 ```
 
-次は v-if 以外の場合を考えてみましょう。
+次は v-if 以外の場合を考えてみましょう．
 
-context から parent の children を辿って siblings を取得し、  
-現在の node (自身) から順にループを回し、自身をもとに IfBranch を生成して branches に push していきます。  
-この際、コメントや空のテキストは削除してしまいます。
+context から parent の children を辿って siblings を取得し，  
+現在の node (自身) から順にループを回し，自身をもとに IfBranch を生成して branches に push していきます．  
+この際，コメントや空のテキストは削除してしまいます．
 
 ```ts
 if (dir.name === 'if') {
@@ -619,18 +619,18 @@ if (dir.name === 'if') {
 }
 ```
 
-これをみても分かる通り、実は else-if と else は区別していません。
+これをみても分かる通り，実は else-if と else は区別していません．
 
-AST 上でも condition がない場合は else というふうな定義にしているので、特に考えることはないのです。  
+AST 上でも condition がない場合は else というふうな定義にしているので，特に考えることはないのです．  
 (`createIfBranch` の `dir.name === "else" ? undefined : dir.exp` の部分で吸収)
 
-重要なのは、`if` であった場合に `IfNode` を生成しておくということで、それ以外はその Node の branches に突っ込んでいけばいいわけです。
+重要なのは，`if` であった場合に `IfNode` を生成しておくということで，それ以外はその Node の branches に突っ込んでいけばいいわけです．
 
-ここまで来れば transformIf の実装は終わりです。あとは周辺に少しだけ手を加えます。
+ここまで来れば transformIf の実装は終わりです．あとは周辺に少しだけ手を加えます．
 
-traverseNode で、IfNode が持つ branches に対して traverseNode を実行してあげるようにします。
+traverseNode で，IfNode が持つ branches に対して traverseNode を実行してあげるようにします．
 
-IfBranch も traverseChildren の対象にしてあげます。
+IfBranch も traverseChildren の対象にしてあげます．
 
 ```ts
 export function traverseNode(
@@ -659,7 +659,7 @@ export function traverseNode(
 }
 ```
 
-あとは、compiler のオプションとして transformIf を登録してあげるだけです。
+あとは，compiler のオプションとして transformIf を登録してあげるだけです．
 
 ```ts
 export function getBaseTransformPreset(): TransformPreset {
@@ -672,11 +672,11 @@ export function getBaseTransformPreset(): TransformPreset {
 
 これで transformer が実装できました！
 
-あとは codegen を実装すれば、v-if の完成です。もう少しです、頑張りましょう！
+あとは codegen を実装すれば，v-if の完成です．もう少しです，頑張りましょう！
 
 ### codegen の実装
 
-あとは楽ちんです。ConditionalExpression の Node をもとにコードを生成すれば OK です。
+あとは楽ちんです．ConditionalExpression の Node をもとにコードを生成すれば OK です．
 
 ```ts
 const genNode = (
@@ -737,11 +737,11 @@ function genConditionalExpression(
 }
 ```
 
-いつも通り、AST をもとに条件式を生成しているだけなので特に難しいことはないと思います。
+いつも通り，AST をもとに条件式を生成しているだけなので特に難しいことはないと思います．
 
 ## 完成！！
 
-さてさて、久しぶりに少しファットなチャプターになってしまいましたがこれで v-if の実装は完了です！ (お疲れ様でした。)
+さてさて，久しぶりに少しファットなチャプターになってしまいましたがこれで v-if の実装は完了です！ (お疲れ様でした．)
 
 実際に動かしてみましょう！！！！
 

@@ -2,7 +2,7 @@
 
 ## 今の実装の問題点
 
-以下のようなコードを playground で実行してみましょう。
+以下のようなコードを playground で実行してみましょう．
 
 ```ts
 import { createApp, defineComponent } from 'chibivue'
@@ -18,13 +18,13 @@ const app = createApp(App)
 app.mount('#app')
 ```
 
-以下のようなエラーが出てしまうかと思います。
+以下のようなエラーが出てしまうかと思います．
 
 ![fragment_error.png](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/fragment_error.png)
 
-エラー文をみてみると、 Function コンストラクタで起きているようです。
+エラー文をみてみると， Function コンストラクタで起きているようです．
 
-つまり、codegen までは一応成功しているようなので、実際にどのようなコードが生成されたのかみてみましょう。
+つまり，codegen までは一応成功しているようなので，実際にどのようなコードが生成されたのかみてみましょう．
 
 ```ts
 return function render(_ctx) {
@@ -36,14 +36,14 @@ return function render(_ctx) {
 }
 ```
 
-return の先がおかしなことになってしまっていますね。今の codegen の実装だと、ルートが配列だった場合(単一のノードではない場合)を考慮できていません。  
-今回はこれを修正していきます。
+return の先がおかしなことになってしまっていますね．今の codegen の実装だと，ルートが配列だった場合(単一のノードではない場合)を考慮できていません．  
+今回はこれを修正していきます．
 
 ## どういうコードを生成すればいいのか
 
-修正していくとはいえ、どういうコードを生成できるようになれば良いでしょうか。
+修正していくとはいえ，どういうコードを生成できるようになれば良いでしょうか．
 
-結論から言うと以下のようなコードになります。
+結論から言うと以下のようなコードになります．
 
 ```ts
 return function render(_ctx) {
@@ -63,17 +63,17 @@ return function render(_ctx) {
 }
 ```
 
-この `Fragment` というものは Vue で定義されている symbol です。  
-つまり、Fragment は FragmentNode のような AST として表現されるものではなく、単に ElementNode の tag として表現されます。
+この `Fragment` というものは Vue で定義されている symbol です．  
+つまり，Fragment は FragmentNode のような AST として表現されるものではなく，単に ElementNode の tag として表現されます．
 
-そして、tag が Fragment あった場合の処理を renderer に実装します。  
-Text と似たよう感じです。
+そして，tag が Fragment あった場合の処理を renderer に実装します．  
+Text と似たよう感じです．
 
 ## 実装していく
 
-fragment の symbol は runtime-core/vnode.ts の方に実装されます。
+fragment の symbol は runtime-core/vnode.ts の方に実装されます．
 
-VNodeTypes の新たな種類として追加しましょう。
+VNodeTypes の新たな種類として追加しましょう．
 
 ```ts
 export type VNodeTypes =
@@ -85,9 +85,9 @@ export type VNodeTypes =
 export const Fragment = Symbol(); // これを追加
 ```
 
-renderer を実装します。
+renderer を実装します．
 
-patch 関数に fragment の時の分岐を追加します。
+patch 関数に fragment の時の分岐を追加します．
 
 ```ts
 if (type === Text) {
@@ -104,11 +104,11 @@ if (type === Text) {
 }
 ```
 
-注意点としては、要素の insert や remove は基本的に anchor を目印に実装して行く必要があることです。
+注意点としては，要素の insert や remove は基本的に anchor を目印に実装して行く必要があることです．
 
-anchor というのは名の通り、フラグメントの開始と終了の位置を示すものです。
+anchor というのは名の通り，フラグメントの開始と終了の位置を示すものです．
 
-始端の要素 は 従来から VNode に存在する `el` というプロパティが担いますが、現時点だと終端を表すプロパティが存在しないので追加します。
+始端の要素 は 従来から VNode に存在する `el` というプロパティが担いますが，現時点だと終端を表すプロパティが存在しないので追加します．
 
 ```ts
 export interface VNode<HostNode = any> {
@@ -123,7 +123,7 @@ export interface VNode<HostNode = any> {
 
 mount 時に anchor を設定します
 
-そして、mount / patch に anchor として フラグメントの終端を渡してあげます。
+そして，mount / patch に anchor として フラグメントの終端を渡してあげます．
 
 ```ts
 const processFragment = (
@@ -151,7 +151,7 @@ const processFragment = (
 }
 ```
 
-更新時、fragment の要素が変動する際も注意します。
+更新時，fragment の要素が変動する際も注意します．
 
 ```ts
 const move = (
@@ -178,7 +178,7 @@ const move = (
 }
 ```
 
-unmount 時も anchor を頼りに要素を削除していきます。
+unmount 時も anchor を頼りに要素を削除していきます．
 
 ```ts
 const remove = (vnode: VNode) => {
@@ -205,7 +205,7 @@ const removeFragment = (cur: RendererNode, end: RendererNode) => {
 
 ## 動作を見てみる
 
-先ほどのコードはきちんと動くようになっているはずです。
+先ほどのコードはきちんと動くようになっているはずです．
 
 ```ts
 import { Fragment, createApp, defineComponent, h, ref } from 'chibivue'
@@ -221,9 +221,9 @@ const app = createApp(App)
 app.mount('#app')
 ```
 
-現状だと、v-for ディレクティブなどが使えないことから、template で fragment を使いつつ要素の個数を変化させるような記述ができないので、
+現状だと，v-for ディレクティブなどが使えないことから，template で fragment を使いつつ要素の個数を変化させるような記述ができないので，
 
-擬似的に コンパイル後のコードを書いて動作を見てみましょう。
+擬似的に コンパイル後のコードを書いて動作を見てみましょう．
 
 ```ts
 import { Fragment, createApp, defineComponent, h, ref } from 'chibivue'

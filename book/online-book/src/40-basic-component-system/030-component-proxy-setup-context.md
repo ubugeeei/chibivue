@@ -2,11 +2,11 @@
 
 ## コンポーネントの Proxy
 
-コンポーネントが持つ重要な概念として Proxy というものがあります。  
-これは、簡単にいうと、コンポーネントのインスタンスが持つデータ(public なプロパティ)にアクセスするための Proxy で、
-この Proxy に setup の結果(ステートや関数)、data、props などのアクセスはまとめてしまいます。
+コンポーネントが持つ重要な概念として Proxy というものがあります．  
+これは，簡単にいうと，コンポーネントのインスタンスが持つデータ(public なプロパティ)にアクセスするための Proxy で，
+この Proxy に setup の結果(ステートや関数)，data，props などのアクセスはまとめてしまいます．
 
-以下のようなコードを考えてみましょう。(chibivue で実装していない範囲のものも含みます。普段の Vue だと思ってください)
+以下のようなコードを考えてみましょう．(chibivue で実装していない範囲のものも含みます．普段の Vue だと思ってください)
 
 ```vue
 <script>
@@ -48,9 +48,9 @@ export default defineComponent({
 </template>
 ```
 
-このコードは正常に動作するわけですが、さて template へはどうやってバインドしているのでしょうか ?
+このコードは正常に動作するわけですが，さて template へはどうやってバインドしているのでしょうか ?
 
-もう一つ例を挙げます。
+もう一つ例を挙げます．
 
 ```vue
 <script setup>
@@ -67,11 +67,11 @@ const ChildRef = ref()
 </template>
 ```
 
-こちらも、ref を介してコンポーネントの情報にアクセスすることができます。
+こちらも，ref を介してコンポーネントの情報にアクセスすることができます．
 
-これをどうやって実現しているかというと、ComponentInternalInstance に proxy というプロパティをもち、ここにはデータアクセスのための Proxy を持っています。
+これをどうやって実現しているかというと，ComponentInternalInstance に proxy というプロパティをもち，ここにはデータアクセスのための Proxy を持っています．
 
-つまり、template (render 関数)や ref は instance.proxy を参照しているということです。
+つまり，template (render 関数)や ref は instance.proxy を参照しているということです．
 
 ```ts
 interface ComponentInternalInstance {
@@ -79,7 +79,7 @@ interface ComponentInternalInstance {
 }
 ```
 
-この proxy の実装はもちろん Proxy で実装されていて、概ね、以下のようなイメージです。
+この proxy の実装はもちろん Proxy で実装されていて，概ね，以下のようなイメージです．
 
 ```ts
 instance.proxy = instance.proxy = new Proxy(
@@ -98,12 +98,12 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
 
 実際にこの Proxy を実装してみましょう！
 
-実装できたら render 関数や ref にはこの proxy を渡すように書き換えてみましょう。
+実装できたら render 関数や ref にはこの proxy を渡すように書き換えてみましょう．
 
 ここまでのソースコード:  
 [chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/40_basic_component_system/030_component_proxy)
 
-※ ついでに defineComponent の実装とそれに関連する型付も実装しています。 (そうすると proxy のデータの型を推論できるようになります。)
+※ ついでに defineComponent の実装とそれに関連する型付も実装しています． (そうすると proxy のデータの型を推論できるようになります．)
 
 ![infer_component_types](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/infer_component_types.png)
 
@@ -111,9 +111,9 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
 
 https://ja.vuejs.org/api/composition-api-setup.html#setup-context
 
-Vue には setupContext という概念があります。これは setup 内に公開される context で、emit や expose などが挙げられます。
+Vue には setupContext という概念があります．これは setup 内に公開される context で，emit や expose などが挙げられます．
 
-現時点では emit は使えるようにはなっているものの、少々雑に実装してしまっています。
+現時点では emit は使えるようにはなっているものの，少々雑に実装してしまっています．
 
 ```ts
 const setupResult = component.setup(instance.props, {
@@ -121,7 +121,7 @@ const setupResult = component.setup(instance.props, {
 })
 ```
 
-SetupContext というインタフェースをきちんと定義して、インスタンスが持つオブジェクトとして表現しましょう。
+SetupContext というインタフェースをきちんと定義して，インスタンスが持つオブジェクトとして表現しましょう．
 
 ```ts
 export interface ComponentInternalInstance {
@@ -136,15 +136,15 @@ export type SetupContext = {
 }
 ```
 
-そして、インスタンスを生成する際に setupContext を生成し、setup 関数を実行する際の第二引数にこのオブジェクトを渡すようにしましょう。
+そして，インスタンスを生成する際に setupContext を生成し，setup 関数を実行する際の第二引数にこのオブジェクトを渡すようにしましょう．
 
 ## expose
 
-ここまでできたら emit 以外の SetupContext も実装してみます。  
-今回は例として、expose を実装してみます。
+ここまでできたら emit 以外の SetupContext も実装してみます．  
+今回は例として，expose を実装してみます．
 
-expose は、パブリックなプロパティを明示できる関数です。  
-以下のような開発者インタフェースを目指しましょう。
+expose は，パブリックなプロパティを明示できる関数です．  
+以下のような開発者インタフェースを目指しましょう．
 
 ```ts
 const Child = defineComponent({
@@ -190,9 +190,9 @@ const app = createApp({
 })
 ```
 
-expose を使用しないコンポーネントでは今まで通り、デフォルトで全てが public です。
+expose を使用しないコンポーネントでは今まで通り，デフォルトで全てが public です．
 
-方向性としては、インスタンス内に `exposed` というオブジェクトを持つことにし、ここに値が設定されていれば templateRef に関してはこのオブジェクトを ref に渡す感じです。
+方向性としては，インスタンス内に `exposed` というオブジェクトを持つことにし，ここに値が設定されていれば templateRef に関してはこのオブジェクトを ref に渡す感じです．
 
 ```ts
 export interface ComponentInternalInstance {
@@ -203,15 +203,15 @@ export interface ComponentInternalInstance {
 }
 ```
 
-そしてここにオブジェクトを登録できるように expose 関数を実装していきましょう。
+そしてここにオブジェクトを登録できるように expose 関数を実装していきましょう．
 
 ## ProxyRefs
 
-このチャプターで proxy や exposedProxy を実装してきましたが、実は少々本家の Vue とは違う部分があります。  
-それは、「ref は unwrap される」という点です。(proxy の場合は proxy というより setupState がこの性質を持っています。)
+このチャプターで proxy や exposedProxy を実装してきましたが，実は少々本家の Vue とは違う部分があります．  
+それは，「ref は unwrap される」という点です．(proxy の場合は proxy というより setupState がこの性質を持っています．)
 
-これらは ProxyRefs というプロキシで実装されていて、handler は`shallowUnwrapHandlers`という名前で実装されています。  
-これにより、template を記述する際や proxy を扱う際に ref 特有の value の冗長さを排除できるようになっています。
+これらは ProxyRefs というプロキシで実装されていて，handler は`shallowUnwrapHandlers`という名前で実装されています．  
+これにより，template を記述する際や proxy を扱う際に ref 特有の value の冗長さを排除できるようになっています．
 
 ```ts
 const shallowUnwrapHandlers: ProxyHandler<any> = {
@@ -235,7 +235,7 @@ const shallowUnwrapHandlers: ProxyHandler<any> = {
 </template>
 ```
 
-ここまで実装すると以下のようなコードが動くようになるはずです。
+ここまで実装すると以下のようなコードが動くようになるはずです．
 
 ```ts
 import { createApp, defineComponent, h, ref } from 'chibivue'
@@ -285,8 +285,8 @@ app.mount('#app')
 
 ## Template へのバインディングと with 文
 
-実は、このチャプターの変更により問題が発生しています。  
-以下のようなコードを動かしてみましょう。
+実は，このチャプターの変更により問題が発生しています．  
+以下のようなコードを動かしてみましょう．
 
 ```ts
 const Child2 = {
@@ -298,17 +298,17 @@ const Child2 = {
 }
 ```
 
-なんの変哲もないコードですが、実はこれは動きません。  
-state が定義されていないと怒られてしまいます。
+なんの変哲もないコードですが，実はこれは動きません．  
+state が定義されていないと怒られてしまいます．
 
 ![state_is_not_defined](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/state_is_not_defined.png)
 
-これがなぜかというと、with 文の引数として Proxy を渡す場合、has を定義しないといけないためです。
+これがなぜかというと，with 文の引数として Proxy を渡す場合，has を定義しないといけないためです．
 
 [Creating dynamic namespaces using the with statement and a proxy (MDN)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/with#creating_dynamic_namespaces_using_the_with_statement_and_a_proxy)
 
-というわけで、PublicInstanceProxyHandlers に has を実装してみましょう。  
-setupState, props, ctx のいずれかに key が存在していれば true を返すようにします。
+というわけで，PublicInstanceProxyHandlers に has を実装してみましょう．  
+setupState, props, ctx のいずれかに key が存在していれば true を返すようにします．
 
 ```ts
 export const PublicInstanceProxyHandlers: ProxyHandler<any> = {

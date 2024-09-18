@@ -2,9 +2,9 @@
 
 ## テンプレートにバインドしたい
 
-今の状態だと、直接 DOM 操作をしているので、 Reactivity System や Virtual DOM の恩恵を得ることができていません。  
-実際にはイベントハンドラであったり、テキストの内容はテンプレート部分に書きたいわけです。それでこそ宣言的 UI の嬉しさと言った感じですよね。  
-以下のような開発者インタフェースを目指します。
+今の状態だと，直接 DOM 操作をしているので， Reactivity System や Virtual DOM の恩恵を得ることができていません．  
+実際にはイベントハンドラであったり，テキストの内容はテンプレート部分に書きたいわけです．それでこそ宣言的 UI の嬉しさと言った感じですよね．  
+以下のような開発者インタフェースを目指します．
 
 ```ts
 import { createApp, reactive } from 'chibivue'
@@ -46,10 +46,10 @@ const app = createApp({
 app.mount('#app')
 ```
 
-setup から return した値をテンプレートに記述して扱えるようにしたいのですが、このことをこれからは「テンプレートバインディング」であったり、単に「バインディング」という言葉で表現することにします。  
-バインディングをこれから実装していくわけですがイベントハンドラやマスタッシュ構文を実装する前にやっておきたいことがあります。  
-`setup から return した値`と言ったのですが、今 setup の戻り値は`undefined`または、`関数`(レンダー関数)です。  
-バインディングの実装の準備として、setup からステート等を return できるようにして、それらをコンポーネントのデータとして保持できるようにしておく必要があるようです。
+setup から return した値をテンプレートに記述して扱えるようにしたいのですが，このことをこれからは「テンプレートバインディング」であったり，単に「バインディング」という言葉で表現することにします．  
+バインディングをこれから実装していくわけですがイベントハンドラやマスタッシュ構文を実装する前にやっておきたいことがあります．  
+`setup から return した値`と言ったのですが，今 setup の戻り値は`undefined`または，`関数`(レンダー関数)です．  
+バインディングの実装の準備として，setup からステート等を return できるようにして，それらをコンポーネントのデータとして保持できるようにしておく必要があるようです．
 
 ```ts
 export type ComponentOptions = {
@@ -98,10 +98,10 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
 }
 ```
 
-伴って、これ以降、setup で定義されるデータのことを`setupState`と呼ぶことにします。
+伴って，これ以降，setup で定義されるデータのことを`setupState`と呼ぶことにします．
 
-さて、コンパイラを実装する前に、setupState をどのようにしてテンプレートにバインディングするか方針について考えてみます。  
-テンプレートを実装する前までは以下のように setupState をバインディングしていました。
+さて，コンパイラを実装する前に，setupState をどのようにしてテンプレートにバインディングするか方針について考えてみます．  
+テンプレートを実装する前までは以下のように setupState をバインディングしていました．
 
 ```ts
 const app = createApp({
@@ -112,8 +112,8 @@ const app = createApp({
 })
 ```
 
-まぁ、バインドというより普通に render 関数がクロージャを形成し変数を参照しているだけです。  
-しかし今回は、イメージ的には setup オプションと render 関数は別のものなので、どうにかして render 関数に setup のデータを渡す必要があります。
+まぁ，バインドというより普通に render 関数がクロージャを形成し変数を参照しているだけです．  
+しかし今回は，イメージ的には setup オプションと render 関数は別のものなので，どうにかして render 関数に setup のデータを渡す必要があります．
 
 ```ts
 const app = createApp({
@@ -127,7 +127,7 @@ const app = createApp({
 })
 ```
 
-template は h 関数を使った render 関数として compile され、instance.render に突っ込まれるわけなので、イメージ的には以下のようなコードと同等になります。
+template は h 関数を使った render 関数として compile され，instance.render に突っ込まれるわけなので，イメージ的には以下のようなコードと同等になります．
 
 ```ts
 const app = createApp({
@@ -142,12 +142,12 @@ const app = createApp({
 })
 ```
 
-当然、render 関数内では `state` という変数は定義されていません。  
-さて、どのようにして state を参照できるようにすれば良いでしょうか。
+当然，render 関数内では `state` という変数は定義されていません．  
+さて，どのようにして state を参照できるようにすれば良いでしょうか．
 
 ## with 文
 
-結論から言うと、with 文を使って以下のようにすれば良いです。
+結論から言うと，with 文を使って以下のようにすれば良いです．
 
 ```ts
 const app = createApp({
@@ -164,30 +164,30 @@ const app = createApp({
 })
 ```
 
-with 文についてあまりよく知らない方も少なくないんじゃないかと思います。
+with 文についてあまりよく知らない方も少なくないんじゃないかと思います．
 
-それもそのはず、この機能は非推奨の機能です。
+それもそのはず，この機能は非推奨の機能です．
 
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/with
 
-MDN によると、
+MDN によると，
 
 > まだ対応しているブラウザーがあるかもしれませんが、すでに関連するウェブ標準から削除されているか、削除の手続き中であるか、互換性のためだけに残されている可能性があります。使用を避け、できれば既存のコードは更新してください。
 
-とのことで、使用を避けるようにとのことです。
+とのことで，使用を避けるようにとのことです．
 
-今後の Vue.js の実装がどうなるかはわかりませんが、Vue.js 3 では with 文を使っているので、今回は with 文を使って実装していきます。
+今後の Vue.js の実装がどうなるかはわかりませんが，Vue.js 3 では with 文を使っているので，今回は with 文を使って実装していきます．
 
-ここで少し補足なのですが、Vue.js でも、全てが全て with 文で実装されているわけではありません。  
-SFC で template を扱う際は with 文を使わずに実装されています。  
-これについては後のチャプターで触れる予定ですが、とりあえずここでは with を使って実装することを考えてみます。
+ここで少し補足なのですが，Vue.js でも，全てが全て with 文で実装されているわけではありません．  
+SFC で template を扱う際は with 文を使わずに実装されています．  
+これについては後のチャプターで触れる予定ですが，とりあえずここでは with を使って実装することを考えてみます．
 
 ---
 
-さて、ここで少し with 文の挙動についておさらいです。
-with 文は、文に対するスコープチェーンを拡張します。
+さて，ここで少し with 文の挙動についておさらいです．
+with 文は，文に対するスコープチェーンを拡張します．
 
-以下のような挙動をとります。
+以下のような挙動をとります．
 
 ```ts
 const obj = { a: 1, b: 2 }
@@ -197,13 +197,13 @@ with (obj) {
 }
 ```
 
-with の引数として、state を持つ親オブジェクトを渡してあげれば、state を参照できるようになります。
+with の引数として，state を持つ親オブジェクトを渡してあげれば，state を参照できるようになります．
 
-今回は、この親オブジェクトとして setupState を扱います。  
-実際には、setupState だけではなく、props のデータや OptionsApi で定義されたデータにもアクセスできるようになる必要があるのですが、今回は一旦 setupState のデータのみ使える形で良しとします。  
-(この辺りの実装は最小構成部門では取り上げず、後の部門で取り上げます。)
+今回は，この親オブジェクトとして setupState を扱います．  
+実際には，setupState だけではなく，props のデータや OptionsApi で定義されたデータにもアクセスできるようになる必要があるのですが，今回は一旦 setupState のデータのみ使える形で良しとします．  
+(この辺りの実装は最小構成部門では取り上げず，後の部門で取り上げます．)
 
-今回やりたいことをまとめると、以下のようなテンプレートを
+今回やりたいことをまとめると，以下のようなテンプレートを
 
 ```html
 <div>
@@ -212,7 +212,7 @@ with の引数として、state を持つ親オブジェクトを渡してあげ
 </div>
 ```
 
-以下のような関数にコンパイルして、
+以下のような関数にコンパイルして，
 
 ```ts
 _ctx => {
@@ -225,7 +225,7 @@ _ctx => {
 }
 ```
 
-この関数に setupState を渡してあげることです。
+この関数に setupState を渡してあげることです．
 
 ```ts
 const setupState = setup()
@@ -234,12 +234,12 @@ render(setupState)
 
 ## マスタッシュ構文の実装
 
-まずはマスタッシュ構文の実装をしていきます。例によって、AST を考え、パーサの実装してコードジェネレータの実装をしていきます。
-今現時点で AST の Node として定義されているのは Element と Text と Attribute 程度です。
-新たにマスタッシュ構文を定義したいので、直感的には `Mustache`のような AST にすることが考えられます。
-それにあたるのが`Interpolation`という Node です。
-Interpolation には「内挿」であったり、「挿入」と言った意味合いがあります。
-よって、今回扱う AST は次のようなものになります。
+まずはマスタッシュ構文の実装をしていきます．例によって，AST を考え，パーサの実装してコードジェネレータの実装をしていきます．
+今現時点で AST の Node として定義されているのは Element と Text と Attribute 程度です．
+新たにマスタッシュ構文を定義したいので，直感的には `Mustache`のような AST にすることが考えられます．
+それにあたるのが`Interpolation`という Node です．
+Interpolation には「内挿」であったり，「挿入」と言った意味合いがあります．
+よって，今回扱う AST は次のようなものになります．
 
 ```ts
 export const enum NodeTypes {
@@ -258,8 +258,8 @@ export interface InterpolationNode extends Node {
 }
 ```
 
-AST が実装できたので、パースの実装をやっていきます。
-<span v-pre>`{{`</span> という文字列を見つけたら Interpolation としてパースします。
+AST が実装できたので，パースの実装をやっていきます．
+<span v-pre>`{{`</span> という文字列を見つけたら Interpolation としてパースします．
 
 ```ts
 function parseChildren(
@@ -322,7 +322,7 @@ function parseInterpolation(
 }
 ```
 
-Text 中に <span v-pre>`{{`</span> が出現することもあるので parseText も少しだけいじります。
+Text 中に <span v-pre>`{{`</span> が出現することもあるので parseText も少しだけいじります．
 
 ```ts
 function parseText(context: ParserContext): TextNode {
@@ -348,10 +348,10 @@ function parseText(context: ParserContext): TextNode {
 }
 ```
 
-これまでパーサを実装してきた方にとっては特に難しいことはないはずです。 <span v-pre>`{{`</span> を探し、 <span v-pre>`}}`</span> が来るまで読み進めて AST を生成しているだけです。  
-<span v-pre>`}}`</span> が見つからなかった場合は undefined を返し、parseText への分岐でテキストとしてパースさせています。
+これまでパーサを実装してきた方にとっては特に難しいことはないはずです． <span v-pre>`{{`</span> を探し， <span v-pre>`}}`</span> が来るまで読み進めて AST を生成しているだけです．  
+<span v-pre>`}}`</span> が見つからなかった場合は undefined を返し，parseText への分岐でテキストとしてパースさせています．
 
-ここらでちゃんとパースができているか、コンソール等に出力して確認してみましょう。
+ここらでちゃんとパースができているか，コンソール等に出力して確認してみましょう．
 
 ```ts
 const app = createApp({
@@ -392,8 +392,8 @@ const app = createApp({
 
 問題なさそうです！
 
-さてそれではこの AST を元にバインディングを実装していきましょう。  
-render 関数の中身を with 文で囲ってあげます。
+さてそれではこの AST を元にバインディングを実装していきましょう．  
+render 関数の中身を with 文で囲ってあげます．
 
 ```ts
 export const generate = ({
@@ -425,7 +425,7 @@ const genInterpolation = (node: InterpolationNode): string => {
 }
 ```
 
-あとは、実際に render 関数を実行する際に引数として setupState を渡してあげましょう。
+あとは，実際に render 関数を実行する際に引数として setupState を渡してあげましょう．
 
 `~/packages/runtime-core/component.ts`
 
@@ -466,15 +466,15 @@ const setupRenderEffect = (
 }
 ```
 
-ここまで来ればレンダリングできるようになっているはずです。確認してみましょう！
+ここまで来ればレンダリングできるようになっているはずです．確認してみましょう！
 
 ![render_interpolation](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/render_interpolation.png)
 
-これにて初めてのバインディング、完です！
+これにて初めてのバインディング，完です！
 
 ## 初めてのディレクティブ
 
-さて、マスタッシュの次はインベントハンドラです。
+さて，マスタッシュの次はインベントハンドラです．
 
 ```ts
 const genElement = (el: ElementNode): string => {
@@ -489,7 +489,7 @@ const genElement = (el: ElementNode): string => {
 }
 ```
 
-動作を確認してみましょう。
+動作を確認してみましょう．
 
 ```ts
 const app = createApp({
@@ -528,10 +528,10 @@ const app = createApp({
 
 動きましたね！　やったね！　完成！
 
-と言いたいところですが、流石に実装が綺麗じゃないのでリファクタしていこうかと思います。
-`@click`というものはせっかく、「ディレクティブ」という名前で分類されていて、今後は v-bind や v-model を実装していくことは容易に想像できるかと思いますので、AST 上で`DIRECTIVE`と表現することにして、単純な ATTRIBUTE と区別するようにしておきましょう。
+と言いたいところですが，流石に実装が綺麗じゃないのでリファクタしていこうかと思います．
+`@click`というものはせっかく，「ディレクティブ」という名前で分類されていて，今後は v-bind や v-model を実装していくことは容易に想像できるかと思いますので，AST 上で`DIRECTIVE`と表現することにして，単純な ATTRIBUTE と区別するようにしておきましょう．
 
-いつも通り AST -> parse -> codegen の順で実装してみます。
+いつも通り AST -> parse -> codegen の順で実装してみます．
 
 ```ts
 export const enum NodeTypes {
@@ -640,8 +640,8 @@ const genProp = (prop: AttributeNode | DirectiveNode): string => {
 }
 ```
 
-さて、playground で動作を確認してみましょう。
-`@click`のみならず、`v-on:click`や他のイベントもハンドリングできるようになっているはずです。
+さて，playground で動作を確認してみましょう．
+`@click`のみならず，`v-on:click`や他のイベントもハンドリングできるようになっているはずです．
 
 ```ts
 const app = createApp({
@@ -695,8 +695,8 @@ const app = createApp({
 
 ![compile_directives](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/compile_directives.png)
 
-やりました。かなり Vue に近づいてきました！  
-ここまでで小さなテンプレートの実装は完了です。お疲れ様でした。
+やりました．かなり Vue に近づいてきました！  
+ここまでで小さなテンプレートの実装は完了です．お疲れ様でした．
 
 ここまでのソースコード:  
 [chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler3)

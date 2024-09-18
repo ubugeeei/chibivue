@@ -1,17 +1,17 @@
 # Effect のクリーンアップと Effect Scope
 
 ::: warning
-2023 年 の 12 月末に [Vue 3.4](https://blog.vuejs.org/posts/vue-3-4) がリリースされましたが、これには [reactivity のパフォーマンス改善](https://github.com/vuejs/core/pull/5912) が含まれています。  
-このオンラインブックはそれ以前の実装を参考にしていることに注意しくてださい。  
-然るべきタイミングでこのオンラインブックも追従する予定です。  
+2023 年 の 12 月末に [Vue 3.4](https://blog.vuejs.org/posts/vue-3-4) がリリースされましたが，これには [reactivity のパフォーマンス改善](https://github.com/vuejs/core/pull/5912) が含まれています．  
+このオンラインブックはそれ以前の実装を参考にしていることに注意しくてださい．  
+然るべきタイミングでこのオンラインブックも追従する予定です．  
 :::
 
 ## ReactiveEffect のクリーンアップ
 
-私たちは今まで登録した effect のクリーンアップを行っていません。ReactiveEffect にクリーンアップの処理を追加してみましょう。
+私たちは今まで登録した effect のクリーンアップを行っていません．ReactiveEffect にクリーンアップの処理を追加してみましょう．
 
-ReactiveEffect に stop というメソッドを実装します。  
-ReactiveEffect に自身がアクティブかどうかというフラグを持たせ、stop メソッドではそれを false に切り替えつつ、deps の削除を行います。
+ReactiveEffect に stop というメソッドを実装します．  
+ReactiveEffect に自身がアクティブかどうかというフラグを持たせ，stop メソッドではそれを false に切り替えつつ，deps の削除を行います．
 
 ```ts
 export class ReactiveEffect<T = any> {
@@ -27,7 +27,7 @@ export class ReactiveEffect<T = any> {
 }
 ```
 
-ついでに、cleanUp 時に行いたい処理を登録できるような hooks の実装と、activeEffect が自身だった場合のハンドリングを追加しておきます。
+ついでに，cleanUp 時に行いたい処理を登録できるような hooks の実装と，activeEffect が自身だった場合のハンドリングを追加しておきます．
 
 ```ts
 export class ReactiveEffect<T = any> {
@@ -69,9 +69,9 @@ export class ReactiveEffect<T = any> {
 }
 ```
 
-ReactiveEffect にクリーンアップ処理が登録できたので、ついでに watch のクリーンアップ関数を実装してみましょう。
+ReactiveEffect にクリーンアップ処理が登録できたので，ついでに watch のクリーンアップ関数を実装してみましょう．
 
-以下のようなコードが動くようになれば OK です。
+以下のようなコードが動くようになれば OK です．
 
 ```ts
 import { createApp, h, reactive, watch } from 'chibivue'
@@ -108,9 +108,9 @@ app.mount('#app')
 
 ## Effect Scope とは
 
-さて、effect をクリーンアップできるようになったわけなので、コンポーネントがアンマウントされた際にも不要な effect はクリーンアップしたいものです。
-しかし、watch にしろ computed にしろ、たくさんの effect を収集するのは少々めんどくさいです。
-愚直に実装しようと思うと、以下のようになってしまいます。
+さて，effect をクリーンアップできるようになったわけなので，コンポーネントがアンマウントされた際にも不要な effect はクリーンアップしたいものです．
+しかし，watch にしろ computed にしろ，たくさんの effect を収集するのは少々めんどくさいです．
+愚直に実装しようと思うと，以下のようになってしまいます．
 
 ```ts
 let disposables = []
@@ -130,12 +130,12 @@ disposables.forEach(f => f())
 disposables = []
 ```
 
-このような管理はめんどくさいですし、必ずどこかでミスります。
+このような管理はめんどくさいですし，必ずどこかでミスります．
 
-そこで、Vue には EffectScope という機構があります。
+そこで，Vue には EffectScope という機構があります．
 https://github.com/vuejs/rfcs/blob/master/active-rfcs/0041-reactivity-effect-scope.md
 
-イメージ的には 1 インスタンス 1 EffectScope を持つ感じで、具体的には以下のようなインタフェースになっています。
+イメージ的には 1 インスタンス 1 EffectScope を持つ感じで，具体的には以下のようなインタフェースになっています．
 
 ```ts
 const scope = effectScope()
@@ -154,12 +154,12 @@ scope.stop()
 
 引用元: https://github.com/vuejs/rfcs/blob/master/active-rfcs/0041-reactivity-effect-scope.md#basic-example
 
-そして、この EffectScope というのはユーザー向けの API としても公開されています。  
+そして，この EffectScope というのはユーザー向けの API としても公開されています．  
 https://ja.vuejs.org/api/reactivity-advanced.html#effectscope
 
 ## EffectScope の実装
 
-先ほども言ったように、1 インスタンスに 1 EffectScope を持つような形をとります。
+先ほども言ったように，1 インスタンスに 1 EffectScope を持つような形をとります．
 
 ```ts
 export interface ComponentInternalInstance {
@@ -167,7 +167,7 @@ export interface ComponentInternalInstance {
 }
 ```
 
-そして、アンマウント時に収集しておいた effect を stop します
+そして，アンマウント時に収集しておいた effect を stop します
 
 ```ts
 const unmountComponent = (...) => {
@@ -180,11 +180,11 @@ const unmountComponent = (...) => {
 }
 ```
 
-EffectScope の構造ですが、activeEffectScope という現在 active な EffectScope を指す変数を一つ持ち、EffectScope に実装された on/off/run/stop というメソッドでその状態を管理します。  
-on/off メソッドは、自身を activeEffectScope として持ち上げたり、持ち上げた状態を元に戻す(元々の EffectScope に戻す)といったことを行います。  
-そして、ReactiveEffect が生成される際は、effect を activeEffectScope に登録するようにします。
+EffectScope の構造ですが，activeEffectScope という現在 active な EffectScope を指す変数を一つ持ち，EffectScope に実装された on/off/run/stop というメソッドでその状態を管理します．  
+on/off メソッドは，自身を activeEffectScope として持ち上げたり，持ち上げた状態を元に戻す(元々の EffectScope に戻す)といったことを行います．  
+そして，ReactiveEffect が生成される際は，effect を activeEffectScope に登録するようにします．
 
-少しわかりづらいので、イメージをソースコードで書くと、
+少しわかりづらいので，イメージをソースコードで書くと，
 
 ```ts
 instance.scope.on()
@@ -195,10 +195,10 @@ setup()
 instance.scope.off()
 ```
 
-このようにすることで、生成された effect を instance の EffectScope に収集しておくことができるというわけです。  
-あとは、この effect の stop メソッドを発火すると全ての effect のクリーンアップを行うことができます。
+このようにすることで，生成された effect を instance の EffectScope に収集しておくことができるというわけです．  
+あとは，この effect の stop メソッドを発火すると全ての effect のクリーンアップを行うことができます．
 
-基本的な原理については理解できたはずなので、実際にソースコードを読みながら実装してみましょう！
+基本的な原理については理解できたはずなので，実際にソースコードを読みながら実装してみましょう！
 
 ここまでのソースコード:  
 [chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/140_effect_scope)

@@ -25,18 +25,18 @@ const app = createApp(App)
 app.mount('#app')
 ```
 
-特に説明は必要ないでしょう。
+特に説明は必要ないでしょう．
 
 ## AST とパーサの実装
 
-コメントアウトをどう実装するかですが、一見 パースするときに無視してしまえばいい感じもします。
+コメントアウトをどう実装するかですが，一見 パースするときに無視してしまえばいい感じもします．
 
-しかし、Vue のコメントアウトは、template に記述したものがそのまま HTML として出力されるようになっています。
+しかし，Vue のコメントアウトは，template に記述したものがそのまま HTML として出力されるようになっています．
 
-つまりはコメントアウトもレンダリングする必要があるので、VNode 上での表現が必要かつコンパイラもそのコードを出力する必要があり、  
-その上コメントノードを生成する操作も必要になります。
+つまりはコメントアウトもレンダリングする必要があるので，VNode 上での表現が必要かつコンパイラもそのコードを出力する必要があり，  
+その上コメントノードを生成する操作も必要になります．
 
-まずは AST とパーサを実装していきましょう。
+まずは AST とパーサを実装していきましょう．
 
 ### AST
 
@@ -64,7 +64,7 @@ export type TemplateChildNode =
 
 ### Parser
 
-エラーはとりあえず throw するようにします。
+エラーはとりあえず throw するようにします．
 
 ```ts
 function parseChildren(
@@ -133,7 +133,7 @@ function parseComment(context: ParserContext): CommentNode {
 
 ## コードを生成する
 
-runtime-core 側に Comment を表現する VNode を追加します。
+runtime-core 側に Comment を表現する VNode を追加します．
 
 ```ts
 export const Comment = Symbol()
@@ -145,9 +145,9 @@ export type VNodeTypes =
   | typeof Fragment
 ```
 
-createCommentVNode という関数を実装し、helper として公開します。
+createCommentVNode という関数を実装し，helper として公開します．
 
-codegen ではこの createCommentVNode を呼び出すコードを生成します。
+codegen ではこの createCommentVNode を呼び出すコードを生成します．
 
 ```ts
 export function createCommentVNode(text: string = ''): VNode {
@@ -182,11 +182,11 @@ function genComment(node: CommentNode, context: CodegenContext) {
 
 ## レンダリングする
 
-renderer の実装をやっていきます。
+renderer の実装をやっていきます．
 
-いつものように patch で Comment の場合を分岐し、mount 時にコメントを生成します。
+いつものように patch で Comment の場合を分岐し，mount 時にコメントを生成します．
 
-patch に関しては、今回は静的なものなので、特に何も行いません。(コード上はそのまま代入するようにしています。)
+patch に関しては，今回は静的なものなので，特に何も行いません．(コード上はそのまま代入するようにしています．)
 
 ```ts
 const patch = (
@@ -224,6 +224,6 @@ const processCommentNode = (
 }
 ```
 
-さて、ここまででコメントアウトが実装できたはずです。実際に動作を確認してみましょう！
+さて，ここまででコメントアウトが実装できたはずです．実際に動作を確認してみましょう！
 
 ここまでのソースコード: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/035_comment)

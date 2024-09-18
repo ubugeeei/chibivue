@@ -1,15 +1,15 @@
 # コンポーネントを解決する
 
-実は、まだ私たちの chibivue の template はコンポーネントを解決することができません。  
-ここでそれを実装していくのですが、Vue.js ではコンポーネントの解決方法がいくつかあります。
+実は，まだ私たちの chibivue の template はコンポーネントを解決することができません．  
+ここでそれを実装していくのですが，Vue.js ではコンポーネントの解決方法がいくつかあります．
 
-まずはいくつかの解決方法についておさらいしてみましょう。
+まずはいくつかの解決方法についておさらいしてみましょう．
 
 ## コンポーネントの解決方法
 
 ### 1. Components Option (ローカル登録)
 
-おそらく、これが最も単純なコンポーネントの解決方法です。
+おそらく，これが最も単純なコンポーネントの解決方法です．
 
 https://vuejs.org/api/options-misc.html#components
 
@@ -31,11 +31,11 @@ export default {
 </template>
 ```
 
-components オプションに指定したオブジェクトの key 名が、テンプレート内で使用できるコンポーネント名になります。
+components オプションに指定したオブジェクトの key 名が，テンプレート内で使用できるコンポーネント名になります．
 
 ### 2. app に登録 (グローバル登録)
 
-作成した Vue アプリケーションの `.component()` メソッドを使うことでアプリケーション全体で使用できるコンポーネントを登録することができます。
+作成した Vue アプリケーションの `.component()` メソッドを使うことでアプリケーション全体で使用できるコンポーネントを登録することができます．
 
 https://vuejs.org/guide/components/registration.html#global-registration
 
@@ -52,7 +52,7 @@ app
 
 ### 3. 動的コンポーネント + is 属性
 
-is 属性を使うことで、動的にコンポーネントを切り替えることができます。
+is 属性を使うことで，動的にコンポーネントを切り替えることができます．
 
 https://vuejs.org/api/built-in-special-elements.html#component
 
@@ -78,7 +78,7 @@ export default {
 
 ### 4. script setup 時の import
 
-script setup では、import したコンポーネントをそのまま使用することができます。
+script setup では，import したコンポーネントをそのまま使用することができます．
 
 ```vue
 <script setup>
@@ -92,21 +92,21 @@ import MyComponent from './MyComponent.vue'
 
 ---
 
-他にも、非同期コンポーネントや組み込みコンポーネント, `component` タグなどもありますが、今回は上記 ２ つ (1, 2) に対応してみようと思います。
+他にも，非同期コンポーネントや組み込みコンポーネント, `component` タグなどもありますが，今回は上記 ２ つ (1, 2) に対応してみようと思います．
 
-3 に関しては、1, 2 が対応できれば拡張するだけです。 4 に関してはまだ script setup を実装していないので、少し後回しにします。
+3 に関しては，1, 2 が対応できれば拡張するだけです． 4 に関してはまだ script setup を実装していないので，少し後回しにします．
 
 ## 基本アプローチ
 
-どのようにコンポーネントを解決していくかですが、基本的には以下のような流れになります。
+どのようにコンポーネントを解決していくかですが，基本的には以下のような流れになります．
 
-- どこかしらに、テンプレート内で使う名前とコンポーネントのレコードを保持する
-- ヘルパー関数を用いて、名前を元にコンポーネントを解決する
+- どこかしらに，テンプレート内で使う名前とコンポーネントのレコードを保持する
+- ヘルパー関数を用いて，名前を元にコンポーネントを解決する
 
-1 の形も 2 の形も、登録する場所が少々異なるだけで、単に名前とコンポーネントのレコードを保持しているだけです。  
-レコードを保持していれば、必要になったところで名前からコンポーネントを解決することができるので、どちらも同じような実装になります。
+1 の形も 2 の形も，登録する場所が少々異なるだけで，単に名前とコンポーネントのレコードを保持しているだけです．  
+レコードを保持していれば，必要になったところで名前からコンポーネントを解決することができるので，どちらも同じような実装になります．
 
-先に、想定されるコードと、コンパイル結果を見てみましょう。
+先に，想定されるコードと，コンパイル結果を見てみましょう．
 
 ```vue
 <script>
@@ -138,19 +138,19 @@ function render(_ctx) {
 }
 ```
 
-このような感じです。
+このような感じです．
 
 ## 実装
 
 ### AST
 
-コンポーネントとして解決するコードを生成するためには、"MyComponent" がコンポーネントであることを知っている必要があります。  
-parse の段階で、タグ名をハンドリングして、AST 上は通常の Element と Component で分けるようにします。
+コンポーネントとして解決するコードを生成するためには，"MyComponent" がコンポーネントであることを知っている必要があります．  
+parse の段階で，タグ名をハンドリングして，AST 上は通常の Element と Component で分けるようにします．
 
-まずは AST の定義を考えてみましょう。  
-ComponentNode は通常の Element と同じように、 props や children を持ちます。  
-これらの共通部分を `BaseElementNode` としてまとめつつ、これまでの `ElementNode` は `PlainElementNode` とし、  
-`ElementNode` は `PlainElementNode` と `ComponentNode` のユニオンにしてしまいます。
+まずは AST の定義を考えてみましょう．  
+ComponentNode は通常の Element と同じように， props や children を持ちます．  
+これらの共通部分を `BaseElementNode` としてまとめつつ，これまでの `ElementNode` は `PlainElementNode` とし，  
+`ElementNode` は `PlainElementNode` と `ComponentNode` のユニオンにしてしまいます．
 
 ```ts
 // compiler-core/ast.ts
@@ -182,34 +182,34 @@ export interface ComponentNode extends BaseElementNode {
 }
 ```
 
-内容としては今のところ変わりありませんが、tagType だけ区別して、 ast は別物として扱います。  
-今後、これを使って transform の方で helper 関数の追加であったりを行っていきます。
+内容としては今のところ変わりありませんが，tagType だけ区別して， ast は別物として扱います．  
+今後，これを使って transform の方で helper 関数の追加であったりを行っていきます．
 
 ### Parser
 
-さて続いては、上記の AST を生成するためのパーサの実装です。  
-基本的には tag 名を判断して tagType を決めるだけです。
+さて続いては，上記の AST を生成するためのパーサの実装です．  
+基本的には tag 名を判断して tagType を決めるだけです．
 
-問題は、どうやって Element なのか Component なのかを判断するかです。
+問題は，どうやって Element なのか Component なのかを判断するかです．
 
-基本的な考え方は単純で、"ネイティブなタグかどうか" を判断するだけです。
+基本的な考え方は単純で，"ネイティブなタグかどうか" を判断するだけです．
 
 ・  
 ・  
 ・
 
-「え、いやいや、だからそれをどうやって実装するかという話じゃないの ?」
+「え，いやいや，だからそれをどうやって実装するかという話じゃないの ?」
 
-はい。ここは力技です。ネイティブなタグ名をあらかじめ列挙し、それにマッチするかどうかで判断します。  
-列挙するべき項目なんてものは、仕様をみに行けば全て書いてあるはずなので、それを信頼して使います。
+はい．ここは力技です．ネイティブなタグ名をあらかじめ列挙し，それにマッチするかどうかで判断します．  
+列挙するべき項目なんてものは，仕様をみに行けば全て書いてあるはずなので，それを信頼して使います．
 
-ここで一つ、問題があるとすれば、「何がネイティブなタグかどうかは環境によって変わる」という点です。  
-今回でいえば、ブラウザです。何が言いたいのかというと、「compiler-core は環境依存であってはならない」ということです。  
-私たちはこれまで DOM に依存するような実装は compiler-dom に実装してきました。今回のこの列挙もその例外ではありません。
+ここで一つ，問題があるとすれば，「何がネイティブなタグかどうかは環境によって変わる」という点です．  
+今回でいえば，ブラウザです．何が言いたいのかというと，「compiler-core は環境依存であってはならない」ということです．  
+私たちはこれまで DOM に依存するような実装は compiler-dom に実装してきました．今回のこの列挙もその例外ではありません．
 
-それに伴って、「ネイティブなタグ名であるかどうか」という関数をパーサのオプションとして外から注入できるような実装にします。
+それに伴って，「ネイティブなタグ名であるかどうか」という関数をパーサのオプションとして外から注入できるような実装にします．
 
-これからのことも考えて、オプションは色々後から追加しやすいようにしておきます。
+これからのことも考えて，オプションは色々後から追加しやすいようにしておきます．
 
 ```ts
 type OptionalOptions = 'isNativeTag' // | TODO: 今後増やしていく (かも)
@@ -258,9 +258,9 @@ export const baseParse = (
 }
 ```
 
-さてさて、そうしましたら、 compiler-dom の方でネイティブなタグ名を列挙して、それをオプションとして渡してあげます。
+さてさて，そうしましたら， compiler-dom の方でネイティブなタグ名を列挙して，それをオプションとして渡してあげます．
 
-compiler-dom と言いましたが、実は列挙自体は shared/domTagConfig.ts で行われています。
+compiler-dom と言いましたが，実は列挙自体は shared/domTagConfig.ts で行われています．
 
 ```ts
 import { makeMap } from './makeMap'
@@ -282,11 +282,11 @@ export const isHTMLTag = makeMap(HTML_TAGS)
 
 なんとも禍々しいですね！！
 
-でもこれが正しい実装なのです。
+でもこれが正しい実装なのです．
 
 https://github.com/vuejs/core/blob/32bdc5d1900ceb8df1e8ee33ea65af7b4da61051/packages/shared/src/domTagConfig.ts#L6
 
-compiler-dom/parserOptions.ts を作成し、コンパイラに渡します。
+compiler-dom/parserOptions.ts を作成し，コンパイラに渡します．
 
 ```ts
 // compiler-dom/parserOptions.ts
@@ -317,9 +317,9 @@ export function compile(template: string, option?: CompilerOptions) {
 }
 ```
 
-少し話が飛びましたが、パーサの実装に必要なものは揃ったので、残りの部分を実装していきます。
+少し話が飛びましたが，パーサの実装に必要なものは揃ったので，残りの部分を実装していきます．
 
-残りはとっても簡単です。コンポーネント化どうかを判断して tagType を生やしてあげるだけです。
+残りはとっても簡単です．コンポーネント化どうかを判断して tagType を生やしてあげるだけです．
 
 ```ts
 function parseElement(
@@ -354,17 +354,17 @@ function isComponent(tag: string, context: ParserContext) {
 }
 ```
 
-これで parser と AST は OK です。これからはこれらを使って transform と codegen を実装していきます。
+これで parser と AST は OK です．これからはこれらを使って transform と codegen を実装していきます．
 
 ### Transform
 
-transform の方でやることはとても簡単です。
+transform の方でやることはとても簡単です．
 
-transformElement で、Node が ComponentNode だった場合に少々変換してあげるだけです。
+transformElement で，Node が ComponentNode だった場合に少々変換してあげるだけです．
 
-この際、context にも component を登録しておいてあげます。  
-これは、codegen の際にまとめて resolve してあげるためです。
-後述しますが、codegen の方ではコンポーネントは assets としてまとめて resolve されます。
+この際，context にも component を登録しておいてあげます．  
+これは，codegen の際にまとめて resolve してあげるためです．
+後述しますが，codegen の方ではコンポーネントは assets としてまとめて resolve されます．
 
 ```ts
 // compiler-core/transforms/transformElement.ts
@@ -404,7 +404,7 @@ export function toValidAssetId(
 }
 ```
 
-context の方にも登録できるようにしておきます。
+context の方にも登録できるようにしておきます．
 
 ```ts
 export interface TransformContext extends Required<TransformOptions> {
@@ -429,7 +429,7 @@ export function createTransformContext(
 }
 ```
 
-そして、context にまとめられて components は登録対象のコンポーネントの RootNode に全て登録してあげます。
+そして，context にまとめられて components は登録対象のコンポーネントの RootNode に全て登録してあげます．
 
 ```ts
 export interface RootNode extends Node {
@@ -451,12 +451,12 @@ export function transform(root: RootNode, options: TransformOptions) {
 }
 ```
 
-これで、あとは RootNode.components を codegen で使うだけです。
+これで，あとは RootNode.components を codegen で使うだけです．
 
 ### Codegen
 
-最初に見たコンパイル結果のように、ヘルパー関数に名前を渡して解決するコードを生成するだけです。  
-今後のためを考えて assets というふうな抽象化をしています。
+最初に見たコンパイル結果のように，ヘルパー関数に名前を渡して解決するコードを生成するだけです．  
+今後のためを考えて assets というふうな抽象化をしています．
 
 ```ts
 export const generate = (ast: RootNode, option: CompilerOptions): string => {
@@ -501,11 +501,11 @@ function genAssets(
 
 ### runtime-core 側の実装
 
-ここまでくれば目的のコードは生成できているので、あとは runtime-core の実装です。
+ここまでくれば目的のコードは生成できているので，あとは runtime-core の実装です．
 
 #### コンポーネントのオプションとして component を追加できるように
 
-これは単純で、option に追加するだけです。
+これは単純で，option に追加するだけです．
 
 ```ts
 export type ComponentOptions<
@@ -520,7 +520,7 @@ export type ComponentOptions<
 
 #### app のオプションとして components を追加できるように
 
-こちらも単純です。
+こちらも単純です．
 
 ```ts
 export interface AppContext {
@@ -556,9 +556,9 @@ export function createAppAPI<HostElement>(
 
 #### 上記二つからコンポーネントを解決する関数の実装
 
-こちらも特に説明することはないでしょう。  
-ローカル/グローバルに登録されたコンポーネントをそれぞれに探索し、コンポーネントを返します。  
-見つからなかった場合は fallback としてそのまま名前を返します。
+こちらも特に説明することはないでしょう．  
+ローカル/グローバルに登録されたコンポーネントをそれぞれに探索し，コンポーネントを返します．  
+見つからなかった場合は fallback としてそのまま名前を返します．
 
 ```ts
 // runtime-core/helpers/componentAssets.ts
@@ -588,12 +588,12 @@ function resolve(registry: Record<string, any> | undefined, name: string) {
 }
 ```
 
-一点、注意点があるのは `currentRenderingInstance` についてです。
+一点，注意点があるのは `currentRenderingInstance` についてです．
 
-resolveComponent ではローカル登録されたコンポーネントを辿るために、現在レンダリングされているコンポーネントにアクセスする必要があります。  
+resolveComponent ではローカル登録されたコンポーネントを辿るために，現在レンダリングされているコンポーネントにアクセスする必要があります．  
 (レンダリング中のコンポーネントの components オプションを探索したいため)
 
-それに伴って、`currentRenderingInstance` というものを用意し、レンダリングする際にこれを更新していく実装にしてみます。
+それに伴って，`currentRenderingInstance` というものを用意し，レンダリングする際にこれを更新していく実装にしてみます．
 
 ```ts
 // runtime-core/componentRenderContexts.ts
@@ -634,7 +634,7 @@ const setupRenderEffect = (
 
 ## いざ動かしてみる
 
-お疲れ様でした。ここまででようやくコンポーネントを解決することができるようになりました。
+お疲れ様でした．ここまででようやくコンポーネントを解決することができるようになりました．
 
 実際にプレイグラウンドの方で動かしてみましょう！
 

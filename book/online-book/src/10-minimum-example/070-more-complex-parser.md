@@ -2,9 +2,9 @@
 
 ## もっと複雑な HTML を書きたい
 
-今の状態だとせいぜいタグの名前や属性、テキストの内容くらいしか表すことができていません。  
-そこで、もっと複雑な HTML を template に書けるようにしたいです。
-具体的には、これくらいのテンプレートをコンパイルできるようになりたいです。
+今の状態だとせいぜいタグの名前や属性，テキストの内容くらいしか表すことができていません．  
+そこで，もっと複雑な HTML を template に書けるようにしたいです．
+具体的には，これくらいのテンプレートをコンパイルできるようになりたいです．
 
 ```ts
 const app = createApp({
@@ -33,19 +33,19 @@ const app = createApp({
 app.mount('#app')
 ```
 
-しかしこれだけ複雑なものは正規表現でパースするのは厳しいのです。なので、ここからは本格的にパーサを実装していこうと思います。
+しかしこれだけ複雑なものは正規表現でパースするのは厳しいのです．なので，ここからは本格的にパーサを実装していこうと思います．
 
 ## AST の導入
 
-本格的なコンパイラを実装していくにあたって AST というものを導入します。  
-AST は Abstract Syntax Tree (抽象構文木)の略で、名前の通り、構文を表現する木構造のデータ表現です。  
-これは、Vue.js に限らず、さまざまなコンパイラを実装するときに登場する概念です。  
-多くの場合(言語処理系においては)、「パース」というと、この AST という表現に変換することを指します。  
-AST の定義はそれぞれの言語が各自で定義します。  
-例えば、皆さんが馴染み深いであろう JavaScript は [estree](https://github.com/estree/estree) という AST で表現されていて、内部的にはソースコードの文字列がこの定義に沿ってパースされていたりします。
+本格的なコンパイラを実装していくにあたって AST というものを導入します．  
+AST は Abstract Syntax Tree (抽象構文木)の略で，名前の通り，構文を表現する木構造のデータ表現です．  
+これは，Vue.js に限らず，さまざまなコンパイラを実装するときに登場する概念です．  
+多くの場合(言語処理系においては)，「パース」というと，この AST という表現に変換することを指します．  
+AST の定義はそれぞれの言語が各自で定義します．  
+例えば，皆さんが馴染み深いであろう JavaScript は [estree](https://github.com/estree/estree) という AST で表現されていて，内部的にはソースコードの文字列がこの定義に沿ってパースされていたりします．
 
-と、少しかっこいい感じの説明をしてみましたが、イメージ的にはこれまで実装していた parse 関数の戻り値の型をもっとかっちり形式的に定義するだけです。
-今現状だと、parse 関数の戻り値は以下のようになっています。
+と，少しかっこいい感じの説明をしてみましたが，イメージ的にはこれまで実装していた parse 関数の戻り値の型をもっとかっちり形式的に定義するだけです．
+今現状だと，parse 関数の戻り値は以下のようになっています．
 
 ```ts
 type ParseResult = {
@@ -55,10 +55,10 @@ type ParseResult = {
 }
 ```
 
-これを拡張して、もっと複雑な表現を行えるような定義にしてみます。
+これを拡張して，もっと複雑な表現を行えるような定義にしてみます．
 
-新たに `~/packages/compiler-core/ast.ts` を作成します。  
-少し長いので、コード中に説明を書きながら説明を進めます。
+新たに `~/packages/compiler-core/ast.ts` を作成します．  
+少し長いので，コード中に説明を書きながら説明を進めます．
 
 ```ts
 // これは Node の種類を表すものです。
@@ -120,24 +120,24 @@ export interface Position {
 }
 ```
 
-これらが今回扱う AST です。  
-parse 関数では template の文字列をこの AST に変換するような実装をしていきます。
+これらが今回扱う AST です．  
+parse 関数では template の文字列をこの AST に変換するような実装をしていきます．
 
 ## 本格的なパーサの実装
 
 ::: warning
-2023 年 11 月下旬に vuejs/core で [パフォーマンス改善のための大規模なリライト](https://github.com/vuejs/core/pull/9674) が行われました。  
-これらは 2023 年 の 12 月末に [Vue 3.4](https://blog.vuejs.org/posts/vue-3-4) としてリリースされました。
-このオンラインブックはそのリライト以前の実装を参考にしていることに注意しくてださい。  
-然るべきタイミングでこのオンラインブックも追従する予定です。  
+2023 年 11 月下旬に vuejs/core で [パフォーマンス改善のための大規模なリライト](https://github.com/vuejs/core/pull/9674) が行われました．  
+これらは 2023 年 の 12 月末に [Vue 3.4](https://blog.vuejs.org/posts/vue-3-4) としてリリースされました．
+このオンラインブックはそのリライト以前の実装を参考にしていることに注意しくてださい．  
+然るべきタイミングでこのオンラインブックも追従する予定です．  
 :::
 
-`~/packages/compiler-core/parse.ts` に本格的な実装していきます。  
-本格的と言ってもあまり身構えなくて大丈夫です。やっていることは基本的に文字列を読み進めながら分岐やループを活用して AST を生成しているだけです。  
-ソースコードが少し多くなりますが、説明もコードベースの方が分かりやすいと思うのでそう進めていきます。  
-細かい部分はぜひソースコードを読んで把握してみてください。
+`~/packages/compiler-core/parse.ts` に本格的な実装していきます．  
+本格的と言ってもあまり身構えなくて大丈夫です．やっていることは基本的に文字列を読み進めながら分岐やループを活用して AST を生成しているだけです．  
+ソースコードが少し多くなりますが，説明もコードベースの方が分かりやすいと思うのでそう進めていきます．  
+細かい部分はぜひソースコードを読んで把握してみてください．
 
-今実装してある baseParse の内容は一旦消して、戻り値の型も以下のようにします。
+今実装してある baseParse の内容は一旦消して，戻り値の型も以下のようにします．
 
 ```ts
 import { TemplateChildNode } from './ast'
@@ -152,7 +152,7 @@ export const baseParse = (
 
 ## Context
 
-まずは parse する際に使う状態から実装します。これは `ParserContext`という名前をつけて、パース中に必要な情報をここにまとめます。ゆくゆくはパーサーの設定オプションなども保持するようになると思います。
+まずは parse する際に使う状態から実装します．これは `ParserContext`という名前をつけて，パース中に必要な情報をここにまとめます．ゆくゆくはパーサーの設定オプションなども保持するようになると思います．
 
 ```ts
 export interface ParserContext {
@@ -189,9 +189,9 @@ export const baseParse = (
 
 ## parseChildren
 
-順番的には、(parseChildren) -> (parseElement または parseText)とパースを進めていきます。
+順番的には，(parseChildren) -> (parseElement または parseText)とパースを進めていきます．
 
-少し長いですが、parseChildren の実装からです。説明はソースコード中のコメントアウトで行います。
+少し長いですが，parseChildren の実装からです．説明はソースコード中のコメントアウトで行います．
 
 ```ts
 export const baseParse = (
@@ -279,10 +279,10 @@ function startsWithEndTagOpen(source: string, tag: string): boolean {
 }
 ```
 
-続いて parseElement と parseText について実装していきます。
+続いて parseElement と parseText について実装していきます．
 
 ::: tip isEnd のループについて
-isEnd では ancestors の配列のそれぞれの要素に対して startsWithEndTagOpen で s がその要素の閉じタグで始まっている文字列かどうかをループでチェックするような処理になっています。
+isEnd では ancestors の配列のそれぞれの要素に対して startsWithEndTagOpen で s がその要素の閉じタグで始まっている文字列かどうかをループでチェックするような処理になっています．
 
 ```ts
 function isEnd(context: ParserContext, ancestors: ElementNode[]): boolean {
@@ -301,12 +301,12 @@ function isEnd(context: ParserContext, ancestors: ElementNode[]): boolean {
 }
 ```
 
-しかし、s が閉じタグで始まっている文字列かどうかをチェックするのであれば、ancestors の最後の要素に対してのみチェックすれば良いはずです。parser のリライトによってこのコードは無くなってしまいましたが、リライト前の Vue 3.3 のコードで ancestors の最後の要素に対してのみチェックするようにコードを書き換えても正常系のテストは全て PASS します。
+しかし，s が閉じタグで始まっている文字列かどうかをチェックするのであれば，ancestors の最後の要素に対してのみチェックすれば良いはずです．parser のリライトによってこのコードは無くなってしまいましたが，リライト前の Vue 3.3 のコードで ancestors の最後の要素に対してのみチェックするようにコードを書き換えても正常系のテストは全て PASS します．
 :::
 
 ## parseText
 
-まずはシンプルな parseText の方から実装していきます。一部、parseText 以外でも使うユーティリティも実装しているので少しだけ長いです。
+まずはシンプルな parseText の方から実装していきます．一部，parseText 以外でも使うユーティリティも実装しているので少しだけ長いです．
 
 ```ts
 function parseText(context: ParserContext): TextNode {
@@ -399,9 +399,9 @@ function getSelection(
 
 ## parseElement
 
-続いて要素のパースです。  
-要素のパースは主に start タグのパース、子 Node のパース、end タグのパースで成り立っていて、start タグのパースはさらにタグ名、属性に分かれます。  
-まずは前半の start タグ, 子 Node, end タグをパースするガワを作っていきましょう。
+続いて要素のパースです．  
+要素のパースは主に start タグのパース，子 Node のパース，end タグのパースで成り立っていて，start タグのパースはさらにタグ名，属性に分かれます．  
+まずは前半の start タグ, 子 Node, end タグをパースするガワを作っていきましょう．
 
 ```ts
 const enum TagType {
@@ -437,10 +437,10 @@ function parseElement(
 }
 ```
 
-とくに難しいことはないと思います。ここで parseChildren が再帰しています。(parseElement は parseChildren に呼ばれるので)  
-前後で ancestors というスタック構造のデータを操作しています。
+とくに難しいことはないと思います．ここで parseChildren が再帰しています．(parseElement は parseChildren に呼ばれるので)  
+前後で ancestors というスタック構造のデータを操作しています．
 
-parseTag を実装していきます。
+parseTag を実装していきます．
 
 ```ts
 function parseTag(context: ParserContext, type: TagType): ElementNode {
@@ -580,12 +580,12 @@ function parseAttributeValue(context: ParserContext): AttributeValue {
 
 ## パーサの実装を終えて
 
-例になくたくさんコードを書いてきました。(せいぜい 300 行ちょっとですが)  
-ここの実装は特別言葉で説明するよりも読んだ方が理解が進むと思うので、何度か繰り返し読んでみてください。  
-たくさん書きましたが基本的には文字列を読み進めて解析を進めているだけで、特に難しいテクニックなどはない地道な作業です。
+例になくたくさんコードを書いてきました．(せいぜい 300 行ちょっとですが)  
+ここの実装は特別言葉で説明するよりも読んだ方が理解が進むと思うので，何度か繰り返し読んでみてください．  
+たくさん書きましたが基本的には文字列を読み進めて解析を進めているだけで，特に難しいテクニックなどはない地道な作業です．
 
-ここまでで AST を生成できるようになっているはずです。パースができているか動作を確認してみましょう。
-とはいえ、codegen の部分をまだ実装できていないので、今回に関しては console に出力して確認してみます。
+ここまでで AST を生成できるようになっているはずです．パースができているか動作を確認してみましょう．
+とはいえ，codegen の部分をまだ実装できていないので，今回に関しては console に出力して確認してみます．
 
 ```ts
 const app = createApp({
@@ -630,19 +630,19 @@ export function baseCompile(template: string) {
 }
 ```
 
-画面は何も表示されなくなってしまいますが、コンソールを確認してみましょう。
+画面は何も表示されなくなってしまいますが，コンソールを確認してみましょう．
 
 ![simple_template_compiler_complex_html](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/simple_template_compiler_complex_html.png)
 
-いい感じにパースができているようです。
-それではここで生成した AST を元に codegen の方の実装を進めていこうと思います。
+いい感じにパースができているようです．
+それではここで生成した AST を元に codegen の方の実装を進めていこうと思います．
 
 
 ## AST を元に render 関数を生成する
 
-さて、本格的なパーサが実装できたところで次はそれに適応したコードジェネレータを作っていきます。  
-と言っても今の時点だと複雑な実装は必要ありません。  
-先にコードをお見せしてしまいます。
+さて，本格的なパーサが実装できたところで次はそれに適応したコードジェネレータを作っていきます．  
+と言っても今の時点だと複雑な実装は必要ありません．  
+先にコードをお見せしてしまいます．
 
 ```ts
 import { ElementNode, NodeTypes, TemplateChildNode, TextNode } from './ast'
@@ -680,8 +680,8 @@ const genText = (text: TextNode): string => {
 }
 ```
 
-以上で動くようなものは作れます。
-パーサの章でコメントアウトした部分を戻して、実際に動作を見てみましょう。
+以上で動くようなものは作れます．
+パーサの章でコメントアウトした部分を戻して，実際に動作を見てみましょう．
 `~/packages/compiler-core/compile.ts`
 
 ```ts
@@ -724,9 +724,9 @@ app.mount('#app')
 ```
 
 ![render_template](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/render_template.png)
-どうでしょうか。とってもいいっ感じに画面を描画できているようです。
+どうでしょうか．とってもいいっ感じに画面を描画できているようです．
 
-せっかくなので画面に動きをつけてみます。テンプレートへのバインディングは実装していないので、直接 DOM 操作します。
+せっかくなので画面に動きをつけてみます．テンプレートへのバインディングは実装していないので，直接 DOM 操作します．
 
 ```ts
 export type ComponentOptions = {
@@ -786,8 +786,8 @@ const app = createApp({
 app.mount('#app')
 ```
 
-これで正常に動作していることを確認します。  
-どうでしょう。機能は少ないにしろ、だんだんと普段の Vue の開発者インタフェースに近づいてきたのではないでしょうか。
+これで正常に動作していることを確認します．  
+どうでしょう．機能は少ないにしろ，だんだんと普段の Vue の開発者インタフェースに近づいてきたのではないでしょうか．
 
 ここまでのソースコード:  
 [chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler2)

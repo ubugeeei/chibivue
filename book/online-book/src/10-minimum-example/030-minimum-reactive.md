@@ -2,14 +2,14 @@
 
 ## 今回目指す開発者インタフェース
 
-ここからは Vue.js の醍醐味である Reactivity System というものについてやっていきます。  
-これ以前の実装は、見た目が Vue.js に似ていれど、それは見た目だけで機能的には全く Vue.js ではありません。  
-たんに最初の開発者インタフェースを実装し、いろんな HTML を表示できるようにしてみました。
+ここからは Vue.js の醍醐味である Reactivity System というものについてやっていきます．  
+これ以前の実装は，見た目が Vue.js に似ていれど，それは見た目だけで機能的には全く Vue.js ではありません．  
+たんに最初の開発者インタフェースを実装し，いろんな HTML を表示できるようにしてみました．
 
-しかし、このままでは一度画面を描画するとその後はそのままで、Web アプリケーションとしてはただの静的なサイトになってしまっています。  
-これから、もっとリッチな UI を構築するために状態を持たせたり、その状態が変わったら描画を更新したりといったことをやっていきます。
+しかし，このままでは一度画面を描画するとその後はそのままで，Web アプリケーションとしてはただの静的なサイトになってしまっています．  
+これから，もっとリッチな UI を構築するために状態を持たせたり，その状態が変わったら描画を更新したりといったことをやっていきます．
 
-まずは例の如くどういった開発者インタフェースになるか考えてみましょう。  
+まずは例の如くどういった開発者インタフェースになるか考えてみましょう．  
 以下のようなのはどうでしょうか?
 
 ```ts
@@ -34,24 +34,24 @@ const app = createApp({
 app.mount('#app')
 ```
 
-普段 SFC を利用した開発を行っている方は少々見慣れないかもしれません。  
-これは、setup というオプションでステートをもち、render 関数を return する開発者インタフェースです。  
-実際、Vue.js にはこういった記法があります。
+普段 SFC を利用した開発を行っている方は少々見慣れないかもしれません．  
+これは，setup というオプションでステートをもち，render 関数を return する開発者インタフェースです．  
+実際，Vue.js にはこういった記法があります．
 
 https://vuejs.org/api/composition-api-setup.html#usage-with-render-functions
 
-reactive 関数でステートを定義し、それを書き換える increment という関数を実装してボタンの click イベントにバインドしています。
-やりたいことをまとめておくと、
+reactive 関数でステートを定義し，それを書き換える increment という関数を実装してボタンの click イベントにバインドしています．
+やりたいことをまとめておくと，
 
 - setup 関数を実行することで戻り値から vnode 取得用の関数を得る
 - reactive 関数に渡したオブジェクトをリアクティブにする
-- ボタンをクリックすると、ステートが更新される
-- ステートの更新を追跡して render 関数を再実行し、画面を再描画する
+- ボタンをクリックすると，ステートが更新される
+- ステートの更新を追跡して render 関数を再実行し，画面を再描画する
 
 ## Reactivity System とはどのようなもの?
 
-さてここで、そもそもリアクティブとは何だったかのおさらいです。
-公式ドキュメントを参照してみます。
+さてここで，そもそもリアクティブとは何だったかのおさらいです．
+公式ドキュメントを参照してみます．
 
 > リアクティブなオブジェクトは JavaScript プロキシで、通常のオブジェクトと同じように振る舞います。違いは、Vue がリアクティブなオブジェクトのプロパティアクセスと変更を追跡できることです。
 
@@ -61,15 +61,15 @@ reactive 関数でステートを定義し、それを書き換える increment 
 
 [引用元](https://ja.vuejs.org/guide/extras/reactivity-in-depth.html)
 
-要約してみると、「リアクティブなオブジェクトは変更があった時に画面が更新される」です。  
-これの実現方法について考えるのは少し置いておいて、とりあえず先ほどあげた開発者インタフェースを実装してみます。
+要約してみると，「リアクティブなオブジェクトは変更があった時に画面が更新される」です．  
+これの実現方法について考えるのは少し置いておいて，とりあえず先ほどあげた開発者インタフェースを実装してみます．
 
 ## setup 関数の実装
 
-やることはとっても簡単です。
-setup オプションを受け取り実行し、あとはそれをこれまでの render オプションと同じように使えば OK です。
+やることはとっても簡単です．
+setup オプションを受け取り実行し，あとはそれをこれまでの render オプションと同じように使えば OK です．
 
-~/packages/runtime-core/componentOptions.ts を編集します。
+~/packages/runtime-core/componentOptions.ts を編集します．
 
 ```ts
 export type ComponentOptions = {
@@ -78,7 +78,7 @@ export type ComponentOptions = {
 }
 ```
 
-あとはそれを使うように各コードを修正します。
+あとはそれを使うように各コードを修正します．
 
 ```ts
 // createAppAPI
@@ -127,32 +127,32 @@ const app = createApp({
 app.mount('#app')
 ```
 
-まあ、これだけです。
-実際にはステートが変更された時にこの `updateComponent` を実行したいわけです。
+まあ，これだけです．
+実際にはステートが変更された時にこの `updateComponent` を実行したいわけです．
 
 ## Proxy オブジェクト
 
-今回のメインテーマです。どうにかしてステートが変更された時に updateComponent を実行したいです。
+今回のメインテーマです．どうにかしてステートが変更された時に updateComponent を実行したいです．
 
-Proxy と呼ばれるオブジェクトが肝になっています。
+Proxy と呼ばれるオブジェクトが肝になっています．
 
-まず、 Reactivity System の実装方法についてではなく、それぞれについての説明をしてみます。
+まず， Reactivity System の実装方法についてではなく，それぞれについての説明をしてみます．
 
 https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Proxy
 
-Proxy はとても面白いオブジェクトです。
+Proxy はとても面白いオブジェクトです．
 
-以下のように、引数にオブジェクトを渡し、new することで使います。
+以下のように，引数にオブジェクトを渡し，new することで使います．
 
 ```ts
 const o = new Proxy({ value: 1 }, {})
 console.log(o.value) // 1
 ```
 
-この例だと、`o` は通常のオブジェクトとほぼ同じ動作をします。
+この例だと，`o` は通常のオブジェクトとほぼ同じ動作をします．
 
-ここで、面白いのが、Proxy は第 2 引数を取ることができ、ハンドラを登録することができます。  
-このハンドラは何のハンドラかというと、オブジェクトの操作に対するハンドラです。以下の例をみてください。
+ここで，面白いのが，Proxy は第 2 引数を取ることができ，ハンドラを登録することができます．  
+このハンドラは何のハンドラかというと，オブジェクトの操作に対するハンドラです．以下の例をみてください．
 
 ```ts
 const o = new Proxy(
@@ -167,15 +167,15 @@ const o = new Proxy(
 )
 ```
 
-この例では生成するオブジェクトに対する設定を書き込んでいます。  
-具体的には、このオブジェクトのプロパティにアクセス(get)した際に元のオブジェクト(target)とアクセスされた key 名がコンソールに出力されるようになっています。
-実際にブラウザ等で動作を確認してみましょう。
+この例では生成するオブジェクトに対する設定を書き込んでいます．  
+具体的には，このオブジェクトのプロパティにアクセス(get)した際に元のオブジェクト(target)とアクセスされた key 名がコンソールに出力されるようになっています．
+実際にブラウザ等で動作を確認してみましょう．
 
 ![proxy_get](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/proxy_get.png)
 
-この Proxy で生成したオブジェクトのプロパティから値を読み取った時に設定された処理が実行されているのがわかるかと思います。
+この Proxy で生成したオブジェクトのプロパティから値を読み取った時に設定された処理が実行されているのがわかるかと思います．
 
-同様に、set に対しても設定することができます。
+同様に，set に対しても設定することができます．
 
 ```ts
 const o = new Proxy(
@@ -192,26 +192,26 @@ const o = new Proxy(
 
 ![proxy_set](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/proxy_set.png)
 
-Proxy の理解はこの程度で OK です。
+Proxy の理解はこの程度で OK です．
 
 ## Proxy で Reactivity System を実現してみる
 
 ::: warning
-2023 年 の 12 月末に [Vue 3.4](https://blog.vuejs.org/posts/vue-3-4) がリリースされましたが、これには [reactivity のパフォーマンス改善](https://github.com/vuejs/core/pull/5912) が含まれています。  
-このオンラインブックはそれ以前の実装を参考にしていることに注意しくてださい。  
-このチャプターに関しては大きな変更はありませんが、ファイル構成が少し違っていたり、コードの一部が変更されていたりします。  
-然るべきタイミングでこのオンラインブックも追従する予定です。  
+2023 年 の 12 月末に [Vue 3.4](https://blog.vuejs.org/posts/vue-3-4) がリリースされましたが，これには [reactivity のパフォーマンス改善](https://github.com/vuejs/core/pull/5912) が含まれています．  
+このオンラインブックはそれ以前の実装を参考にしていることに注意しくてださい．  
+このチャプターに関しては大きな変更はありませんが，ファイル構成が少し違っていたり，コードの一部が変更されていたりします．  
+然るべきタイミングでこのオンラインブックも追従する予定です．  
 :::
 
-改めて目的を明確にしておくと、今回の目的は「ステートが変更された時に `updateComponent` を実行したい」です。  
-Proxy を用いた実装の流れについて説明してみます。
+改めて目的を明確にしておくと，今回の目的は「ステートが変更された時に `updateComponent` を実行したい」です．  
+Proxy を用いた実装の流れについて説明してみます．
 
-まず、Vue.js の Reactivity System には `target`, `Proxy`, `ReactiveEffect`, `Dep`, `track`, `trigger`, `targetMap`, `activeEffect`というものが登場します。
+まず，Vue.js の Reactivity System には `target`, `Proxy`, `ReactiveEffect`, `Dep`, `track`, `trigger`, `targetMap`, `activeEffect`というものが登場します．
 
-まず、targetMap の構造についてです。  
-targetMap はある target の key と dep のマッピングです。  
-target というのはリアクティブにしたいオブジェクト、dep というのは実行したい作用(関数)だと思ってもらえれば大丈夫です。  
-コードで表すとこういう感じになります。
+まず，targetMap の構造についてです．  
+targetMap はある target の key と dep のマッピングです．  
+target というのはリアクティブにしたいオブジェクト，dep というのは実行したい作用(関数)だと思ってもらえれば大丈夫です．  
+コードで表すとこういう感じになります．
 
 ```ts
 type Target = any // 任意のtarget
@@ -231,10 +231,10 @@ class ReactiveEffect {
 }
 ```
 
-基本的な構造はこれが担っていて、あとはこの TargetMap をどう作っていくか(どう登録していくか)と実際に作用を実行するにはどうするかということを考えます。
+基本的な構造はこれが担っていて，あとはこの TargetMap をどう作っていくか(どう登録していくか)と実際に作用を実行するにはどうするかということを考えます．
 
-そこで登場する概念が `track` と `trigger` です。
-それぞれ名前の通り、`track` は `TargetMap` に登録する関数、`trigger` は `TargetMap` から作用を取り出して実行する関数です。
+そこで登場する概念が `track` と `trigger` です．
+それぞれ名前の通り，`track` は `TargetMap` に登録する関数，`trigger` は `TargetMap` から作用を取り出して実行する関数です．
 
 ```ts
 export function track(target: object, key: unknown) {
@@ -246,7 +246,7 @@ export function trigger(target: object, key?: unknown) {
 }
 ```
 
-そして、この track と trigger は Proxy の get と set のハンドラに実装されます。
+そして，この track と trigger は Proxy の get と set のハンドラに実装されます．
 
 ```ts
 const state = new Proxy(
@@ -265,7 +265,7 @@ const state = new Proxy(
 )
 ```
 
-この Proxy 生成のための API が reactive 関数です。
+この Proxy 生成のための API が reactive 関数です．
 
 ```ts
 function reactive<T>(target: T) {
@@ -285,9 +285,9 @@ function reactive<T>(target: T) {
 
 ![reactive](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/reactive.drawio.png)
 
-ここで、一つ足りない要素について気づくかもしれません。それは「track ではどの関数を登録するの?」という点です。
-答えを言ってしまうと、これが `activeEffect` という概念です。
-これは、targetMap と同様、このモジュール内のグローバル変数として定義されていて、ReactiveEffect の `run` というメソッドで随時設定されます。
+ここで，一つ足りない要素について気づくかもしれません．それは「track ではどの関数を登録するの?」という点です．
+答えを言ってしまうと，これが `activeEffect` という概念です．
+これは，targetMap と同様，このモジュール内のグローバル変数として定義されていて，ReactiveEffect の `run` というメソッドで随時設定されます．
 
 ```ts
 let activeEffect: ReactiveEffect | undefined
@@ -305,7 +305,7 @@ class ReactiveEffect {
 }
 ```
 
-どのような原理かというと、このようなコンポーネントを想像してください。
+どのような原理かというと，このようなコンポーネントを想像してください．
 
 ```ts
 {
@@ -329,7 +329,7 @@ class ReactiveEffect {
 }
 ```
 
-これを、内部的には以下のようにリアクティブを形成します。
+これを，内部的には以下のようにリアクティブを形成します．
 
 ```ts
 // chibivue 内部実装
@@ -348,20 +348,20 @@ const app: App = {
 }
 ```
 
-順を追って説明すると、まず、`setup` 関数が実行されます。
-この時点で reactive proxy が生成されます。つまり、ここで作られた proxy に対してこれから何か操作があると proxy で設定した通り動作をとります。
+順を追って説明すると，まず，`setup` 関数が実行されます．
+この時点で reactive proxy が生成されます．つまり，ここで作られた proxy に対してこれから何か操作があると proxy で設定した通り動作をとります．
 
 ```ts
 const state = reactive({ count: 0 }) // proxyの生成
 ```
 
-次に、`updateComponent` を渡して `ReactiveEffect` (Observer 側)を生成します。
+次に，`updateComponent` を渡して `ReactiveEffect` (Observer 側)を生成します．
 
 ```ts
 const effect = new ReactiveEffect(updateComponent)
 ```
 
-この `updateComponent` で使っている `componentRender` は `setup` の`戻り値`の関数です。そしてこの関数は proxy によって作られたオブジェクトを参照しています。
+この `updateComponent` で使っている `componentRender` は `setup` の`戻り値`の関数です．そしてこの関数は proxy によって作られたオブジェクトを参照しています．
 
 ```ts
 function render() {
@@ -378,36 +378,36 @@ function render() {
 }
 ```
 
-実際にこの関数が走った時、`state.count` の `getter` 関数が実行され、`track` が実行されるようになっています。  
-この状況下で、effect を実行してみます。
+実際にこの関数が走った時，`state.count` の `getter` 関数が実行され，`track` が実行されるようになっています．  
+この状況下で，effect を実行してみます．
 
 ```ts
 effect.run()
 ```
 
-そうすると、まず `activeEffect` に `updateComponent` (を持った ReactiveEffect) が設定されます。  
-この状態で `track` が走るので、`targetMap` に `state.count` と `updateComponent` (を持った ReactiveEffect) のマップが登録されます。  
-これがリアクティブの形成です。
+そうすると，まず `activeEffect` に `updateComponent` (を持った ReactiveEffect) が設定されます．  
+この状態で `track` が走るので，`targetMap` に `state.count` と `updateComponent` (を持った ReactiveEffect) のマップが登録されます．  
+これがリアクティブの形成です．
 
-ここで、increment が実行された時のことを考えてみましょう。  
-increment では `state.count` を書き換えているので `setter` が実行され、`trigger` が実行されます。  
-`trigger` は `state` と `count` を元に `targetMap` から `effect`(今回の例だと updateComponent)をみつけ、実行します。
+ここで，increment が実行された時のことを考えてみましょう．  
+increment では `state.count` を書き換えているので `setter` が実行され，`trigger` が実行されます．  
+`trigger` は `state` と `count` を元に `targetMap` から `effect`(今回の例だと updateComponent)をみつけ，実行します．
 これで画面の更新が行われるようになりました!
 
-これによって、リアクティブを実現することができます。
+これによって，リアクティブを実現することができます．
 
-ちょっとややこしいので図でまとめます。
+ちょっとややこしいので図でまとめます．
 
 ![reactivity_create](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/reactivity_create.drawio.png)
 
 ## これらを踏まえて実装しよう
 
-一番難しいところは上記までの理解なので、理解ができればあとはソースコードを書くだけです。  
-とは言っても、実際のところどうなってるのかよく分からず上記だけでは理解ができない方もいるでしょう。  
-そんな方も一旦ここで実装してみましょう。それから実際のコードを読みながら先ほどのセクションを見返してもらえたらと思います!
+一番難しいところは上記までの理解なので，理解ができればあとはソースコードを書くだけです．  
+とは言っても，実際のところどうなってるのかよく分からず上記だけでは理解ができない方もいるでしょう．  
+そんな方も一旦ここで実装してみましょう．それから実際のコードを読みながら先ほどのセクションを見返してもらえたらと思います!
 
-まずは必要なファイルを作ります。`packages/reactivity`に作っていきます。
-ここでも本家 Vue の構成をなるべく意識します。
+まずは必要なファイルを作ります．`packages/reactivity`に作っていきます．
+ここでも本家 Vue の構成をなるべく意識します．
 
 ```sh
 pwd # ~
@@ -421,9 +421,9 @@ touch packages/reactivity/reactive.ts
 touch packages/reactivity/baseHandler.ts
 ```
 
-例の如く、index.ts は export しているだけなので特に説明はしません。reactivity 外部パッケージから使いたくなったものはここから export しましょう。
+例の如く，index.ts は export しているだけなので特に説明はしません．reactivity 外部パッケージから使いたくなったものはここから export しましょう．
 
-dep.ts からです。
+dep.ts からです．
 
 ```ts
 import { type ReactiveEffect } from './effect'
@@ -436,9 +436,9 @@ export const createDep = (effects?: ReactiveEffect[]): Dep => {
 }
 ```
 
-effect の定義がないですがこれから実装するので Ok です。
+effect の定義がないですがこれから実装するので Ok です．
 
-続いて effect.ts です。
+続いて effect.ts です．
 
 ```ts
 import { Dep, createDep } from './dep'
@@ -493,11 +493,11 @@ export function trigger(target: object, key?: unknown) {
 }
 ```
 
-track と trigger の中身についてこれまで解説していないのですが、単純に targetMap に登録をしたり取り出して実行したりしているだけなので頑張って読んでみてください。
+track と trigger の中身についてこれまで解説していないのですが，単純に targetMap に登録をしたり取り出して実行したりしているだけなので頑張って読んでみてください．
 
-続いて baseHandler.ts です。ここには reactive proxy のハンドラを定義します。  
-まあ、reactive に直接実装してもいいのですが、本家がこうなっているので真似してみました。  
-実際には readonly や shallow などさまざまなプロキシが存在するのでそれらのハンドラをここに実装するイメージです。(今回はやりませんが)
+続いて baseHandler.ts です．ここには reactive proxy のハンドラを定義します．  
+まあ，reactive に直接実装してもいいのですが，本家がこうなっているので真似してみました．  
+実際には readonly や shallow などさまざまなプロキシが存在するのでそれらのハンドラをここに実装するイメージです．(今回はやりませんが)
 
 ```ts
 import { track, trigger } from './effect'
@@ -531,12 +531,12 @@ const hasChanged = (value: any, oldValue: any): boolean =>
   !Object.is(value, oldValue)
 ```
 
-ここで、Reflect というものが登場していますが、Proxy と似た雰囲気のものなんですが、Proxy があるオブジェクトに対する設定を書き込む処理だったのに対し、Reflect はあるオブジェクトに対する処理を行うものです。  
-Proxy も Reflect も JS エンジン内のオブジェクトにまつわる処理の API で、普通にオブジェクトを使うのと比べてメタなプログラミングを行うことができます。  
-そのオブジェクトを変化させる関数を実行したり、読み取る関数を実行したり、key が存在するのかをチェックしたりさまざまなメタ操作ができます。  
-とりあえず、Proxy = オブジェクトを作る段階でのメタ設定、 Reflect = 既に存在しているオブジェクトに対するメタ操作くらいの理解があれば OK です。
+ここで，Reflect というものが登場していますが，Proxy と似た雰囲気のものなんですが，Proxy があるオブジェクトに対する設定を書き込む処理だったのに対し，Reflect はあるオブジェクトに対する処理を行うものです．  
+Proxy も Reflect も JS エンジン内のオブジェクトにまつわる処理の API で，普通にオブジェクトを使うのと比べてメタなプログラミングを行うことができます．  
+そのオブジェクトを変化させる関数を実行したり，読み取る関数を実行したり，key が存在するのかをチェックしたりさまざまなメタ操作ができます．  
+とりあえず，Proxy = オブジェクトを作る段階でのメタ設定， Reflect = 既に存在しているオブジェクトに対するメタ操作くらいの理解があれば OK です．
 
-続いて reactive.ts です。
+続いて reactive.ts です．
 
 ```ts
 import { mutableHandlers } from './baseHandler'
@@ -547,8 +547,8 @@ export function reactive<T extends object>(target: T): T {
 }
 ```
 
-これで reactive 部分の実装は終わりなので、mount する際に実際にこれらを使ってみましょう。  
-`~/packages/runtime-core/apiCreateApp.ts`です。
+これで reactive 部分の実装は終わりなので，mount する際に実際にこれらを使ってみましょう．  
+`~/packages/runtime-core/apiCreateApp.ts`です．
 
 ```ts
 import { ReactiveEffect } from '../reactivity'
@@ -578,7 +578,7 @@ export function createAppAPI<HostElement>(
 }
 ```
 
-さて、あとは playground で試してみましょう。
+さて，あとは playground で試してみましょう．
 
 ```ts
 import { createApp, h, reactive } from 'chibivue'
@@ -606,12 +606,12 @@ app.mount('#app')
 
 あっ………
 
-ちゃんとレンダリングはされるようになりましたが何やら様子がおかしいです。
-まぁ、無理もなくて、`updateComponent`では毎回要素を作っています。
-なので、2 回目以降のレンダリングの際に古いものはそのままで、新しく要素が作られてしまっているのです。
-なので、レンダリング前に毎回要素を全て消してあげましょう。
+ちゃんとレンダリングはされるようになりましたが何やら様子がおかしいです．
+まぁ，無理もなくて，`updateComponent`では毎回要素を作っています．
+なので，2 回目以降のレンダリングの際に古いものはそのままで，新しく要素が作られてしまっているのです．
+なので，レンダリング前に毎回要素を全て消してあげましょう．
 
-`~/packages/runtime-core/renderer.ts`の render 関数をいじります。
+`~/packages/runtime-core/renderer.ts`の render 関数をいじります．
 
 ```ts
 const render: RootRenderFunction = (vnode, container) => {
@@ -621,7 +621,7 @@ const render: RootRenderFunction = (vnode, container) => {
 }
 ```
 
-さてこれでどうでしょう。
+さてこれでどうでしょう．
 
 ![reactive_example](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/reactive_example.png)
 

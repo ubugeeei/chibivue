@@ -2,14 +2,14 @@
 
 ## ライフサイクルフックを実装しよう
 
-ライフサイクルフックの実装はとても簡単です。  
-ComponentInternalInstance に関数を登録して、render 時に所定のタイミングで実行してあげるだけです。  
-API 自体は runtime-core/apiLifecycle.ts に実装していきます。
+ライフサイクルフックの実装はとても簡単です．  
+ComponentInternalInstance に関数を登録して，render 時に所定のタイミングで実行してあげるだけです．  
+API 自体は runtime-core/apiLifecycle.ts に実装していきます．
 
-一点、注意するべきところがあるとすれば、onMounted/onUnmounted/onUpdated に関してはスケジューリングを考えなければならない点です。  
-登録された関数たちはマウントやアンマウント、アップデートが完全に終わったタイミングで実行したいわけです。
+一点，注意するべきところがあるとすれば，onMounted/onUnmounted/onUpdated に関してはスケジューリングを考えなければならない点です．  
+登録された関数たちはマウントやアンマウント，アップデートが完全に終わったタイミングで実行したいわけです．
 
-そこで、スケジューラの方で`post`という種類のキューを新たに実装します。これは既存の queue の flush が終わった後に flush されるようなものです。  
+そこで，スケジューラの方で`post`という種類のキューを新たに実装します．これは既存の queue の flush が終わった後に flush されるようなものです．  
 イメージ ↓
 
 ```ts
@@ -22,8 +22,8 @@ function queueFlush() {
 }
 ```
 
-また、これに伴って、pendingPostFlushCbs に enqueue するような API も実装しましょう。
-そして、それを使って renderer で作用を pendingPostFlushCbs に enqueue しましょう。
+また，これに伴って，pendingPostFlushCbs に enqueue するような API も実装しましょう．
+そして，それを使って renderer で作用を pendingPostFlushCbs に enqueue しましょう．
 
 今回対応するライフサイクル
 
