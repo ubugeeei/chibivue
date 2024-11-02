@@ -33,7 +33,7 @@ app.mount('#app')
 
 When the button is clicked, the `set` function is called twice on `state.message`, so naturally, the `trigger` function will be executed twice as well. This means that the Virtual DOM will be computed twice and the patching will be performed twice.
 
-![non_scheduled_effect](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/non_scheduled_effect.png)
+![non_scheduled_effect](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/non_scheduled_effect.png)
 
 However, in reality, patching only needs to be done once, during the second trigger.  
 Therefore, we will implement a scheduler. A scheduler is responsible for managing the execution order and control of tasks. One of the roles of the Vue scheduler is to manage reactive effects in a queue and consolidate them if possible.
@@ -137,7 +137,7 @@ function triggerEffect(effect: ReactiveEffect) {
 Now, let's implement scheduling with queue management and the classification of effects while reading the source code!
 
 Source code up to this point:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/20_basic_virtual_dom/040_scheduler)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/20_basic_virtual_dom/040_scheduler)
 
 ## We want nextTick
 
@@ -174,7 +174,7 @@ app.mount('#app')
 
 Try clicking this button and take a look at the console.
 
-![old_state_dom](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/old_state_dom.png)
+![old_state_dom](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/old_state_dom.png)
 
 Even though we output to the console after updating `state.count`, the information is outdated. This is because the DOM is not instantly updated when the state is updated, and at the time of console output, the DOM is still in the old state.
 
@@ -229,4 +229,4 @@ app.mount('#app')
 Now, let's actually rewrite the implementation of the current scheduler to keep "currentFlushPromise" and implement "nextTick"!
 
 Source code up to this point:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/20_basic_virtual_dom/050_next_tick)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/20_basic_virtual_dom/050_next_tick)

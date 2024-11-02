@@ -101,11 +101,11 @@ Let's implement this Proxy!
 Once implemented, let's modify the code to pass this proxy to the render function and ref.
 
 Source code so far:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/40_basic_component_system/030_component_proxy)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/40_basic_component_system/030_component_proxy)
 
 ※ By the way, I have also implemented the implementation of defineComponent and related type checking (this allows us to infer the type of proxy data).
 
-![infer_component_types](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/infer_component_types.png)
+![infer_component_types](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/infer_component_types.png)
 
 ## setupContext
 
@@ -301,7 +301,7 @@ const Child2 = {
 It's just a simple code, but it doesn't work.  
 It complains that state is not defined.
 
-![state_is_not_defined](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/state_is_not_defined.png)
+![state_is_not_defined](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/state_is_not_defined.png)
 
 The reason for this is that when passing a Proxy as an argument to the with statement, has must be defined.
 
@@ -332,4 +332,4 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
 If it works correctly, it should work fine!
 
 Source code up to this point:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/40_basic_component_system/040_setup_context)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/40_basic_component_system/040_setup_context)

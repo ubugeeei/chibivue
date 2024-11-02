@@ -310,7 +310,7 @@ In the case of `v-for="(fruit, i) in fruits"`,
 
 https://vuejs.org/v2/guide/list.html#v-for-with-an-object
 
-![v_for_ast.drawio.png](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/v_for_ast.drawio.png)
+![v_for_ast.drawio.png](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/v_for_ast.drawio.png)
 
 Regarding `value`, if you use destructuring assignment like `{ id, name, color, }`, it will have multiple identifiers.
 
@@ -844,8 +844,8 @@ Now, the remaining part is the implementation of renderList that is actually inc
 
 Let's try running it!
 
-![v_for](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/v_for.png)
+![v_for](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/v_for.png)
 
 It seems to be going well.
 
-Source code up to this point: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/050_v_for)
+Source code up to this point: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/050_v_for)

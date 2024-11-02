@@ -633,7 +633,7 @@ export function baseCompile(template: string) {
 
 The screen will not display anything, but let's check the console.
 
-![simple_template_compiler_complex_html](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/simple_template_compiler_complex_html.png)
+![simple_template_compiler_complex_html](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_template_compiler_complex_html.png)
 
 It seems that the parsing is going well.
 Now, let's proceed with the implementation of the codegen based on the generated AST.
@@ -723,7 +723,7 @@ const app = createApp({
 app.mount('#app')
 ```
 
-![render_template](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/render_template.png)
+![render_template](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/render_template.png)
 
 How about that? It seems that we can render the screen very nicely.
 
@@ -791,4 +791,4 @@ Let's make sure it is working correctly.
 How about that? Although the functionality is limited, it is getting closer to the usual Vue developer interface.
 
 Source code up to this point:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler2)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler2)

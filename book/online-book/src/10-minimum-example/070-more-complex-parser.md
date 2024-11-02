@@ -632,7 +632,7 @@ export function baseCompile(template: string) {
 
 画面は何も表示されなくなってしまいますが，コンソールを確認してみましょう．
 
-![simple_template_compiler_complex_html](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/simple_template_compiler_complex_html.png)
+![simple_template_compiler_complex_html](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_template_compiler_complex_html.png)
 
 いい感じにパースができているようです．
 それではここで生成した AST を元に codegen の方の実装を進めていこうと思います．
@@ -723,7 +723,7 @@ const app = createApp({
 app.mount('#app')
 ```
 
-![render_template](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/render_template.png)
+![render_template](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/render_template.png)
 どうでしょうか．とってもいいっ感じに画面を描画できているようです．
 
 せっかくなので画面に動きをつけてみます．テンプレートへのバインディングは実装していないので，直接 DOM 操作します．
@@ -790,4 +790,4 @@ app.mount('#app')
 どうでしょう．機能は少ないにしろ，だんだんと普段の Vue の開発者インタフェースに近づいてきたのではないでしょうか．
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler2)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler2)

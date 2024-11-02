@@ -37,7 +37,7 @@ app.mount('#app')
 
 コンソールを見てみると，以下のようになっていることが観測できるかと思います．
 
-![reactive_html_element](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/reactive_html_element.png)
+![reactive_html_element](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive_html_element.png)
 
 ここで，focus をする処理を加えてみましょう．
 
@@ -71,7 +71,7 @@ app.mount('#app')
 
 なんと，エラーになってしまいます．
 
-![focus_in_reactive_html_element](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/focus_in_reactive_html_element.png)
+![focus_in_reactive_html_element](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/focus_in_reactive_html_element.png)
 
 これの原因としては，document.getElementById によって取得した要素自体を元に Proxy を生成してしまっているためです．
 
@@ -110,7 +110,7 @@ const app = createApp({
 app.mount('#app')
 ```
 
-![element_to_string](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/element_to_string.png)
+![element_to_string](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/element_to_string.png)
 
 このようにしてどのようなオブジェクトなのかというのを知ることができます．ややハードコードですが，この判定関数を一般化します．
 
@@ -170,7 +170,7 @@ export function reactive<T extends object>(target: T): T {
 
 これで先ほどのフォーカスのコードが動くようになったはずです！
 
-![focus_in_element](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/focus_in_element.png)
+![focus_in_element](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/focus_in_element.png)
 
 ## TemplateRefs を実装してみる
 
@@ -256,7 +256,7 @@ app.mount('#app')
 ```
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/110_template_refs)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/110_template_refs)
 
 ## key が増減するオブジェクトに対応する
 
@@ -535,4 +535,4 @@ export function toRaw<T>(observed: T): T {
 https://ja.vuejs.org/api/reactivity-advanced.html#toraw
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/30_basic_reactivity_system/120_proxy_handler_improvement)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/30_basic_reactivity_system/120_proxy_handler_improvement)

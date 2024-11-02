@@ -237,7 +237,7 @@ app.mount('#app')
 
 Yay! Now we can use the h function to render various tags!
 
-![](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/simple_h_function.png)
+![](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_h_function.png)
 
 ## Since it's lonely just to display
 
@@ -467,7 +467,7 @@ app.mount('#app')
 
 We can now register event handlers with the h function!
 
-![simple_h_function_event](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/simple_h_function_event.png)
+![simple_h_function_event](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_h_function_event.png)
 
 ## Trying to support other props
 
@@ -499,9 +499,9 @@ const app = createApp({
 app.mount('#app')
 ```
 
-![simple_h_function_attr](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/simple_h_function_attr.png)
+![simple_h_function_attr](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_h_function_attr.png)
 
 Now we can handle a wide range of HTML!
 
 Source code up to this point:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/020_simple_h_function)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/020_simple_h_function)

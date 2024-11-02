@@ -106,7 +106,7 @@ Actually, the original implementation takes a slightly different approach.
 
 As you can see below, in the original implementation, anything bound from the `setup` function is resolved through `$setup`.
 
-![resolve_bindings_original](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/resolve_bindings_original.png)
+![resolve_bindings_original](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/resolve_bindings_original.png)
 
 However, implementing this is a bit difficult, so we will simplify it and implement it by adding `_ctx.`. (All props and setup will be resolved from `_ctx`)
 
@@ -515,4 +515,4 @@ const app = createApp(App)
 app.mount('#app')
 ```
 
-Source code up to this point: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/022_transform_expression)
+Source code up to this point: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/022_transform_expression)

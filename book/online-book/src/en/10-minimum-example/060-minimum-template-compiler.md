@@ -533,7 +533,7 @@ const app = createApp({ template: `<p class="hello">Hello World</p>` })
 app.mount('#app')
 ```
 
-![simple_template_compiler](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/simple_template_compiler.png)
+![simple_template_compiler](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_template_compiler.png)
 
 It seems to be working fine. Let's try making some changes to see if they are reflected.
 
@@ -544,9 +544,9 @@ const app = createApp({
 app.mount('#app')
 ```
 
-![simple_template_compiler2](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/simple_template_compiler2.png)
+![simple_template_compiler2](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_template_compiler2.png)
 
 It appears to be implemented correctly!
 
 Source code up to this point:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler)

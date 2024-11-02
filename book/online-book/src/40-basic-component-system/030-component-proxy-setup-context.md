@@ -101,11 +101,11 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
 実装できたら render 関数や ref にはこの proxy を渡すように書き換えてみましょう．
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/40_basic_component_system/030_component_proxy)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/40_basic_component_system/030_component_proxy)
 
 ※ ついでに defineComponent の実装とそれに関連する型付も実装しています． (そうすると proxy のデータの型を推論できるようになります．)
 
-![infer_component_types](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/infer_component_types.png)
+![infer_component_types](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/infer_component_types.png)
 
 ## setupContext
 
@@ -301,7 +301,7 @@ const Child2 = {
 なんの変哲もないコードですが，実はこれは動きません．  
 state が定義されていないと怒られてしまいます．
 
-![state_is_not_defined](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/state_is_not_defined.png)
+![state_is_not_defined](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/state_is_not_defined.png)
 
 これがなぜかというと，with 文の引数として Proxy を渡す場合，has を定義しないといけないためです．
 
@@ -332,4 +332,4 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
 これで正常に動くようになれば OK です！
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/40_basic_component_system/040_setup_context)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/40_basic_component_system/040_setup_context)

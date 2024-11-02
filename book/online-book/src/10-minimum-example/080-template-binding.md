@@ -388,7 +388,7 @@ const app = createApp({
 })
 ```
 
-![parse_interpolation](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/parse_interpolation.png)
+![parse_interpolation](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/parse_interpolation.png)
 
 問題なさそうです！
 
@@ -468,7 +468,7 @@ const setupRenderEffect = (
 
 ここまで来ればレンダリングできるようになっているはずです．確認してみましょう！
 
-![render_interpolation](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/render_interpolation.png)
+![render_interpolation](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/render_interpolation.png)
 
 これにて初めてのバインディング，完です！
 
@@ -693,12 +693,12 @@ const app = createApp({
 })
 ```
 
-![compile_directives](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/compile_directives.png)
+![compile_directives](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/compile_directives.png)
 
 やりました．かなり Vue に近づいてきました！  
 ここまでで小さなテンプレートの実装は完了です．お疲れ様でした．
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler3)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler3)
 
 <!-- ちゃんと動いているようなのでコンパイラ実装を始める際に分割した 3 つのタスクを実装し終えました。やったね！ -->

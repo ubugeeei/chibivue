@@ -20,7 +20,7 @@ app.mount('#app')
 
 以下のようなエラーが出てしまうかと思います．
 
-![fragment_error.png](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/fragment_error.png)
+![fragment_error.png](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/fragment_error.png)
 
 エラー文をみてみると， Function コンストラクタで起きているようです．
 
@@ -255,4 +255,4 @@ app.mount('#app')
 
 ちゃんと動作しているようです！
 
-ここまでのソースコード: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/030_fragment)
+ここまでのソースコード: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/030_fragment)

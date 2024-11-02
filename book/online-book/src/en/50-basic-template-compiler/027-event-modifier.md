@@ -110,7 +110,7 @@ Let's review the current compiler architecture a little.
 
 The current configuration is as follows.
 
-![50-027-compiler-architecture](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/50-027-compiler-architecture.drawio.png)
+![50-027-compiler-architecture](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/50-027-compiler-architecture.drawio.png)
 
 When you understand the roles of compiler-core and compiler-dom again,  
 compiler-core provides compiler functionality that does not depend on the DOM, such as generating and transforming AST.
@@ -164,7 +164,7 @@ And if you pass this `transformOn` implemented on the compiler-dom side as an op
 Here is a diagram of the relationship.  
 Instead of passing all transformers from compiler-dom, the default implementation is implemented in compiler-core, and the configuration allows additional transformers to be added.
 
-![50-027-new-compiler-architecture](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/50-027-new-compiler-architecture.drawio.png)
+![50-027-new-compiler-architecture](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/50-027-new-compiler-architecture.drawio.png)
 
 With this, compiler-core can execute transformers without depending on the DOM, and compiler-dom can implement processing that depends on the DOM while executing the transformers in compiler-core.
 
@@ -261,7 +261,7 @@ That's the end of the implementation.
 
 Let's check the operation! If the input content is reflected on the screen without the page being reloaded when the button is pressed, it's OK!
 
-Source code up to this point: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/027_event_modifier)
+Source code up to this point: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/027_event_modifier)
 
 ## Other Modifiers
 
@@ -287,4 +287,4 @@ The two points to be careful about are:
 Please try implementing while reading the actual code!
 If you've come this far, you should be able to do it.
 
-Source code up to this point: [GitHub](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/027_event_modifier2)
+Source code up to this point: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/027_event_modifier2)

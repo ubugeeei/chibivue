@@ -6,7 +6,7 @@
 Minimum Example 部門でやったところから少し時間が空いてしまったので，今の実装がどうなっていたか少しおさらいをしておきましょう．  
 主なキーワードは Parse, AST, Codegen でした．
 
-![me_template_compiler_design](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/me_template_compiler_design.drawio.png)
+![me_template_compiler_design](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/me_template_compiler_design.drawio.png)
 
 ```ts
 export function baseCompile(
@@ -42,7 +42,7 @@ export function baseCompile(
 
 今回はこの transform という関数を実装していきます．
 
-![design_with_transformer](https://raw.githubusercontent.com/Ubugeeei/chibivue/main/book/images/design_with_transformer.drawio.png)
+![design_with_transformer](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/design_with_transformer.drawio.png)
 
 ## transform とは?
 
@@ -474,4 +474,4 @@ app.mount('#app')
 ```
 
 ここまでのソースコード:  
-[chibivue (GitHub)](https://github.com/Ubugeeei/chibivue/tree/main/book/impls/50_basic_template_compiler/010_transformer)
+[chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/010_transformer)
