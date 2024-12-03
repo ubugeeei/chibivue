@@ -1,7 +1,5 @@
 # First Rendering and createApp API
 
-## Vue.js Developer Interface
-
 ## Where to start? 🤔
 
 Now, let's start implementing chibivue step by step. How should we proceed with the implementation?
