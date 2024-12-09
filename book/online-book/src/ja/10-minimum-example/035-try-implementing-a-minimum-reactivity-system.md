@@ -4,7 +4,7 @@
 ## Proxy を使ったリアクティビティの仕組み
 
 ::: info 現在の vuejs/core との設計の違いについて
-現在 (2024/12)の Vue.js の Reactivity System では，doubly linked list ベースの Observer Pattern が採用されています．\
+現在 (2024/12)の Vue.js のリアクティビティシステムでは，doubly linked list ベースの Observer Pattern が採用されています．\
 この実装は [Refactor reactivity system to use version counting and doubly-linked list tracking](https://github.com/vuejs/core/pull/10397) で行われ，パフォーマンスの向上に寄与しました．
 
 しかし，初めてリアクティビティシステムを実装する人にとっては少し難しいものになっており，今回のこのチャプターでは従来 (改善以前) のものをより簡略化したものの実装を行います．\
@@ -16,7 +16,7 @@
 改めて目的を明確にしておくと，今回の目的は「ステートが変更された時に `updateComponent` を実行したい」です．  
 Proxy を用いた実装の流れについて説明してみます．
 
-まず，Vue.js の Reactivity System には `target`, `Proxy`, `ReactiveEffect`, `Dep`, `track`, `trigger`, `targetMap`, `activeEffect` (現在は `activeSub`) というものが登場します．
+まず，Vue.js のリアクティビティシステムには `target`, `Proxy`, `ReactiveEffect`, `Dep`, `track`, `trigger`, `targetMap`, `activeEffect` (現在は `activeSub`) というものが登場します．
 
 まず，targetMap の構造についてです．  
 targetMap はある target の key と dep のマッピングです．  
@@ -40,6 +40,39 @@ class ReactiveEffect {
   ) {}
 }
 ```
+
+「ある target (オブジェクト)」 の「ある key」 に対して「ある作用」 を登録するということになります．
+
+パッと見のコードだけだと分かりづらいと思うので具体例と図による補足です．\
+以下のようなコンポーネントがあったと考えてみます．
+
+```ts
+export default defineComponent({
+  setup() {
+    const state1 = reactive({ name: "John", age: 20 })
+    const state2 = reactive({ count: 0 })
+
+    function onCountUpdated() {
+      console.log("count updated")
+    }
+
+    watch(() => state2.count, onCountUpdated)
+
+    return () => h("p", {}, `name: ${state1.name}`)
+  }
+})
+```
+
+このチャプターではまだ watch は実装していないのでですが，イメージのために書いてあります．\
+このコンポーネントでは最終的にかのような targetMap が形成されます．
+
+![target_map](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/target_map.drawio.png)
+
+targetMap の key は「ある target」 です．この例では state1 と state2 がそれにあたります．\
+そして，これらの target が持つ key が targetMap の key になります．\
+そこに紐づく作用がその value になります．
+
+`() => h("p", {}, name: ${state1.name})` の部分で `state->name->updateComponentFn` というマッピングが登録され，`watch(() => state2.count, onCountUpdated)` の部分で `state2->count->onCountUpdated` というマッピングが登録されるという感じです．
 
 基本的な構造はこれが担っていて，あとはこの TargetMap をどう作っていくか(どう登録していくか)と実際に作用を実行するにはどうするかということを考えます．
 

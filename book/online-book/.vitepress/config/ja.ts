@@ -44,7 +44,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: '/ja/10-minimum-example/025-event-handler-and-attrs',
           },
           {
-            text: 'Reactivity System の前程知識',
+            text: 'リアクティビティシステムの前程知識',
             link: '/ja/10-minimum-example/030-prerequisite-knowledge-for-the-reactivity-system',
           },
           {
@@ -52,7 +52,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: '/ja/10-minimum-example/035-try-implementing-a-minimum-reactivity-system',
           },
           {
-            text: '小さい Virtual DOM',
+            text: '小さい仮想 DOM',
             link: '/ja/10-minimum-example/040-minimum-virtual-dom',
           },
           {
@@ -123,7 +123,7 @@ export const jaConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
           },
           {
             text: 'スケジューラ',
-            link: '/ja/20-basic-virtual-dom/030-scheduler',
+            link: '/kja/20-basic-virtual-dom/030-scheduler',
           },
           {
             text: '🚧 対応できていない Props のパッチ',
