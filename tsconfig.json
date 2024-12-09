@@ -4,7 +4,7 @@
     "outDir": "temp",
     "target": "ESNext",
     "module": "ESNext",
-    "lib": ["DOM"],
+    "lib": ["DOM", "ES2020"],
     "strict": true,
     "paths": {
       "@chibivue/*": ["./packages/*/src"],

@@ -103,7 +103,7 @@ Contents of tsconfig.json
   "compilerOptions": {
     "target": "ES2020",
     "module": "ES2020",
-    "lib": ["DOM"],
+    "lib": ["DOM", "ES2020"],
     "strict": true,
     "paths": {
       "chibivue": ["./packages"]
