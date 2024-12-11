@@ -1,6 +1,6 @@
 {
   "name": "@chibivue/compiler-dom",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "main": "dist/index.js",
   "author": "ubugeeei <ubuge1122@gmail.com>",
   "license": "MIT"
