@@ -63,7 +63,7 @@ export default defineComponent({
 })
 ```
 
-このチャプターではまだ watch は実装していないのでですが，イメージのために書いてあります．\
+このチャプターではまだ watch は実装していないのですが，イメージのために書いてあります．\
 このコンポーネントでは最終的にかのような targetMap が形成されます．
 
 ![target_map](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/target_map.drawio.png)
@@ -72,7 +72,7 @@ targetMap の key は「ある target」 です．この例では state1 と sta
 そして，これらの target が持つ key が targetMap の key になります．\
 そこに紐づく作用がその value になります．
 
-`() => h("p", {}, name: ${state1.name})` の部分で `state->name->updateComponentFn` というマッピングが登録され，`watch(() => state2.count, onCountUpdated)` の部分で `state2->count->onCountUpdated` というマッピングが登録されるという感じです．
+`() => h("p", {}, name: ${state1.name})` の部分で `state1->name->updateComponentFn` というマッピングが登録され，`watch(() => state2.count, onCountUpdated)` の部分で `state2->count->onCountUpdated` というマッピングが登録されるという感じです．
 
 基本的な構造はこれが担っていて，あとはこの TargetMap をどう作っていくか(どう登録していくか)と実際に作用を実行するにはどうするかということを考えます．
 
