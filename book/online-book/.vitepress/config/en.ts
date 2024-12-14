@@ -95,15 +95,15 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             link: '/10-minimum-example/091-parse-sfc',
           },
           {
-            text: 'template block of SFC',
+            text: 'SFC template block',
             link: '/10-minimum-example/092-compile-sfc-template',
           },
           {
-            text: 'script block of SFC ',
+            text: 'SFC script block ',
             link: '/10-minimum-example/093-compile-sfc-script',
           },
           {
-            text: 'style block of SFC ',
+            text: 'SFC style block',
             link: '/10-minimum-example/094-compile-sfc-style',
           },
           {
