@@ -71,7 +71,7 @@
     "typescript": "^5.2.2",
     "vite-hyper-config": "^0.2.1",
     "vite-node": "^1.1.3",
-    "vitepress": "^1.0.1",
+    "vitepress": "^1.6.3",
     "vitepress-plugin-mermaid": "^2.0.16",
     "vitest": "^0.29.2"
   },
