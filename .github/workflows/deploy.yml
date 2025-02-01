@@ -2,7 +2,7 @@ name: Deploy chibivue Book to Pages
 
 on:
   push:
-    branches: [main]
+    branches: [main, redirect-to-chibivue-land]
 
   workflow_dispatch:
 

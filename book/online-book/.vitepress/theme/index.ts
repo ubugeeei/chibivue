@@ -4,6 +4,15 @@ import './main.css'
 
 export default {
   ...DefaultTheme,
+
+  // NOTE: https://github.com/vuejs/vitepress/issues/4160#issuecomment-2571714528
+  enhanceApp({ router }) {
+    router.onBeforeRouteChange = (to: string) => {
+      setTimeout(() => {
+        router.go('https://book.chibivue.land/')
+      })
+    }
+  },
   setup() {
     const { lang } = useData()
     if (inBrowser) {
