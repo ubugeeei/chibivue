@@ -1,9 +1,20 @@
-import { useData, inBrowser } from 'vitepress'
+import { inBrowser, useData } from 'vitepress'
 import DefaultTheme from 'vitepress/theme-without-fonts'
 import './main.css'
 
 export default {
   ...DefaultTheme,
+
+  // NOTE: https://github.com/vuejs/vitepress/issues/4160#issuecomment-2571714528
+  enhanceApp({ router }) {
+    router.onBeforeRouteChange = (to: string) => {
+      if (typeof window !== 'undefined') {
+        window.setTimeout(() => {
+          window.location.href = 'https://book.chibivue.land/'
+        })
+      }
+    }
+  },
   setup() {
     const { lang } = useData()
     if (inBrowser) {
